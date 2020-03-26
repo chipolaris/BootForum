@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf" 
+    template="/WEB-INF/template/layout_admin.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} Administration - #{msg['userManagement.page.title']}
+	</ui:define>
+	
+	<ui:define name="content">
+		<style type="text/css">
+		
+			.panelGridCol1 {
+				width: 180px;
+			}
+			.panelGridCol2 {
+				
+			}
+		
+		</style>
+		
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+ 				$(document).ready(function(){
+					customizeDatatableStyle();
+					customizePrimefaceButtons();
+				});
+				
+				function customizeDatatableStyle() {
+					/* set datatable header's background color */
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+					
+					/* set datatable paginator button color */
+					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
+						function(el) {
+							el.className += ' w3-button';
+							
+							if(el.className.indexOf('ui-state-active') >= 0) {
+								el.className += ' w3-theme-dark';	
+							}
+							else {
+								el.className += ' w3-white';
+							}
+						}
+					);
+				}
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+			//]]>	
+		</script>
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white">
+				
+			<p:messages id="messages" showDetail="true">
+				<p:autoUpdate/>
+			</p:messages>
+			
+			<p/>
+			
+			<div class="w3-panel w3-theme-d5 w3-center w3-round">
+ 				<h2 id="title">#{msg['userManagement.page.title']}</h2>
+ 			</div>
+			
+			<div jsf:id="userListDiv" class="w3-margin-top w3-animate-right">
+			
+				<h:form id="filterForm">
+					<div style="display:flex;flex-wrap:wrap;">
+						
+						<div class="w3-padding-large" style="margin:auto;">
+						
+							<h:panelGrid columns="2">
+						
+								<p:inputText id="filterInputText" value="#{userList.searchValue}" placeholder="Enter search value" size="25" maxlength="50"/>
+			
+						        <p:splitButton value="For Username" action="#{userList.search('username')}" update=":form:userList" style="margin-left:2px;">
+						            <p:menuitem value="For First name" action="#{userList.search('person.firstName')}" update=":form:userList"/>
+						            <p:menuitem value="For Last name" action="#{userList.search('person.lastName')}" update=":form:userList"/>
+						            <p:menuitem value="For Email" action="#{userList.search('person.email')}" update=":form:userList"/>
+						        </p:splitButton>
+						
+							</h:panelGrid>
+						</div>
+						<div class="w3-padding-large" style="margin:auto;vertical-align:top;">
+							
+							<h:panelGrid columns="2">
+							
+								<p:outputLabel value="Account Status:"/>
+								
+						        <p:selectOneMenu value="#{userList.lazyModel.accountStatus}" >
+						        	<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.name}"/>
+						        	<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
+						        	<f:ajax render=":form:userList"/>
+						        </p:selectOneMenu>
+							</h:panelGrid>
+						</div>
+						
+					</div>	
+				
+				</h:form>
+				
+				<div class="w3-container w3-margin-top">
+				
+					<h:form id="form">
+					
+						<p:dataList id="userList" value="#{userList.lazyModel}" var="user" lazy="true" paginator="true" rows="10"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+							currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} users"
+							emptyMessage="No user found" itemType="square">
+							
+							<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+							
+							<div class="w3-tooltip">
+							
+								<h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(user.username)}"
+									id="avatarImage" height="60" width="60" style="border:3px;"/>
+									
+								<p class="w3-large w3-opacity">Username: #{user.username}</p>
+								<p class="w3-large w3-opacity">Role: #{user.userRole}</p>
+								<p class="w3-large w3-opacity">Name: #{user.person.firstName} #{user.person.lastName}</p>
+								<p class="w3-large w3-opacity">Email: #{user.person.email}</p>
+								<p class="w3-large w3-opacity">Account Status: #{user.accountStatus}</p>
+		
+								<span class="w3-text">
+								
+									<p:commandButton ajax="true" icon="fa fa-edit" styleClass="w3-button" update=":userEditDiv" process="@this"
+										oncomplete="document.getElementById('userListDiv').style.display='none';
+														document.getElementById('userEditDiv').style.display='block';
+														document.getElementById('userEditDiv').scrollIntoView();" 
+										title="Edit user #{user.username}" value="#{msg['userAction.edit']}">
+										<f:setPropertyActionListener value="#{user}" target="#{userList.selectedRecord}"/>
+									</p:commandButton>
+									
+									<p:commandButton ajax="true" icon="fa fa-trash" styleClass="w3-button" value="#{msg['userAction.delete']}" process="@this"
+										oncomplete="PF('deleteUserConfirmation').show();" title="Delete this User" style="margin-left:5px;">
+										<f:setPropertyActionListener value="#{user}" target="#{userList.selectedRecord}" />  
+									</p:commandButton>
+									
+								</span>
+							</div>
+							
+							<p/>
+						
+						</p:dataList>
+					</h:form>
+				
+				</div>
+		    
+			</div>
+			
+			<div jsf:id="userEditDiv" class="w3-animate-right">
+			
+		    	<div class="w3-container">
+						
+					<h:form id="editForm" rendered="#{userList.selectedRecord != null}">
+											       
+				        <a href="javascript:void(0)" class="w3-button w3-border w3-theme-light"
+				        	onclick="document.getElementById('userEditDiv').style.display='none';
+									document.getElementById('userListDiv').style.display='block';
+									document.getElementById('userListDiv').scrollIntoView();">
+				        	<i class="fa fa-users"/> Back to User List
+				        </a>
+				        
+				        <div class="w3-card-2 w3-margin-top">
+				  			
+				  			<div id="userProfileDiv" class="w3-container w3-padding-none">
+				  			
+					  			<h:panelGrid columns="2" cellspacing="10" columnClasses="panelGridCol1 panelGridCol2">
+					  			
+					  				<h:outputText value="Avatar:"/>
+									<h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(userList.selectedRecord.username)}"
+										id="avatarImage" height="60" width="60" style="border:3px;"/>
+									
+			 		  				<h:outputText value="User ID:"/>
+					  				<h:outputText value="#{userList.selectedRecord.username}"/>
+					  				
+					  				<h:outputText value="Role:"/>
+					  				<h:outputText value="#{userList.selectedRecord.userRole}"/>
+					  				
+					  				<h:outputText value="First Name:"/>
+					  				<h:outputText value="#{userList.selectedRecord.person.firstName}"/>
+					  				
+					  				<h:outputText value="Last Name:"/>
+					  				<h:outputText value="#{userList.selectedRecord.person.lastName}"/>
+					  				
+					  				<h:outputText value="Email:"/>
+					  				<h:outputText value="#{userList.selectedRecord.person.email}"/>
+				  				
+				  					<h:outputText value="Discussions Started"/>
+				  					<h:outputText value="#{userList.selectedRecord.stat.discussionCount}"/>
+				  					
+				  					<h:outputText value="Comments"/>
+				  					<h:outputText value="#{userList.selectedRecord.stat.commentCount}"/>
+				  					
+				  					<h:outputText value="Last Comment"/>
+				  					<pe:timeAgo value="#{userList.selectedRecord.stat.lastComment.updateDate}" titlePattern="MMMMM dd, yyyy" />
+				  					
+				  					<h:outputText value="Last Login"/>
+				  					<pe:timeAgo value="#{userList.selectedRecord.stat.lastLogin}" titlePattern="MMMMM dd, yyyy" />
+				  					
+				  					<h:outputText value="Reputation"/>
+				  					<h:outputText value="#{userList.selectedRecord.stat.reputation}"/>
+				  				</h:panelGrid>
+				  			</div>
+				  			
+				  			<div class="w3-container w3-border-top">
+				  			
+					  			<h:panelGrid columns="2" cellspacing="10" columnClasses="panelGridCol1 panelGridCol2">	
+			 		  				<h:outputLabel value="Account Status:" for="accountStatus"/>
+									<p:selectOneMenu value="#{userList.selectedRecord.accountStatus}" id="accountStatus">
+										<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.name}"/>
+										<!-- If we want ajax update, can use the p:ajax event="change" as below to initiate call to server side action -->
+										<!-- <p:ajax event="change" listener="#{userList.updateAccountStatus}" update=":form:userTable"></p:ajax> -->
+									</p:selectOneMenu>
+					  				
+					  				<h:outputLabel value="New Role:" for="userRole"/>
+					  				<p:selectOneMenu value="#{userList.selectedRecord.userRole}" id="userRole">
+					  					<f:selectItems value="#{referenceData.userRoles}" var="role" itemValue="#{role}" itemLabel="#{role.name}"/>
+					  				</p:selectOneMenu>
+					  				
+					  				<h:outputText value=""/>
+					  				<p:commandButton id="updateUser" ajax="true" action="#{userList.update}" styleClass="w3-button" 
+						            	oncomplete="document.getElementById('userEditDiv').style.display='none';
+						            	document.getElementById('userListDiv').style.display='block';
+										document.getElementById('userListDiv').scrollIntoView();" 
+										value="&#160;Update" update=":form:userList" icon="fa fa-save"/>										
+									
+					  			</h:panelGrid>
+				  		
+				  			</div>
+				  			
+				  			<div class="w3-container w3-border-top">
+				  				<h:panelGrid columns="2" cellspacing="10" columnClasses="panelGridCol1 panelGridCol2">	
+					  				<h:outputLabel value="Password:" for="inplacePassword"/>
+					  				<p:inplace id="inplacePassword" editor="true">
+					  					<p:password id="newPassword" value="#{userList.newPassword}" feedback="false"/>
+					  					<p:ajax event="save" listener="#{userList.update}"/>
+					  					<f:facet name="output"><b class="w3-text-deep-orange">Click to change</b></f:facet>
+					  				</p:inplace>
+				  				</h:panelGrid>
+				  			</div>
+				  			
+				  		</div>				  		
+				  		
+				  		<p/>
+				  		
+			  		</h:form>
+
+				</div>			
+		
+			</div>
+
+			<p:confirmDialog message="Are you sure?" width="300" global="true" header="Confirm"
+				severity="alert" widgetVar="deleteUserConfirmation">
+				<h:form id="deleteForm">
+					<p:commandButton value="Yes" icon="fa fa-check" styleClass="w3-button w3-theme-l3" 
+						update=":form:userList"
+						action="#{userList.delete}"
+						oncomplete="PF('deleteUserConfirmation').hide()" />
+					<p:commandButton value="Cancel" styleClass="w3-button w3-theme-l3" 
+						onclick="PF('deleteUserConfirmation').hide();return false;"
+						type="button" icon="fa fa-times" style="margin-left:5px;" />
+				</h:form>
+			</p:confirmDialog>
+		
+		</div>
+		
+	</ui:define>
+
+</ui:composition>

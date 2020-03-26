@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:func="http://bootforum.chipolaris.github.com/functions"
+    template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		View Forum
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<style type="text/css">
+			/* borderless datascroller: https://stackoverflow.com/questions/18880208/remove-all-borders-on-a-specific-datatable */
+			.ui-datascroller-content.ui-widget-content.ui-corner-all
+			{
+			    border-style: none;
+			}
+		</style>
+		
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+			//]]>	
+		</script>
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="id" value="#{viewTag.tagId}"/>
+			<f:viewAction action="#{viewTag.onLoad}"/>
+		</f:metadata>
+	
+		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
+						
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty viewTag.tag}">
+			
+				<h3>Error!</h3>
+				<h4>Must specified a valid tag Id</h4>
+			
+			</div>
+			
+			<div jsf:id="viewForumDiv" jsf:rendered="#{not empty viewTag.tag}">
+				
+				<div class="w3-hide-small">
+					<p:breadCrumb>
+						<p:menuitem value="Home" url="#{request.contextPath}/" />
+   						<p:menuitem value="Tag '#{viewTag.tag.label}'" url="#{request.requestURI}?#{request.queryString}"/>
+					</p:breadCrumb>
+				</div>
+				
+				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2 style="font-weight:bold;"><i class="fa #{viewTag.tag.icon}"/> #{viewTag.tag.label}</h2>
+ 				</div>
+				
+				<p/>
+				
+				<h:form>
+				
+					<p:dataScroller value="#{viewTag.tagDiscussionsLazyModel}" var="discussion" lazy="true" 
+						rowIndexVar="rowIndex" chunkSize="10">
+						
+						<div class="w3-panel">
+						
+							<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><span class="w3-large"><b>#{discussion.title}</b></span></h:outputLink>
+							Comments: <b>#{discussion.stat.commentCount}</b>, Views: <b>#{discussion.stat.viewCount}</b>,
+							Last Comment: <b><pe:timeAgo value="#{discussion.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy" /></b> 
+							[in forum 
+							<h:link outcome="viewForum">
+								<b>#{discussion.forum.title}</b>
+								<f:param name="id" value="#{discussion.forum.id}"/>
+							</h:link>
+							]
+							by <b>#{discussion.stat.lastComment.updateBy} </b>
+							<h:link outcome="memberProfile">
+								<h:graphicImage value="#{requestContext}/avatar/#{discussion.stat.lastComment.updateBy}" class="w3-circle"
+										id="commentorAvatar" height="30" width="30" title="#{discussion.stat.lastComment.updateBy}"
+										rendered="#{fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}"/>
+																
+								<span  jsf:rendered="#{!fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}" class="w3-circle w3-purple"
+									 title="#{discussion.stat.lastComment.updateBy}"
+	 									style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;">
+	 									#{fn:substring(discussion.stat.lastComment.updateBy, 0, 3)}
+								</span>
+								<f:param name="username" value="#{discussion.stat.lastComment.updateBy}"/>
+							</h:link>
+						</div>
+					
+					</p:dataScroller>
+
+			    </h:form>
+			    
+			    <p/>
+			    
+			</div>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

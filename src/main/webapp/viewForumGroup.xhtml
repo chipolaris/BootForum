@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:func="http://bootforum.chipolaris.github.com/functions"
+    template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		List Forums
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<style type="text/css">	
+			 
+			 /* borderless datatable: https://stackoverflow.com/questions/18880208/remove-all-borders-on-a-specific-datatable */
+			
+			.ui-treetable.borderless thead th,
+			.ui-treetable.borderless tbody,
+			.ui-treetable.borderless tbody tr,
+			.ui-treetable.borderless tbody td {
+			    border-style: none;
+			}
+			
+			body .ui-paginator {
+				 border-style: none;
+			}
+			
+		</style>
+	
+		<script>
+			//<![CDATA[	
+				
+			$(document).ready(function(){
+				var selectedForum = document.getElementById("selectedForum");
+				if(selectedForum) { selectedForum.scrollIntoView(); }
+				
+				/* set table header's background color */
+				document.querySelectorAll('.ui-treetable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+			});
+			
+			$(document).ready(function(){
+				
+				var selectedForum = document.getElementById("selectedForum");
+				if(selectedForum) { selectedForum.scrollIntoView(); }
+				
+				customizeDatatableStyle();
+			});
+			
+			function customizeDatatableStyle() {
+				/* set table header's background color */
+				document.querySelectorAll('.ui-treetable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+			}
+				
+			//]]>
+		</script>
+	
+		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
+						
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div jsf:id="forumGroupDiv" >
+			
+				<div class="w3-hide-small">
+					<p:breadCrumb>
+						<p:menuitem value="Home" url="#{request.contextPath}/" />
+   						<p:menuitem value="Forums Index" url="#{request.requestURI}?#{request.queryString}" />
+					</p:breadCrumb>
+				</div>
+				
+				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2>Forums Index</h2>
+ 				</div>
+				
+				<p/>
+				
+				<h:form>
+				
+					<p:treeTable value="#{viewForumGroup.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;" styleClass="borderless">
+				        
+				        <p:column headerText="Category/Name" style="text-align:left;" priority="1">
+				        	<h:outputLink value="viewForum.xhtml?id=#{forumNode.bean.id}" rendered="#{forumNode.type=='Forum'}">
+								<span class="w3-badge" style="line-height:36px;width:36px;height:36px;color:#fff;background-color:##{forumNode.bean.iconColor};">
+				        			<i class="#{forumNode.bean.icon}"/>
+				        		</span>
+				        		<span class="w3-large"><b>#{forumNode.bean.title}</b></span>
+				        	</h:outputLink>
+				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type=='ForumGroup' and param['id'] != forumNode.bean.id}">#{forumNode.bean.title}</span>
+				        	<span class="w3-large w3-theme-d5" jsf:rendered="#{forumNode.type=='ForumGroup' and param['id'] == forumNode.bean.id}" 
+				        		id="selectedForum">#{forumNode.bean.title}</span>
+				        </p:column>
+				        
+				        <p:column headerText="Discussions" style="text-align:center;width:100px;" priority="3">
+				        	<span jsf:rendered="#{forumNode.type=='Forum'}">#{viewForumGroup.getForumStat(forumNode.bean).getDiscussionCount()}<!-- #{forumNode.bean.stat.discussionCount} --></span>
+				        </p:column>
+				        
+				        <p:column headerText="Comments" style="text-align:center;width:100px;" priority="4">
+				        	<span jsf:rendered="#{forumNode.type=='Forum'}">#{viewForumGroup.getForumStat(forumNode.bean).getCommentCount()}<!-- #{forumNode.bean.stat.commentCount} --></span>
+				        </p:column>
+
+						<p:column headerText="Last Comment" style="text-align:right;" priority="2">
+							<div jsf:rendered="#{forumNode.type=='Forum' and not empty forumNode.bean.stat.lastComment.updateBy}">
+								<pe:timeAgo value="#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateDate()}" titlePattern="MMMMM dd yyyy " /> by <b>#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy()} </b>
+								
+								<h:link outcome="memberProfile">
+									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(forumNode.bean.stat.lastComment.updateBy)}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36" style="border:3px;margin-right:15px;" title="#{forumNode.bean.stat.lastComment.updateBy}"/> -->
+									<h:graphicImage value="#{requestContext}/avatar/#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36" title="#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}"
+											rendered="#{fileHandler.isAvatarExists(viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy())}"/>
+											
+									<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy())}"
+										title="#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}"
+	  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+	  									#{fn:substring(viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy(), 0, 3)}
+	  								</span>
+									<f:param name="username" value="#{forumNode.bean.stat.lastComment.updateBy}"/>
+								</h:link>
+							</div>
+				        </p:column>
+					</p:treeTable>
+
+			    </h:form>
+			    
+			    <p/>
+			    
+			</div>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

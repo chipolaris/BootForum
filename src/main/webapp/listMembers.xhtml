@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:func="http://bootforum.chipolaris.github.com/functions"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		List Members
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<style type="text/css">
+		
+			 /* borderless datatable: https://stackoverflow.com/questions/18880208/remove-all-borders-on-a-specific-datatable */
+			
+			.ui-datatable.borderless thead th,
+			.ui-datatable.borderless tbody,
+			.ui-datatable.borderless tbody tr,
+			.ui-datatable.borderless tbody td {
+			    border-style: none;
+			}
+			
+			body .ui-paginator {
+				 border-style: none;
+			}			
+		</style>
+	
+		<script>
+			//<![CDATA[
+				$(document).ready(function(){
+					customizeDatatableStyle();
+				});
+				
+				function customizeDatatableStyle() {
+					/* set datatable header's background color */
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+					
+					/* set datatable paginator button color */
+					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
+						function(el) {
+							el.className += ' w3-button';
+							
+							if(el.className.indexOf('ui-state-active') >= 0) {
+								el.className += ' w3-theme-dark';	
+							}
+							else {
+								el.className += ' w3-white';
+							}
+						}
+					);
+				}	
+			//]]>
+		</script>
+	
+		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
+						
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false" globalOnly="true">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div jsf:id="listMembersDiv" >
+			
+				<div>
+					<p:breadCrumb class="w3-hide-small">
+						<p:menuitem value="Home" url="#{request.contextPath}/" />
+   						<p:menuitem value="List Members" url="#{request.requestURI}" />
+					</p:breadCrumb>
+				</div>
+				
+				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2>List Members</h2>
+ 				</div>
+ 				
+				<p/>
+				
+				<h:form>
+				
+					<p:dataTable var="user" value="#{listMembers.genericLazyModel}" style="margin: 0 auto;" styleClass="borderless"
+						widgetVar="membersTableVar" rowIndexVar="rowIndex" paginator="true" filterEvent="enter"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} members"
+						rows="10" rowsPerPageTemplate="10,20,50" lazy="true" id="membersTable" draggableColumns="true">
+						
+						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						
+						<p:column sortBy="#{user.username}" filterBy="#{user.username}">
+						
+							<f:facet name="header">
+								<h:outputText value="Username" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<span>
+								<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(user.username)}" class="w3-circle"
+									id="commentorAvatar" height="40" width="40" style="border:3px;margin-right:15px;" title="#{user.username}"/> -->
+								<h:graphicImage value="#{requestContext}/avatar/#{user.username}" class="w3-circle"
+									id="commentorAvatar" height="36" width="36" style="border:3px;" title="#{user.username}"
+									rendered="#{fileHandler.isAvatarExists(user.username)}"/>
+										
+								<span jsf:rendered="#{!fileHandler.isAvatarExists(user.username)}" class="w3-circle avatarSpan" title="#{user.username}"
+  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+  									#{fn:substring(user.username, 0, 3)}
+  								</span>													
+								
+						        <h:link outcome="memberProfile">
+									<span style="margin-left:5px;" title="View '#{user.username}' profile"><b>#{user.username}</b></span>
+									<f:param name="username" value="#{user.username}"/>
+								</h:link> 								
+
+								<!-- if logged in, show the send private message link -->
+								<sec:authorize ifNotGranted="ROLE_ANONYMOUS">								
+									<h:link outcome="/secure/privateMessages">
+										[<i class="fa fa-paper-plane" title="Send private message to '#{user.username}'"></i>]
+										<f:param name="viewTab" value="newTab"/>
+										<f:param name="toUser" value="#{user.username}"/>
+									</h:link>
+								</sec:authorize>								
+							</span>
+						</p:column>
+						
+						<p:column sortBy="#{user.stat.discussionCount}" style="text-align:center;">
+							<f:facet name="header">
+								<h:outputText value="Discussions Created" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<span><b>#{user.stat.discussionCount}</b></span>
+							
+						</p:column>
+
+						<p:column sortBy="#{user.stat.commentCount}" style="text-align:center;">
+							<f:facet name="header">
+								<h:outputText value="Comments" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<span><b>#{user.stat.commentCount}</b></span>
+							
+						</p:column>
+
+						<p:column style="text-align:center;">
+							<f:facet name="header">
+								<h:outputText value="Last Comment" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<span jsf:rendered="#{not empty user.stat.lastComment}"><pe:timeAgo value="#{user.stat.lastComment.updateDate}"/></span>
+							<span jsf:rendered="#{empty user.stat.lastComment}">None</span>
+						</p:column>
+
+						<p:column sortBy="#{user.createDate}" style="text-align:right;">
+							<f:facet name="header">
+								<h:outputText value="Joined" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<h:outputText value="#{user.createDate}">
+								<f:convertDateTime pattern="MMMM dd, yyyy"/>
+							</h:outputText>
+						</p:column>
+					
+					</p:dataTable>
+
+			    </h:form>
+			    
+			    <p/>
+			    
+			</div>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

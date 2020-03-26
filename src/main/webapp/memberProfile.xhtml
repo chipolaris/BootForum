@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		User Profile
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<style type="text/css">
+		
+				
+		</style>
+	
+		<script>
+			//<![CDATA[
+				
+			//]]>
+		</script>
+		
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="username" value="#{memberProfile.username}"/>
+			<f:viewAction action="#{memberProfile.onLoad}"/>
+		</f:metadata>
+	
+		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
+						
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false" globalOnly="true">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div jsf:id="userProfileDiv" >
+			
+				<div>
+					<p:breadCrumb class="w3-hide-small">
+						<p:menuitem value="Home" url="#{request.contextPath}/" />
+						<p:menuitem value="Members" url="#{request.contextPath}/listMembers.xhtml" />
+   						<p:menuitem value="Member Profile: &lt;b&gt;#{memberProfile.username}&lt;/b&gt;" url="#{request.requestURI}?#{request.queryString}" escape="false"/>
+					</p:breadCrumb>
+				</div>
+				
+				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2>Member Profile</h2>
+ 				</div>
+ 				
+ 				<div class="w3-panel w3-center">
+ 					
+         			<div>		
+           				<h:graphicImage value="#{requestContext}/avatar/#{memberProfile.user.username}"
+							id="memberAvatar" height="100" width="100" 
+							title="#{comment.createBy} avatar"
+							rendered="#{fileHandler.isAvatarExists(memberProfile.user.username)}"/>
+					
+						<span jsf:rendered="#{!fileHandler.isAvatarExists(memberProfile.user.username)}" class="avatarSpan"
+							title="#{memberProfile.user.username}"
+							style="display:inline-block;font-size:2.5rem;line-height:100px;width:100px;text-align:center;text-transform: uppercase;color:white;">
+							#{fn:substring(memberProfile.user.username, 0, 3)}
+						</span>
+					</div>
+ 					
+ 					<div class="w3-section">
+ 						Username: <b>#{memberProfile.user.username}</b>
+ 					</div>
+ 					
+ 					<div class="w3-section">
+ 						Join: <b><pe:timeAgo value="#{memberProfile.user.createDate}"/></b>
+ 					</div>
+ 					
+ 					<div class="w3-section">
+ 						Discussion Started: <b>#{memberProfile.user.stat.discussionCount}</b>
+ 					</div>
+ 					
+ 					<div class="w3-section">
+ 						Comments: <b>#{memberProfile.user.stat.commentCount}</b>
+ 					</div>
+ 					
+ 					<div class="w3-section">
+ 						Reputation: <b>#{memberProfile.user.stat.reputation}</b>
+ 					</div>			
+ 
+					<div class="w3-section">
+ 						Last Login: <b><pe:timeAgo value="#{memberProfile.user.stat.lastLogin}"/></b>
+ 					</div>
+ 					
+ 					<!-- if logged in, show the send private message link -->
+					<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+						<div class="w3-section">								
+							<h:link outcome="/secure/privateMessages">
+								<span><i class="fa fa-paper-plane"/> Send private message to <b>#{memberProfile.user.username}</b></span>
+								<f:param name="viewTab" value="newTab"/>
+								<f:param name="toUser" value="#{memberProfile.user.username}"/>
+							</h:link>
+						</div>
+					</sec:authorize>					
+ 				
+ 				</div>
+ 				
+ 				<div class="w3-border-top">
+ 					<h4>Recent Comments:</h4>
+ 				</div>
+ 				
+ 				<div id="latestComments" class="w3-container">
+ 					<p:repeat var="comment" value="#{memberProfile.latestComments}">
+ 						
+						<div class="w3-panel w3-round-large w3-padding w3-theme-l5">
+							<p>
+								<b>Posted <pe:timeAgo value="#{comment.createDate}"/>:&#160;</b>
+								<h:outputLink value="commentThread.xhtml?commentId=#{comment.id}"><span><b>'#{comment.title}'</b></span></h:outputLink>
+								in discussion <h:outputLink value="viewDiscussion.xhtml?id=#{comment.discussion.id}"><span class="w3-large">#{comment.discussion.title}</span></h:outputLink>
+	 						</p>
+							
+							<p>
+						  		<h:outputText value="#{comment.content}" escape="false"/>
+						  	</p>
+						</div>
+ 					
+ 					</p:repeat>
+ 				</div>
+ 				
+			</div>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

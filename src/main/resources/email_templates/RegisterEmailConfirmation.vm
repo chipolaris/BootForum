@@ -1,0 +1,9 @@
+<h4>Hi ${username}!</h4>
+<p>
+This email <b>${email}</b> has been used for account registration on ${appUrl}.
+If that wasn't your intention, please ignore this email. 
+Otherwise, please lick on this <a href='${baseUrl}/emailConfirmation.xhtml?key=${value}'>link to activate your account.</a>
+</p>
+<p>
+Regards,
+</p>

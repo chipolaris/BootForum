@@ -1,0 +1,41 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    
+	<!-- Navbar -->
+	<div class="w3-top">
+	
+		<div class="w3-bar w3-theme-gradient-l1 w3-left-align w3-xlarge w3-card">
+			<div style="max-width:1680px;margin:auto;">
+				<a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-hover-white w3-theme-gradient-d5" href="javascript:void(0);" onclick="openNav()"><span><i class="fa fa-ellipsis-v fa-3x"></i></span></a>
+				<a href="#{request.contextPath}" class="w3-bar-item w3-button w3-theme-gradient-d5"><i class="fa fa-home fa-lg w3-margin-right"></i><br/><span><b>#{msg['application.title']}</b></span></a>
+				<a href="#{request.contextPath}/register.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-clipboard fa-lg"/><br/><span class="w3-medium">Register</span></a>
+				<a href="#" onclick="aboutOverlay.open();return false;" class="w3-bar-item w3-button w3-hide-small w3-right w3-theme-gradient-d5" title="About"><i class="fa fa-info-circle fa-lg"/><br/><span>About</span></a>
+			</div>
+		</div>
+	
+	  <!-- Navbar on small screens -->
+	  <div id="navSmall" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium">
+	  	<a href="#{request.contextPath}/register.xhtml" class="w3-bar-item w3-button"><i class="fa fa-clipboard fa-lg"/> Register</a>
+	    <a href="javascript:void(0);" onclick="aboutOverlay.open();return false;" class="w3-bar-item w3-button"><i class="fa fa-info-circle fa-lg"/> About</a>
+	  </div>
+	</div>
+
+	<script>
+		//<![CDATA[
+			// Used to toggle the menu on smaller screens when clicking on the menu button
+			function openNav() {
+			  var x = document.getElementById("navSmall");
+			  if (x.className.indexOf("w3-show") == -1) {
+			    x.className += " w3-show";
+			  } else { 
+			    x.className = x.className.replace(" w3-show", "");
+			  }
+			}
+		//]]>
+	</script>
+    
+</ui:composition>

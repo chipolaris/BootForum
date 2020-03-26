@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:func="http://bootforum.chipolaris.github.com/functions"
+    template="/WEB-INF/template/layout_public.xhtml">
+
+	<ui:define name="title">
+		Reply to comment '#{replyComment.comment.title}' in discussion '#{replyComment.comment.discussion.title}'
+	</ui:define>
+
+	<ui:define name="content">	
+		
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="id" value="#{replyComment.commentId}"/>
+			<f:viewParam name="quote" value="#{replyComment.quote}"/>
+			<f:viewParam name="discussionId" value="#{replyComment.discussionId}"/>
+			<f:viewAction action="#{replyComment.onLoad}"/>
+		</f:metadata>
+
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+ 				$(document).ready(function(){
+					customizePrimefaceButtons();
+				});
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+			//]]>	
+		</script>	
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
+	
+			<!-- <div class="w3-panel w3-round w3-theme-d5 w3-center">
+ 				<h2>#{msg['replyComment.page.title']}</h2>
+ 			</div> -->
+			
+			<p/>
+			
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{replyComment.reply == null}">
+			
+				<h3>Error!</h3>
+				<h4>Must specified a valid comment or discussion to post a reply</h4>
+			
+			</div>
+		
+			<div jsf:id="replyCommentDiv" jsf:rendered="#{replyComment.reply != null}">
+
+				<div>
+					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(replyComment.reply.discussion)}"/>
+				</div>
+ 				
+ 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2 jsf:rendered="#{not empty replyComment.comment.title}">Reply to comment '#{replyComment.comment.title}'</h2>
+ 					<h2 jsf:rendered="#{empty replyComment.comment.title}">Add comment to discussion '#{replyComment.reply.discussion.title}'</h2>
+ 				</div>
+ 								
+				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-comment"/> Comment</button> <!-- accordion button  -->
+			
+				<div id="commentPanel" class="w3-container w3-animate-right w3-hide w3-show">
+					
+					<h:form id="replyForm">
+				
+						<p/>
+						<b>Reply Title</b>
+						<p/>
+						
+						<p:inputText value="#{replyComment.reply.title}" style="width:100%;" maxlength="255">
+							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+						</p:inputText>
+						<p/>
+						<b>Comment</b>
+						<p/>
+						
+						<!-- 
+							Note (10/22/2019): Primefaces textEditor component (based on Quill JS text editor) has 
+							issues with the quoting feature where it add multi-lines.
+							Therefore, use PrimefacesExtension's ckEditor for now
+						-->
+						<pe:ckEditor value="#{replyComment.reply.content}" skin="moono-lisa" width="100%"
+							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
+										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
+										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]">
+							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+						</pe:ckEditor>
+						
+						<p:remoteCommand name="submitReplyForm" action="#{replyComment.submit}"/>
+							
+						<p/>							
+					
+					</h:form>
+					
+				</div>
+				
+				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-image"/> Thumbnails</button> <!-- accordion button  -->
+					
+				<div jsf:id="thumbnailPanel" class="w3-container w3-animate-right w3-hide w3-hide">
+					<h:form>
+
+						<p>
+				      		<b>Current Thumbnails:</b>
+						</p>
+						
+						<h6>
+							(Limit #{applicationProperties['Comment.thumbnail.maxPerComment']} thumbnails per comment,
+							 #{applicationProperties['Comment.thumbnail.maxPerComment'] - fn:length(replyComment.commentThumbnailManagement.uploadedFileList)} left)
+						</h6>
+
+
+						<div class="w3-row" style="padding:0">										
+							
+							<p:repeat var="thumbnail" value="#{replyComment.commentThumbnailManagement.uploadedFileList}">											
+						
+									<div class="w3-panel w3-border w3-round w3-col w3-quarter w3-center" style="margin:5px; width:175px;">
+									
+										<p/>
+	
+										<p:graphicImage alt="Image File" library="images" name="#{func:contentTypeIcon(thumbnail.contentType)}"/>
+									
+										<p/>
+								
+										<h:outputText value="#{thumbnail.origFileName}" style="font-size: 0.75em;word-wrap:break-word;"/>
+										
+										<p/>
+										
+										<p:commandButton ajax="true" icon="fa fa-trash" oncomplete="toggle('thumbnailPanel');" title="Delete this thumbnail"
+											update=":thumbnailPanel" action="#{replyComment.commentThumbnailManagement.deleteUploadedFile}">
+											<p:confirm header="Confirm Delete Thumbnail" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+											<f:setPropertyActionListener value="#{thumbnail}" target="#{replyComment.commentThumbnailManagement.selectedUploadedFile}" />  
+										</p:commandButton>
+								
+										<p/>
+										
+									</div>
+							
+							</p:repeat>
+																
+						</div>
+						
+						<p/>
+						
+						<p:fileUpload fileUploadListener="#{replyComment.commentThumbnailManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');"
+		        			update=":thumbnailPanel" auto="true" sizeLimit="#{applicationProperties['Comment.thumbnail.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
+		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(replyComment.commentThumbnailManagement.uploadedFileList)}"/>
+          				
+          				<p/>
+          					
+          			</h:form>
+					
+				</div>
+				
+				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-paperclip"/> Attachments</button> <!-- accordion button  -->
+					
+				<div jsf:id="attachmentPanel" class="w3-container w3-animate-right w3-hide w3-hide">
+				      
+			      	<h:form>
+			      
+			      		<p>
+				      		<b>Current Attachments:</b>
+						</p>
+						
+						<h6>
+							(Limit #{applicationProperties['Comment.attachment.maxPerComment']} attachments per comment,
+							#{applicationProperties['Comment.attachment.maxPerComment'] - fn:length(replyComment.commentAttachmentManagement.uploadedFileList)} left)
+						</h6>
+
+						<div class="w3-row" style="padding:0">										
+							
+							<p:repeat var="attachment" value="#{replyComment.commentAttachmentManagement.uploadedFileList}">											
+						
+									<div class="w3-panel w3-border w3-round w3-col w3-quarter w3-center" style="margin:5px; width:175px;">
+									
+										<p/>
+	
+										<p:graphicImage alt="File" library="images" name="#{func:contentTypeIcon(attachment.contentType)}"/>
+									
+										<p/>
+								
+										<h:outputText value="#{attachment.origFileName}" style="font-size: 0.75em;word-wrap:break-word;"/>
+										
+										<p/>
+										
+										<p:commandButton ajax="true" icon="fa fa-trash" oncomplete="toggle('attachmentPanel');" title="Delete this attachment"
+												update=":attachmentPanel" action="#{replyComment.commentAttachmentManagement.deleteUploadedFile}">
+												<p:confirm header="Confirm Delete Attachment" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+												<f:setPropertyActionListener value="#{attachment}" target="#{replyComment.commentAttachmentManagement.selectedUploadedFile}" />  
+											</p:commandButton>
+								
+										<p/>
+										
+									</div>
+							
+							</p:repeat>
+																
+						</div>
+						
+						<p/>
+						
+						<p:fileUpload fileUploadListener="#{replyComment.commentAttachmentManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');"
+			        			update=":attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Comment.attachment.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
+			        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(replyComment.commentAttachmentManagement.uploadedFileList)}"/>
+		          		
+		          		<p/>
+				
+					</h:form>
+					
+					
+				</div>
+				
+				<hr/>
+							
+				<h:panelGroup>
+					<h:form>
+						<!-- TODO: consider to implement this feature later
+						<p:commandButton ajax="false" value="Preview" icon="fa fa-eye"
+							action="#{replyComment.preview}"/>
+						 -->
+						 
+						 <!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
+						<p:commandButton value="#{msg['generic.form.submit']}" type="button" icon="fa fa-check-square" onclick="submitReplyForm();" styleClass="w3-btn w3-theme-dark w3-border-0"/>
+					
+					</h:form>
+					
+				</h:panelGroup>					
+				
+				<!-- confirm dialog -->
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+	    		</p:confirmDialog>
+				
+			</div>
+	
+			<script>
+				//<![CDATA[
+					
+					function toggle(id) {
+						var x = document.getElementById(id);
+						if (x.className.indexOf("w3-show") == -1) {
+							x.className += " w3-show";
+						} else {
+							x.className = x.className.replace(" w3-show", "");
+						}
+					};
+				
+				//]]>
+			</script>	
+	
+		</div>
+	
+	</ui:define>
+	
+</ui:composition>

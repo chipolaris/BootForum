@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+	template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		Welcome to #{msg['application.title']}
+	</ui:define>
+	
+	<ui:define name="content">
+	
+		<div class="w3-panel w3-card-4 w3-white">
+			
+			<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 0 -16px;">
+ 				<h2>Welcome to #{msg['application.title']}</h2>
+ 			</div>
+			
+			<div class="w3-large w3-margin-top">
+				<p>
+					<!-- welcome text -->
+				</p>
+			</div>
+			
+			<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
+				<i class="fa fa-clock-o"/> Most Recent Discussions
+			</div>
+			<div class="w3-container">
+				<p:repeat var="discussion" value="#{homePageBacking.mostRecentDiscussions}">
+					<p>
+						<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
+						started by
+						<h:link outcome="memberProfile">
+							<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
+							<f:param name="username" value="#{discussion.createBy}"/>
+						</h:link>
+						- <pe:timeAgo value="#{discussion.createDate}"/>
+						<p:repeat var="tag" value="#{discussion.tags}">
+							<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
+								<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+							</h:outputLink>
+						</p:repeat>
+					</p>
+				</p:repeat>
+			</div>
+			<h:outputLink value="listDiscussions.xhtml">
+				More ...
+				<f:param name="sort" value="createDate"/>
+			</h:outputLink>
+			<p/>
+			
+			<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
+				<i class="fa fa-eye"/> Most Views Discussions
+			</div>
+			<div class="w3-container">
+				<p:repeat var="discussion" value="#{homePageBacking.mostViewsDiscussions}">
+					<p>
+						<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
+						<b>(#{discussion.stat.viewCount} views)</b>
+						started by
+						<h:link outcome="memberProfile">
+							<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
+							<f:param name="username" value="#{discussion.createBy}"/>
+						</h:link> 
+						- <pe:timeAgo value="#{discussion.createDate}"/>
+						<p:repeat var="tag" value="#{discussion.tags}">
+							<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
+								<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+							</h:outputLink>
+						</p:repeat>
+					</p>
+				</p:repeat>
+			</div>
+			<h:outputLink value="listDiscussions.xhtml">
+				More ...
+				<f:param name="sort" value="stat.viewCount"/>
+			</h:outputLink>
+			<p/>
+			
+			<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
+				<i class="fa fa-comment-o"/> Most Comments Discussions
+			</div>
+			<div class="w3-container">
+				<p:repeat var="discussion" value="#{homePageBacking.mostCommentsDiscussions}">
+					<p>
+						<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
+						<b>(#{discussion.stat.commentCount} comments)</b>
+						started by
+						<h:link outcome="memberProfile">
+							<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
+							<f:param name="username" value="#{discussion.createBy}"/>
+						</h:link>						
+						- <pe:timeAgo value="#{discussion.createDate}"/>
+						<p:repeat var="tag" value="#{discussion.tags}">
+							<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
+								<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+							</h:outputLink>
+						</p:repeat>
+					</p>
+				</p:repeat>
+			</div>
+			<h:outputLink value="listDiscussions.xhtml">
+				More ...
+				<f:param name="sort" value="stat.commentCount"/>
+			</h:outputLink>
+			<p/>
+			
+			<p:repeat var="tag" value="#{homePageBacking.tags}">
+				<div jsf:rendered="#{not empty tag.discussions}">
+					<div class="w3-xlarge" 
+						style="border-bottom-style:solid; border-width: 6px; border-color:##{tag.color}; color:##{tag.color}">
+						<i class="fa #{tag.icon}"/> #{tag.label}
+					</div>
+					<div class="w3-container">
+						<p:repeat var="discussion" value="#{tag.discussions}">
+							<p>
+								<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
+								started by
+								<h:link outcome="memberProfile">
+									<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
+									<f:param name="username" value="#{discussion.createBy}"/>
+								</h:link>
+								- <pe:timeAgo value="#{discussion.createDate}"/>
+							</p>
+						</p:repeat>
+					</div>
+					<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
+						More #{tag.label}...
+					</h:outputLink>
+					<p/>
+				</div>
+			</p:repeat>
+			
+		</div>
+		
+	</ui:define>
+	
+</ui:composition>

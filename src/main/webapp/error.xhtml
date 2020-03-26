@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		#{msg['application.title']} Application - Error
+	</ui:define>
+
+	<ui:define name="content">
+	
+		<script>
+			//<![CDATA[	
+ 				$(document).ready(function(){
+					customizePrimefaceButtons();
+				});
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+			//]]>
+		</script>	
+	
+		<div class="w3-container">
+		
+			<div class="w3-xlarge w3-margin-top">Error occurs: #{pfExceptionHandler.type}</div>
+			
+			<div class="w3-large w3-margin-top">
+				Message: #{pfExceptionHandler.message} 
+				<p/>
+				StackTrace:
+			</div>
+			
+			<div class="w3-panel w3-border" style="height:500px;overflow: scroll;">
+				<h:outputText value="#{pfExceptionHandler.formattedStackTrace}" escape="false" />
+			</div>
+			
+			<p/>
+			
+			<p:button onclick="window.history.go(-1); return false;" value="&#160;Go back to previous page to try again!" 
+				icon="fa fa-arrow-circle-left"/>
+			
+			<p:button onclick="window.location = '#{request.contextPath}'; return false;" value="&#160;Go to home page" 
+				icon="fa fa-home" style="margin-left:5px;"/>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

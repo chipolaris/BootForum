@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		List Discussions
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<style type="text/css">
+			
+		</style>
+		
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+			//]]>	
+		</script>
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="sort" value="#{listDiscussions.sort}"/>
+			<f:viewParam name="order" value="#{listDiscussions.order}"/>
+			<f:viewParam name="pageSize" value="#{listDiscussions.pageSize}"/>
+			<f:viewAction action="#{listDiscussions.onLoad}"/>
+		</f:metadata>
+	
+		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
+						
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div jsf:id="listDiscussionsDiv">
+			
+				<div class="w3-hide-small">
+					<p:breadCrumb>
+						<p:menuitem value="Home" url="#{request.contextPath}/" />
+   						<p:menuitem value="List Discussions" url="#{request.requestURI}?#{request.queryString}" />
+					</p:breadCrumb>
+				</div>
+
+				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2>List Discussions</h2>
+ 				</div>
+				
+				<div jsf:id="paginationDiv">
+					<b>Sort By:</b>
+					
+					<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{empty listDiscussions.sort or listDiscussions.sort eq 'createDate'}">
+						<span class="w3-tag w3-round w3-large #{empty listDiscussions.sort or listDiscussions.sort eq 'createDate' ? 'w3-white w3-border' : 'w3-theme-d1'}">Date Started <i class="fa fa-clock-o"/></span>
+						<f:setPropertyActionListener value="createDate" target="#{listDiscussions.sort}"/>
+					</p:commandLink>
+					
+					<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{listDiscussions.sort eq 'stat.commentCount'}">
+						<span class="w3-tag w3-round w3-large #{listDiscussions.sort eq 'stat.commentCount' ? 'w3-white w3-border' : 'w3-theme-d1'}">Comment Count <i class="fa fa-comment-o"/></span>
+						<f:setPropertyActionListener value="stat.commentCount" target="#{listDiscussions.sort}"/>
+					</p:commandLink>
+					
+					<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{listDiscussions.sort eq 'stat.viewCount'}">
+						<span class="w3-tag w3-round w3-large #{listDiscussions.sort eq 'stat.viewCount' ? 'w3-white w3-border' : 'w3-theme-d1'}">View Count <i class="fa fa-eye"/></span>
+						<f:setPropertyActionListener value="stat.viewCount" target="#{listDiscussions.sort}"/>
+					</p:commandLink>
+					
+					&#160;&#160; <!-- add some white spaces for separation -->
+					
+					<b>Sort Order:</b>
+
+					<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{listDiscussions.order eq 'asc'}">
+						<span class="w3-tag w3-round w3-large #{listDiscussions.order eq 'asc' ? 'w3-white w3-border' : 'w3-theme-d3'}"><i class="fa fa-arrow-up"/></span>
+						<f:setPropertyActionListener value="asc" target="#{listDiscussions.order}"/>
+					</p:commandLink>
+
+					<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{empty listDiscussions.order or listDiscussions.order eq 'desc'}">
+						<span class="w3-tag w3-round w3-large #{empty listDiscussions.order or listDiscussions.order eq 'desc' ? 'w3-white w3-border' : 'w3-theme-d3'}"><i class="fa fa-arrow-down"/></span>
+						<f:setPropertyActionListener value="desc" target="#{listDiscussions.order}"/>
+					</p:commandLink>
+					
+					&#160;&#160; <!-- add some white spaces for separation -->
+					
+					<b>Page Size:</b>
+					
+					<ui:repeat var="pageSize" value="#{[10, 20, 50]}">
+						<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{listDiscussions.pageSize eq pageSize}">
+							<span class="w3-tag w3-round w3-large #{listDiscussions.pageSize eq pageSize ? 'w3-white w3-border' : 'w3-theme-d5'}">#{pageSize}</span>
+							<f:setPropertyActionListener value="#{pageSize}" target="#{listDiscussions.pageSize}"/>
+						</p:commandLink>
+					</ui:repeat>
+					
+				</div>
+				
+				<p/>
+				
+				<h:form id="form">
+				
+					<p:dataScroller value="#{listDiscussions.discussionsLazyModel}" var="discussion" lazy="true" 
+						rowIndexVar="rowIndex" chunkSize="#{listDiscussions.pageSize}"> 
+												
+						<f:facet name="loader">
+							<input type="button" value="Show More &#xf078;" class="w3-btn w3-theme-l1" style="font-family:Open Sans, FontAwesome;"/>
+						</f:facet>
+						
+						<p>
+							<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
+							<b>(#{discussion.stat.commentCount} comments, #{discussion.stat.viewCount} views)</b>
+							created by
+							<h:link outcome="memberProfile"> 
+								<b>#{discussion.createBy}</b>
+								<f:param name="username" value="#{discussion.createBy}"/>
+							</h:link>
+							- <pe:timeAgo value="#{discussion.createDate}"/>
+							<p:repeat var="tag" value="#{discussion.tags}">
+								<h:link outcome="viewTag">
+									<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+									<f:param name="id" value="#{tag.id}"/>
+								</h:link>
+							</p:repeat>
+							[in forum 
+							<h:outputLink value="viewForum.xhtml">
+								<b>#{discussion.forum.title}</b>
+								<f:param name="id" value="#{discussion.forum.id}"/>
+							</h:outputLink>]
+						</p>
+					</p:dataScroller>
+
+			    </h:form>
+			    
+			    <p/>
+			    
+			</div>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

@@ -1,0 +1,342 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:func="http://bootforum.chipolaris.github.com/functions"
+    xmlns:box4j="http://bootforum.chipolaris.github.com/jsf/component"
+    template="/WEB-INF/template/layout_admin.xhtml">
+	
+	<ui:define name="title">
+		Moderate Discussion
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<style type="text/css">
+			
+			blockquote {
+				font-family: Georgia, serif;
+				font-size: 10pt;
+				font-style: italic;
+				/*width: 90%;*/
+				margin: 0.25em 0;
+				padding: 0.25em 40px;
+				line-height: 1.45;
+				position: relative;
+				color: #383838;
+				background:#ececec;
+			}
+			
+			blockquote:before {
+				display: block;
+				content: "\201C";
+				font-size: 30pt;
+				position: absolute;
+				left: 5px;
+				top: -10px;
+				color: #7a7a7a;
+			}
+			
+			blockquote cite {
+				color: #999999;
+				font-size: 10.5pt;
+				display: block;
+				margin-top: 5px;
+			}
+			 
+			blockquote cite:before {
+				content: "\2014 \2009";
+			}			
+			
+		</style>
+		
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+ 				$(document).ready(function(){
+					customizeDatatableStyle();
+				});
+				
+				function customizeDatatableStyle() {
+					/* set datatable header's background color */
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+					
+					/* set datatable paginator button color */
+					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
+						function(el) {
+							el.className += ' w3-button';
+							
+							if(el.className.indexOf('ui-state-active') >= 0) {
+								el.className += ' w3-theme-dark';	
+							}
+							else {
+								el.className += ' w3-white';
+							}
+						}
+					);
+				}
+			//]]>	
+		</script>		
+		
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="id" value="#{moderateDiscussion.discussionId}"/>
+			<f:viewAction action="#{moderateDiscussion.onLoad}"/>
+		</f:metadata>
+	
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">		
+						
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{moderateDiscussion.discussion == null}">
+			
+				<h3>Error!</h3>
+				<h4>Must specified a valid discussion Id</h4>
+			
+			</div>
+			
+			<div jsf:id="moderateDiscussionDiv" jsf:rendered="#{moderateDiscussion.discussion != null}">
+				
+				<div class="w3-panel w3-theme-dark w3-opacity w3-center w3-round">
+ 					<h2>Moderate Discussion '#{moderateDiscussion.discussion.title}'</h2>
+ 					[Started by <b>#{moderateDiscussion.discussion.createBy}</b> on #{moderateDiscussion.discussion.createDate}]
+ 					<p/>
+ 				</div>
+				
+				<div>
+					
+					<h:form>
+						<h:outputText id="discussionStatusText" value="This discussion is #{moderateDiscussion.discussion.closed ? 'CLOSED' : 'OPEN'} "
+							style="font-weight:bold;color:#{moderateDiscussion.discussion.closed ? 'Tomato' : 'LimeGreen'};"/>
+					
+						<p:selectBooleanButton id="discussionCloseButton" value="#{moderateDiscussion.discussion.closed}" title="click to change"
+							onLabel="Click to open" offLabel="Click to close" onIcon="fa fa-check" offIcon="fa fa-ban" style="width:150px;">
+	            			<p:ajax update=":messages discussionStatusText" listener="#{moderateDiscussion.updateDiscussion}" />
+	        			</p:selectBooleanButton>
+	        			
+	        			<p:commandButton type="button" value=" Delete this Discussion" icon="fa fa-exclamation-triangle"
+	        				onclick="PF('deleteDiscussionConfirmation').show();" styleClass="w3-red w3-border-red" style="margin-left:5px;"/>
+					</h:form>
+					
+					<p/>
+					
+					<h:form>
+						
+						<h:panelGrid columns="3">
+							<h:outputText value="Apply Tags: "/>
+							<p:selectCheckboxMenu id="tags" value="#{moderateDiscussion.discussion.tags}" multiple="true"
+	                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px" converter="#{moderateDiscussion.tagConverter}">
+					            <f:selectItems value="#{moderateDiscussion.tags}" var="tag" itemLabel="#{tag.label}" itemValue="#{tag}"/>
+					        </p:selectCheckboxMenu>
+					         <p:commandButton ajax="true" value="&#160;Save" action="#{moderateDiscussion.updateDiscussionTag}" update=":messages" icon="fa fa-check"
+					         	styleClass="w3-btn w3-theme-dark w3-border-0" style="margin-top:-5px;"/>
+				        </h:panelGrid>
+				        
+					</h:form>	
+					
+					<p/>
+					
+				</div>
+				
+				<h:form>
+				
+				    <p:dataList value="#{moderateDiscussion.commentListLazyModel}" var="comment" type="definition" 
+				    	itemType="none" rowIndexVar="rowIndex" lazy="true"
+				    	paginator="true" rows="10" style="width:100%;" itemStyleClass="padding-inline-start:0px;">
+				    	
+				    	<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+				    	
+				        <f:facet name="header">
+				        	<h:outputText value="There are #{moderateDiscussion.discussion.stat.commentCount} comments in this discussion. This discussion has been viewed #{moderateDiscussion.discussion.stat.viewCount} times"/>
+				        </f:facet>
+	
+						<div class="w3-container" style="padding:0;">
+						
+							<div class="w3-right-align">
+								<h:outputText value="#{comment.createDate} "/>
+					        	<h:outputText value="[#{rowIndex + 1}]" style="font-weight:bold;"/>
+							</div>
+							
+							<table>
+								<tr>
+									<td>
+										<p:commandLink update=":userDetailsForm:userStatOutputPanel" action="#{userStatManager.loadUserStat(comment.createBy)}" 
+											oncomplete="PF('userStatOverlayPanel').show('#{component.clientId}')">
+               						
+               							<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
+											id="commentorAvatar" height="65" width="65" style="margin-right:15px;float:left;" 
+											title="click to view #{comment.createBy} profile"/>
+										
+           								</p:commandLink>									
+									</td>
+									
+									<td>
+								        <h:outputText value="#{comment.title} " style="font-size:14pt;" styleClass="w3-opacity-min" 
+								        	title="[by #{comment.createBy} on #{comment.createDate}, last edited on #{comment.updateDate}]"/>
+									    
+									    <p:commandLink rendered="#{not empty comment.replyTo}" 
+									    	onclick="document.getElementById('replyTo_#{rowIndex}_Div').style.display='block'; return false;">
+									    	<i class="fa fa-share"/>
+									    	<span>@#{comment.replyTo.createBy}: </span>
+									    	<h:outputText value=" #{comment.replyTo.title}" style="text-decoration:none;font-weight:bold;font-style:italic;" />
+									        
+									    </p:commandLink>									
+									</td>
+								</tr>
+							</table>
+
+					        <div jsf:rendered="#{not empty comment.replyTo}" style="margin: 10px 20px;display:none;" id="replyTo_#{rowIndex}_Div">
+					        	<div class="w3-panel w3-border w3-round-large">
+					        		
+					        		<p/>
+					        	
+					        		<h:graphicImage value="#{requestContext}/avatar/#{comment.replyTo.createBy}" class="w3-circle"
+										height="50" width="50" style="margin-right:15px;" 
+										title="#{comment.replyTo.createBy}"/>
+							        <span style="font-size: 12pt;" class="w3-opacity-min">#{comment.replyTo.title}</span>
+							        
+							        <p/>
+							        
+							        <div class="w3-panel w3-round-large w3-padding w3-theme-l5">
+								  		<h:outputText value="#{comment.replyTo.content}" escape="false"/>
+									</div>
+					        		
+					        		<div class="w3-opacity">
+					        			By #{comment.replyTo.createBy} on #{comment.replyTo.createDate}, last edited on #{comment.replyTo.updateDate}
+					        		</div>
+					        		
+					        		<p/>
+					        		
+					        		<a onclick="document.getElementById('replyTo_#{rowIndex}_Div').style.display='none';" style="cursor:pointer;">[Hide]</a>
+					        		
+					        		<p/>
+					        		
+					        	</div>				        
+					        </div>
+					        
+					        <div class="w3-panel">
+					        
+					        	<div class="w3-panel w3-round-large w3-padding w3-theme-l3">
+					        		<h:outputText value="#{comment.content}" escape="false"/>
+								</div>
+								
+								<p/>
+																
+								<p:fieldset legend="Thumbnails" rendered="#{fn:length(comment.thumbnails) gt 0}" toggleable="true" collapsed="true">
+
+									<box4j:slideshow value="#{comment.thumbnails}" var="thumbnail" maxWidth="800px;" id="slideshow">
+									
+										<h:graphicImage value="#{requestContext}/thumbnail/#{thumbnail.id}"/>
+									
+									</box4j:slideshow>
+									
+								</p:fieldset>
+																
+								<p/>
+																
+								<p:fieldset legend="Attachments" rendered="#{fn:length(comment.attachments) gt 0}" toggleable="true" collapsed="true">
+								
+						    		<div class="w3-row" style="padding:0">
+				
+						    			<div class="w3-section">
+						    				
+				    						<p:repeat var="attachment" value="#{comment.attachments}" varStatus="rowNumber">
+																								
+												<p:panel styleClass="w3-col w3-quarter" style="margin:5px; text-align:center;width:135px;word-wrap: break-word;">
+														
+													<f:facet name="header"><span style="font-size:8pt;">#{empty attachment.description ? 'File ' + (rowNumber.index + 1) : attachment.description}</span></f:facet>
+														
+													<h:commandLink>
+														<p:fileDownload value="#{fileHandler.getCommentAttachment(attachment)}"/>
+														<p:graphicImage alt="#{attachment.description}" library="images" name="#{func:contentTypeIcon(attachment.contentType)}"/>
+													</h:commandLink>
+															
+												</p:panel>
+																	
+											</p:repeat>
+						    				
+						    			</div>
+						    					    			
+						    		</div>										
+									
+								</p:fieldset>
+						        			        	
+					       	</div>
+					       	
+				        </div>
+				        
+				        <div>
+					        
+					       	<h:outputText id="commentStatusText" value="This comment is #{comment.hidden ? 'HIDDEN' : 'VISIBLE'} "
+					       		style="font-weight:bold;color:#{comment.hidden ? 'Tomato' : 'LimeGreen'};"/>
+					        
+							<p:selectBooleanButton id="commentHideButton" value="#{comment.hidden}" title="click to toggle"
+								onLabel="Click to show" offLabel="Click to hide" onIcon="fa fa-check" offIcon="fa fa-ban" style="width:150px;">
+			            		<p:ajax update=":messages commentStatusText" listener="#{moderateDiscussion.updateComment(comment)}" process="@this"/>
+			        		</p:selectBooleanButton>					        	
+					    </div>
+				        
+				        <hr style="border: 1px dashed; opacity: 0.75"/>
+				        
+				    </p:dataList>
+			    </h:form>
+			    
+			    <p/>
+			    
+			</div>
+
+			<h:form id="userDetailsForm">
+				<p:overlayPanel widgetVar="userStatOverlayPanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
+					<p:outputPanel id="userStatOutputPanel" style="text-align:center;">
+						<p:panelGrid columns="2" rendered="#{not empty userStatManager.userStat}">
+							<f:facet name="header">
+								<h5>User '#{userStatManager.username}'</h5>
+							</f:facet>
+
+			                <h:outputText value="Joined: " />
+			                <pe:timeAgo value="#{userStatManager.userStat.createDate}"/>
+			 
+			                <h:outputText value="Discussions Started: " />
+			                <h:outputText value="#{userStatManager.userStat.discussionCount}" />
+			 
+			                <h:outputText value="Comments: " />
+			                <h:outputText value="#{userStatManager.userStat.commentCount}"/>
+			             
+			             	<h:outputText value="Reputation: " />
+			                <h:outputText value="#{userStatManager.userStat.reputation}"/>
+			             
+			                <h:outputText value="Last Login: " />
+			                <pe:timeAgo value="#{userStatManager.userStat.lastLogin}"/>
+
+							<h:outputText value="Last Comment: " />
+							<pe:timeAgo value="#{userStatManager.userStat.lastComment.createDate}"/>
+			                			                						
+						</p:panelGrid>
+					</p:outputPanel>
+				</p:overlayPanel>
+			</h:form>
+			
+			<p:confirmDialog message="Delete Discussion and related Comments?" showEffect="fade" hideEffect="fade"  
+		        header="Confirm" severity="alert" widgetVar="deleteDiscussionConfirmation">
+		  		<h:form>
+			        <p:commandButton value="Yes" icon="fa fa-exclamation" styleClass="w3-red w3-border-red"
+			        	action="#{moderateDiscussion.deleteDiscussion}"	oncomplete="PF('deleteDiscussionConfirmation').hide()"/>  
+			        <p:commandButton value="Cancel" oncomplete="PF('deleteDiscussionConfirmation').hide();"
+			        	icon="fa fa-close" style="margin-left:5px;" styleClass="w3-green w3-border-green">
+			        </p:commandButton>  
+		  		</h:form>
+		    </p:confirmDialog>			
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

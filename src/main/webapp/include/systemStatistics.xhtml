@@ -1,0 +1,109 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <p:panel header="View System Statistics" toggleable="true" collapsed="true" toggleableHeader="true" >
+
+    	<p:panelGrid style="width:100%;">
+
+			<p:row styleClass="ui-widget-content">
+				<p:column style="width:50%;">
+					<h:outputText value="Comments" />
+				</p:column>
+				<p:column style="font-weight:bold" >
+					<h:outputText value="#{systemInfo.statistics.commentCount}"/>
+				</p:column>
+			</p:row>
+
+			<p:row styleClass="ui-widget-content">
+				<p:column styleClass="w3-theme-light">
+					<h:outputText value="Discussions" />
+				</p:column>
+				<p:column style="font-weight:bold" styleClass="w3-theme-light">
+					<h:outputText value="#{systemInfo.statistics.discussionCount}"/>
+				</p:column>
+			</p:row>
+
+			<p:row styleClass="ui-widget-content">
+				<p:column>
+					<h:outputText value="Forums" />
+				</p:column>
+				<p:column style="font-weight:bold">
+					<h:outputText value="#{systemInfo.statistics.forumCount}"/>
+				</p:column>
+			</p:row>
+
+			<p:row styleClass="ui-widget-content">
+				<p:column styleClass="w3-theme-light">
+					<h:outputText value="Forum Groups" />
+				</p:column>
+				<p:column style="font-weight:bold" styleClass="w3-theme-light">
+					<h:outputText value="#{systemInfo.statistics.forumGroupCount}"/>
+				</p:column>
+			</p:row>
+
+			<p:row styleClass="ui-widget-content">
+				<p:column>
+					<h:outputText value="Registered Users" />
+				</p:column>
+				<p:column style="font-weight:bold">
+					<h:outputText value="#{systemInfo.statistics.userCount}"/>
+				</p:column>
+			</p:row>
+
+			<p:row styleClass="ui-widget-content">
+				
+				<p:column styleClass="w3-theme-light">
+					<h:outputText value="Last Registered User" />
+				</p:column>
+				
+				<p:column style="font-weight:bold;" styleClass="w3-theme-light">
+					<h:outputText value="#{systemInfo.statistics.lastRegisteredUser} "/>
+					<span class="w3-opacity"> <i class="fa fa-clock-o fa-lg"/>&#160;<pe:timeAgo value="#{systemInfo.statistics.lastUserRegisteredDate}"/></span>
+				</p:column>
+				
+			</p:row>
+
+			<p:row styleClass="ui-widget-content">
+				
+				<p:column>
+					<h:outputText value="Last Comment" />
+				</p:column>
+				
+				<p:column style="font-weight:bold">
+					<h:outputText value="By #{systemInfo.statistics.lastComment.updateBy} "/>
+					<span class="w3-opacity"> <i class="fa fa-clock-o fa-lg"/>&#160;<pe:timeAgo value="#{systemInfo.statistics.lastComment.updateDate}"/></span>
+				</p:column>
+			</p:row>
+
+
+			<p:row styleClass="ui-widget-content">
+				<p:column styleClass="w3-theme-light">
+					<h:outputText value="Logged On Users" />
+				</p:column>
+				<p:column style="font-weight:bold" styleClass="w3-theme-light">
+					<h:outputText value="#{fn:length(systemInfo.loggedOnUsers)}" />
+				</p:column>
+			</p:row>
+
+			<p:row styleClass="ui-widget-content">
+			
+				<p:column>
+					<h:outputText value="Anonymous Users" />
+				</p:column>
+				<p:column style="font-weight:bold">
+					<h:outputText value="#{systemInfo.sessionCount - fn:length(systemInfo.loggedOnUsers)}"/>
+				</p:column>
+				
+			</p:row>
+
+		</p:panelGrid>
+		    		    	
+   	</p:panel>
+
+</ui:composition>

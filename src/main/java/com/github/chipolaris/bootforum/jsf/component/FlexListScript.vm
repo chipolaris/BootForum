@@ -1,0 +1,52 @@
+
+<script type="text/javascript">
+
+	${cssClientId}_paginatorHandler = function(e) {
+		e.preventDefault();
+		var firstRecord = $(this).attr('title');
+		${cssClientId}_ajaxSubmit(firstRecord);
+	}
+	
+	${cssClientId}_pageSizeHandler = function(e) {
+		var firstRecord = 0;
+		${cssClientId}_ajaxSubmit(firstRecord);
+	}
+	
+	${cssClientId}_filterHandler = function(e) {
+		var firstRecord = 0;
+		${cssClientId}_ajaxSubmit(firstRecord);
+	}
+	
+	${cssClientId}_ajaxSubmit = function (firstRecord) {
+		
+		var viewState = $("input[name='javax.faces.ViewState']").val();
+	
+	    $.ajax({
+	    	type: 'POST',
+	    	url: '',
+	    	dataType: "xml",
+		    data: {
+		    	'javax.faces.ViewState': viewState,
+		        'javax.faces.partial.ajax': 'true',
+		        'javax.faces.source': '${clientId}',
+		        'javax.faces.partial.execute': '${clientId}',
+		        'javax.faces.partial.render': '${clientId}',
+		        '${cssClientId}_first': firstRecord,
+		        '${cssClientId}_pageSizeOption': $('#${cssClientId}_pageSizeOptions').val(),
+		        '${cssClientId}_filterInput': $('#${cssClientId}_filterInput').val(),
+		    },
+		    success: function(responseXml){
+	    
+		        // note: since form:flexList has the colon character ':' which is a meta-characters, must escape with '\\:'
+		        $("#${clientIdEscapeColons}").replaceWith( $(responseXml).find('update[id="${clientId}"]').text());
+		    }
+	    });
+	}
+	
+	$(document).on('click', '.${cssClientId}_paginator_button', ${cssClientId}_paginatorHandler);
+	
+	$(document).on('change', '#${cssClientId}_pageSizeOptions', ${cssClientId}_pageSizeHandler);
+	
+	$(document).on('click', '#${cssClientId}_filterButton', ${cssClientId}_filterHandler);
+
+</script>

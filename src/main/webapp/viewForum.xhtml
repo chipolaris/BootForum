@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:func="http://bootforum.chipolaris.github.com/functions"
+    template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		View Forum
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<style type="text/css">	
+			 
+			 /* borderless datatable: https://stackoverflow.com/questions/18880208/remove-all-borders-on-a-specific-datatable */
+			.ui-datatable-header.borderless,
+			.ui-datatable.borderless thead th,
+			.ui-datatable.borderless tbody,
+			.ui-datatable.borderless tbody tr,
+			.ui-datatable.borderless tbody td {
+			    border-style: none;
+			}
+			
+			body .ui-paginator {
+				 border-style: none;
+			}
+			
+		</style>
+		
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+			$(document).ready(function(){
+				customizeDatatableStyle();
+			});
+			
+			function customizeDatatableStyle() {
+				/* set datatable header's background color */
+				document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'});
+				
+				/* set datatable paginator button color */
+				document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
+					function(el) {
+						el.className += ' w3-button';
+						
+						if(el.className.indexOf('ui-state-active') >= 0) {
+							el.className += ' w3-theme-dark';	
+						}
+						else {
+							el.className += ' w3-white';
+						}
+					}
+				);
+			}
+			//]]>	
+		</script>
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="id" value="#{viewForum.forumId}"/>
+			<f:viewAction action="#{viewForum.onLoad}"/>
+		</f:metadata>
+	
+		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
+						
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty viewForum.forum}">
+			
+				<h3>Error!</h3>
+				<h4>Must specified a valid forum Id</h4>
+			
+			</div>
+			
+			<div jsf:id="viewForumDiv" jsf:rendered="#{not empty viewForum.forum}">
+			
+				<div class="w3-hide-small">
+					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(viewForum.forum)}"/>
+				</div>
+
+				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2>Forum #{viewForum.forum.title}</h2>
+ 				</div>
+ 							
+				<div>
+					<!-- <p:button href="#{request.contextPath}/secure/addDiscussion.xhtml?forumId=#{viewForum.forumId}" styleClass="w3-button w3-theme-dark w3-round w3-border-0" 
+						value="Start new Discussion" icon="fa fa-plus" rendered="#{viewForum.forum.active}"/> -->
+					<a href="#{request.contextPath}/secure/addDiscussion.xhtml?forumId=#{viewForum.forumId}" class="w3-button w3-border">
+						<i class="fa fa-plus"/> Start new Discussion
+					</a>
+					
+					<h:outputText value="Forum is not active" rendered="#{!viewForum.forum.active}"/>
+				</div>
+				
+				<p/>
+				
+				<h:form>
+				
+					<p:dataTable var="discussion" value="#{viewForum.forumDiscussionsLazyModel}" style="margin: 0 auto;" styleClass="borderless"
+						widgetVar="discussionTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
+						rows="10" lazy="true" id="discussionTable" draggableColumns="true">
+						
+						<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+						
+						<p:column sortBy="#{discussion.title}" style="text-align:left;" priority="1">
+							<f:facet name="header">
+								<h:outputText value="Discussion Title" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><span class="w3-large"><b>#{discussion.title}</b></span></h:outputLink>
+							<br/>
+							<span>Started by <b>#{discussion.createBy} </b><pe:timeAgo value="#{discussion.createDate}" titlePattern="MMMMM dd yyyy" /></span>
+							<p:repeat var="tag" value="#{discussion.tags}">
+								<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
+									<span class="w3-tag" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
+								</h:outputLink>
+							</p:repeat>
+						</p:column>
+						
+						<p:column sortBy="#{discussion.stat.commentCount}" style="text-align:center;width:120px;" priority="3">
+							<f:facet name="header">
+								<h:outputText value="Comments" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<span><b>#{discussion.stat.commentCount}</b></span>
+							
+						</p:column>
+
+						<p:column sortBy="#{discussion.stat.viewCount}" style="text-align:center;width:120px;" priority="4">
+							<f:facet name="header">
+								<h:outputText value="Views" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<span><b>#{discussion.stat.viewCount}</b></span>
+							
+						</p:column>
+
+						<p:column sortBy="#{discussion.stat.lastComment.updateDate}" style="text-align:right;" priority="2">
+							<f:facet name="header">
+								<h:outputText value="Last Comment" />
+							</f:facet>
+							
+							<div>
+								<pe:timeAgo value="#{discussion.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy" />
+								by <b>#{discussion.stat.lastComment.updateBy} </b>
+								<h:link outcome="memberProfile">
+									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(discussion.stat.lastComment.updateBy)}" class="w3-circle"
+											id="commentorAvatar" height="40" width="40" style="border:3px;margin-right:15px;" title="#{discussion.stat.lastComment.updateBy}"/> -->
+									<h:graphicImage value="#{requestContext}/avatar/#{discussion.stat.lastComment.updateBy}" class="w3-circle"
+											id="commentorAvatar" height="30" width="30" title="#{discussion.stat.lastComment.updateBy}"
+											rendered="#{fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}"/>
+																	
+									<span  jsf:rendered="#{!fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}" class="w3-circle avatarSpan"
+										 title="#{discussion.stat.lastComment.updateBy}"
+	  									style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white">
+	  									#{fn:substring(discussion.stat.lastComment.updateBy, 0, 3)}
+	  								</span>									
+									<f:param name="username" value="#{discussion.stat.lastComment.updateBy}"/>
+								</h:link>
+							</div>
+						</p:column>
+					
+					</p:dataTable>
+
+			    </h:form>
+			    
+			    <p/>
+			    
+			</div>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

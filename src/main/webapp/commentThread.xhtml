@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:func="http://bootforum.chipolaris.github.com/functions"
+    xmlns:box4j="http://bootforum.chipolaris.github.com/jsf/component"
+    template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		Comment Thread
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<style type="text/css">
+		
+				
+		</style>
+	
+		<script>
+			//<![CDATA[
+			
+			//]]>
+		</script>
+		
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="commentId" value="#{commentThread.commentId}"/>
+			<f:viewAction action="#{commentThread.onLoad}"/>
+		</f:metadata>
+	
+		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
+						
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false" globalOnly="true">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div jsf:id="commentThreadDiv" >
+			
+				<div>
+					<p:breadCrumb class="w3-hide-small">
+						<p:menuitem value="Home" url="#{request.contextPath}/" />
+						<p:menuitem value="Discussion: '#{commentThread.comment.discussion.title}'" url="#{request.contextPath}/viewDiscussion.xhtml?id=#{commentThread.comment.discussion.id}" />
+   						<p:menuitem value="Comment Thread" url="#{request.requestURI}?#{request.queryString}"/>
+					</p:breadCrumb>
+				</div>
+				
+				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2>Comment Thread</h2>
+ 				</div>
+ 
+  				<div id="commentThreads" class="w3-container">
+  					
+  					<h:link outcome="viewDiscussion">
+  						<h4>In Discussion '#{commentThread.comment.discussion.title}'</h4>
+  						<f:param name="id" value="#{commentThread.comment.discussion.id}"/>
+  					</h:link>
+  					
+ 					<p:repeat var="comment" value="#{commentThread.comments}">
+ 						
+						<div class="w3-panel w3-round-large w3-padding w3-theme-light">
+							
+							<p>
+								<b>Posted <pe:timeAgo value="#{comment.createDate}"/></b> by
+								
+								<h:link outcome="memberProfile">
+									<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36" title="#{comment.createBy}"
+											rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
+											
+									<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" title="#{comment.createBy}"
+	  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+	  									#{fn:substring(comment.createBy, 0, 3)}
+	  								</span>
+									<f:param name="username" value="#{comment.createBy}"/>
+								</h:link>								
+								
+	 						</p>
+	 						
+	 						<p style="font-size:12pt;">
+	 							<b>#{comment.title}</b>
+	 						</p>
+							
+							<p>
+						  		<h:outputText value="#{comment.content}" escape="false"/>
+						  	</p>
+						  	
+							<p:fieldset legend="Thumbnails" rendered="#{not empty comment.thumbnails}" toggleable="true" collapsed="true" style="margin-bottom:10px;">
+								<box4j:slideshow value="#{comment.thumbnails}" var="thumbnail" maxWidth="800px;" id="slideshow">
+								
+									<h:graphicImage value="#{requestContext}/thumbnail/#{thumbnail.id}"/>
+								
+								</box4j:slideshow>
+							</p:fieldset>
+															
+							<p:fieldset legend="Attachments" rendered="#{not empty comment.attachments}" toggleable="true" collapsed="true" style="margin-bottom:10px;">
+								
+					    		<div class="w3-row" style="padding:0">
+			
+					    			<div class="w3-section">
+					    				
+			    						<p:repeat var="attachment" value="#{comment.attachments}" varStatus="rowNumber">
+																							
+											<p:panel styleClass="w3-col w3-quarter" style="margin:5px; text-align:center;width:135px;word-wrap: break-word;">
+													
+												<f:facet name="header"><span style="font-size:8pt;">#{empty attachment.description ? 'File ' + (rowNumber.index + 1) : attachment.description}</span></f:facet>
+													
+												<h:commandLink>
+													<p:fileDownload value="#{fileHandler.getCommentAttachment(attachment)}"/>
+													<p:graphicImage alt="#{attachment.description}" library="images" name="#{func:contentTypeIcon(attachment.contentType)}"/>
+												</h:commandLink>
+														
+											</p:panel>
+																
+										</p:repeat>
+					    				
+					    			</div>
+					    					    			
+					    		</div>
+								
+							</p:fieldset>
+													  	
+						</div>
+ 					
+ 					</p:repeat>
+ 				</div>
+ 				
+			</div>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title><ui:insert name="title">#{msg['application.title']}</ui:insert></title>
+        
+        <!-- *Note: favicon generated and setup instruction taken from https://favicon.io/favicon-generator/ -->
+		<link rel="apple-touch-icon" sizes="180x180" href="#{request.contextPath}/favicon_io/apple-touch-icon.png"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="#{request.contextPath}/favicon_io/favicon-32x32.png"/>
+		<link rel="icon" type="image/png" sizes="16x16" href="#{request.contextPath}/favicon_io/favicon-16x16.png"/>
+		<link rel="manifest" href="#{request.contextPath}/favicon_io/site.webmanifest"/>
+        
+        <h:outputStylesheet library="css" name="w3.css"/>
+        
+        <!-- color themes -->
+        <!-- read from cookie name 'theme.color', if empty, set to default value 'w3-theme-light-blue' -->
+        <c:set var = "theme_color" value = "#{cookie['theme.color'].value}"/>
+        <c:if test = "#{empty theme_color}">
+        	<c:set var = "theme_color" value = "w3-theme-light-blue"/>
+      	</c:if>      	
+        <h:outputStylesheet library="css" name="w3-theme/#{theme_color}.css"/>
+        
+        <style>
+        
+			html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+			
+		</style>
+    </h:head>
+
+    <h:body style="margin:0px;">
+
+		<!-- Top container -->
+		<div class="w3-bar w3-top w3-theme-l3 w3-large w3-bottombar w3-border-deep-orange" style="z-index:4">
+		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+		  <a href="#{request.contextPath}"><span class="w3-bar-item w3-right" style="font-weight:bold;">#{msg['application.title']} Administration</span></a>
+		</div>
+		
+		<!-- Sidebar/menu -->
+		<nav class="w3-sidebar w3-collapse w3-theme-l4 w3-animate-left" style="z-index:3;width:230px;" id="mySidebar">
+		
+		  <div class="w3-center w3-border-bottom w3-border-green w3-padding w3-margin">
+			
+			<a href="#{request.contextPath}/secure/index.xhtml">
+				<h:graphicImage value="#{requestContext}/avatar/#{userSession.user.username}" class="w3-circle"
+					id="commentorAvatar" height="60" width="60" style="border:3px;" 
+					title="#{userSession.user.username}"
+					rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"/>
+				
+				<span jsf:rendered="#{!fileHandler.isAvatarExists(userSession.user.username)}" class="w3-circle w3-purple"
+					title="#{userSession.user.username}"
+					style="display:inline-block;font-size:1.2rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;">
+					#{fn:substring(userSession.user.username, 0, 3)}
+				</span>
+			</a>
+			    		    
+		  </div>
+		  
+		  <div class="w3-bar-block">
+		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+		    
+			<a href="#{request.contextPath}/admin/index.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-institution" title="Home"/> ADMIN HOME</a> 
+			<a href="#{request.contextPath}/admin/userList.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users" title="Manage Users"/> MANAGE USERS</a> 
+			<a href="#{request.contextPath}/admin/discussionManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-comments" title="Manage Discussions"/> MANAGE DISCUSSIONS</a> 
+			<a href="#{request.contextPath}/admin/forumManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-indent" title="Manage Forums"/> MANAGE FORUMS</a>
+			<a href="#{request.contextPath}/admin/tagManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tags" title="Manage Tags"/> MANAGE TAGS</a>
+			<a href="#{request.contextPath}/admin/simulateData.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-play" title="Create Simulation Data"/> SIMULATE DATA</a>
+			<a href="#{request.contextPath}/admin/systemManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-gear" title="Manage System"/> SYSTEM INFO</a>
+			<a href="#{request.contextPath}/index.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home" title="Home"/> FORUM HOME</a>
+			<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button w3-padding"><i class="fa fa-sign-out" title="Logout"/> LOGOUT</a>
+		  </div>
+		</nav>
+
+		<!-- Overlay effect when opening sidebar on small screens -->
+		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>    
+
+		<!-- !PAGE CONTENT! -->
+		<div class="w3-main" style="margin-left:230px;margin-top:43px;">
+
+			<!-- Header -->
+			<header class="w3-container">
+				<h5><ui:insert name="pageTitle"/></h5>
+			</header>
+			
+			<div class="w3-margin">
+				<ui:insert name="content">
+		        	Template
+		        </ui:insert>
+	        </div>
+           	
+			<!-- Footer -->
+			<footer class="w3-container w3-padding-16">
+				&#169; <a href="http://www.SoftwarePrincipals.com">SoftwarePrincipals.com 2019</a>. Powered by <a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a>, <a href="https://spring.io/projects/spring-framework">Spring Framework</a>, <a href="http://www.eclipse.org/eclipselink/">EclipseLink</a>, <a href="https://www.primefaces.org">Primefaces</a>, and <a href="https://www.w3schools.com/w3css/default.asp">W3.CSS</a> | All rights reserved.
+			</footer>
+			
+			<!-- End page content -->         	
+		</div>
+		
+        <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:25px;bottom:25px">
+            <f:facet name="start">
+                <i class="fa fa-refresh fa-spin fa-3x fa-fw w3-text-blue-grey"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+        
+        <ui:include src="/WEB-INF/template/ajaxErrors.xhtml" />    	
+  
+		<script type="text/javascript">
+ 			//<![CDATA[	
+			
+				// Get the Sidebar
+				var mySidebar = document.getElementById("mySidebar");
+				
+				// Get the DIV with overlay effect
+				var overlayBg = document.getElementById("myOverlay");
+				
+				// Toggle between showing and hiding the sidebar, and add overlay effect
+				function w3_open() {
+				  if (mySidebar.style.display === 'block') {
+				    mySidebar.style.display = 'none';
+				    overlayBg.style.display = "none";
+				  } else {
+				    mySidebar.style.display = 'block';
+				    overlayBg.style.display = "block";
+				  }
+				}
+				
+				// Close the sidebar with the close button
+				function w3_close() {
+				  mySidebar.style.display = "none";
+				  overlayBg.style.display = "none";
+				}
+				
+				/* highlight and disable anchor (a href) the side navigation link if the page is current */
+				$(document).ready(function(){
+					var navLinks = document.querySelectorAll("a.w3-bar-item");
+					navLinks.forEach(function(navLink) {
+						if(window.location.href.includes(navLink.href)) {
+							navLink.style.pointerEvents = 'none';
+						  	navLink.style.cursor = 'default';
+						  	navLink.className += " w3-theme-dark";
+						  	navLink.style.fontWeight = "bold";
+						}
+					});
+					
+				});
+				
+				function toggle(id) {
+					var x = document.getElementById(id);
+					if (x.className.indexOf("w3-show") == -1) {
+						x.className += " w3-show";
+					} else {
+						x.className = x.className.replace(" w3-show", "");
+					}
+				}
+				
+			//]]>	
+		</script>
+    
+    </h:body>
+</html>

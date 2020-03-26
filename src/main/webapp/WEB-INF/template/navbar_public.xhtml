@@ -1,0 +1,99 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+  
+	<!-- Navbar -->
+	<div class="w3-top">
+		<div class="w3-bar w3-theme-gradient-l1 w3-left-align w3-xlarge w3-card">
+			<div style="max-width:1680px;margin:auto;">
+				<a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="openNav()"><span style="font-size:48px;"><i class="fa fa-ellipsis-v w3-opacity"/></span></a>
+				<a href="#{request.contextPath}" class="w3-bar-item w3-button w3-theme-gradient-d5 w3-text-black"><i class="fa fa-home fa-lg"></i><br/><span><b>#{msg['application.title']}</b></span></a>
+				<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right" onclick="document.getElementById('loginModal').style.display='block'"><i class="fa fa-sign-in fa-lg"/><br/><span class="w3-medium">Login</span></a>
+				<a href="#{request.contextPath}/register.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-clipboard fa-lg"/><br/><span class="w3-medium">Register</span></a>
+				<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-comments fa-lg"/><br/><span class="w3-medium">Forums</span></a>
+				<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-users fa-lg"/><br/><span class="w3-medium">Members</span></a>
+				<a href="#{request.contextPath}/searchComment.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-search fa-lg"/><br/><span class="w3-medium">Search</span></a>
+				<a href="#" onclick="aboutOverlay.open();return false;" class="w3-bar-item w3-button w3-hide-small w3-right w3-theme-gradient-d5" title="About"><i class="fa fa-info-circle fa-lg"/><br/><span>About</span></a>
+			</div>
+		</div>
+	
+	  <!-- Navbar on small screens -->
+	  <div id="navSmall" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium">
+	  	<a href="javascript:void(0);" class="w3-bar-item w3-button" onclick="document.getElementById('loginModal').style.display='block'"><i class="fa fa-sign-in fa-lg"/> Login</a>
+	    <a href="#{request.contextPath}/register.xhtml" class="w3-bar-item w3-button"><i class="fa fa-clipboard fa-lg"/> Register</a>
+	    <a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button"><i class="fa fa-comments fa-lg"/> Forums</a>
+	    <a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button"><i class="fa fa-users fa-lg"/> Members</a>
+	    <a href="#{request.contextPath}/searchComment.xhtml" class="w3-bar-item w3-button"><i class="fa fa-search fa-lg"/> Search</a>
+	    <a href="javascript:void(0);" onclick="aboutOverlay.open();return false;" class="w3-bar-item w3-button"><i class="fa fa-info-circle fa-lg"/> About</a>
+	  </div>
+	</div>
+
+	<!-- Login Modal -->
+	<div id="loginModal" class="w3-modal">
+	  <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+		<header class="w3-container w3-padding-16 w3-theme-dark">
+			<span class="w3-xlarge"><i class="fa fa-key"/> Login to #{msg['application.title']}</span>
+		</header>
+		
+	    <div class="w3-center">
+	    	<br/>
+	    	<span onclick="document.getElementById('loginModal').style.display='none'" class="w3-button w3-xxlarge w3-transparent w3-display-topright" title="Close Modal">×</span>
+	      	<h:graphicImage library="images" name="img_avatar4.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top"/>
+	    </div>
+	    
+		<h:form id="loginForm" prependId="false" styleClass="w3-container">
+			<div class="w3-section">
+			
+				<i class="fa fa-user"/> <b>User Name</b>
+				<p:inputText type="text" id="username" placeholder="Enter Username" class="w3-margin-bottom" style="width:100%;" required="true"/>
+				
+				<i class="fa fa-unlock"/> <b>Password</b>
+				<p:inputText type="password" id="password" placeholder="Enter Password" style="width:100%;" required="true"/>
+				
+				<!-- <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Login</button>
+          		<input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me -->
+          		
+          		<p:commandButton ajax="false" value="Login" icon="fa fa-sign-in" styleClass="w3-block w3-section" action="#{loginBean.doLogin}"/>
+          		
+          		<!-- 
+          			Note: Primefaces p:selectBooleanCheckbox (same with p:toggleSwitch) appends the _input after the id attribute as the request parameter. 
+          			Thus 'rememberMe' becomes 'rememberMe_input', this will throw off the Spring Security's remember Me feature, which expects
+          			the exact 'rememberMe' checkbox request parameter, so use the h:selectBooleanCheckbox for this field
+          		-->
+          		<!-- <p:selectBooleanCheckbox id="rememberMe" /> <p:outputLabel value="&#160;Remember me"/> -->
+          		<h:selectBooleanCheckbox id="#{applicationProperties['RememberMe.requestParameter']}" styleClass="w3-check"/><span>&#160;Remember Me</span>
+          		
+			</div>
+		</h:form>
+	
+	    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+	      <p:button value=" Cancel" icon="fa fa-close" onclick="document.getElementById('loginModal').style.display='none';return false;"/>
+	      <!-- <button onclick="document.getElementById('loginModal').style.display='none'" type="button" class="w3-button w3-red w3-round"><i class="fa fa-close"/>&#160;Cancel</button> -->
+	      <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
+	    </div>
+	
+	  </div>
+	  
+	</div>
+
+	<script>
+		//<![CDATA[
+			
+			// Used to toggle the menu on smaller screens when clicking on the menu button
+			function openNav() {
+			  var x = document.getElementById("navSmall");
+			  if (x.className.indexOf("w3-show") == -1) {
+			    x.className += " w3-show";
+			  } else { 
+			    x.className = x.className.replace(" w3-show", "");
+			  }
+			}
+		
+		//]]>
+	</script>
+    
+</ui:composition>

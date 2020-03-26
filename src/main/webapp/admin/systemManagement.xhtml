@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    template="/WEB-INF/template/layout_admin.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} - System Information
+	</ui:define>
+	
+	<ui:define name="content">
+	
+		<style type="text/css">	
+			 
+			 /* borderless datatable: https://stackoverflow.com/questions/18880208/remove-all-borders-on-a-specific-datatable */
+			
+			.ui-datatable.borderless thead th,
+			.ui-datatable.borderless tbody,
+			.ui-datatable.borderless tbody tr,
+			.ui-datatable.borderless tbody td {
+			    border-style: none;
+			}
+			
+			body .ui-paginator {
+				 border-style: none;
+			}
+			
+			.companyHeaderGrid.ui-panelgrid>*>tr,
+				.companyHeaderGrid.ui-panelgrid .ui-panelgrid-cell {
+				    border: none;
+			}
+			
+		</style>
+
+		<script type="text/javascript">
+ 			//<![CDATA[	
+ 				
+ 				/* set table header's background color */
+ 				$(document).ready(function(){
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+ 				});
+			//]]>	
+		</script>
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white">
+
+			<p:messages id="messages" showDetail="true">
+				<p:autoUpdate/>
+			</p:messages>
+			
+			<p/>
+
+			<div class="w3-panel w3-theme-d5 w3-center w3-round">
+ 				<h2 id="title">System Information</h2>
+ 			</div>
+		
+			<p:fieldset id="systemStatistics" legend="System Statistics" toggleable="true">
+			
+				<h:form id="systemStatForm">
+			
+			    	<p:panelGrid style="width:100%;">
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+							<p:column style="width:50%;">
+								<h:outputText value="Comments" />
+							</p:column>
+							<p:column style="font-weight:bold" >
+								<h:outputText value="#{systemInfo.statistics.commentCount}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-even">
+							<p:column>
+								<h:outputText value="Discussions" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemInfo.statistics.discussionCount}"/>
+							</p:column>
+						</p:row>
+
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+							<p:column>
+								<h:outputText value="Forums" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemInfo.statistics.forumCount}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-even">
+							<p:column>
+								<h:outputText value="Forum Groups" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemInfo.statistics.forumGroupCount}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+							<p:column>
+								<h:outputText value="Registered Users" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemInfo.statistics.userCount}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-even">
+							
+							<p:column>
+								<h:outputText value="Last Registered User" />
+							</p:column>
+							
+							<p:column style="font-weight:bold;">
+								<h:outputText value="#{systemInfo.statistics.lastRegisteredUser} "/>
+								<pe:timeAgo	value="#{systemInfo.statistics.lastUserRegisteredDate}"/>
+							</p:column>
+							
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+							
+							<p:column>
+								<h:outputText value="Last Comment" />
+							</p:column>
+							
+							<p:column style="font-weight:bold">
+								<h:outputText value="By #{systemInfo.statistics.lastComment.updateBy} "/>
+								<pe:timeAgo	value="#{systemInfo.statistics.lastComment.updateDate}"	/>
+							</p:column>
+						</p:row>
+
+
+						<p:row styleClass="ui-widget-content ui-datatable-even">
+							<p:column>
+								<h:outputText value="Logged On Users" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{fn:length(systemInfo.loggedOnUsers)}" />
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+						
+							<p:column>
+								<h:outputText value="Anonymous Users" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemInfo.sessionCount - fn:length(systemInfo.loggedOnUsers)}"/>
+							</p:column>
+							
+						</p:row>
+
+					</p:panelGrid>
+		    		
+		    		<p/>
+		    		
+		    		<h:panelGrid columns="2"> <!-- use h:panelGrid to make the buttons row responsive -->
+			    		<p:commandButton action="#{systemManagement.synchSystemStat}" icon="fa fa-refresh" 
+			    			value="Synchronize System Statistics" update=":systemStatForm"/>
+			    			
+			    		<p:commandButton action="#{systemManagement.synchForumStats}" icon="fa fa-refresh" 
+			    			value="Synchronize Forum Statistics" update=":systemStatForm"/>
+		    		</h:panelGrid>	
+		    	</h:form>
+			</p:fieldset>
+			 
+			 <p/>
+			 
+			 <p:fieldset id="configuredProperties" legend="Configured Application Properties" toggleable="true" collapsed="true">
+			 
+			 	<h:form>
+
+					<p:dataTable var="configuredProperty" value="#{systemManagement.applicationProperties}" style="margin: 0 auto;table-layout:fixed;word-wrap:break-word;"
+						styleClass="borderless" widgetVar="configuredPropertiesTableVar" rowIndexVar="rowIndex" id="configuredPropertiesTable" reflow="true">
+						
+						<p:column sortBy="#{configuredProperty.key}" style="text-align:left;">
+							<f:facet name="header">
+								Key
+							</f:facet>
+							#{configuredProperty.key}
+						</p:column>
+
+						<p:column style="text-align:left;">
+							<f:facet name="header">
+								Value
+							</f:facet>
+							<b>#{configuredProperty.value}</b>
+						</p:column>
+						
+					</p:dataTable>
+			 	
+			 	</h:form>
+			 	
+			 </p:fieldset>
+			 
+			 <p/>
+			 
+			 <p:fieldset id="serverInformation" legend="Server System Properties" toggleable="true" collapsed="true">
+
+				<h:form>
+					<p:dataTable var="systemProperty" value="#{systemManagement.systemProperties}" style="margin: 0 auto;table-layout:fixed;word-wrap:break-word;"
+						styleClass="borderless" widgetVar="systemPropertiesTableVar" rowIndexVar="rowIndex" id="systemPropertiesTable" reflow="true">
+						
+						<p:column sortBy="#{systemProperty.key}" style="text-align:left;">
+							<f:facet name="header">
+								Key
+							</f:facet>
+							#{systemProperty.key}
+						</p:column>
+
+						<p:column style="text-align:left;">
+							<f:facet name="header">
+								Value
+							</f:facet>
+							<b>#{systemProperty.value}</b>
+						</p:column>
+						
+					</p:dataTable>
+			 
+				</h:form>
+			 </p:fieldset>
+		</div>
+	</ui:define>
+	
+</ui:composition>

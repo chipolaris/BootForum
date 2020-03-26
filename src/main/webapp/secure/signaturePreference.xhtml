@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf" 
+    template="/WEB-INF/template/layout_secure.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} - My Signature
+	</ui:define>
+	
+	<ui:define name="pageTitle">
+		<b><span class="fa-stack"><i class="fa fa-sticky-note-o fa-stack-2x"/><i class="fa fa-pencil fa-stack-1x"/></span> Signature Preference</b>
+	</ui:define>
+
+	<ui:define name="content">
+	
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+ 				$(document).ready(function(){
+					customizePrimefaceButtons();
+				});
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+			//]]>	
+		</script>	
+	
+		<div>
+			<p:messages id="messages" showDetail="true" showSummary="false">
+				<p:autoUpdate/>
+			</p:messages>
+		</div>
+		
+		<div id="signaturePanel" class="w3-container w3-animate-right">
+		
+			<h:form>
+			
+				<div class="w3-row w3-section">
+					
+					<div class="w3-col l5 m6 s12 ">
+						<p:selectBooleanCheckbox value="#{signaturePreference.preferences.useSignatureOnComment}" itemLabel="Use signature on comment"/>
+					</div>
+					
+					<div class="w3-col l5 m6 s12 ">
+						<p:selectBooleanCheckbox value="#{signaturePreference.preferences.useSignatureOnMessage}" itemLabel="Use signature on private message"/>
+					</div>
+				
+					<div class="w3-col l12 s12 m12 w3-margin-top">
+						
+						<pe:ckEditor value="#{signaturePreference.preferences.signature}" skin="moono-lisa" width="100%" id="messageEditor"
+							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
+									'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
+									'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
+									'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" widgetVar="messageEditorVar">
+							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+						</pe:ckEditor>
+						<span style="font-size:-1;"> *Signature must be 1000 characters or less (including markups)</span>
+					</div>
+				</div>
+				
+				<div class="w3-row w3-section">
+					<p:commandButton ajax="true" value="&#160;&#160;Save" icon="fa fa-save" action="#{signaturePreference.save}" />	
+				</div>
+			</h:form>
+			
+		</div>
+		
+	</ui:define>
+</ui:composition>

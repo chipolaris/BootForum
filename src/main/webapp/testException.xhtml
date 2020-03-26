@@ -1,0 +1,57 @@
+<!-- 
+	This page is used to test the handling of exceptions in the application
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf" 
+	template="/WEB-INF/template/layout.xhtml">
+	
+	<ui:define name="title">
+		#{msg['application.title']} Application - Test Exceptions
+	</ui:define>
+	
+	<ui:define name="content">
+		<div jsf:id="mainDiv" class="w3-panel w3-card-4">
+		
+			<p class="w3-xlarge">Test Exceptions</p>
+			
+			<h:form id="form">
+			
+				<p class="w3-xlarge">Throwable</p>
+			
+				<p>
+					<p:commandButton ajax="true" value="Test Throwable - AJAX" action="#{testException.throwable}"/>
+				</p>
+				
+				<p>
+					<p:commandButton ajax="false" value="Test Throwable - Non-AJAX" action="#{testException.throwable}"/>
+				</p>
+			
+				<p class="w3-xlarge">RuntimeException</p>
+			
+				<p>
+					<p:commandButton ajax="true" value="Test RuntimeException - AJAX" action="#{testException.runtime}"/>
+				</p>
+				
+				<p>
+					<p:commandButton ajax="false" value="Test RuntimeException - Non-AJAX" action="#{testException.runtime}"/>
+				</p>
+				
+				<p class="w3-xlarge">ViewExpiredException</p>
+			
+				<p>
+					<p:commandButton ajax="true" value="Test ViewExpiredException - AJAX" action="#{testException.viewExpired}"/>
+				</p>
+				
+				<p>
+					<p:commandButton ajax="false" value="Test ViewExpiredException - Non-AJAX" action="#{testException.viewExpired}"/>
+				</p>
+			
+			</h:form>
+		</div>
+	</ui:define>
+	
+</ui:composition>

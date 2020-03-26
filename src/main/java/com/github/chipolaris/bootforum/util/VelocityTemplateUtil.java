@@ -1,0 +1,41 @@
+package com.github.chipolaris.bootforum.util;
+
+import java.io.StringWriter;
+import java.util.Map;
+
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+
+/**
+ * 
+ * Utility class to generate content using Velocity template file
+ *
+ */
+public class VelocityTemplateUtil {
+
+	public static String build(String templatePath, Map<String, String> paramsMap) {
+		
+		VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
+        velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        velocityEngine.init();
+         
+        Template template = velocityEngine.getTemplate(templatePath);
+         
+        VelocityContext velocityContext = new VelocityContext();
+        
+        if(paramsMap != null) {
+	        for(String key : paramsMap.keySet() ) {
+	        	velocityContext.put(key, paramsMap.get(key));
+	        }
+        }
+             
+        StringWriter stringWriter = new StringWriter();
+        template.merge(velocityContext, stringWriter);
+         
+        return stringWriter.toString();
+	}
+}

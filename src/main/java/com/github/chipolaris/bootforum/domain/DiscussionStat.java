@@ -1,0 +1,75 @@
+package com.github.chipolaris.bootforum.domain;
+
+import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name="DISCUSSION_STAT_T")
+@TableGenerator(name="DiscussionStatIdGenerator", table="ENTITY_ID_T", pkColumnName="GEN_KEY", 	pkColumnValue="DISCUSSION_STAT_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
+public class DiscussionStat extends BaseEntity {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="DiscussionStatIdGenerator")	private Long id;
+	
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private CommentInfo lastComment; // last comment of this discussion
+	
+	@Column(name="COMMENT_COUNT")
+	private long commentCount;
+	
+	@Column(name="VIEW_COUNT")
+	private long viewCount;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="LAST_VIEWED")
+	private Date lastViewed;
+	
+	@Override
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}	
+	public CommentInfo getLastComment() {
+		return lastComment;
+	}
+	public void setLastComment(CommentInfo lastComment) {
+		this.lastComment = lastComment;
+	}
+	
+	public long getCommentCount() {
+		return commentCount;
+	}
+	public void setCommentCount(long commentCount) {
+		this.commentCount = commentCount;
+	}
+	
+	public long getViewCount() {
+		return viewCount;
+	}
+	public void setViewCount(long viewCount) {
+		this.viewCount = viewCount;
+	}
+	
+	public Date getLastViewed() {
+		return lastViewed;
+	}
+	public void setLastViewed(Date lastViewed) {
+		this.lastViewed = lastViewed;
+	}
+}
+
+

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title><ui:insert name="title">#{msg['application.title']}</ui:insert></title>
+        
+        <!-- *Note: favicon generated and setup instruction taken from https://favicon.io/favicon-generator/ -->
+		<link rel="apple-touch-icon" sizes="180x180" href="#{request.contextPath}/favicon_io/apple-touch-icon.png"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="#{request.contextPath}/favicon_io/favicon-32x32.png"/>
+		<link rel="icon" type="image/png" sizes="16x16" href="#{request.contextPath}/favicon_io/favicon-16x16.png"/>
+		<link rel="manifest" href="#{request.contextPath}/favicon_io/site.webmanifest"/>
+        
+        <h:outputStylesheet library="css" name="w3.css"/>
+        
+        <!-- color themes -->
+        <!-- read from cookie name 'theme.color', if empty, set to default value 'w3-theme-light-blue' -->
+        <c:set var = "theme_color" value = "#{cookie['theme.color'].value}"/>
+        <c:if test = "#{empty theme_color}">
+        	<c:set var = "theme_color" value = "w3-theme-light-blue"/>
+      	</c:if>      	
+        <h:outputStylesheet library="css" name="w3-theme/#{theme_color}.css"/>
+        
+        <style>
+        
+			html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}			
+			
+			input[type=text].searchInput {
+			  
+			  box-sizing: border-box;
+			  border: 2px solid #ccc;
+			  border-radius: 4px;
+			  font-size: 14px;
+			  background-color: white;
+			  background-image: url('#{resource['images/searchicon.png']}');
+			  background-position: 10px 10px; 
+			  background-repeat: no-repeat;
+			  padding: 10px 20px 8px 35px;
+			  -webkit-transition: width 0.4s ease-in-out;
+			  transition: width 0.4s ease-in-out;
+			}
+			
+			input[type=text].searchInputExpand {
+				width: 200px;
+			}
+			
+			input[type=text].searchInputExpand:focus {
+			  width: 400px;
+			}			
+
+		</style>
+		
+		<script>
+			//<![CDATA[
+			
+			$(document).ready(function(){
+				changeAvatarBackgrounds();
+			});
+			
+			function changeAvatarBackgrounds() {
+				$(".avatarSpan").each(function() {						
+					$(this).css('background-color', stringToColor($(this).prop('title')));
+				});
+			}
+				
+			function openNav(elementId) {
+			  var elm = document.getElementById(elementId);
+			  if (elm.className.indexOf("w3-show") == -1) {
+			    elm.className += " w3-show";
+			  } else { 
+			    elm.className = elm.className.replace(" w3-show", "");
+			  }
+			}	
+				
+			function showSearchSuggestion(keywordInput, searchValueEl, searchCommentLinkEl, elementId, doSearch = true) {
+				
+				var elm = document.getElementById(elementId);
+				var keywords = keywordInput.value;
+				
+				if (keywords.length >= 3) {
+					
+					if(elm.className.indexOf("w3-show") == -1)
+						elm.className += " w3-show";
+					
+					if(doSearch) {
+						invokeSearchSuggestion([{name: 'keywords', value: keywords}]);					
+					}
+					
+					var searchValueElement = document.getElementById(searchValueEl);
+					searchValueElement.textContent = keywords;
+					
+					var searchCommentLink = document.getElementById(searchCommentLinkEl);
+					searchCommentLink.href = "searchComment.xhtml?keywords=" + keywords;
+				} 
+				else { 
+					elm.className = elm.className.replace(" w3-show", "");
+				}
+			}
+			
+			function hideSearchSuggestion(elementId) {
+				var elm = document.getElementById(elementId);
+				elm.className = elm.className.replace(" w3-show", "");
+			}
+			
+			// from https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
+			function stringToColor(str) {
+				var hash = 0;
+				for (var i = 0; i < str.length; i++) {
+					hash = str.charCodeAt(i) + ((hash << 5) - hash);
+				}
+				var colour = '#';
+				for (var i = 0; i < 3; i++) {
+					var value = (hash >> (i * 8)) & 0xFF;
+				    colour += ('00' + value.toString(16)).substr(-2);
+				}
+				return colour;
+			}
+			//]]>	
+		</script>
+    </h:head>
+
+    <h:body class="w3-theme-light" style="margin:0px;">
+    	
+    	<h:form>
+    		<p:remoteCommand name="invokeSearchSuggestion" update="searchSuggestionResultDiv searchSuggestionResultDivSmall" action="#{searchSuggestion.suggest}" />
+    		<!-- <h:commandScript name="invokeSearchSuggestion" action="#{searchSuggestion.suggest}" render=":searchSuggestionDiv"/> -->
+    	</h:form>
+
+		<!-- navbar -->
+		<div class="w3-top w3-theme-l4">
+			<div class="w3-bar w3-left-align w3-card" style="max-height: 60px;">
+				<div style="max-width:1680px;margin:auto;">
+					
+					<!-- ellipsis icon button to show on small screen -->
+					<a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-hover-text-white w3-border-left w3-right" href="javascript:void(0);" onclick="openNav('navSmall')" 
+						style="font-size:28px;padding-top:9px;padding-bottom: 9px;">
+						<i class="fa fa-ellipsis-v"/>
+					</a>
+					
+					<a href="#{request.contextPath}" class="w3-bar-item w3-theme-gradient-l1">
+						<img src="#{resource['images/logo.png']}" alt="Home" style="height: 44px;" title="Home"/>
+					</a>
+					
+					<!-- medium screen top menu items -->
+					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
+						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="Forums">
+						<i class="fa fa-comments"/>
+					</a>
+					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
+						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="Users">
+						<i class="fa fa-users"/>
+					</a>
+					
+					<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
+						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white"
+							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="Register" onclick="document.getElementById('registerModal').style.display='block'">
+							<i class="fa fa-clipboard"/>
+						</a>					
+						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white"
+							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="Login" onclick="document.getElementById('loginModal').style.display='block'">
+							<i class="fa fa-sign-in"/>
+						</a>
+					</sec:authorize>
+					
+					<!-- large screen top menu items -->
+					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
+						<i class="fa fa-comments fa-lg"/><br/><span class="w3-medium">Forums</span>
+					</a>
+					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
+						<i class="fa fa-users fa-lg"/><br/><span class="w3-medium">Members</span>
+					</a>
+					
+					<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
+					
+						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white"
+							onclick="document.getElementById('registerModal').style.display='block'">
+							<i class="fa fa-clipboard fa-lg"/><br/><span class="w3-medium">Register</span>
+						</a>					
+						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white" 
+							onclick="document.getElementById('loginModal').style.display='block'">
+							<i class="fa fa-sign-in fa-lg"/><br/><span class="w3-medium">Login</span>
+						</a>
+					
+					</sec:authorize>
+					
+					<!-- if logged in, show the profile image on all three screen sizes: small, medium, and large -->
+					<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+						
+						<div class="w3-dropdown-hover">
+							<button class="w3-button" style="height: 60px;">
+								<h:graphicImage value="#{requestContext}/avatar/#{userSession.user.username}" class="w3-circle"
+									id="commentorAvatar" height="40" width="40" style="border:3px;" title="#{userSession.user.username}"
+									rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"/>
+							
+								<span jsf:rendered="#{!fileHandler.isAvatarExists(userSession.user.username)}" class="w3-circle avatarSpan"
+									title="#{userSession.user.username}"
+									style="display:inline-block;font-size:1.0rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;">
+									#{fn:substring(userSession.user.username, 0, 3)}
+								</span>							
+							
+							</button>
+							<div class="w3-dropdown-content w3-bar-block w3-card-4">
+								<a href="#{request.contextPath}/secure/index.xhtml" class="w3-bar-item w3-button"><i class="fa fa-gear fa-fw"/> My Profile</a>
+								<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button"><i class="fa fa-sign-out fa-fw"/> Logout</a>
+							</div>
+						</div>
+						
+					</sec:authorize>
+					
+					<!-- search icon button, show on small screens -->
+					<a class="w3-bar-item w3-button w3-border-left w3-hover-text-white w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" 
+						onclick="openNav('searchSmall')" style="font-size:28px;padding-top:9px;padding-bottom: 9px;" title="Search">
+						<i class="fa fa-search"/>
+					</a>
+					
+					<!-- search bar, show on large and medium screens -->
+					<div class="w3-dropdown-click w3-bar-item w3-right w3-hover-none w3-hide-small" style="margin-top:2px;"> <!-- try the margin-top to vertically align the search div to middle -->
+						
+						<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
+						<input type="text" value="#{null}" placeholder="Search Forum.." style="font-family:Open Sans, FontAwesome" autocomplete="off"
+							class="w3-input w3-border w3-round searchInput searchInputExpand" id="keywords" 
+							onkeyup="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv');document.getElementById('keywordsSmall').value = this.value;" 
+							onfocus="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv', false)" 
+							onblur="setTimeout(function(){ hideSearchSuggestion('searchSuggestionDiv'); }, 300);"/>
+							
+						<div jsf:id="searchSuggestionDiv" class="w3-dropdown-content w3-bar-block w3-border w3-card" style="width:400px;margin-top: 5px;">
+						
+							<a href="#{request.contextPath}/searchComment.xhtml?keywords=" class="w3-bar-item w3-button" id="searchCommentLink">
+								Search comment for <span id="searchValue" style="font-weight: bold"></span>
+							</a>
+						
+							<div jsf:id="searchSuggestionResultDiv">
+								<p:dataList value="#{searchSuggestion.comments}" var="comment" rendered="#{not empty searchSuggestion.comments}">
+									<f:facet name="header">
+							            Comments:
+							        </f:facet>
+							        <h:outputLink value="commentThread.xhtml">
+										<span>#{comment.id}: #{comment.title}</span>
+										<f:param name="commentId" value="#{comment.id}"/>
+									</h:outputLink>
+								</p:dataList>
+								<p:dataList value="#{searchSuggestion.usernames}" var="username" rendered="#{not empty searchSuggestion.usernames}">
+									<f:facet name="header">
+							            Users:
+							        </f:facet>
+							        
+							        <h:outputLink value="memberProfile.xhtml">
+										<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36"	title="#{username}"
+											rendered="#{fileHandler.isAvatarExists(username)}"/>
+										
+										<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle w3-purple"
+											 title="#{username}"
+		  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;">
+		  									#{fn:substring(username, 0, 3)}
+										</span>
+										#{username}
+										
+										<f:param name="username" value="#{username}"/>
+									</h:outputLink>     
+								</p:dataList>
+							</div>
+							
+						</div>
+					</div>				
+					
+				</div>
+			</div>
+		
+		  	<!-- Navbar on small screens -->
+		  	<div id="navSmall" class="w3-bar w3-theme-l4 w3-hide w3-hide-large w3-hide-medium w3-border-top">
+		    	
+		    	<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="fa fa-users fa-lg"/><br/>Members</a>
+		    	<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="fa fa-comments fa-lg"/><br/>Forums</a>
+		    	
+		    	<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
+		    	
+		    		<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"
+						onclick="document.getElementById('registerModal').style.display='block'">
+						<i class="fa fa-clipboard fa-lg"/><br/>Register
+					</a>					
+					<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right" 
+						onclick="document.getElementById('loginModal').style.display='block'">
+						<i class="fa fa-sign-in fa-lg"/><br/>Login
+					</a>
+		    	
+		    		<!-- <a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right" onclick="document.getElementById('loginModal').style.display='block'"><i class="fa fa-sign-in fa-lg"/><br/>Login</a>
+		    		<a href="#{request.contextPath}/register.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="fa fa-clipboard fa-lg"/><br/>Register</a> -->
+		    	</sec:authorize>
+		  	</div>
+		  	
+		  	<!-- Searchbar on small screens -->
+		  	<div id="searchSmall" class="w3-padding w3-theme-l4 w3-hide w3-hide-large w3-hide-medium w3-border-top">
+		  	
+				<div class="w3-dropdown-click w3-bar-item w3-hover-none w3-block">
+					
+					<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
+					<input type="text" value="#{null}" placeholder="Search Forum.." style="width:100%; font-family:Open Sans, FontAwesome" autocomplete="off"
+						class="w3-input w3-border w3-round searchInput" id="keywordsSmall"
+						onkeyup="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall'); document.getElementById('keywords').value = this.value;" 
+						onfocus="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall', false)" 
+						onblur="setTimeout(function(){ hideSearchSuggestion('searchSuggestionDivSmall'); }, 300);"/>
+						
+					<div jsf:id="searchSuggestionDivSmall" class="w3-dropdown-content w3-bar-block w3-border w3-card" style="width:100%;margin-top: 5px;">
+					
+						<a href="#{request.contextPath}/searchComment.xhtml?keywords=" class="w3-bar-item w3-button" id="searchCommentLinkSmall">
+							Search comment for <span id="searchValueSmall" style="font-weight: bold"></span>
+						</a>
+					
+						<div jsf:id="searchSuggestionResultDivSmall">
+							<p:dataList value="#{searchSuggestion.comments}" var="comment" rendered="#{not empty searchSuggestion.comments}">
+								<f:facet name="header">
+						            Comments:
+						        </f:facet>
+								#{comment.id}: #{comment.title}
+							</p:dataList>
+							<p:dataList value="#{searchSuggestion.usernames}" var="username" rendered="#{not empty searchSuggestion.usernames}">
+								<f:facet name="header">
+						            Users:
+						        </f:facet>
+						        
+								<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+									id="commentorAvatar" height="36" width="36"	title="#{username}"
+									rendered="#{fileHandler.isAvatarExists(username)}"/>
+								
+								<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle w3-purple"
+									 title="#{username}"
+  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;">
+  									#{fn:substring(username, 0, 3)}
+								</span>
+								#{username}     
+							</p:dataList>
+						</div>
+						
+					</div>
+				</div>		  	
+		  	</div>
+		</div>
+		
+		<!-- Show login and register command link if user is not logged on -->
+		<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
+		
+			<!-- Login Modal -->
+			<div id="loginModal" class="w3-modal">
+			  <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="width:450px;max-width: 450px;">
+		
+				<span onclick="$('#loginModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+		
+				<header class="w3-container w3-padding w3-theme-dark w3-center">
+					<span class="w3-xlarge"><i class="fa fa-lock"/> Login to #{msg['application.title']}</span>
+				</header>
+				
+				<div class="w3-center w3-pale-red" jsf:rendered="#{param.login_error != null and SPRING_SECURITY_LAST_EXCEPTION != null}"
+					 style="line-height: 50px;">
+					<span class="w3-large">#{SPRING_SECURITY_LAST_EXCEPTION.message}. Please try again.</span>
+				</div>
+				
+			    <div class="w3-center w3-section w3-text-theme">
+			      	<i class="fa fa-user-circle-o" style="font-size: 100pt;"/>
+			    </div>
+			    
+    			<form action="#{request.contextPath}/login" method="post" class="w3-container">
+    				<div class="w3-section w3-center">
+	    				<p>
+	    					<input type="text" name="username" placeholder="&#xf007; Enter Username" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+	    				</p>
+	    				<p>
+	    					<input type="password" name="password" placeholder="&#xf084; Enter Password" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+	    				</p>
+	    				<p>
+	    					<input type="submit" value="&#xf090; Login" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
+	    				</p>
+	    				<p>
+	    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> Remember Me
+	    				</p>
+    				</div>
+    			</form>
+			
+			    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+			      
+			      <span class="w3-left">
+			      	<a href="#" onclick="$('.w3-modal').hide();$('#registerModal').show();return false;">Register</a>
+			      </span>
+			      
+			      <span class="w3-right">
+			      	<a href="#" onclick="$('.w3-modal').hide();$('#passwordResetModal').show();return false;">Forgot Password?</a>
+			      </span>
+			    </div>
+			
+			  </div>
+			  
+			</div>
+			
+			<!-- Register Modal -->
+			<div id="registerModal" class="w3-modal">
+				<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="width:450px;max-width: 450px;">
+		
+					<span onclick="$('#registerModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+			
+					<header class="w3-container w3-padding w3-theme-dark w3-center">
+						<span class="w3-xlarge"><i class="fa fa-clipboard"/> Register</span>
+					</header>
+					
+					<div class="w3-center w3-section w3-text-theme">
+			      		<i class="fa fa-id-card-o" style="font-size: 100pt;"/>
+			    	</div>
+							
+					<h:form styleClass="w3-container" id="registerForm">
+					
+						<div jsf:rendered="#{publicBackingBean.registrationSuccess}" class="w3-green w3-container w3-round">
+							<h4>Your account has been created</h4>
+							<a href="#" onclick="$('.w3-modal').hide();$('#loginModal').show();return false;">Click here to login</a>
+						</div>
+					
+						<div jsf:rendered="#{!publicBackingBean.registrationSuccess and not empty publicBackingBean.registrationMessages}" class="w3-red w3-container w3-round">
+							<h4>Unable to create account</h4>
+							<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.registrationMessages}" style="list-style-position: inside; padding-left: 0;">
+								<li>#{message}</li>
+							</ul>
+							
+						</div>
+					
+						<div jsf:rendered="#{!publicBackingBean.registrationSuccess}" class="w3-section w3-center">
+							<p>
+								<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xf2c0; Pick a username" styleClass="w3-input" title="Username"
+									style="font-family:Open Sans, FontAwesome;text-align:center;"
+									onblur="validateRegisterUsername();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+								</p:inputText>
+								<h:message for="username" id="usernameMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+							</p>
+							<p>
+								<p:inputText id="email" value="#{publicBackingBean.user.person.email}" placeholder="@ Enter email" styleClass="w3-input w3-margin-top" title="Email"
+									style="font-family:Open Sans, FontAwesome;text-align:center;"
+									onblur="validEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+								</p:inputText>
+								<h:message for="email" id="emailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+							</p>
+							<p>
+								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; Choose a Password" styleClass="w3-input w3-margin-top" title="Password" 
+									style="font-family:Open Sans, FontAwesome;text-align:center;"
+									onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+								</p:password>
+								<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+							</p>
+							<p>
+								<p:password id="confirmPassword" placeholder="&#xf00c; Confirm Password" styleClass="w3-input" title="Confirm Password" 
+									style="font-family:Open Sans, FontAwesome;text-align:center;" 
+									onblur="validateConfirmPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+								</p:password>
+								<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+							</p>
+							<p>
+								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf234; Submit" 
+									onclick="return validateRegistration()"	id="submitButton" style="font-family:Open Sans, FontAwesome;" action="#{publicBackingBean.register}" update=":registerForm"/>
+							</p>
+						</div>
+					</h:form>
+					
+				    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey w3-center">
+				      
+				      <span>
+				      	Already registered?
+				      	<a href="#" onclick="$('.w3-modal').hide();$('#loginModal').show();return false;">Login</a>
+				      </span>
+				      
+				    </div>
+					
+				</div>
+			</div>
+			
+			<!-- Password Reset Modal -->
+			<div id="passwordResetModal" class="w3-modal">
+				<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="width:450px;max-width: 450px;">
+
+					<span onclick="$('#passwordResetModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+		
+					<header class="w3-container w3-padding w3-theme-dark w3-center">
+						<span class="w3-xlarge"><i class="fa fa-undo"/> Reset Your Password</span>
+					</header>
+
+					<div class="w3-center w3-section w3-text-theme">
+			      		<span class="fa-passwd-reset fa-stack" style="font-size: 50pt;">
+						  <i class="fa fa-undo fa-stack-2x"></i>
+						  <i class="fa fa-lock fa-stack-1x"></i>
+						</span>
+			    	</div>
+					
+					<h:form styleClass="w3-container" id="passwordResetForm">
+						
+						<div jsf:rendered="#{publicBackingBean.passwordResetEmailSent}" class="w3-green w3-section w3-round w3-center">
+							<h4>Password reset email sent</h4>
+							<h6>Please check email for password reset instruction</h6>
+						</div>
+						
+						<div jsf:rendered="#{!publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-red w3-section w3-round">
+							<h4>Unable to complete request:</h4>
+							<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.passwordResetMessages}" style="list-style-position: inside; padding-left: 0;">
+								<li>#{message}</li>
+							</ul>
+						</div>						
+
+						<div jsf:rendered="#{!publicBackingBean.passwordResetEmailSent}" class="w3-section w3-center">
+							
+							<h5>Enter email to get password reset link.</h5>
+							
+							<p>
+								<p:inputText id="passwordResetEmail" value="#{publicBackingBean.passwordResetEmail}" placeholder="@ Enter email" styleClass="w3-input w3-margin-top" title="Email"
+									style="font-family:Open Sans, FontAwesome;text-align:center;"
+									onblur="validPasswordResetEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+								</p:inputText>
+								<h:message for="passwordResetEmail" id="passwordResetEmailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+							</p>
+							<p>
+								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf1d8; Submit" 
+									onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" style="font-family:Open Sans, FontAwesome;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
+							</p>
+						</div>
+
+					
+					</h:form>
+
+				    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+				      
+				      <span class="w3-left">
+				      	<a href="#" onclick="$('.w3-modal').hide();$('#loginModal').show();return false;">Login</a>
+				      </span>
+				      
+				      <span class="w3-right">
+				      	<a href="#" onclick="$('.w3-modal').hide();$('#registerModal').show();return false;">Register</a>
+				      </span>
+				    </div>
+					
+				</div>
+			</div>
+			<script>
+				//<![CDATA[//------
+				
+				validPasswordResetEmail = false;
+					
+				/*
+				 *
+				 */
+				validPassword = false;
+				validConfirmPassword = false;
+				validEmail = false;
+				validUsername = false;
+				
+				function validateRegisterUsername() {
+					
+					var usernameEl = document.getElementById('registerForm:username');
+					var username = usernameEl.value;
+					
+					// reset styling
+					usernameEl.className = usernameEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
+					
+					if(username.length < 5) {
+						validUsername = false;
+						usernameEl.className += " w3-border-orange";
+						usernameEl.title = "Username must be at least 5 characters"
+					}
+					else {
+						validUsername = true;
+						usernameEl.className += " w3-border-light-green";
+						usernameEl.title = "Username"
+					}
+				}
+				
+				function validateEmail(emailEl) {
+					
+					var isValid = false;
+					
+					// the following email regular expression is taken from the most voted answer in stackoverflow at:
+					// https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+					var emailRegex =  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+					
+					//var emailEl = document.getElementById('registerForm:email');
+					var email = emailEl.value;
+					
+					// reset styling
+					emailEl.className = emailEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
+					
+					if(!emailRegex.test(String(email).toLowerCase())) {
+						isValid = false;
+						emailEl.className += " w3-border-orange";
+						emailEl.title = "Invalid email format"
+					}
+					else {
+						isValid = true;
+						emailEl.className += " w3-border-light-green";
+						emailEl.title = "Email"
+					}
+					
+					return isValid;
+				}
+				
+				function validateRegisterPassword() {
+					
+					var passwordEl = document.getElementById('registerForm:password');
+					var password = passwordEl.value;
+					
+					// reset styling
+					passwordEl.className = passwordEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
+					
+					if(password.length < 5) {
+						validPassword = false;
+						passwordEl.className += " w3-border-orange";
+						passwordEl.title = "Password length is less than 5"
+					}
+					else {
+						validPassword = true;
+						passwordEl.className += " w3-border-light-green";
+						passwordEl.title = "Password"
+					}
+				}
+				
+				function validateConfirmPassword() {
+					
+					var passwordEl = document.getElementById('registerForm:password');
+					var password = passwordEl.value;
+					
+					var confirmPasswordEl = document.getElementById('registerForm:confirmPassword');
+					var confirmPassword = confirmPasswordEl.value;
+					
+					// reset styling
+					confirmPasswordEl.className = confirmPasswordEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
+					
+					if(password != confirmPassword) {
+						validConfirmPassword = false;
+						confirmPasswordEl.className += " w3-border-orange";
+						confirmPasswordEl.title="Confirm Password does not match Password"
+					}
+					else if(confirmPassword.length < 5) {
+						validConfirmPassword = false;
+						confirmPasswordEl.className += " w3-border-orange";
+						confirmPasswordEl.title="Password is too short"
+					}
+					else {
+						validConfirmPassword = true;
+						confirmPasswordEl.className += " w3-border-light-green";
+						confirmPasswordEl.title="Confirm Password"
+					}
+				}
+				
+				function validateRegistration() {
+					
+					if(!validUsername) {
+						var usernameEl = document.getElementById('registerForm:username');
+						var messageEl = document.getElementById('registerForm:usernameMessage');
+						messageEl.innerHTML = usernameEl.title;
+						messageEl.className += " w3-text-red";
+					}
+					if(!validEmail) {
+						var emailEl = document.getElementById('registerForm:email');
+						var messageEl = document.getElementById('registerForm:emailMessage');
+						messageEl.innerHTML = emailEl.title;
+						messageEl.className += " w3-text-red";
+					}
+					if(!validPassword) {
+						var passwordEl = document.getElementById('registerForm:password');
+						var messageEl = document.getElementById('registerForm:passwordMessage'); 
+						messageEl.innerHTML = passwordEl.title; 
+						messageEl.className += " w3-text-red";
+					}
+					if(!validConfirmPassword) {
+						var confirmPasswordEl = document.getElementById('registerForm:confirmPassword');
+						var messageEl = document.getElementById('registerForm:confirmPasswordMessage');
+						messageEl.innerHTML = confirmPasswordEl.title; 
+						messageEl.className += " w3-text-red";
+					}
+					
+					return validUsername && validEmail && validPassword && validConfirmPassword;
+				}
+				
+				//]]>	
+			</script>		
+		
+		</sec:authorize>
+    
+        <!-- Page Container -->
+		<div class="w3-container w3-content" style="max-width:1680px;margin-top:60px; padding:0px;">
+			<!-- The Grid -->
+  			<div class="w3-row"> <!-- The w3-row class creates a mobile-first responsive grid system -->
+				
+				<ui:insert name="content">
+                	Template
+            	</ui:insert>
+            	
+			</div> <!-- end of w3-row -->
+			
+			<!-- bottom copyright -->
+			<div class="w3-section"> 
+				&#169; <a href="http://www.SoftwarePrincipals.com">SoftwarePrincipals.com 2019</a>. Powered by <a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a>, <a href="https://spring.io/projects/spring-boot">Spring Boot</a>, <a href="http://www.eclipse.org/eclipselink/">EclipseLink</a>, <a href="https://www.primefaces.org">Primefaces</a>, and <a href="https://www.w3schools.com/w3css/default.asp">W3.CSS</a> | All rights reserved.
+			</div>
+		
+		</div> <!-- end of w3-container -->
+    	
+		<!-- <ui:include src="/WEB-INF/template/about.xhtml"/> -->
+
+        <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:25px;bottom:25px">
+            <f:facet name="start">
+                <i class="fa fa-refresh fa-spin fa-3x fa-fw w3-text-blue-grey"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+        <!-- 
+        	Note on <ui:include> tag: https://www.illucit.com/en/java-ee/stackoverflow-in-tomcat-8-5-and-9-0/
+         -->
+        <ui:include src="/WEB-INF/template/ajaxErrors.xhtml" />
+    
+    </h:body>
+</html>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.2.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.github.chipolaris</groupId>
+	<artifactId>BootForum</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>BootForum</name>
+	<description>BootForum - Forum Software using Java and Spring Boot</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<lucene.version>8.0.0</lucene.version>
+		<velocity.version>2.1</velocity.version>
+		<primefaces.version>7.0</primefaces.version>
+		<primefaces-extensions.version>7.0.2</primefaces-extensions.version>
+		<eclipselink.version>2.7.5</eclipselink.version>
+	</properties>
+
+	<dependencies>
+	
+		<!-- H2 JDBC Driver -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- PostgreSQL JDBC Driver -->
+		<dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <!-- <version>42.2.10</version> -->
+		</dependency>
+	
+		<!-- Velocity -->
+		<dependency>
+		    <groupId>org.apache.velocity</groupId>
+		    <artifactId>velocity-engine-core</artifactId>
+		    <version>${velocity.version}</version>
+		</dependency>
+	
+		<!-- mail -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+	
+		<!-- Lorem - libary to generate random paragraphs for testing data -->	
+		<dependency>
+		    <groupId>com.thedeanda</groupId>
+		    <artifactId>lorem</artifactId>
+		    <version>2.1</version>
+		</dependency>
+	
+		<!-- Jericho HTML parser -->
+		<dependency>
+			<groupId>net.htmlparser.jericho</groupId>
+			<artifactId>jericho-html</artifactId>
+			<version>3.4</version>
+		</dependency>
+
+		<!-- Lucence -->
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-suggest</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<!-- Caffeine caching -->
+		<dependency>
+		    <groupId>com.github.ben-manes.caffeine</groupId>
+		    <artifactId>caffeine</artifactId>
+		</dependency>	
+
+		<!-- JSF -->
+		<!-- https://mvnrepository.com/artifact/org.glassfish/javax.faces -->
+		<!-- <dependency>
+		    <groupId>org.glassfish</groupId>
+		    <artifactId>javax.faces</artifactId>
+		    <version>2.3.8</version>
+		</dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.glassfish/jakarta.faces -->
+		<dependency>
+		    <groupId>org.glassfish</groupId>
+		    <artifactId>jakarta.faces</artifactId>
+		    <version>2.3.14</version>
+		</dependency>
+	
+		<dependency>
+		    <groupId>javax.enterprise</groupId>
+		    <artifactId>cdi-api</artifactId>
+		    <version>2.0</version> <!-- 2.0 -->
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>javax.el</groupId>
+		    		<artifactId>javax.el-api</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		    <!-- <scope>provided</scope> -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>${primefaces.version}</version>
+		</dependency>
+		
+		<dependency>
+	        <groupId>org.primefaces.extensions</groupId>
+	        <artifactId>primefaces-extensions</artifactId>
+	        <version>${primefaces-extensions.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+    		<groupId>org.primefaces.extensions</groupId>
+    		<artifactId>resources-ckeditor</artifactId>
+    		<version>${primefaces-extensions.version}</version>
+		</dependency>
+
+		<!-- commons-fileupload for Primefaces upload component -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.4</version>
+		</dependency>
+		
+		<dependency>
+			<!-- For Spring-JSF integration -->
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<!-- <version>${springframework.version}</version> -->
+		</dependency>		
+		
+		<!-- The spring-faces artifact is necessary for Spring JSF integration -->
+		<dependency>
+			<groupId>org.springframework.webflow</groupId>
+			<artifactId>spring-faces</artifactId>
+			<version>2.5.1.RELEASE</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<!-- declare the exclusion here -->
+			<exclusions>
+        		<exclusion>  
+			        <groupId>org.hibernate</groupId>
+			        <artifactId>hibernate-core</artifactId>
+        		</exclusion>
+      		</exclusions> 
+		</dependency>
+		
+		<!-- JPA Provider: Eclipselink -->
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>org.eclipse.persistence.jpa</artifactId>
+		    <version>${eclipselink.version}</version>
+		</dependency>
+		
+		<!-- <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency> -->
+
+		<!-- Spring Security Dependencies -->
+		<dependency>
+			<!-- for security namespace (config) parsing code -->
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
+		<dependency>
+			<!-- for URL based access control and web authentication services -->
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-taglibs</artifactId>
+		</dependency>
+				
+		<!-- <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

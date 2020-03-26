@@ -1,0 +1,504 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:func="http://bootforum.chipolaris.github.com/functions"
+    template="/WEB-INF/template/layout_secure.xhtml">
+	
+	<ui:define name="title">
+		Private Messages
+	</ui:define>
+	
+	<ui:define name="pageTitle">
+		<b><i class="fa fa-envelope"></i> Private Messages</b>
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<style type="text/css">	
+			 
+			 /* borderless datatable: https://stackoverflow.com/questions/18880208/remove-all-borders-on-a-specific-datatable */
+			
+			.ui-datatable.borderless thead th,
+			.ui-datatable.borderless tbody,
+			.ui-datatable.borderless tbody tr,
+			.ui-datatable.borderless tbody td {
+			    border-style: none;
+			}
+			
+			body .ui-paginator {
+				 border-style: none;
+			}
+			
+			.ui-autocomplete-multiple-container {
+				width: 100%;
+			}
+			
+		</style>
+		
+		<script type="text/javascript">
+ 			//<![CDATA[	
+ 				
+ 				/* set table header's background color */
+ 				$(document).ready(function(){
+ 					
+ 					customizePrimefaceButtons();
+ 					customizeDatatableStyle();
+ 					highlightActiveTabButton();
+ 				});
+ 				
+ 				function switchTab(tabButton) {
+ 					$(".tab-button").removeClass('w3-theme-d3');
+ 					$(".tab-button").css('pointer-events', 'auto');
+ 					
+ 					// remove the pointer event from selected tab
+ 					tabButton.css('pointer-events', 'none');
+ 					
+ 					// give the selected tab a darker color
+ 					tabButton.addClass('w3-theme-d3');
+ 				}
+ 				
+ 				function customizeDatatableStyle() {
+					/* set datatable header's background color */
+					$(".ui-datatable.borderless thead th").addClass("w3-theme-l3")
+					
+					/* set datatable paginator button color */
+					$("span.ui-paginator-pages > a.ui-paginator-page").each(
+						function() {
+							$(this).addClass("w3-button");
+							$(this).removeClass("w3-theme-dark w3-white");
+							
+							if($(this).hasClass("ui-state-active")) {
+								$(this).addClass("w3-theme-dark");	
+							}
+							else {
+								$(this).addClass("w3-white");	
+							}
+						}
+					);
+				}
+ 				
+ 				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+ 				
+ 				function highlightActiveTabButton() {
+ 					
+ 					var viewTab = '#{privateMessages.viewTab}';
+ 					var tabButton;
+ 					
+ 					if(viewTab == 'sentTab') {
+ 						tabButton = $('#sentButton');
+ 					}
+ 					else if(viewTab == 'deletedTab') {
+ 						tabButton = $('#deletedButton');
+ 					}
+ 					else if(viewTab == 'newTab') {
+ 						tabButton = $('#plusButton');
+ 					}
+ 					else {
+ 						tabButton = $('#receivedButton');					
+ 					}
+ 					
+ 					// remove the pointer event from selected tab
+ 					tabButton.css('pointer-events', 'none');
+ 					
+ 					// give the selected tab a darker color
+ 					tabButton.addClass('w3-theme-d3');
+ 				}
+ 				
+ 				// hide messageDetailsDiv
+ 				function hideMessageDetailsDiv() {
+ 					document.getElementById('messageDetailsDiv').style.display='none';
+ 				}
+			//]]>	
+		</script>
+		
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="viewTab" value="#{privateMessages.viewTab}"/>
+			<f:viewParam name="toUser" value="#{privateMessages.toUser}"/>
+			<f:viewAction action="#{privateMessages.onLoad}"/>
+		</f:metadata>
+						
+		<div>
+			<p:messages id="messages" showDetail="true" showSummary="false">
+				<p:autoUpdate/>
+			</p:messages>
+		</div>
+
+		<div id="viewMessagesDiv">
+			
+			<div id="tabButtons" class="w3-bottombar" style="padding-bottom: 2px;">
+				<span class="w3-button w3-border w3-padding-16 tab-button" id="receivedButton" onclick="switchTab($(this));showReceivedTab();hideMessageDetailsDiv();"><b><i class="fa fa-envelope-o"/> Received</b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button" id="sentButton" onclick="switchTab($(this));showSentTab();hideMessageDetailsDiv();"><b><i class="fa fa-envelope"/> Sent</b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button" id="deletedButton" onclick="switchTab($(this));showDeletedTab();hideMessageDetailsDiv();"><b><i class="fa fa-trash"/> Deleted</b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button" id="plusButton" onclick="switchTab($(this));showNewTab();hideMessageDetailsDiv();"><b><i class="fa fa-plus"/></b></span>
+				
+				<h:form>
+					<p:remoteCommand name="showReceivedTab" update=":tabs" actionListener="#{privateMessages.setViewTab('receivedTab')}" oncomplete="customizeDatatableStyle();"/>
+					<p:remoteCommand name="showSentTab" update=":tabs" actionListener="#{privateMessages.setViewTab('sentTab')}" oncomplete="customizeDatatableStyle();"/>
+					<p:remoteCommand name="showDeletedTab" update=":tabs" actionListener="#{privateMessages.setViewTab('deletedTab')}" oncomplete="customizeDatatableStyle();"/>
+					<p:remoteCommand name="showNewTab" update=":tabs" actionListener="#{privateMessages.setViewTab('newTab')}" oncomplete="customizePrimefaceButtons();"/>
+				</h:form>
+			</div>
+				
+			<div jsf:id="tabs" class="w3-panel">
+				<div id="receivedTab" jsf:rendered="#{privateMessages.viewTab eq 'receivedTab'}">
+					<p:dataTable var="privateMessage" value="#{privateMessages.receivedMessages}" style="margin: 0 auto;" styleClass="borderless"
+						widgetVar="receivedPrivateMessageTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
+						rows="5" lazy="true" id="receivedPrivateMessageTable" draggableColumns="true">
+						
+						<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+						
+						<p:column sortBy="#{privateMessage.message.fromUser}" style="text-align:left;" priority="2">
+							<f:facet name="header">
+								<h:outputText value="From" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<b>#{privateMessage.message.fromUser}</b>
+						</p:column>
+						
+						<p:column sortBy="#{privateMessage.message.subject}" style="text-align:left;" priority="1">
+							<f:facet name="header">
+								<h:outputText value="Subject" style="font-weight:bold;"/>
+							</f:facet>
+							<p:commandLink oncomplete="$('#messageDetailsDiv').show();$('#messageDetailsDiv')[0].scrollIntoView();customizePrimefaceButtons();" 
+								process="@this" update=":messageDetailsDiv">
+								<f:setPropertyActionListener value="#{privateMessage}" target="#{privateMessages.selectedMessage}" />
+								<b>#{privateMessage.message.subject} </b>
+							</p:commandLink>
+						</p:column>
+
+						<p:column sortBy="#{privateMessage.createDate}" style="text-align:right;" priority="3">
+							<f:facet name="header">
+								<h:outputText value="Received" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<b>#{privateMessage.createDate} </b>
+							
+						</p:column>
+					
+					</p:dataTable>
+
+				</div>
+				
+				<div id="sentTab" jsf:rendered="#{privateMessages.viewTab eq 'sentTab'}">
+					
+					<p:dataTable var="privateMessage" value="#{privateMessages.sentMessages}" style="margin: 0 auto;" styleClass="borderless"
+						widgetVar="sentPrivateMessageTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
+						rows="5" lazy="true" id="sentPrivateMessageTable" draggableColumns="true">
+						
+						<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+						
+						<p:column style="text-align:left;" priority="2">
+							<f:facet name="header">
+								<h:outputText value="To" style="font-weight:bold;"/>
+							</f:facet>
+							<b>
+								<ui:repeat value="#{privateMessage.message.toUsers}" var="str" varStatus="status">
+									#{str}#{status.last?'':', '}
+								</ui:repeat>
+							</b>
+						</p:column>
+						
+						<p:column sortBy="#{privateMessage.message.subject}" style="text-align:left;" priority="1">
+							<f:facet name="header">
+								<h:outputText value="Subject" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<p:commandLink oncomplete="$('#messageDetailsDiv').show();$('#messageDetailsDiv')[0].scrollIntoView();customizePrimefaceButtons();"  
+								process="@this" update=":messageDetailsDiv">
+								<f:setPropertyActionListener value="#{privateMessage}" target="#{privateMessages.selectedMessage}" />
+								<b>#{privateMessage.message.subject} </b>
+							</p:commandLink>								
+						</p:column>
+
+						<p:column sortBy="#{privateMessage.createDate}" style="text-align:right;" priority="3">
+							<f:facet name="header">
+								<h:outputText value="Sent" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<b>#{privateMessage.createDate} </b>
+							
+						</p:column>
+					
+					</p:dataTable>
+				</div>
+				
+				<div id="deletedTab" jsf:rendered="#{privateMessages.viewTab eq 'deletedTab'}">
+					<p:dataTable var="privateMessage" value="#{privateMessages.deletedMessages}" style="margin: 0 auto;" styleClass="borderless"
+						widgetVar="deletedPrivateMessageTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
+						rows="5" lazy="true" id="deletedPrivateMessageTable" draggableColumns="true">
+						
+						<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+						
+						<p:column sortBy="#{privateMessage.message.fromUser}" style="text-align:left;" priority="2">
+							<f:facet name="header">
+								<h:outputText value="From" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<b>#{privateMessage.message.fromUser}</b>
+						</p:column>
+						
+						<p:column sortBy="#{privateMessage.message.subject}" style="text-align:left;" priority="1">
+							<f:facet name="header">
+								<h:outputText value="Subject" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<p:commandLink oncomplete="$('#messageDetailsDiv').show();$('#messageDetailsDiv')[0].scrollIntoView();customizePrimefaceButtons();"
+								process="@this" update=":messageDetailsDiv">
+								<f:setPropertyActionListener value="#{privateMessage}" target="#{privateMessages.selectedMessage}" />
+								<b>#{privateMessage.message.subject} </b>
+							</p:commandLink>
+							
+						</p:column>
+
+						<p:column sortBy="#{privateMessage.createDate}" style="text-align:left;" priority="3">
+							<f:facet name="header">
+								<h:outputText value="Received" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<b>#{privateMessage.createDate}</b>
+							
+						</p:column>
+
+						<p:column sortBy="#{privateMessage.updateDate}" style="text-align:right;" priority="4">
+							<f:facet name="header">
+								<h:outputText value="Deleted Date" style="font-weight:bold;"/>
+							</f:facet>
+							
+							<b>#{privateMessage.updateDate}</b>
+							
+						</p:column>
+					
+					</p:dataTable>
+				</div>
+				
+				<div id="newTab" jsf:rendered="#{privateMessages.viewTab eq 'newTab'}">
+					
+					<h:form id="newMessageForm">
+            			
+			       		<div class="w3-row w3-section">
+			       			
+			       			<b>Recipients</b><br/>
+			       			<div class="w3-col" style="width:50px;">
+			       				<p:button styleClass="w3-button w3-round" style="height:35px;" value="To" onclick="return false;"/>		       			
+			       				<!-- <a href="#" class="w3-button w3-round w3-theme-dark" style="height:35px;">To</a> -->
+			       			</div>
+			       			<div class="w3-rest">
+						        <p:autoComplete id="toUsers" value="#{privateMessages.toUsers}" completeMethod="#{privateMessages.autoCompleteToUser}"
+						                minQueryLength="3" maxResults="10" var="toUser" itemLabel="#{toUser}" itemValue="#{toUser}" forceSelection="true" 
+						                style="width:100%" inputStyle="padding-left:15px;width:100%;" multiple="true" required="true" requiredMessage="Recipient(s) must be specified">
+						            
+						            <p:column style="width:10%">
+						            
+										<h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(toUser)}" class="w3-circle"
+											height="35" width="35" style="border:2px;" title="#{toUser}"/>
+						            </p:column>
+						             
+						            <p:column style="width:90%;">
+						                <h:outputText value="#{toUser}" />
+						            </p:column>
+						        </p:autoComplete>
+					        </div>       			
+			       			
+						</div>
+			       		
+			       		<div class="w3-section">
+			       			
+			       			<b>Subject</b>
+				       		
+					       	<p:inputText value="#{privateMessages.newPrivateMessage.message.subject}" style="width:100%" maxlength="100">
+					       		<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+					       	</p:inputText>
+				       						       		
+						</div>
+
+			       		<div class="w3-section">
+			       			
+				       		<b>Message</b>				       		
+							
+							<pe:ckEditor value="#{privateMessages.newPrivateMessage.message.text}" skin="moono-lisa" width="100%" id="messageEditor"
+								toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
+										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
+										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" widgetVar="messageEditorVar">
+								<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+							</pe:ckEditor>
+			       		</div>
+			       		
+			       		<div jsf:id="attachmentPanel">
+														
+					      	<b>Attachments:</b>
+
+							<h6>
+								(Limit #{applicationProperties['Message.attachment.maxPerMessage']} attachments per message,
+								#{applicationProperties['Message.attachment.maxPerMessage'] - fn:length(privateMessages.uploadedFileManager.uploadedFileList)} left)
+							</h6>
+
+							<div class="w3-row" style="padding:0">										
+								
+								<p:repeat var="attachment" value="#{privateMessages.uploadedFileManager.uploadedFileList}">											
+							
+										<div class="w3-panel w3-border w3-round w3-col w3-quarter w3-center" style="margin:5px; width:175px;">
+										
+											<p/>
+		
+											<p:graphicImage alt="File" library="images" name="#{func:contentTypeIcon(attachment.contentType)}"/>
+										
+											<p/>
+									
+											<h:outputText value="#{attachment.origFileName}" style="font-size: 0.75em;word-wrap:break-word;"/>
+											
+											<p/>
+											
+											<p:commandButton ajax="true" icon="fa fa-trash" title="Delete this attachment" process="@this"
+												action="#{privateMessages.uploadedFileManager.deleteUploadedFile}"
+												update=":newMessageForm:attachmentPanel">
+												<p:confirm header="Confirm Delete Attachment" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+												<f:setPropertyActionListener value="#{attachment}" target="#{privateMessages.uploadedFileManager.selectedUploadedFile}" />  
+											</p:commandButton>
+									
+											<p/>
+											
+										</div>
+								
+								</p:repeat>
+																	
+							</div>
+							
+							<p/>
+							
+							<p:fileUpload fileUploadListener="#{privateMessages.uploadedFileManager.handleFileUpload}" mode="advanced" dragDropSupport="true"
+				        			update=":newMessageForm:attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Message.attachment.maxFileSize'] * 1024}" 
+				        			allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG|zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
+				        			rendered="#{applicationProperties['Message.attachment.maxPerMessage'] gt fn:length(privateMessages.uploadedFileManager.uploadedFileList)}"/>
+			          		
+			          		<p/>
+			       		
+			       		</div>
+			       		
+			       		<p>
+				       		<p:commandButton id="createMessageButton" ajax="true" action="#{privateMessages.createMessage}"
+		            			update=":sentPrivateMessageTable" value=" Send" icon="fa fa-paper-plane"/>         
+				       	</p>
+			    
+			    	</h:form>
+				</div>
+			</div>
+					    
+		    <p/>
+		    
+		</div>
+		
+		<!-- confirm dialog -->
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+       		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+       		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+   		</p:confirmDialog>
+	    
+		<div jsf:id="messageDetailsDiv" class="w3-panel w3-round w3-border w3-display-container w3-animate-top" style="display:none">
+
+	    	<h:form id="messageDetailsForm" rendered="#{privateMessages.selectedMessage != null}">
+	    		
+	    		<div class="w3-row w3-padding-0">
+	    			
+	    			<div class="w3-col w3-hide-small" style="width: 150px;">
+	    				<div class=" w3-center w3-panel w3-border w3-round w3-margin-right w3-theme-gradient-d5">
+							<h:graphicImage value="#{requestContext}/avatar/#{privateMessages.selectedMessage.message.fromUser}"
+								style="border:2px;" title="#{privateMessages.selectedMessage.message.fromUser}" width="100" height="100" class="w3-circle"/>
+						</div>
+	    			</div>
+	    			
+	    			<div class="w3-hide-medium w3-hide-large w3-center">
+						<h:graphicImage value="#{requestContext}/avatar/#{privateMessages.selectedMessage.message.fromUser}"
+							style="border:2px;" title="#{privateMessages.selectedMessage.message.fromUser}" width="200" height="200" class="w3-circle"/>
+						<p/>
+	    			</div>
+	    			
+	    			<div class="w3-col l8 m8 s12">
+	    				<div > <!-- Note: put negative margin-top so the top edge of text aligns with the top of the avatar image -->
+	    					<h5 class="w3-opacity-min">From: <b>#{privateMessages.selectedMessage.message.fromUser}</b>, <i class="fa fa-clock-o"/> #{privateMessages.selectedMessage.createDate}</h5>
+	    				</div>
+	    				
+		    			<div class="w3-section">
+		    				<h5 class="w3-opacity-min">To: <b><ui:repeat value="#{privateMessages.selectedMessage.message.toUsers}" var="str" varStatus="status">#{str}#{status.last?'':', '}</ui:repeat></b></h5>
+		    			</div>
+		    			
+		    			<div class="w3-section">
+		    				<h5 class="w3-opacity-min">Subject: <b>#{privateMessages.selectedMessage.message.subject}</b></h5>
+		    			</div>		    				
+	    				
+	    			</div>
+	    			
+	    		</div>
+	    			
+   				<div class="w3-panel w3-border w3-round w3-padding-16 w3-theme-l4">
+   					<h:outputText value="#{privateMessages.selectedMessage.message.text}" escape="false"/>
+   				</div>	    		
+	    		
+	    		<div class="w3-row" style="padding:0" jsf:rendered="#{fn:length(privateMessages.selectedMessage.attachments) gt 0}"> 			
+	    			
+    				<h4 class="w3-opacity-min">Attachments</h4>
+
+	    			<div class="w3-section">
+	    				
+   						<p:repeat var="attachment" value="#{privateMessages.selectedMessage.attachments}">
+																			
+							<p:panel styleClass="w3-col w3-quarter" style="margin:5px; text-align:center;width:135px;word-wrap: break-word;">
+									
+								<f:facet name="header"><span style="font-size:8pt;">#{attachment.description}</span></f:facet>
+									
+									<h:commandLink>
+										<p:fileDownload value="#{fileHandler.getMessageAttachment(attachment)}"/>
+										<p:graphicImage alt="#{attachment.description}" library="images" name="#{func:contentTypeIcon(attachment.contentType)}"/>
+									</h:commandLink>
+										
+							</p:panel>
+												
+						</p:repeat>
+	    				
+	    			</div>
+	    					    			
+	    		</div>
+	    		
+	    		<div class="w3-row" style="padding:0">
+	    			
+	    			<p/>
+	    			
+	    			<hr style="border: 1px solid; opacity: 0.25"/>
+
+					<p:commandButton ajax="true" icon="fa fa-trash" value="Delete Message" rendered="#{!privateMessages.selectedMessage.deleted}"
+						 action="#{privateMessages.deleteMessage}" title="Delete this message" process="@this"
+						 oncomplete="hideMessageDetailsDiv();" 
+						 update=":receivedPrivateMessageTable :sentPrivateMessageTable :deletedPrivateMessageTable">
+						<p:confirm header="Confirm Delete Message" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+					</p:commandButton>
+					
+					<p:commandButton ajax="true" icon="fa fa-undo" value="Restore Message" rendered="#{privateMessages.selectedMessage.deleted}"
+						action="#{privateMessages.restoreMessage}" title="Restore this message" process="@this"
+						oncomplete="hideMessageDetailsDiv();"
+						update=":receivedPrivateMessageTable :sentPrivateMessageTable :deletedPrivateMessageTable">
+						<p:confirm header="Confirm Restore Message" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+					</p:commandButton>						
+					
+					<p:commandButton type="button" onclick="hideMessageDetailsDiv();" value="Close"
+	            		icon="fa fa-close" style="margin-left:5px;"/>
+					
+					<p/>		    		
+	    		
+	    		</div>		    	
+	
+	    	</h:form>
+		
+		</div>
+		
+	</ui:define>
+	
+</ui:composition>

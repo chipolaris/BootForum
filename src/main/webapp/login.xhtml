@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:ui="http://java.sun.com/jsf/facelets"> 
+	
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title><ui:insert name="title">#{msg['application.title']} Login</ui:insert></title>
+        
+        <!-- *Note: favicon generated and setup instruction taken from https://favicon.io/favicon-generator/ -->
+ 		<link rel="apple-touch-icon" sizes="180x180" href="#{request.contextPath}/favicon_io/apple-touch-icon.png"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="#{request.contextPath}/favicon_io/favicon-32x32.png"/>
+		<link rel="icon" type="image/png" sizes="16x16" href="#{request.contextPath}/favicon_io/favicon-16x16.png"/>
+		<link rel="manifest" href="#{request.contextPath}/favicon_io/site.webmanifest"/>       
+        
+        <h:outputStylesheet library="css" name="w3.css"/>
+        
+        <!-- 
+        	color themes, read from cookie name 'theme-color', if empty, set to default value 'w3-theme-light-blue' 
+        -->
+        <c:set var = "theme_color" value = "#{cookie['theme.color'].value}"/>
+        <c:if test = "#{empty theme_color}">
+        	<c:set var = "theme_color" value = "w3-theme-light-blue"/>
+      	</c:if>      	
+        <h:outputStylesheet library="css" name="w3-theme/#{theme_color}.css"/>
+        
+        <style>
+        
+			html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+
+		</style>
+    </h:head>
+	
+	<h:body class="w3-theme-light" style="margin:0px;">
+	
+		<!-- <ui:include src="/WEB-INF/template/navbar_login.xhtml"/> -->
+	
+		<div class="w3-container w3-content" style="max-width:1680px;margin-top:50px; padding:0px;"> <!-- main content -->
+		  
+		  	<div class="w3-row-padding">
+		  
+		  		<!-- Login div -->
+		  		<div id="loginDiv" class="w3-display-middle">
+
+					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 500px;">
+					
+						<header class="w3-container w3-padding-16 w3-theme-dark w3-center">
+							<span class="w3-xlarge"><i class="fa fa-lock"/> Login to #{msg['application.title']}</span>
+						</header>
+
+						<div class="w3-center w3-pale-green" jsf:rendered="#{param.logout_success != null}" 
+							style="line-height: 50px;">
+							<span class="w3-large">Successfully logged out</span>
+						</div>
+						<div class="w3-center w3-pale-red" jsf:rendered="#{param.login_error != null and SPRING_SECURITY_LAST_EXCEPTION != null}"
+							 style="line-height: 50px;">
+							<span class="w3-large">#{SPRING_SECURITY_LAST_EXCEPTION.message}. Please try again.</span>
+						</div>
+					
+						<div class="w3-center w3-section w3-text-theme">
+		      				<i class="fa fa-user-circle-o" style="font-size: 100pt;"/>
+		    			</div>
+		    			
+		    			<form action="#{request.contextPath}/login" method="post" class="w3-container">
+		    				<div class="w3-section w3-center">
+			    				<p>
+			    					<input type="text" name="username" placeholder="&#xf007; Enter Username" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+			    				</p>
+			    				<p>
+			    					<input type="password" name="password" placeholder="&#xf084; Enter Password" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+			    				</p>
+			    				<p>
+			    					<input type="submit" value="&#xf090; Login" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
+			    				</p>
+			    				<p>
+			    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> Remember Me
+			    				</p>
+		    				</div>
+		    			</form>
+					
+					    <div class="w3-container w3-border-top w3-padding-16 w3-theme-light">
+					      	<span class="w3-left">No account? <a href="#" onclick="toggleMiddleDivs('registerDiv'); return false;">Register</a></span>
+					      	<span class="w3-right">Forgot Password? <a href="#" onclick="toggleMiddleDivs('passwordResetDiv'); return false;">Reset</a></span>
+					    </div>
+			
+			 		</div>
+		
+				</div>	
+				
+				<!-- Register div -->
+				<div id="registerDiv" class="w3-display-middle" style="display: none;">
+					
+					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 500px;">
+				
+						<header class="w3-container w3-padding w3-theme-dark w3-center">
+							<span class="w3-xlarge"><i class="fa fa-clipboard"/> Register Account</span>
+						</header>
+						
+						<div class="w3-center w3-section w3-text-theme">
+				      		<i class="fa fa-id-card-o" style="font-size: 100pt;"/>
+				    	</div>
+								
+						<h:form styleClass="w3-container" id="registerForm">
+						
+							<div jsf:rendered="#{!publicBackingBean.registrationSuccess and not empty publicBackingBean.registrationMessages}" class="w3-red w3-section w3-round">
+								<h4>Unable to create account</h4>
+								<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.registrationMessages}">
+									<li>#{message}</li>
+								</ul>
+								
+							</div>
+							
+							<div jsf:rendered="#{publicBackingBean.registrationSuccess}" class="w3-green w3-section w3-round w3-center">
+								<h4>Your account has been created</h4>
+								<a href="#" onclick="toggleMiddleDivs('loginDiv');return false;">Click here to login</a>
+							</div>
+						
+							<div jsf:rendered="#{!publicBackingBean.registrationSuccess}" class="w3-section w3-center">
+								<p>
+									<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xf2c0; Pick a username" styleClass="w3-input" title="Username"
+										style="font-family:Open Sans, FontAwesome;text-align:center;"
+										onblur="validateRegisterUsername();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+									</p:inputText>
+									<h:message for="username" id="usernameMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+								</p>
+								<p>
+									<p:inputText id="email" value="#{publicBackingBean.user.person.email}" placeholder="@ Enter email" styleClass="w3-input w3-margin-top" title="Email"
+										style="font-family:Open Sans, FontAwesome;text-align:center;"
+										onblur="validEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+									</p:inputText>
+									<h:message for="email" id="emailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+								</p>
+								<p>
+									<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; Choose a Password" styleClass="w3-input w3-margin-top" title="Password" 
+										style="font-family:Open Sans, FontAwesome;text-align:center;"
+										onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+									</p:password>
+									<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+								</p>
+								<p>
+									<p:password id="confirmPassword" placeholder="&#xf00c; Confirm Password" styleClass="w3-input" title="Confirm Password" 
+										style="font-family:Open Sans, FontAwesome;text-align:center;" 
+										onblur="validateConfirmPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+									</p:password>
+									<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+								</p>
+								<p>
+									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf234; Submit" 
+										onclick="return validateRegistration()"	id="submitButton" style="font-family:Open Sans, FontAwesome;" action="#{publicBackingBean.register}" update=":registerForm"/>
+								</p>
+							</div>
+						</h:form>
+						
+					    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey w3-center">
+					      
+					      <span class="w3-left">
+					      	Already registered?	<a href="#" onclick="toggleMiddleDivs('loginDiv');return false;">Login</a>
+					      </span>
+					      <span class="w3-right">
+					      	<a href="#{request.contextPath}">#{msg['application.title']} Home</a>
+					      </span>
+					      
+					    </div>
+						
+					</div>
+				</div>
+				
+				<!-- Forgot Password div -->
+				<div id="passwordResetDiv" class="w3-display-middle" style="display:none">
+					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 500px;">
+					
+					
+						<header class="w3-container w3-padding w3-theme-dark w3-center">
+							<span class="w3-xlarge"><i class="fa fa-undo"/> Reset Your Password</span>
+						</header>
+	
+						<div class="w3-center w3-section w3-text-theme">
+				      		<span class="fa-passwd-reset fa-stack" style="font-size: 50pt;">
+							  <i class="fa fa-undo fa-stack-2x"></i>
+							  <i class="fa fa-lock fa-stack-1x"></i>
+							</span>
+				    	</div>					
+					
+
+						<h:form styleClass="w3-container" id="passwordResetForm">
+							
+							<div jsf:rendered="#{publicBackingBean.passwordResetEmailSent}" class="w3-green w3-section w3-round w3-center">
+								<h4>Password reset email sent</h4>
+								<h6>Please check email for password reset instruction</h6>
+							</div>
+							
+							<div jsf:rendered="#{!publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-red w3-section w3-round">
+								<h4>Unable to complete request:</h4>
+								<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.passwordResetMessages}" style="list-style-position: inside; padding-left: 0;">
+									<li>#{message}</li>
+								</ul>
+							</div>						
+	
+							<div jsf:rendered="#{not publicBackingBean.passwordResetEmailSent}" class="w3-section w3-center">
+								
+								<h5>Enter email to get password reset link.</h5>
+								
+								<p>
+									<p:inputText id="passwordResetEmail" value="#{publicBackingBean.passwordResetEmail}" placeholder="@ Enter email" styleClass="w3-input w3-margin-top" title="Email"
+										style="font-family:Open Sans, FontAwesome;text-align:center;"
+										onblur="validPasswordResetEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+									</p:inputText>
+									<h:message for="passwordResetEmail" id="passwordResetEmailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+								</p>
+								<p>
+									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf1d8; Submit" 
+										onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" style="font-family:Open Sans, FontAwesome;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
+								</p>
+							</div>
+							
+						</h:form>
+						
+						<div class="w3-container w3-border-top w3-padding-16 w3-theme-light">
+					      	<span class="w3-left"><a href="#" onclick="toggleMiddleDivs('loginDiv'); return false;">Login</a></span>
+					      	<span class="w3-right"><a href="#{request.contextPath}">#{msg['application.title']} Home</a></span>
+					    </div>
+					</div>
+				</div>					
+			
+			</div>
+		
+		</div>
+
+		<script>
+			//<![CDATA[	
+				
+			validPasswordResetEmail = false;	
+			
+			/*
+			 *
+			 */
+			validPassword = false;
+			validConfirmPassword = false;
+			validEmail = false;
+			validUsername = false;
+			
+			function validateRegisterUsername() {
+				
+				var usernameEl = document.getElementById('registerForm:username');
+				var username = usernameEl.value;
+				
+				// reset styling
+				usernameEl.className = usernameEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
+				
+				if(username.length < 5) {
+					validUsername = false;
+					usernameEl.className += " w3-border-orange";
+					usernameEl.title = "Username must be at least 5 characters"
+				}
+				else {
+					validUsername = true;
+					usernameEl.className += " w3-border-light-green";
+					usernameEl.title = "Username"
+				}
+			}
+
+			function validateEmail(emailEl) {
+				
+				var isValid = false;
+				
+				// the following email regular expression is taken from the most voted answer in stackoverflow at:
+				// https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+				var emailRegex =  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				
+				//var emailEl = document.getElementById('registerForm:email');
+				var email = emailEl.value;
+				
+				// reset styling
+				emailEl.className = emailEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
+				
+				if(!emailRegex.test(String(email).toLowerCase())) {
+					isValid = false;
+					emailEl.className += " w3-border-orange";
+					emailEl.title = "Invalid email format"
+				}
+				else {
+					isValid = true;
+					emailEl.className += " w3-border-light-green";
+					emailEl.title = "Email"
+				}
+				
+				return isValid;
+			}
+			
+			function validateRegisterPassword() {
+				
+				var passwordEl = document.getElementById('registerForm:password');
+				var password = passwordEl.value;
+				
+				// reset styling
+				passwordEl.className = passwordEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
+				
+				if(password.length < 5) {
+					validPassword = false;
+					passwordEl.className += " w3-border-orange";
+					passwordEl.title = "Password length is less than 5"
+				}
+				else {
+					validPassword = true;
+					passwordEl.className += " w3-border-light-green";
+					passwordEl.title = "Password"
+				}
+			}
+			
+			function validateConfirmPassword() {
+				
+				var passwordEl = document.getElementById('registerForm:password');
+				var password = passwordEl.value;
+				
+				var confirmPasswordEl = document.getElementById('registerForm:confirmPassword');
+				var confirmPassword = confirmPasswordEl.value;
+				
+				// reset styling
+				confirmPasswordEl.className = confirmPasswordEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
+				
+				if(password != confirmPassword) {
+					validConfirmPassword = false;
+					confirmPasswordEl.className += " w3-border-orange";
+					confirmPasswordEl.title="Confirm Password does not match Password"
+				}
+				else if(confirmPassword.length < 5) {
+					validConfirmPassword = false;
+					confirmPasswordEl.className += " w3-border-orange";
+					confirmPasswordEl.title="Password is too short"
+				}
+				else {
+					validConfirmPassword = true;
+					confirmPasswordEl.className += " w3-border-light-green";
+					confirmPasswordEl.title="Confirm Password"
+				}
+			}
+			
+			function validateRegistration() {
+				
+				if(!validUsername) {
+					var usernameEl = document.getElementById('registerForm:username');
+					var messageEl = document.getElementById('registerForm:usernameMessage');
+					messageEl.innerHTML = usernameEl.title;
+					messageEl.className += " w3-text-red";
+				}
+				if(!validEmail) {
+					var emailEl = document.getElementById('registerForm:email');
+					var messageEl = document.getElementById('registerForm:emailMessage');
+					messageEl.innerHTML = emailEl.title;
+					messageEl.className += " w3-text-red";
+				}
+				if(!validPassword) {
+					var passwordEl = document.getElementById('registerForm:password');
+					var messageEl = document.getElementById('registerForm:passwordMessage'); 
+					messageEl.innerHTML = passwordEl.title; 
+					messageEl.className += " w3-text-red";
+				}
+				if(!validConfirmPassword) {
+					var confirmPasswordEl = document.getElementById('registerForm:confirmPassword');
+					var messageEl = document.getElementById('registerForm:confirmPasswordMessage');
+					messageEl.innerHTML = confirmPasswordEl.title; 
+					messageEl.className += " w3-text-red";
+				}
+				
+				return validUsername && validEmail && validPassword && validConfirmPassword;
+			}
+			
+			// ---
+			function toggleMiddleDivs(divId) {
+				
+				$(".w3-display-middle").hide();
+				$("#" + divId).show();
+			}
+			
+			//]]>
+		</script>
+	
+	</h:body>
+	
+</ui:composition>

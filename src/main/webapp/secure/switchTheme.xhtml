@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    template="/WEB-INF/template/layout_secure.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} - Switch UI Theme
+	</ui:define>
+
+	<ui:define name="pageTitle">
+		<b><i class="fa fa-paint-brush"></i> Choose UI Theme</b>
+	</ui:define>
+
+	<ui:define name="content">
+		
+		<div>
+			<p:messages id="messages" showDetail="true" showSummary="false">
+				<p:autoUpdate/>
+			</p:messages>
+		</div>
+		
+		<div jsf:id="switchThemeDiv" >
+		
+			<!-- <div>
+				<p:breadCrumb class="w3-hide-small">
+					<p:menuitem value="Home" url="#{request.contextPath}/" />
+  						<p:menuitem value="Switch UI Theme" url="#{request.contextPath}/switchTheme.xhtml" />
+				</p:breadCrumb>
+			</div>
+			
+			<div class="w3-panel w3-theme-d5 w3-center w3-round">
+					<h2>Switch UI Theme</h2>
+				</div> -->
+				
+				<h:outputStylesheet library="css" id="outputStylesheetCSS" 
+					name="w3-theme/#{switchTheme.themeColor}.css" rendered="#{not empty switchTheme.themeColor}"/>
+			
+			<div class="w3-row">
+				
+					
+				<div class="w3-half w3-container">
+					
+					<h:form>
+						<p>
+							Current Color Theme is <b>#{not empty switchTheme.themeColor ? switchTheme.themeColor : cookie['theme.color'].value}</b>
+						</p>
+					
+						<p>
+							<b>Select a new Color Theme:</b>
+						
+						</p>
+						
+						<p>
+						
+							<!-- Note: #theme_color is defined in the /WEB-INF/tamplate/layout.xhtml file -->
+							<p:selectOneMenu value="#{switchTheme.themeColor}" var="theme" style="width:100%;" >
+								
+								<f:selectItem itemValue="w3-theme-blue" itemLabel="Blue" />
+								<f:selectItem itemValue="w3-theme-blue-grey" itemLabel="Blue-Grey" />
+								<f:selectItem itemValue="w3-theme-brown" itemLabel="Brown" />
+								<f:selectItem itemValue="w3-theme-cyan" itemLabel="Cyan"/>
+								<f:selectItem itemValue="w3-theme-deep-orange" itemLabel="Deep Orange"/>
+								<f:selectItem itemValue="w3-theme-green" itemLabel="Green"/>
+								<f:selectItem itemValue="w3-theme-indigo" itemLabel="Indigo"/>
+								<f:selectItem itemValue="w3-theme-khaki" itemLabel="Khaki"/>
+								<f:selectItem itemValue="w3-theme-light-blue" itemLabel="Light Blue"/>
+								<f:selectItem itemValue="w3-theme-light-green" itemLabel="Light Green"/>
+								<f:selectItem itemValue="w3-theme-pink" itemLabel="Pink"/>
+								<f:selectItem itemValue="w3-theme-red" itemLabel="Red"/>
+								<f:selectItem itemValue="w3-theme-teal" itemLabel="Teal"/>
+								<f:selectItem itemValue="w3-theme-w3schools" itemLabel="W3Schools"/>
+								
+								<p:column style="width:100%">
+									<div class="w3-padding-16 w3-center w3-#{fn:substringAfter(theme, 'w3-theme-')}">#{theme}</div>
+								</p:column>
+								
+								<p:ajax event="change" update=":outputStylesheetCSS" />
+								
+							</p:selectOneMenu>
+						
+						</p>
+						
+						<p:commandButton value=" Save" icon="fa fa-save" ajax="false" action="#{switchTheme.submitThemeColor}"/>
+					</h:form>
+				</div>
+					
+				<div class="w3-half w3-container">
+					<h:form>
+					
+						<p>
+							Current Component Theme is <b>#{not empty switchTheme.themeComponent ? switchTheme.themeComponent : cookie['theme.component'].value}</b>
+						</p>
+				
+						<p>
+							<b>Select a new Component Theme:</b>
+						</p>
+					
+						<p>
+						
+							<p:themeSwitcher value="#{switchTheme.themeComponent}" var="theme" panelStyle="width:94%" style="width:100%" >
+	
+								<f:selectItem itemValue="nova-light" itemLabel="Nova-Light" />
+								<f:selectItem itemValue="nova-dark" itemLabel="Nova-Dark" />
+								<f:selectItem itemValue="nova-colored" itemLabel="Nova-Colored"/>
+								<f:selectItem itemValue="luna-blue" itemLabel="Luna-Blue"/>
+								<f:selectItem itemValue="luna-amber" itemLabel="Luna-Amber"/>
+								<f:selectItem itemValue="luna-green" itemLabel="Luna-Green"/>
+								<f:selectItem itemValue="luna-pink" itemLabel="Luna-Pink"/>
+								<f:selectItem itemValue="omega" itemLabel="Omega"/>
+							
+								<p:column style="width:100%">
+									#{theme}
+								</p:column>
+								
+							</p:themeSwitcher>
+					
+						</p>
+						
+						<p:commandButton value=" Save" icon="fa fa-save" ajax="false" action="#{switchTheme.submitThemeComponent}"/>
+				
+					</h:form>	
+				</div>
+					
+				
+			</div>
+			
+			<p/>
+			
+			<h2>Preview <i class="fa fa-eye"/></h2>
+			
+			<div class="w3-panel w3-topbar w3-bottombar">
+				
+				<div class="w3-panel w3-theme-d5 w3-center w3-round"><h3>Header</h3></div>
+				
+				<div class="w3-row">
+				
+					<h:form>
+					
+						<div class="w3-col l12 m12 s12 w3-padding">
+							
+							<b>Tool Bar</b>
+							
+						    <p:toolbar style="margin:20px 0px">
+						        <f:facet name="left">
+						            <p:commandButton type="button" value="New" icon="pi pi-file" />
+						            <p:commandButton type="button" value="Open" icon="pi pi-folder-open"/>
+						            <p:commandButton type="button" title="Save" icon="pi pi-save"/>
+						            <p:commandButton type="button" title="Delete" icon="pi pi-trash"/>
+						            <p:commandButton type="button" title="Print" icon="pi pi-print"/>
+						        </f:facet>
+						 
+						        <f:facet name="right">
+						            <p:menuButton value="Navigate">
+						                <p:menuitem value="Home" url="#" />
+						                <p:menuitem value="ShowCase" url="#" />
+						                <p:menuitem value="TouchFaces" url="#" />
+						            </p:menuButton>
+						        </f:facet>
+						    </p:toolbar>
+
+							<b>Tabs</b>
+							<p/>
+							<p:accordionPanel>
+						        <p:tab title="Accordion 1">Accordion 1 Content</p:tab>
+						        <p:tab title="Accordion 2">Accordion 2 Content</p:tab>
+						        <p:tab title="Accordion 3">Accordion 3 Content</p:tab>
+							</p:accordionPanel>	
+							
+							<p/>
+			
+							
+						</div>
+					
+						
+					
+						<div class="w3-col l6 m12 s12 w3-padding">
+							<p>
+								<b>Date Picker</b>
+							</p>
+						
+							<p:datePicker id="inline" inline="true" style="width:100%;"/>
+						</div>
+						
+						<div class="w3-col l6 m12 s12 w3-padding">
+							
+							<p>
+								<b>Inputs</b>
+							</p>
+							
+							<p>
+								<p:inputText maxlength="30" placeholder="Text Input" style="width:100%;"/>
+							</p>
+							<p>
+							
+								<p:selectOneMenu style="width:100%;" onchange="customizePrimefacesSelectonemenu();">
+									<f:selectItem itemLabel="Option 1" itemValue="1" />
+						            <f:selectItem itemLabel="Option 2" itemValue="2" />
+						            <f:selectItem itemLabel="Option 3" itemValue="3" />
+						            <f:selectItem itemLabel="Option 4" itemValue="4" />
+						            <f:selectItem itemLabel="Option 5" itemValue="5" itemDisabled="true"/>
+						            <f:selectItem itemLabel="Option 6" itemValue="6" />
+						            <f:selectItem itemLabel="Option 7" itemValue="7" />
+								</p:selectOneMenu>
+							
+							</p>
+							<p>
+								<p:selectOneListbox style="width:100%;">
+									<f:selectItem itemLabel="Option 1" itemValue="1" />
+						            <f:selectItem itemLabel="Option 2" itemValue="2" />
+						            <f:selectItem itemLabel="Option 3" itemValue="3" />
+						            <f:selectItem itemLabel="Option 4" itemValue="4" />
+						            <f:selectItem itemLabel="Option 5" itemValue="5" itemDisabled="true"/>
+						            <f:selectItem itemLabel="Option 6" itemValue="6" />
+						        </p:selectOneListbox>
+					        
+					        </p>
+						</div>							
+	
+					</h:form>
+				
+				</div>
+								
+			</div>
+			
+		</div>
+
+		<script type="text/javascript">
+ 			//<![CDATA[	
+ 				
+ 				/* set table header's background color */
+ 				$(document).ready(function(){
+ 					
+ 					customizePrimefaceButtons();
+ 					customizePrimefacesAccordian();
+ 					customizePrimefacesSelectlistbox();
+ 					customizePrimefacesSelectonemenu();
+ 				});
+ 				
+ 				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+ 				
+ 				function customizePrimefacesAccordian() {
+ 					$('div.ui-accordion-header').addClass("w3-theme-dark w3-border-0")
+ 				}
+ 				
+ 				function customizePrimefacesSelectonemenu() {
+ 					$('div > ul.ui-selectonemenu-items > li.ui-selectonemenu-item').removeClass("w3-theme-dark")
+ 					$('div > ul.ui-selectonemenu-items > li.ui-selectonemenu-item.ui-state-highlight').addClass("w3-theme-dark");
+ 				}
+ 				
+ 				function customizePrimefacesSelectlistbox() {
+ 					$('div > ul.ui-selectlistbox-list > li.ui-selectlistbox-item').removeClass("w3-theme-dark")
+ 					$('div > ul.ui-selectlistbox-list > li.ui-selectlistbox-item.ui-state-highlight').addClass("w3-theme-dark");
+ 				}
+ 				
+			//]]>	
+		</script>	
+
+		
+	</ui:define>
+</ui:composition>

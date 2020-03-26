@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    template="/WEB-INF/template/layout_public.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} - Search Comment
+	</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+			
+			/* borderless datatable: https://stackoverflow.com/questions/18880208/remove-all-borders-on-a-specific-datatable */
+			
+			.ui-datatable.borderless thead th,
+			.ui-datatable.borderless tbody,
+			.ui-datatable.borderless tbody tr,
+			.ui-datatable.borderless tbody td {
+			    border-style: none;
+			}
+			
+			body .ui-paginator {
+				 border-style: none;
+			}
+			
+			#results > div.ui-datatable-header.ui-widget-header.ui-corner-top {
+				border-style: none;
+			}
+		</style>
+		
+		<script type="text/javascript">
+			//<![CDATA[
+				
+				function customizeDatatableStyle() {
+					
+					/* set table header's background color */
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+					
+					/* set datatable paginator button color */
+					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
+						function(el) {
+							el.className += ' w3-button';
+							
+							if(el.className.indexOf('ui-state-active') >= 0) {
+								el.className += ' w3-theme-dark';	
+							}
+							else {
+								el.className += ' w3-white';
+							}
+						}
+					);
+				}
+				
+				$(document).ready(function(){
+					
+					customizeDatatableStyle();
+					
+					// mark the search result
+					$('.commentTitle').mark($('#searchForm\\:keywords').val())
+				});
+			//]]>
+		</script>
+		
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="keywords" value="#{searchComment.keywords}"/>
+			<f:viewAction action="#{searchComment.onLoad}"/>
+		</f:metadata>
+
+		<!-- Use the mark.js library from https://markjs.io/ -->
+		<h:outputScript library="js" name="jquery.mark.min.js"/>
+
+		<div class="w3-panel w3-card-4 w3-white">
+
+			<div class="w3-hide-small w3-margin-top">
+				<p:breadCrumb>
+					<p:menuitem value="Home" url="#{request.contextPath}/" />
+  						<p:menuitem value="Search Comments" url="#{request.requestURI}" />
+				</p:breadCrumb>
+			</div>
+		
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div jsf:id="searchFormDiv" >
+				
+				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2>Search Comments</h2>
+ 				</div>
+			
+				<h:form id="searchForm">
+					
+					<div class="w3-row" style="width: 500px;margin: auto;">
+						
+						<div class="w3-col w3-margin-top">
+							<p:inputText value="#{searchComment.keywords}" placeholder="Enter keywords" styleClass="w3-block" id="keywords"/>
+						</div>
+						
+						<div class="w3-col w3-margin-top w3-margin-bottom">
+							<!-- Note: since this search page is AJAX submitted/refreshed, make sure to clear the resultTable, so the display between
+								searches is displayed properly: use the paginator.setPage(0) on the onclick event
+								ref: https://stackoverflow.com/questions/18441847/primefaces-datatable-reset-pagination -->
+							<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xf002; Search"
+								style="font-family:Open Sans, FontAwesome;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
+								onclick="PF('searchResultDatatable').getPaginator().setPage(0);" update=":searchResultDiv"
+								oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();"/>
+						</div>
+					</div>
+				
+				</h:form>
+			
+			</div>
+
+			<div jsf:id="searchResultDiv">
+				
+				<div jsf:rendered="#{not empty searchComment.keywords}">
+				
+					<hr style="border: 1px dashed; opacity: 0.25"/>
+					
+					<!-- note: paginator position can be top/bottom/both (default) -->
+					<p:dataTable value="#{searchComment.commentSearchLazyModel}" var="comment" id="results" 
+							widgetVar="searchResultDatatable" style="margin: 0 auto;" styleClass="borderless"
+					        paginator="true" rows="#{applicationProperties['Lucene.search.pageSize']}" lazy="true" paginatorPosition="both"
+					        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+					        type="none" rendered="#{not empty searchComment.commentSearchLazyModel}">
+
+						<p:ajax event="rowToggle" oncomplete="$('.commentContent').mark($('#searchForm\\:keywords').val());"/>
+						<p:ajax event="page" oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();"/>
+
+					  	<f:facet name="header">
+	           				 <h4 class="w3-opacity-min">Found #{searchComment.commentSearchLazyModel.rowCount} comments for '#{searchComment.keywords}'</h4>
+	        			</f:facet>
+	 
+	 					<p:column width="50px;">
+	 					
+	 						<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
+								height="50" width="50" style="border:3px;margin-right:15px;" 
+								title="#{comment.createBy}" rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
+
+							<span jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" class="w3-circle w3-purple"
+								title="#{comment.createBy}"
+								style="display:inline-block;font-size:1.2rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;">
+								#{fn:substring(comment.createBy, 0, 3)}
+							</span>
+							
+						</p:column>
+	
+						<p:column style="text-align:left">
+							<f:facet name="header">
+								<h:outputText value="Comment"/>
+							</f:facet>
+				            <p:commandLink id="viewCommentLink" title="View Comment" style="text-decoration:none;color: #0084B4;"
+				            	oncomplete="PF('commentDialogVar').show();
+				            		$('#commentDialogForm\\:searchCommentText').mark($('#searchForm\\:keywords').val());
+				            		$('#searchCommentTitle').mark($('#searchForm\\:keywords').val());" 
+				            	update=":commentDialogForm" value="#{comment.title}" styleClass="commentTitle">  
+				                
+				                <f:setPropertyActionListener target="#{searchComment.selectedComment}" value="#{comment}"/>
+				            </p:commandLink>
+				            
+				            <p:rowToggler />
+				            
+				      	</p:column>
+	
+	 					<p:column style="text-align:left">
+							<f:facet name="header">
+								<h:outputText value="Discussion"/>
+							</f:facet>
+							<h:outputLink value="viewDiscussion.xhtml" style="text-decoration:none;color: #0084B4;">
+								<h:outputText value="#{comment.discussion.title}"/>
+								<f:param name="id" value="#{comment.discussion.id}" />
+							</h:outputLink>
+						</p:column>
+						
+						<p:column style="text-align:right;">
+							<f:facet name="header">
+								<h:outputText value="Posted On"/>
+							</f:facet>
+							<h:outputText value="#{comment.createDate}"/>					
+						</p:column>
+						
+						<p:rowExpansion>
+							<div class="w3-panel w3-border w3-round-large w3-theme-l3">
+								<h:outputText value="#{comment.content}" escape="false" styleClass="commentContent"/>
+							</div>
+						</p:rowExpansion>
+					  	
+					 </p:dataTable>
+				</div>
+			</div>
+
+			<h:form id="commentDialogForm">
+			    <p:dialog header="#{searchComment.selectedComment.createBy} posted on #{searchComment.selectedComment.createDate}" 
+			    	widgetVar="commentDialogVar" width="900" resizable="false" id="commentDialog" position="center" 
+			        showEffect="scale" hideEffect="slide" modal="true">
+			        
+			        <h3 id="searchCommentTitle">#{searchComment.selectedComment.title}</h3>
+			        
+			        <p:scrollPanel style="max-height:500px;">	
+				  		<h:outputText value="#{searchComment.selectedComment.content}" escape="true" id="searchCommentText"/>
+					</p:scrollPanel>
+					
+					<p/>
+					
+					<p:button href="viewDiscussion.xhtml?id=#{searchComment.selectedComment.discussion.id}" value="View Discussion" icon="fa fa-eye"/>		
+				</p:dialog>
+			</h:form>
+
+		</div>
+		
+	</ui:define>
+</ui:composition>

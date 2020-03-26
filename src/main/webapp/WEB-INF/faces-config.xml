@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+    <!--
+    No ManagedBean declarations here as we are using @ManagedBean Annotations.
+    -->
+    
+    <!-- Note:
+    	Must explicitly declare validators and converter in this file (instead of using @FacesValidator or @FacesConverter
+    	annotations) for this application to run in embedded tomcat.
+    	For more information, see this link https://stackoverflow.com/questions/46187725/spring-boot-jsf-integration
+    -->
+    <converter>
+    	<converter-for-class>java.lang.String</converter-for-class>
+    	<converter-class>com.github.chipolaris.bootforum.jsf.converter.StringConverter</converter-class>
+    </converter>
+    
+    <converter>
+    	<converter-id>accountStatusConverter</converter-id>
+    	<converter-class>com.github.chipolaris.bootforum.jsf.converter.AccountStatusConverter</converter-class>
+    </converter>
+    
+    <validator>
+        <validator-id>captchaValidator</validator-id>
+        <validator-class>com.github.chipolaris.bootforum.jsf.validator.CaptchaValidator</validator-class>
+    </validator>
+    
+	<application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+		<el-resolver>org.primefaces.application.exceptionhandler.PrimeExceptionHandlerELResolver</el-resolver>
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>vi</supported-locale>
+		</locale-config>
+		<resource-bundle>
+			<base-name>ResourceBundle.messages</base-name>
+			<var>msg</var>
+		</resource-bundle>
+		
+		<system-event-listener>
+			
+		    <system-event-listener-class>com.github.chipolaris.bootforum.jsf.config.ViewScopeCallbackRegistrar</system-event-listener-class>
+		    <system-event-class>javax.faces.event.PostConstructViewMapEvent</system-event-class>
+		    <source-class>javax.faces.component.UIViewRoot</source-class>
+		</system-event-listener>
+		 
+		<system-event-listener>
+		    <system-event-listener-class>com.github.chipolaris.bootforum.jsf.config.ViewScopeCallbackRegistrar</system-event-listener-class>
+		    <system-event-class>javax.faces.event.PreDestroyViewMapEvent</system-event-class>
+		    <source-class>javax.faces.component.UIViewRoot</source-class>
+		</system-event-listener>
+		
+	</application>
+	
+	<lifecycle>
+		<phase-listener>com.github.chipolaris.bootforum.jsf.config.MultiPageMessagesSupport</phase-listener>
+	</lifecycle>
+	
+	<factory>
+		<exception-handler-factory>org.primefaces.application.exceptionhandler.PrimeExceptionHandlerFactory</exception-handler-factory>
+	</factory>
+	
+</faces-config>

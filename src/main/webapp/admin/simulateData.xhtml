@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="/WEB-INF/template/layout_admin.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} - Simulate Data
+	</ui:define>
+	
+	<ui:define name="content">
+	
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+ 				$(document).ready(function(){
+					
+					customizePrimefaceButtons();
+				});
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+			//]]>	
+		</script>
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
+		
+			<p:messages id="messages" showDetail="true">
+				<p:autoUpdate/>
+			</p:messages>
+			
+			<div class="w3-panel w3-round w3-theme-d5 w3-center w3-round">
+ 				<h2>#{msg['simulateData.page.title']}</h2>
+ 			</div>
+			
+			<div class="w3-panel w3-display-container">
+			
+				<div class="w3-panel w3-border w3-round w3-padding">
+					<i class="fa fa-info-circle fa-2x w3-opacity"/>
+					<span>Note: use this utility to quickly populate data (with randomly generated data) to test forum features</span>
+				</div>
+
+				<div class="w3-bar">
+					<button class="w3-bar-item w3-button tab-button" onclick="openTab('tab', 'users', 'tab-button', 'usersButton')" id="usersButton">
+						<i class="fa fa-users"/> <b>Users</b>
+					</button>
+					<button class="w3-bar-item w3-button tab-button" onclick="openTab('tab', 'discussion', 'tab-button', 'discussionButton')" id="discussionButton">
+						<i class="fa fa-comments"/> <b>Discussion</b>
+					</button>
+					<button class="w3-bar-item w3-button tab-button" onclick="openTab('tab', 'forumData', 'tab-button', 'forumDataButton')" id="forumDataButton">
+						<i class="fa fa-comments"/> <b>Forum Data</b>
+					</button>
+				</div>
+				
+				<div class="tab" id="users">
+					<h:form>
+						<div class="w3-row w3-border w3-round w3-padding">
+							
+							<div>
+								<h:outputLabel value="Number of Users" for="numUsers"/><br/>
+								<p:inputText value="#{simulateData.form.numUsers}" required="true" id="numUsers"/>
+							</div>
+							
+							<div class="w3-col" style="margin:10px 0px;">
+								<p:commandButton ajax="true" value="Create Users" icon="fa fa-play" 
+									action="#{simulateData.createRandomUsers}"/>
+							</div>
+						</div>
+					</h:form>				
+				</div>
+				
+				<div class="tab" id="discussion">
+					<h:form id="discussionForm">
+					
+						<div class="w3-row w3-border w3-round w3-padding">
+						
+							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Forum Group Title" for="forumGroupTitle"/><br/>
+								<p:inputText value="#{simulateData.form.forumGroupTitle}" style="width:100%;" required="true" id="forumGroupTitle"/>
+							</div>
+	
+							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Forum Title" for="forumTitle"/><br/>
+								<p:inputText value="#{simulateData.form.forumTitle}" style="width:100%;" required="true" id="forumTitle"/>
+							</div>
+	
+							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Discussion Title" for="discussionTitle"/><br/>
+								<p:inputText value="#{simulateData.form.discussionTitle}" style="width:100%;" required="true" id="discussionTitle"/>
+							</div>
+							
+							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Number of Comments" for="numComments"/><br/>
+								<p:inputText value="#{simulateData.form.numComments}" style="width:100%;" required="true" id="numComments"/>
+							</div>
+							
+							<div class="w3-col w3-rest w3-margin-top" style="padding: 0px 5px;">
+							
+								<h:outputLabel value="Pick Commentors" for="commentorList"/><br/>
+								
+							    <p:pickList id="commentorList" value="#{simulateData.form.commentors}" var="commentor"
+	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true">
+	         					
+	         						<f:facet name="sourceCaption">Available</f:facet>
+	        						<f:facet name="targetCaption">Chosen</f:facet>
+	        						
+							        <p:column style="width:20%">
+							        	<h:graphicImage value="#{requestContext}/avatar/#{commentor}" class="w3-circle"
+											id="commentorAvatar" height="50" width="50" style="border:3px;" 
+											/>
+							        </p:column>
+							 
+							        <p:column style="width:80%;">
+							            <h:outputText value="#{commentor}" />
+							        </p:column>						
+	        						
+	                			</p:pickList>
+							</div>
+	
+							<div class="w3-col" style="padding: 0px 5px; margin:10px 0px;">
+								
+								<!-- submit button to show on small screen -->
+								<p:commandButton ajax="true" value="Simulate Discussion" icon="fa fa-play" 
+									styleClass="w3-block w3-hide-large w3-hide-medium" action="#{simulateData.simulateDiscussion}"/>
+								
+								<!-- submit button to show on large and medium screen -->	
+								<p:commandButton ajax="true" value="Simulate Discussion" icon="fa fa-play" 
+									styleClass="w3-hide-small" action="#{simulateData.simulateDiscussion}"/>
+								
+							</div>
+																		
+						</div>
+								
+					</h:form>
+					
+				</div>
+
+
+				<div class="tab" id="forumData">
+					<h:form id="forumDataForm">
+					
+						<div class="w3-row w3-border w3-round w3-padding">
+						
+							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Forum Group Title" for="forumGroupTitle"/><br/>
+								<p:inputText value="#{simulateData.form.forumGroupTitle}" style="width:100%;" required="true" id="forumGroupTitle"/>
+							</div>
+	
+							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Forum Title" for="forumTitle"/><br/>
+								<p:inputText value="#{simulateData.form.forumTitle}" style="width:100%;" required="true" id="forumTitle"/>
+							</div>
+	
+							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Discussion Title (Template)" for="discussionTitle"/><br/>
+								<p:inputText value="#{simulateData.form.discussionTitle}" style="width:100%;" required="true" id="discussionTitle"/>
+							</div>
+							
+							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Number of Discussions" for="numDiscussions"/><br/>
+								<p:inputText value="#{simulateData.form.numDiscussions}" style="width:100%;" required="true" id="numDiscussions"/>
+							</div>
+							
+							<div class="w3-col w3-rest w3-margin-top" style="padding: 0px 5px;">
+							
+								<h:outputLabel value="Pick Commentors" for="commentorList"/><br/>
+								
+							    <p:pickList id="commentorList" value="#{simulateData.form.commentors}" var="commentor"
+	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true">
+	         					
+	         						<f:facet name="sourceCaption">Available</f:facet>
+	        						<f:facet name="targetCaption">Chosen</f:facet>
+	        						
+							        <p:column style="width:20%">
+							        	<h:graphicImage value="#{requestContext}/avatar/#{commentor}" class="w3-circle"
+											id="commentorAvatar" height="50" width="50" style="border:3px;" 
+											/>
+							        </p:column>
+							 
+							        <p:column style="width:80%;">
+							            <h:outputText value="#{commentor}" />
+							        </p:column>						
+	        						
+	                			</p:pickList>
+							</div>
+	
+							<div class="w3-col" style="padding: 0px 5px; margin:10px 0px;">
+								
+								<!-- submit button to show on small screen -->
+								<p:commandButton ajax="true" value="Simulate Forum Data" icon="fa fa-play" 
+									styleClass="w3-block w3-hide-large w3-hide-medium" action="#{simulateData.simulateForumData}"/>
+								
+								<!-- submit button to show on large and medium screen -->	
+								<p:commandButton ajax="true" value="Simulate Forum Data" icon="fa fa-play" 
+									styleClass="w3-hide-small" action="#{simulateData.simulateForumData}"/>
+								
+							</div>
+																		
+						</div>
+								
+					</h:form>
+					
+				</div>
+
+			</div>
+
+		</div> <!-- end mainContentDiv -->
+		
+		<script type="text/javascript">
+ 			//<![CDATA[	
+ 				
+ 			/* set table header's background color */
+			$(document).ready(function(){
+				
+				$(".tab").hide();
+				$("#users").show();
+				$("#usersButton").addClass('w3-theme-d3');
+			});
+ 
+ 			function openTab(tabClass, tabId, buttonClass, buttonId) {
+				
+ 				$("." + tabClass).hide();
+				$("." + buttonClass).removeClass('w3-theme-d3');
+				
+			  	$("#" + tabId).show();
+			  	$("#" + buttonId).addClass('w3-theme-d3');
+			}
+ 			
+ 			//]]>	
+		</script>	
+
+	</ui:define>
+	
+</ui:composition>

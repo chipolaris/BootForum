@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="/WEB-INF/template/layout_admin.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} - Tags Management
+	</ui:define>
+	
+	<ui:define name="content">
+	
+		<style type="text/css">	
+			 
+		</style>
+
+		<script type="text/javascript">
+ 			//<![CDATA[
+				
+			//]]>	
+		</script>
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
+			
+			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
+ 				<h2>#{msg['tagManagement.page.title']}</h2>
+ 			</div>
+ 			
+ 			<p:messages id="messages" showDetail="true">
+				<p:autoUpdate/>
+			</p:messages>
+			
+			<button onclick="toggle('newTagDiv');" class="w3-button w3-left-align w3-border">
+				<i class="fa fa-tag"/>
+				Add New Tag
+			</button>
+			
+			<div jsf:id="newTagDiv" class="w3-hide w3-display-container w3-animate-right">
+				<span onclick="toggle('newTagDiv');" class="w3-button w3-display-topright">X</span>
+				<div class="w3-panel w3-border w3-round-large">
+					<h:form>
+						<h5>Label</h5>
+						
+						<p:inputText value="#{tagManagement.newTag.label}" styleClass="w3-input" maxlength="30"/>
+							
+						<h5>Icon</h5>
+		  				<p:selectOneMenu value="#{tagManagement.newTag.icon}" panelStyle="width:250px" style="width:270px;"
+		  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
+		  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
+		  					
+			  				<p:column style="width:10%">
+			  					<i class="#{f} fa-2x"/>
+			  				</p:column>
+			  				
+			  				<p:column>
+			  					<h:outputText value="#{f}"/>
+			  				</p:column>
+		  					
+		  				</p:selectOneMenu>
+						
+						<h5>Color</h5>
+						<p:colorPicker value="#{tagManagement.newTag.color}" mode="inline" />
+						
+						<span style="font-size:12pt;">Disabled</span>&#160;&#160;<h:selectBooleanCheckbox value="#{tagManagement.newTag.disabled}" styleClass="w3-check"/>
+						
+						<p/>
+						
+						<p:commandButton value="Submit" ajax="true" action="#{tagManagement.createTag}" update=":listTagsDiv" icon="fa fa-check" styleClass="w3-button"/>
+						<p:button value="Close" icon="fa fa-close" styleClass="w3-button" style="margin-left:5px;" onclick="toggle('newTagDiv');return;"/>
+						
+						<p/>
+						
+					</h:form>
+				</div>
+			</div>
+			
+			<hr style="border: 1px solid; opacity: 0.25"/>
+			
+			<div jsf:id="listTagsDiv" class="w3-row">
+			
+				<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
+					<h3>Tag List</h3>
+				</div>				
+			
+				<p:repeat var="tag" value="#{tagManagement.tags}">
+				
+				<div class="w3-col l3 m6 s12" style="padding: 8px;position:relative">
+				    <div class="w3-display-container w3-padding-16 w3-hover-grey" style="color:white;background-color: ##{tag.color}">
+						<span jsf:rendered="#{tag.disabled}" class="w3-display-topright" style="color:lightgrey;">
+				        	<i class="fa fa-ban w3-xxlarge" title="Disabled"/>
+				        </span>
+				        <div class="w3-center">
+				        	<i class="#{tag.icon} w3-xxxlarge"></i>
+				        	<p/>
+				        	<h4>#{tag.label}</h4>
+				        </div>
+				        
+				        <!-- use w3-display-hover to only show these when the mouse is hovered over -->
+				        <div class="w3-display-bottommiddle w3-display-hover">
+				        	
+				        	<p:commandLink ajax="true" oncomplete="toggle('editTagDiv');document.getElementById('editTagDiv').scrollIntoView();" 
+				        		update=":editTagDiv" title="Edit this tag">
+				        		<i class="fa fa-edit w3-xlarge w3-text-black"/>
+				        		<f:setPropertyActionListener value="#{tag}" target="#{tagManagement.selectedTag}"/>
+				        	</p:commandLink>
+				        	<p:commandLink oncomplete="PF('deleteTagConfirmation').show();" title="Delete this Tag" style="margin-left:5px;">
+				        		<i class="fa fa-trash w3-xlarge w3-text-black"/>
+				        		<f:setPropertyActionListener value="#{tag}" target="#{tagManagement.selectedTag}"/>
+				        	</p:commandLink>
+				        </div>
+				    </div>				
+				</div>
+				
+				</p:repeat>
+			</div>
+			
+			<div jsf:id="editTagDiv" class="w3-hide">
+				<div jsf:rendered="#{not empty tagManagement.selectedTag}">
+				
+					<h3>Edit Tag '#{tagManagement.selectedTag.label}'</h3>
+					<div class="w3-panel w3-border w3-round-large w3-display-container w3-animate-right">
+						<span onclick="toggle('editTagDiv');" class="w3-button w3-display-topright">X</span>
+						<h:form>
+							<h5>Label</h5>
+							
+							<p:inputText value="#{tagManagement.selectedTag.label}" styleClass="w3-input" maxlength="30"/>
+								
+							<h5>Icon</h5>
+			  				<p:selectOneMenu value="#{tagManagement.selectedTag.icon}" panelStyle="width:250px" style="width:270px;"
+			  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
+			  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
+			  					
+				  				<p:column style="width:10%">
+				  					<i class="#{f} fa-2x"/>
+				  				</p:column>
+				  				
+				  				<p:column>
+				  					<h:outputText value="#{f}"/>
+				  				</p:column>
+			  					
+			  				</p:selectOneMenu>
+							
+							<h5>Color</h5>
+							<p:colorPicker value="#{tagManagement.selectedTag.color}" mode="inline" />
+							
+							<span style="font-size:12pt;">Disabled</span>&#160;&#160;<h:selectBooleanCheckbox value="#{tagManagement.selectedTag.disabled}" styleClass="w3-check"/>
+							
+							<p/>
+							
+							<p:commandButton value="Submit" ajax="true" action="#{tagManagement.editTag}" update=":listTagsDiv" icon="fa fa-plus" styleClass="w3-button"/>
+							<p:button value="Close" icon="fa fa-close" styleClass="w3-button" style="margin-left:5px;" onclick="toggle('editTagDiv');return;"/>
+							
+							<p/>
+							
+						</h:form>
+					</div>
+				</div>
+			</div>			
+
+			<p:confirmDialog message="Delete Tag?" showEffect="fade" hideEffect="fade"  
+		        header="Confirm" severity="alert" widgetVar="deleteTagConfirmation" responsive="true">
+		  		<h:form>
+			        <p:commandButton value="Yes" icon="fa fa-check"
+			        	update=":listTagsDiv :messages"  
+			        	actionListener="#{tagManagement.deleteTag}"
+			        	oncomplete="PF('deleteTagConfirmation').hide();window.scrollTo(0,0);"/>  
+			        <p:commandButton value="Cancel" oncomplete="PF('deleteTagConfirmation').hide();"
+			        	icon="fa fa-close" style="margin-left:5px;">
+			        	<f:setPropertyActionListener value="#{null}" target="#{tagManagement.selectedTag}" />
+			        </p:commandButton>  
+		  		</h:form>
+		    </p:confirmDialog>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

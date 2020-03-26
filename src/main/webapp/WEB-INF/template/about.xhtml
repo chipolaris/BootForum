@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:box4j="http://bootforum.chipolaris.github.com/jsf/component">
+    
+	<box4j:fullOverlay widgetVarId="aboutOverlay" transition="0.5s" backgroundColor="rgba(0,0,0, 0.9)" closeButtonColor="rgb(256,256,256)">
+		
+		<!-- add w3-padding-48 to create some vertical space between the overlay's close 'X' icon and the first line -->
+		<div class="w3-container w3-center w3-padding-48">
+	        
+        	<p class="w3-xxlarge w3-text-white">#{msg['application.title']} Application Demo</p>
+        	<p class="w3-large w3-text-white">Chi Nguyen</p>
+        	<p class="w3-large w3-text-white">Version 0.0.1</p>
+        	
+        	<div class="w3-border-top"/>
+        	
+        	<p class="w3-large w3-text-white">Notable Technologies Used</p>
+        	
+        	<p class="w3-medium w3-text-white"><a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a></p>
+        	
+        	<p class="w3-medium w3-text-white">Spring Framework 5.1 <a href="http://www.springsource.org/spring-framework">[Details]</a></p>
+        	
+        	<p class="w3-medium w3-text-white">Spring Security 5.1 <a href="http://www.springsource.org/spring-security">[Details]</a></p>
+        	
+        	<p class="w3-medium w3-text-white">Java Persistence API 2 (JPA) / Eclipselink as the provider <a href="http://www.eclipse.org/eclipselink/">[Details]</a></p>
+        	
+        	<p class="w3-medium w3-text-white">Java Server Faces 2 (JSF) with Primefaces Components <a href="http://www.primefaces.org">[Details]</a></p>
+        	
+        	<p class="w3-medium w3-text-white">W3.CSS Framework <a href="https://www.w3schools.com/w3css/default.asp">[Details]</a></p>
+			
+		</div>
+		
+	</box4j:fullOverlay>
+</ui:composition>
