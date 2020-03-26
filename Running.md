@@ -16,7 +16,7 @@ By default, BootForum looks for the **application.properties** file in the follo
 ### To specify a custom configuration file name, use the **--spring.config.name** option:
 > java -jar BootForum.war --spring.config.name=myconfig.properties
 * Additional information on running with an external configuration file can be found here:
-[Externalized Configuration](https://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/html/boot-features-external-config.html "Externalized Configuration")
+[Externalized Configuration](https://docs.spring.io/spring-boot/docs/2.2.0.RELEASE/reference/html/spring-boot-features.html#boot-features-external-config-application-property-files "Externalized Configuration")
 
 ## Run as a web application inside a Servlet Container
 BootForum can also be run as a regular web application by placing the **BootForum.war** inside the **<Servet-Container>/webapps** folder
