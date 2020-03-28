@@ -24,10 +24,10 @@ public class AddDiscussion {
 
 	private static final Logger logger = LoggerFactory.getLogger(AddDiscussion.class);
 	
-	@Value("#{applicationProperties['Comment.thumbnail.maxPerComment']}")
+	@Value("${Comment.thumbnail.maxPerComment}")
 	private short maxThumbnailsPerComment;
 
-	@Value("#{applicationProperties['Comment.attachment.maxPerComment']}")
+	@Value("${Comment.attachment.maxPerComment}")
 	private short maxAttachmentsPerComment;
 	
 	@Resource

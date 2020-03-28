@@ -9,14 +9,12 @@ import javax.servlet.ServletException;
 
 import org.primefaces.webapp.filter.FileUploadFilter;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.context.support.HttpRequestHandlerServlet;
@@ -42,13 +40,6 @@ public class WebConfig implements ServletContextInitializer {
 	    configurer.setScopes(scopes);
 	
 	    return configurer;
-	}
-    
-	@Bean(name="applicationProperties")
-	public PropertiesFactoryBean applicationProperties() {
-	    PropertiesFactoryBean bean = new PropertiesFactoryBean();
-	    bean.setLocation(new ClassPathResource("application.properties"));
-	    return bean;
 	}
     
 	@Bean

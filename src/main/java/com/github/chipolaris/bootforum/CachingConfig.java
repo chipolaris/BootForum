@@ -105,33 +105,33 @@ public class CachingConfig {
     /**
      * injected properties from application.properties file
      */
-    @Value("#{applicationProperties['Cache.discussionBreadCrumb.maximumSize']}")
+    @Value("${Cache.discussionBreadCrumb.maximumSize}")
     private Integer discussionBreadCrumbMaximumSize;
     
-    @Value("#{applicationProperties['Cache.discussionBreadCrumb.expireAfterAccessMinutes']}")
+    @Value("${Cache.discussionBreadCrumb.expireAfterAccessMinutes}")
     private Integer discussionBreadCrumbExpireAfterAccessMinutes;
     
-    @Value("#{applicationProperties['Cache.forumBreadCrumb.maximumSize']}")
+    @Value("${Cache.forumBreadCrumb.maximumSize}")
     private Integer forumBreadCrumbMaximumSize;
     
-    @Value("#{applicationProperties['Cache.forumBreadCrumb.expireAfterAccessMinutes']}")
+    @Value("${Cache.forumBreadCrumb.expireAfterAccessMinutes}")
     private Integer forumBreadCrumbExpireAfterAccessMinutes;
     
-    @Value("#{applicationProperties['Cache.avatarBase64.maximumSize']}")
+    @Value("${Cache.avatarBase64.maximumSize}")
     private Integer avatarBase64MaximumSize;
     
-    @Value("#{applicationProperties['Cache.avatarBase64.expireAfterAccessMinutes']}")
+    @Value("${Cache.avatarBase64.expireAfterAccessMinutes}")
     private Integer avatarBase64ExpireAfterAccessMinutes;
     
-    @Value("#{applicationProperties['Cache.userStat.maximumSize']}")
+    @Value("${Cache.userStat.maximumSize}")
     private Integer userStatMaximumSize;
     
-    @Value("#{applicationProperties['Cache.userStat.expireAfterAccessMinutes']}")
+    @Value("${Cache.userStat.expireAfterAccessMinutes}")
     private Integer userStatExpireAfterAccessMinutes;
     
-    @Value("#{applicationProperties['Cache.forumStat.maximumSize']}")
+    @Value("${Cache.forumStat.maximumSize}")
     private Integer forumStatMaximumSize;
     
-    @Value("#{applicationProperties['Cache.forumStat.expireAfterAccessMinutes']}")
+    @Value("${Cache.forumStat.expireAfterAccessMinutes}")
     private Integer forumStatExpireAfterAccessMinutes;
 }

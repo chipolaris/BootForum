@@ -25,7 +25,7 @@ public class ScheduledTasks {
 	@Resource
 	private GenericDAO genericDAO;
 	
-	@Value("#{new Integer(applicationProperties['Scheduled.cleanPasswordReset.timePassed.minutes'])}")
+	@Value("${Scheduled.cleanPasswordReset.timePassed.minutes}")
 	private Integer timePassedMinutes;
 	
 	@Scheduled(fixedRateString = "${Scheduled.cleanPasswordReset.interval.miliseconds}", 

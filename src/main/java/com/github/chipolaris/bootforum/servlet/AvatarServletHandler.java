@@ -45,13 +45,13 @@ public class AvatarServletHandler implements HttpRequestHandler {
 	// TODO: make EXPIRE_TIME_IN_SECONDS configurable through application properties file
 	private static final Long EXPIRE_TIME_IN_SECONDS = 30l; //TimeUnit.DAYS.toSeconds(1);
 	
-	@Value("#{applicationProperties['Avatar.imageType']}")
+	@Value("${Avatar.imageType}")
 	private String avatarImageType;
 	
 	// caching anonymousAvatarBytes for quick serving
 	private byte[] anonymousAvatarBytes;
 	
-	@Value("#{applicationProperties['FileUpload.rootDirectory'] + systemProperties['file.separator'] + applicationProperties['Avatar.filePath']}")
+	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Avatar.filePath}' }")
 	private String avatarDirectory;
 	
 	@PostConstruct

@@ -29,16 +29,16 @@ public class EmailSender {
 	
 	private JavaMailSenderImpl javaMailSender;
 
-	@Value("#{applicationProperties['Email.smtp.host']}")
+	@Value("${Email.smtp.host}")
 	private String host;
 
-	@Value("#{applicationProperties['Email.smtp.port']}")
+	@Value("${Email.smtp.port}")
 	private Integer port;
 	
-	@Value("#{applicationProperties['Email.smtp.username']}")
+	@Value("${Email.smtp.username}")
 	private String username;
 	
-	@Value("#{applicationProperties['Email.smtp.password']}")
+	@Value("${Email.smtp.password}")
 	private String password;
 	
 	@PostConstruct

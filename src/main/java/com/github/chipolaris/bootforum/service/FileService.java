@@ -26,37 +26,37 @@ public class FileService {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileService.class);
 	
-	@Value("#{applicationProperties['FileUpload.rootDirectory'] + systemProperties['file.separator'] + applicationProperties['Avatar.filePath']}")
+	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Avatar.filePath}' }")
 	private String avatarDirectory;
 
-	@Value("#{new Integer(applicationProperties['Avatar.maxFileSize']) * 1024}")
+	@Value("#{ ${Avatar.maxFileSize} * 1024 }")
 	private Integer avatarMaxFileSize;
 	
-	@Value("#{applicationProperties['Avatar.maxWidth']}")
+	@Value("${Avatar.maxWidth}")
 	private Integer avatarMaxWidth;
 	
-	@Value("#{applicationProperties['Avatar.maxHeight']}")
+	@Value("${Avatar.maxHeight}")
 	private Integer avatarMaxHeight;
 	
-	@Value("#{applicationProperties['Avatar.imageType']}")
+	@Value("${Avatar.imageType}")
 	private String avatarImageType;
 	
-	@Value("#{new Integer(applicationProperties['Comment.thumbnail.maxFileSize']) * 1024}")
+	@Value("#{ ${Comment.thumbnail.maxFileSize} * 1024 }")
 	private Long commentThumbnailMaxSize;
 	
-	@Value("#{new Integer(applicationProperties['Comment.attachment.maxFileSize']) * 1024}")
+	@Value("#{ ${Comment.attachment.maxFileSize} * 1024}")
 	private Long commentAttachmentMaxSize;
 	
-	@Value("#{applicationProperties['FileUpload.rootDirectory'] + systemProperties['file.separator'] + applicationProperties['Comment.thumbnailPath']}")
+	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Comment.thumbnailPath}' }")
 	private String commentThumbnailDirectory;
 	
-	@Value("#{applicationProperties['FileUpload.rootDirectory'] + systemProperties['file.separator'] + applicationProperties['Comment.attachmentPath']}")
+	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Comment.attachmentPath}' }")
 	private String commentAttachmentDirectory;
 
-	@Value("#{new Integer(applicationProperties['Message.attachment.maxFileSize']) * 1024}")
+	@Value("#{ ${Message.attachment.maxFileSize} * 1024}")
 	private Long messageAttachmentMaxSize;
 	
-	@Value("#{applicationProperties['FileUpload.rootDirectory'] + systemProperties['file.separator'] + applicationProperties['Message.attachmentPath']}")
+	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Message.attachmentPath}' }")
 	private String messageAttachmentDirectory;
 	
 	/* timestamp pattern used to generated unique file name for new file uploaded */

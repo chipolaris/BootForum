@@ -27,7 +27,7 @@ public class AutoSuggestService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AutoSuggestService.class);
 	
-	@Value("#{applicationProperties['Lucene.indexDirectory']}")
+	@Value("${Lucene.indexDirectory}")
 	private String indexDirectory;
 	
 	/*

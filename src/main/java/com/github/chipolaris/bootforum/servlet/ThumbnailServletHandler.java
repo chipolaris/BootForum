@@ -48,7 +48,7 @@ public class ThumbnailServletHandler implements HttpRequestHandler {
 	// TODO: make EXPIRE_TIME_IN_SECONDS configurable through application properties file
 	private static final Long EXPIRE_TIME_IN_SECONDS = TimeUnit.MINUTES.toSeconds(5);
 	
-	@Value("#{applicationProperties['FileUpload.rootDirectory'] + systemProperties['file.separator'] + applicationProperties['Comment.thumbnailPath']}")
+	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Comment.thumbnailPath}' }")
 	private String thumbnailDirectory;
 	
 	@Resource

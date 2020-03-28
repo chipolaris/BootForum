@@ -44,7 +44,7 @@ public class UserService {
 	@Resource
 	private EmailSender emailSender;
 	
-	@Value("#{applicationProperties['Email.fromEmailAddress']}")
+	@Value("${Email.fromEmailAddress}")
 	private String fromEmailAddress;
 		
 	/**

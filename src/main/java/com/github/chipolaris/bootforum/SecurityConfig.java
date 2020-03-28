@@ -19,13 +19,13 @@ import org.springframework.context.annotation.Bean;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
-	@Value("#{applicationProperties['RememberMe.tokenValiditySeconds']}")
+	@Value("${RememberMe.tokenValiditySeconds}")
 	private Integer rememberMeTokenValiditySeconds;
 	
-	@Value("#{applicationProperties['RememberMe.tokenHashKey']}")
+	@Value("${RememberMe.tokenHashKey}")
 	private String rememberMeTokenHashKey;
 	
-	@Value("#{applicationProperties['RememberMe.requestParameter']}")
+	@Value("${RememberMe.requestParameter}")
 	private String rememberMeRequestParameter;
 	
 	@Bean

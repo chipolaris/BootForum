@@ -1,6 +1,5 @@
 package com.github.chipolaris.bootforum.service;
 
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,10 +32,10 @@ public class PasswordResetService {
 	@Resource
 	private EmailSender emailSender;
 	
-	@Value("#{applicationProperties['Email.fromEmailAddress']}")
+	@Value("${Email.fromEmailAddress}")
 	private String fromEmailAddress;
 	
-	@Value("#{applicationProperties['Application.name']}")
+	@Value("${Application.name}")
 	private String applicationName;
 	
 	@Transactional(readOnly = false)

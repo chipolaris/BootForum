@@ -31,7 +31,7 @@ public class PrivateMessages {
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(PrivateMessages.class);
 	
-	@Value("#{applicationProperties['Message.attachment.maxPerMessage']}")
+	@Value("${Message.attachment.maxPerMessage}")
 	private short maxAttachmentsPerMessage;
 	
 	@Resource

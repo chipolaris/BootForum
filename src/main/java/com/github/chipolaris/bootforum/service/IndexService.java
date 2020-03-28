@@ -52,13 +52,13 @@ public class IndexService {
 
 	private static final Logger logger = LoggerFactory.getLogger(IndexService.class);
 	
-	/*@Value("#{applicationProperties['Lucene.maxHitsPerPage']}")
+	/*@Value("${Lucene.maxHitsPerPage}")
 	private Integer maxHitsPerPage;*/
 	
-	@Value("#{applicationProperties['Lucene.indexDirectory']}")
+	@Value("${Lucene.indexDirectory}")
 	private String indexDirectory;
 	
-	@Value("#{applicationProperties['Lucene.search.maxResults']}")
+	@Value("${Lucene.search.maxResults}")
 	private Integer maxSearchResults;
 	
 	private SearcherManager searcherManager;
@@ -107,7 +107,7 @@ public class IndexService {
 	// see: http://blog.mikemccandless.com/2011/09/lucenes-searchermanager-simplifies.html
 	// 
 	// Note: adapted to use Spring @Scheduled instead of raw Java Thread 
-	@Scheduled(fixedDelayString = "#{new Long(applicationProperties['Lucene.search.refresh']) * 1000}")
+	@Scheduled(fixedDelayString = "#{ ${Lucene.search.refresh} * 1000 }")
 	private void searchIndexRefresh() {
 		try {
 			searcherManager.maybeRefresh();
