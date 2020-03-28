@@ -42,8 +42,13 @@
  				
  				/* set table header's background color */
  				$(document).ready(function(){
-					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+ 					customizePrimefaceButtons();
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'});
  				});
+ 				
+ 				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
 			//]]>	
 		</script>
 		
@@ -117,8 +122,8 @@
 								<h:outputText value="Last Registered User" />
 							</p:column>
 							
-							<p:column style="font-weight:bold;">
-								<h:outputText value="#{systemInfo.statistics.lastRegisteredUser} "/>
+							<p:column>
+								<h:outputText value="#{systemInfo.statistics.lastRegisteredUser} "  style="font-weight:bold;"/>
 								<pe:timeAgo	value="#{systemInfo.statistics.lastUserRegisteredDate}"/>
 							</p:column>
 							
@@ -130,9 +135,9 @@
 								<h:outputText value="Last Comment" />
 							</p:column>
 							
-							<p:column style="font-weight:bold">
-								<h:outputText value="By #{systemInfo.statistics.lastComment.updateBy} "/>
-								<pe:timeAgo	value="#{systemInfo.statistics.lastComment.updateDate}"	/>
+							<p:column>
+								<h:outputText value="By #{systemInfo.statistics.lastComment.updateBy} " style="font-weight:bold"/>
+								<pe:timeAgo	value="#{systemInfo.statistics.lastComment.updateDate}"/>
 							</p:column>
 						</p:row>
 
