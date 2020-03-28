@@ -37,8 +37,29 @@
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
-		    <!-- <version>42.2.10</version> -->
+		    <!-- <version>${postgresql.version}</version> -->
 		</dependency>
+		
+		<!-- MySQL JDBC Driver -->
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <!-- <version>${mysql.version}</version> -->
+		</dependency>
+
+		<!-- SQL Server JDBC Driver -->
+		<dependency>
+		    <groupId>com.microsoft.sqlserver</groupId>
+		    <artifactId>mssql-jdbc</artifactId>
+		    <!-- <version>${sqlserver.version}</version> -->
+		</dependency>
+		
+		<!-- Oracle JDBC Driver -->
+		<!-- <dependency>
+		    <groupId>com.oracle.database.jdbc</groupId>
+		    <artifactId>ojdbc8</artifactId>
+		    <version>19.3.0.0</version>
+		</dependency> -->
 	
 		<!-- Velocity -->
 		<dependency>
