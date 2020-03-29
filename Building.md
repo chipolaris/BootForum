@@ -1,5 +1,7 @@
 # Checkout and build **BootForum.war**
 
-## Checkout
+### Checkout
 
-## Build
+### Build
+Change to the project's root directory
+> mvn package
