@@ -7,6 +7,8 @@ First, if not already, [build the **BootForum.war**](Building.md). Also make sur
 ## Run as standalone Java application
 BootForum can be run as a standalone Java application by using the **java -jar** on command line:
 > java -jar BootForum.war
+#### Note:
+Run-time configuration properties are specified in the **application.properties** file. The template can be found at [application.properties file](./src/main/resources/application.properties)
 ### Specify configuration file at runtime
 By default, BootForum looks for the **application.properties** file in the following locations: 
 1. A **/config** subdir of the current directory.
