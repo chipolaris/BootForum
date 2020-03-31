@@ -82,7 +82,7 @@
 		
 		<!-- set request parameter values from URL to backing bean -->
 		<f:metadata>
-			<f:viewParam name="id" value="#{viewDiscussion.discussionId}"/>
+			<f:viewParam name="id" value="#{viewDiscussion.id}"/>
 			<f:viewAction action="#{viewDiscussion.onLoad}"/>
 		</f:metadata>
 	
@@ -130,10 +130,11 @@
 					
 					<p/>
 					
-					<a href="#{request.contextPath}/secure/replyComment.xhtml?discussionId=#{viewDiscussion.discussionId}" class="w3-button w3-border w3-theme-light"
-						jsf:rendered="#{! viewDiscussion.discussion.closed}" >
+					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{! viewDiscussion.discussion.closed}" >
+						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
 						<i class="fa fa-comment-o"/> Add new Comment
-					</a>						
+					</h:link>
+					
 					<p/>
 					
 				</div>
@@ -187,14 +188,7 @@
 											
 											</div>
 											
-		           						</p:commandLink>
-		           						
-	               						<!-- <h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
-											id="commentorAvatar" height="65" width="65">
-											<p:ajax event="mouseover" oncomplete="PF('userStatOverlayPanel').show('#{component.clientId}')"
-												listener="#{userStatManager.loadUserStat(comment.createBy)}" update=":userDetailsForm:userStatOutputPanel"
-											/>
-										</h:graphicImage> -->												
+		           						</p:commandLink>											
 		           														
 									</td>
 									
@@ -316,18 +310,23 @@
 						    
 						    <!-- large screen and tablet -->
 						    <div class="w3-bar w3-hide-small">
-						        
-								<a href="#{request.contextPath}/secure/replyComment.xhtml?id=#{comment.id}" class="w3-button w3-border w3-theme-light">
+								
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light">
+									<f:param name="id" value="#{comment.id}"/>
 									<i class="fa fa-reply"/> Reply
-								</a>
-						        
-						        <a href="#{request.contextPath}/secure/replyComment.xhtml?id=#{comment.id}&amp;quote=true" class="w3-button w3-border w3-theme-light">
+								</h:link>
+								
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;">
+									<f:param name="id" value="#{comment.id}"/>
+									<f:param name="quote" value="true"/>
 									<i class="fa fa-quote-left"/> Quote
-								</a>
-					        		
-					        	<!-- <a href="#{request.contextPath}/secure/editComment.xhtml?id=#{comment.id}" class="w3-button w3-border">
+								</h:link>
+					        	
+					        	<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
+					        		rendered="#{userSession.user.username eq comment.createBy}" >
+									<f:param name="id" value="#{comment.id}"/>
 									<i class="fa fa-pencil-square-o"/> Edit
-								</a> -->		
+								</h:link>	
 					        	
 					        	<!-- right side: like buttons -->
 					        	<p:outputLabel value="#{comment.commentVote.voteDownCount}"
@@ -346,17 +345,22 @@
 							<!-- mobile screen -->
 							<div class="w3-bar w3-hide-medium w3-hide-large">
 								
-						        <a href="#{request.contextPath}/secure/replyComment.xhtml?id=#{comment.id}" class="w3-button w3-border" title="Reply">
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Reply">
+									<f:param name="id" value="#{comment.id}"/>
 									<i class="fa fa-reply"/>
-								</a>
-						        
-						        <a href="#{request.contextPath}/secure/replyComment.xhtml?id=#{comment.id}&amp;quote=true" class="w3-button w3-border" title="Quote">
+								</h:link>
+								
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Quote">
+									<f:param name="id" value="#{comment.id}"/>
+									<f:param name="quote" value="true"/>
 									<i class="fa fa-quote-left"/>
-								</a>
-					        	
-					        	<!-- <a href="#{request.contextPath}/secure/editComment.xhtml?id=#{comment.id}" class="w3-button w3-border" title="Edit">
+								</h:link>
+								
+								<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" title="Edit"
+									rendered="#{userSession.user.username eq comment.createBy}">
+									<f:param name="id" value="#{comment.id}"/>
 									<i class="fa fa-pencil-square-o"/>
-								</a> -->
+								</h:link>
 					        	
 					        	<!-- right side: like buttons -->
 				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="Dislike" action="#{voteManager.voteDown(comment)}" process="@this" 
@@ -374,10 +378,10 @@
 				        <hr style="border: 1px dashed; opacity: 0.75"/>
 				        
 				        <f:facet name="footer">
-						    <a href="#{request.contextPath}/secure/replyComment.xhtml?discussionId=#{viewDiscussion.discussionId}" class="w3-button w3-border"
-								jsf:rendered="#{! viewDiscussion.discussion.closed}" >
+				        	<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border" rendered="#{! viewDiscussion.discussion.closed}" >
+								<f:param name="discussionId" value="#{viewDiscussion.id}"/>
 								<i class="fa fa-comment-o"/> Add new Comment
-							</a>
+							</h:link>
 				            <h:outputText value="This discussion is closed" rendered="#{viewDiscussion.discussion.closed}" style="font-size:16pt; color:red;"/>
 				        </f:facet>
 				    </p:dataList>

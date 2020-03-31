@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:func="http://bootforum.chipolaris.github.com/functions"
+    template="/WEB-INF/template/layout_public.xhtml">
+
+	<ui:define name="title">
+		Edit comment '#{editComment.comment.title}' in discussion '#{editComment.comment.discussion.title}'
+	</ui:define>
+
+	<ui:define name="content">	
+		
+		<!-- set request parameter values from URL to backing bean -->
+		<f:metadata>
+			<f:viewParam name="id" value="#{editComment.id}"/>
+			<f:viewAction action="#{editComment.onLoad}"/>
+		</f:metadata>
+
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+ 				$(document).ready(function(){
+					customizePrimefaceButtons();
+				});
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+			//]]>	
+		</script>	
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
+			
+			<p/>
+			
+			<div>
+				<p:messages id="messages" showDetail="true" showSummary="false">
+					<p:autoUpdate/>
+				</p:messages>
+			</div>
+			
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{not applicationProperties['Comment.allowEdit']}">
+			
+				<h3>Error!</h3>
+				<h4>System does not allow to edit comment (contact administrator)</h4>
+			
+			</div>
+			
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{applicationProperties['Comment.allowEdit'] and empty editComment.comment}">
+			
+				<h3>Error!</h3>
+				<h4>Must specified a valid comment to edit</h4>
+			
+			</div>
+		
+			<div jsf:id="editCommentDiv" jsf:rendered="#{applicationProperties['Comment.allowEdit'] and not empty editComment.comment}">
+
+				<div>
+					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(editComment.comment.discussion)}"/>
+				</div>
+ 				
+ 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h2 jsf:rendered="#{not empty editComment.comment.title}">Edit comment '#{editComment.comment.title}'</h2>
+ 				</div>
+ 								
+				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-comment"/> Comment</button> <!-- accordion button  -->
+			
+				<div id="commentPanel" class="w3-container w3-animate-right w3-hide w3-show">
+					
+					<h:form id="editForm">
+				
+						<p/>
+						<b>Comment Title</b>
+						<p/>
+						
+						<p:inputText value="#{editComment.comment.title}" style="width:100%;" maxlength="255">
+							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+						</p:inputText>
+						<p/>
+						<b>Comment</b>
+						<p/>
+						
+						<!-- 
+							Note (10/22/2019): Primefaces textEditor component (based on Quill JS text editor) has 
+							issues with the quoting feature where it add multi-lines.
+							Therefore, use PrimefacesExtension's ckEditor for now
+						-->
+						<pe:ckEditor value="#{editComment.comment.content}" skin="moono-lisa" width="100%"
+							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
+										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
+										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]">
+							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+						</pe:ckEditor>
+						
+						<p/>
+						
+						<p:commandButton value="#{msg['generic.form.submit']}" ajax="true" icon="fa fa-check-square" action="#{editComment.submit}"/>
+							
+						<p/>
+					
+					</h:form>
+					
+				</div>
+				
+				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-image"/> Thumbnails</button> <!-- accordion button  -->
+					
+				<div jsf:id="thumbnailPanel" class="w3-container w3-animate-right w3-hide w3-hide">
+					<h:form>
+
+						<p>
+				      		<b>Current Thumbnails:</b>
+						</p>
+						
+						<h6>
+							(Limit #{applicationProperties['Comment.thumbnail.maxPerComment']} thumbnails per comment,
+							 #{applicationProperties['Comment.thumbnail.maxPerComment'] - fn:length(editComment.comment.thumbnails)} left)
+						</h6>
+
+
+						<div class="w3-row" style="padding:0">										
+							
+							<p:repeat var="thumbnail" value="#{editComment.comment.thumbnails}">											
+						
+								<div class="w3-panel w3-border w3-round w3-col w3-quarter w3-center" style="margin:5px; width:175px;">
+								
+									<p/>
+
+									<p:graphicImage alt="Image File" library="images" name="#{func:contentTypeIcon(thumbnail.contentType)}"/>
+								
+									<p/>
+							
+									<h:outputText value="#{thumbnail.description}" style="font-size: 0.75em;word-wrap:break-word;"/>
+									
+									<p/>
+									
+									<p:commandButton ajax="true" icon="fa fa-trash" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();" 
+										title="Delete this thumbnail" update=":thumbnailPanel" action="#{editComment.deleteThumbnail}">
+										<p:confirm header="Confirm Delete Thumbnail" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+										<f:setPropertyActionListener value="#{thumbnail}" target="#{editComment.selectedThumbnail}" />  
+									</p:commandButton>
+							
+									<p/>
+									
+								</div>
+							
+							</p:repeat>
+																
+						</div>
+						
+						<p/>
+						
+						<p:fileUpload fileUploadListener="#{editComment.uploadThumbnail}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();"
+		        			update=":thumbnailPanel" auto="true" sizeLimit="#{applicationProperties['Comment.thumbnail.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
+		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(editComment.comment.thumbnails)}"/>
+          				
+          				<p/>
+          					
+          			</h:form>
+					
+				</div>
+				
+				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-paperclip"/> Attachments</button> <!-- accordion button  -->
+					
+				<div jsf:id="attachmentPanel" class="w3-container w3-animate-right w3-hide w3-hide">
+				      
+			      	<h:form>
+			      
+			      		<p>
+				      		<b>Current Attachments:</b>
+						</p>
+						
+						<h6>
+							(Limit #{applicationProperties['Comment.attachment.maxPerComment']} attachments per comment,
+							#{applicationProperties['Comment.attachment.maxPerComment'] - fn:length(editComment.comment.attachments)} left)
+						</h6>
+
+						<div class="w3-row" style="padding:0">										
+							
+							<p:repeat var="attachment" value="#{editComment.comment.attachments}">											
+						
+								<div class="w3-panel w3-border w3-round w3-col w3-quarter w3-center" style="margin:5px; width:175px;">
+								
+									<p/>
+
+									<p:graphicImage alt="File" library="images" name="#{func:contentTypeIcon(attachment.contentType)}"/>
+								
+									<p/>
+							
+									<h:outputText value="#{attachment.description}" style="font-size: 0.75em;word-wrap:break-word;"/>
+									
+									<p/>
+									
+									<p:commandButton ajax="true" icon="fa fa-trash" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();" 
+										title="Delete this attachment" update=":attachmentPanel" action="#{editComment.deleteAttachment}">
+										<p:confirm header="Confirm Delete Attachment" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+										<f:setPropertyActionListener value="#{attachment}" target="#{editComment.selectedAttachment}" />  
+									</p:commandButton>
+							
+									<p/>
+									
+								</div>
+							
+							</p:repeat>
+																
+						</div>
+						
+						<p/>
+						
+						<p:fileUpload fileUploadListener="#{editComment.uploadAttachment}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();"
+		        			update=":attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Comment.attachment.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
+		        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(editComment.comment.attachments)}"/>
+		          		
+		          		<p/>
+				
+					</h:form>
+					
+				</div>				
+				
+				<!-- confirm dialog -->
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+	    		</p:confirmDialog>
+				
+			</div>
+	
+			<script>
+				//<![CDATA[
+					
+					function toggle(id) {
+						var x = document.getElementById(id);
+						if (x.className.indexOf("w3-show") == -1) {
+							x.className += " w3-show";
+						} else {
+							x.className = x.className.replace(" w3-show", "");
+						}
+					};
+				
+				//]]>
+			</script>	
+	
+		</div>
+	
+	</ui:define>
+	
+</ui:composition>

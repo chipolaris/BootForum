@@ -147,7 +147,7 @@ public class ReplyComment {
 			
 			JSFUtils.addServiceErrorMessage(response);
 			
-			return  null;
+			return null;
 		}
 	}
 	

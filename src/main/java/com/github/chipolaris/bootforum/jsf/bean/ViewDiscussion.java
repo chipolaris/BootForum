@@ -21,13 +21,13 @@ public class ViewDiscussion {
 	@Resource
 	private ApplicationEventPublisher applicationEventPublisher;
 	
-	private Long discussionId;
+	private Long id;
 
-	public Long getDiscussionId() {
-		return discussionId;
+	public Long getId() {
+		return id;
 	}
-	public void setDiscussionId(Long discussionId) {
-		this.discussionId = discussionId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	private Discussion discussion;
@@ -50,9 +50,9 @@ public class ViewDiscussion {
 	
 	public void onLoad() {
 
-		if(this.discussionId != null) {
+		if(this.id != null) {
 					
-			this.discussion = genericService.findEntity(Discussion.class, this.discussionId).getDataObject();
+			this.discussion = genericService.findEntity(Discussion.class, this.id).getDataObject();
 			
 			if(this.discussion != null) {
 				

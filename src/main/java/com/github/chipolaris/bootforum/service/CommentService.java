@@ -396,7 +396,47 @@ public class CommentService {
 	}
 	
 	@Transactional(readOnly = false)
-	public ServiceResponse<Boolean> deleteCommentThumbnail(Comment comment, FileInfo thumbnail, User user) {
+	public ServiceResponse<Comment> addCommentThumbnail(Comment comment, UploadedFileData uploadedFile) {
+
+		ServiceResponse<Comment> response = new ServiceResponse<>();
+		
+		FileInfo thumbnail = createThumbnail(uploadedFile);
+		
+		if(thumbnail != null) {
+			comment.getThumbnails().add(thumbnail);
+			Comment mergedComment = genericDAO.merge(comment);
+			response.setDataObject(mergedComment);
+		}
+		else {
+			response.setAckCode(AckCodeType.FAILURE);
+			response.addMessage("Unable to add thumbnail for comment.id " + comment.getId());
+		}
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<Comment> addCommentAttachment(Comment comment, UploadedFileData uploadedFile) {
+
+		ServiceResponse<Comment> response = new ServiceResponse<>();
+		
+		FileInfo attachment = createAttachment(uploadedFile);
+		
+		if(attachment != null) {
+			comment.getAttachments().add(attachment);
+			Comment mergedComment = genericDAO.merge(comment);
+			response.setDataObject(mergedComment);
+		}
+		else {
+			response.setAckCode(AckCodeType.FAILURE);
+			response.addMessage("Unable to add attachment for comment.id " + comment.getId());
+		}
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<Boolean> deleteCommentThumbnail(Comment comment, FileInfo thumbnail) {
 		
 		ServiceResponse<Boolean> response = new ServiceResponse<Boolean>();
 		
@@ -421,7 +461,7 @@ public class CommentService {
 	}
 	
 	@Transactional(readOnly = false)
-	public ServiceResponse<Boolean> deleteCommentAttachment(Comment comment, FileInfo attachment, User user) {
+	public ServiceResponse<Boolean> deleteCommentAttachment(Comment comment, FileInfo attachment) {
 		
 		ServiceResponse<Boolean> response = new ServiceResponse<Boolean>();
 		
