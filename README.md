@@ -12,8 +12,9 @@ Full features web based forum/disscussion/bulletin board software implemented us
 
 * **Discussion/Comment**:
   * Add discussion
-  * Add new/reply/quote comments
-  * Add vote (per comment)
+  * Add new/reply/quote comment
+  * Edit comment
+  * Add vote up/down (per comment)
   * Comment thumbnails and attachments (configurable by administrators)
   * Replies can be viewed as a comment thread.
   * Discussions can be tagged
@@ -43,6 +44,6 @@ Full features web based forum/disscussion/bulletin board software implemented us
 A relational database. This software has been tested in **Postgresql**, **H2**, **MySQL**, **SQL Server**, **Oracle**.
 
 ### Recommended Environment for Development
-**JDK 8**or later
-**Maven 3** or later
-IDE: recommend tools with Spring deveopment plugin such as Eclipse based **Spring Tool Suite**
+* **JDK 8** or later
+* **Maven 3** or later
+* IDE: recommend tools with Spring deveopment plugin such as Eclipse based **Spring Tool Suite**
