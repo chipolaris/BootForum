@@ -13,8 +13,6 @@ Run-time configuration properties are specified in the **application.properties*
 By default, BootForum looks for the **application.properties** file in the following locations: 
 1. A **/config** subdir of the current directory.
 2. The current directory
-3. A classpath **/config** package
-4. The classpath root
 ### To specify a custom configuration file name, use the **--spring.config.name** option:
 > java -jar BootForum.war --spring.config.name=myconfig.properties
 * Additional information on running with an external configuration file can be found here:
