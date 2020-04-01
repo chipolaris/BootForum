@@ -30,6 +30,12 @@ Full features web based forum/disscussion/bulletin board software implemented us
 * **Forums**:
   * Unlimited nested forum groups / sub-groups (category/subcategory)
 
+* **User Profile**:
+  * User managed profile: account info, avatar ...
+
+* **Private Messages**:
+  * Send/Receive messages to other forum members 
+
 * **Administration**:
   * Manage forums: add, edit, delete forum group / sub forum groups (unlimited nested structure)
   * Manage discussions: add tags, moderate (mark active/inactive)
