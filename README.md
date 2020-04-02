@@ -17,7 +17,7 @@ Full features web based forum/disscussion/bulletin board software implemented us
   * Add vote up/down (per comment)
   * Comment thumbnails and attachments (configurable by administrators)
   * Replies can be viewed as a comment thread.
-  * Discussions can be tagged
+  * Tagged discussions (by administrator)
 
 * **Search**
   * Search for comments (backed by Lucence Index)
@@ -28,7 +28,7 @@ Full features web based forum/disscussion/bulletin board software implemented us
   * User reputation
 
 * **Forums**:
-  * Unlimited nested forum groups / sub-groups (category/subcategory)
+  * Unlimited nested forum groups / sub-groups (categories/subcategories)
 
 * **User Profile**:
   * User managed profile: account info, avatar ...
@@ -43,13 +43,17 @@ Full features web based forum/disscussion/bulletin board software implemented us
   * Manage users: edit (change role, password) / delete / mark active/inactive, etc
 
 * **UI**: 
-  * Change look and feel based on each user'r preferences
+  * Change look and feel based on each user's preferences
   
 ### Prerequisites to Run
-**Java 8** installed
-A relational database. This software has been tested in **Postgresql**, **H2**, **MySQL**, **SQL Server**, **Oracle**.
+**Java 8**
+A relational database. **BootForum** has been tested with **Postgresql**, **H2**, **MySQL**, **SQL Server**, **Oracle**.
+
+### Try BootForum
+Head to [**Running Instructions**](Running.md "Running Instructions") to download and tryout BootForum in your environment. Note that a separate relational database is not required as **BootForum** is bundled with an embbeded H2 database.
 
 ### Recommended Environment for Development
+For developers, the followings are recommended
 * **JDK 8** or later
 * **Maven 3** or later
 * IDE: recommend tools with Spring deveopment plugin such as Eclipse based **Spring Tool Suite**
