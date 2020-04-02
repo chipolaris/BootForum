@@ -8,6 +8,8 @@ Full features web based forum/disscussion/bulletin board software implemented us
 * Responsive web designed using W3.CSS framework to display and function well on all screen sizes (desktop, tablet, or mobile phone)
 * Very _easy_ to run: operate out of the box with minimal configuration. Run-time configuration flexibilty enabled by Spring Boot.
 
+### View [**BootForum Screenshots**](Screenshots.md "Screenshots")
+
 ### Main Features:
 
 * **Discussion/Comment**:
