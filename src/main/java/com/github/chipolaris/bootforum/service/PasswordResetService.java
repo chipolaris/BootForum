@@ -52,7 +52,7 @@ public class PasswordResetService {
 		else if(userDAO.emailExists(email)) {
 			PasswordReset passwordReset = new PasswordReset();
 			passwordReset.setEmail(email);
-			passwordReset.setKey(UUID.randomUUID().toString());
+			passwordReset.setResetKey(UUID.randomUUID().toString());
 			
 			// persist passwordReset record
 			genericDAO.persist(passwordReset);
@@ -103,7 +103,7 @@ public class PasswordResetService {
 		paramsMap.put("baseUrl", JSFUtils.getBaseURL());
 		paramsMap.put("username", userDAO.getUsernameForEmail(passwordReset.getEmail()));
 		paramsMap.put("requestedDate", new SimpleDateFormat("MM/dd/yyyy hh:mm a").format(new Date()));
-		paramsMap.put("key", passwordReset.getKey());
+		paramsMap.put("key", passwordReset.getResetKey());
 		
 		emailSender.sendEmail(fromEmailAddress, passwordReset.getEmail(), String.format("%s: Password Reset", this.applicationName), 
 				VelocityTemplateUtil.build("email_templates/PasswordResetEmail.vm", paramsMap), true);

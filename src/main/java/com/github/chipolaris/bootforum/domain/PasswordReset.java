@@ -32,8 +32,8 @@ public class PasswordReset extends BaseEntity {
 	@Column(name="EMAIL", length=128)
 	private String email;
 	
-	@Column(name="KEY", length=64)
-	private String key;
+	@Column(name="RESET_KEY", length=64)
+	private String resetKey;
 	
 	@Override
 	public Long getId() {
@@ -50,10 +50,10 @@ public class PasswordReset extends BaseEntity {
 		this.email = email;
 	}
 	
-	public String getKey() {
-		return key;
+	public String getResetKey() {
+		return resetKey;
 	}
-	public void setKey(String key) {
-		this.key = key;
+	public void setResetKey(String resetKey) {
+		this.resetKey = resetKey;
 	}
 }
