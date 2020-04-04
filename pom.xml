@@ -37,6 +37,7 @@
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
+		    <scope>runtime</scope>
 		    <!-- <version>${postgresql.version}</version> -->
 		</dependency>
 		
@@ -44,6 +45,7 @@
 		<dependency>
 		    <groupId>mysql</groupId>
 		    <artifactId>mysql-connector-java</artifactId>
+		    <scope>runtime</scope>
 		    <!-- <version>${mysql.version}</version> -->
 		</dependency>
 
@@ -51,6 +53,7 @@
 		<dependency>
 		    <groupId>com.microsoft.sqlserver</groupId>
 		    <artifactId>mssql-jdbc</artifactId>
+		    <scope>runtime</scope>
 		    <!-- <version>${sqlserver.version}</version> -->
 		</dependency>
 		
@@ -58,6 +61,7 @@
 		<!-- <dependency>
 		    <groupId>com.oracle.database.jdbc</groupId>
 		    <artifactId>ojdbc8</artifactId>
+		    <scope>runtime</scope>
 		    <version>19.3.0.0</version>
 		</dependency> -->
 	
