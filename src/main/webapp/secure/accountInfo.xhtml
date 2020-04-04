@@ -127,7 +127,7 @@
 						<b>Upload New Avatar:</b>
 					</p>
 					
-					<!-- <p:fileUpload fileUploadListener="#{avatarImage.handleFileUpload}" 
+					<!-- <p:fileUpload listener="#{avatarImage.handleFileUpload}" 
 						mode="advanced" dragDropSupport="true" update="viewAvatarPanel"
 						auto="false"
 						sizeLimit="#{applicationProperties['Avatar.maxFileSize'] * 1024}"
@@ -135,7 +135,7 @@
 						
 					</p:fileUpload> -->
 					
-					<p:fileUpload fileUploadListener="#{fileHandler.uploadAvatar}"
+					<p:fileUpload listener="#{fileHandler.uploadAvatar}"
 						mode="advanced" dragDropSupport="true" update="viewAvatarPanel"
 						auto="false"
 						sizeLimit="#{applicationProperties['Avatar.maxFileSize'] * 1024}"

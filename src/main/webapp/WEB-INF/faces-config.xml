@@ -56,6 +56,85 @@
 		
 	</application>
 	
+	<!-- 
+		Note:
+		Must explicitly declare component element and render-kit's renderer for it to work 
+		in Spring Boot embedded mode, as the Spring Boot doesn't scan for the @FaceComponent and @FacesRenderer:
+		
+			https://github.com/javaserverfaces/mojarra/issues/3961
+	-->
+	<component>
+		<component-type>com.github.chipolaris.bootforum.jsf.component.Overlay.FullOverlay</component-type>
+		<component-class>com.github.chipolaris.bootforum.jsf.component.FullOverlay</component-class>
+		<property>
+			<property-name>widgetVarId</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+		<property>
+			<property-name>backgroundColor</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+		<property>
+			<property-name>opacity</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+		<property>
+			<property-name>transition</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+		<property>
+			<property-name>textAlign</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+		<property>
+			<property-name>closeButtonX</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+		<property>
+			<property-name>closeButtonY</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+		<property>
+			<property-name>closeButtonColor</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+	</component>
+	
+	<component>
+		<component-type>com.github.chipolaris.jsf.components.display.Slideshow</component-type>
+		<component-class>com.github.chipolaris.bootforum.jsf.component.Slideshow</component-class>
+		<property>
+			<property-name>widgetVarId</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+		<property>
+			<property-name>maxWidth</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+		<property>
+			<property-name>value</property-name>
+			<property-class>java.lang.Object</property-class>
+		</property>
+		<property>
+			<property-name>var</property-name>
+			<property-class>java.lang.String</property-class>
+		</property>
+	</component>
+	
+	<render-kit>
+        <renderer>
+            <component-family>com.github.chipolaris.bootforum.jsf.component.Overlay</component-family>
+            <renderer-type>com.github.chipolaris.bootforum.jsf.component.FullOverlayRenderer</renderer-type>
+            <renderer-class>com.github.chipolaris.bootforum.jsf.component.FullOverlayRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>com.github.chipolaris.jsf.components.Slideshow</component-family>
+            <renderer-type>com.github.chipolaris.jsf.components.display.Slideshow</renderer-type>
+            <renderer-class>com.github.chipolaris.bootforum.jsf.component.SlideshowRenderer</renderer-class>
+        </renderer>
+	</render-kit>
+	
 	<lifecycle>
 		<phase-listener>com.github.chipolaris.bootforum.jsf.config.MultiPageMessagesSupport</phase-listener>
 	</lifecycle>

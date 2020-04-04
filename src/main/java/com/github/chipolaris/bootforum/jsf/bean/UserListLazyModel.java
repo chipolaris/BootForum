@@ -1,9 +1,9 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
@@ -35,13 +35,11 @@ public class UserListLazyModel extends LazyDataModel<User> {
 	}
 	
 	@Override
-    public List<User> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+    public List<User> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
     	
     	logger.debug("first is " + first + ", pageSize is " + pageSize);
     	
-    	if(filters == null) {
-    		filters = new HashMap<>();
-    	}
+    	Map<String, Object> filters = LazyModelUtil.toObjectMap(filterBy);
     	
     	if(this.accountStatus != null) {
     		filters.put("accountStatus", this.accountStatus);

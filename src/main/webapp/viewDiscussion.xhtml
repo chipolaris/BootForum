@@ -8,7 +8,7 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
-    xmlns:box4j="http://bootforum.chipolaris.github.com/jsf/component"
+    xmlns:bf="http://bootforum.chipolaris.github.com/jsf/component"
     template="/WEB-INF/template/layout_public.xhtml">
 	
 	<ui:define name="title">
@@ -267,12 +267,12 @@
 									<p/>
 									
 									<p:fieldset legend="Thumbnails" rendered="#{not empty comment.thumbnails}" toggleable="true" collapsed="true" style="margin-bottom:10px;">
-										<box4j:slideshow value="#{comment.thumbnails}" var="thumbnail" maxWidth="800px;" id="slideshow">
+										<bf:slideshow value="#{comment.thumbnails}" var="thumbnail" maxWidth="800px;" id="slideshow">
 										
 											<!-- <h:graphicImage value="data:#{thumbnail.contentType};base64,#{fileHandler.getCommentThumbnailBase64(thumbnail)}"/> -->
 											<h:graphicImage value="#{requestContext}/thumbnail/#{thumbnail.id}"/>
 										
-										</box4j:slideshow>
+										</bf:slideshow>
 									</p:fieldset>
 																	
 									<p:fieldset legend="Attachments" rendered="#{not empty comment.attachments}" toggleable="true" collapsed="true" style="margin-bottom:10px;">

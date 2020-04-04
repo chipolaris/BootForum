@@ -136,7 +136,7 @@ public class WebConfig implements ServletContextInitializer {
 		 * </param-value> </context-param>
 		 */
 		servletContext.setInitParameter("javax.faces.FACELETS_LIBRARIES",
-				"/WEB-INF/functions.taglib.xml;/WEB-INF/springsecurity.taglib.xml");
+				"/WEB-INF/functions.taglib.xml;/WEB-INF/springsecurity.taglib.xml;/WEB-INF/bootforum.taglib.xml");
 
 		/*
 		 * Note: there is a unexplained behavior of the app when deployed on Tomcat in

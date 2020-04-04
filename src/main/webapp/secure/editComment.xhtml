@@ -156,7 +156,7 @@
 						
 						<p/>
 						
-						<p:fileUpload fileUploadListener="#{editComment.uploadThumbnail}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();"
+						<p:fileUpload listener="#{editComment.uploadThumbnail}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();"
 		        			update=":thumbnailPanel" auto="true" sizeLimit="#{applicationProperties['Comment.thumbnail.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
 		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(editComment.comment.thumbnails)}"/>
           				
@@ -213,7 +213,7 @@
 						
 						<p/>
 						
-						<p:fileUpload fileUploadListener="#{editComment.uploadAttachment}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();"
+						<p:fileUpload listener="#{editComment.uploadAttachment}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();"
 		        			update=":attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Comment.attachment.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
 		        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(editComment.comment.attachments)}"/>
 		          		

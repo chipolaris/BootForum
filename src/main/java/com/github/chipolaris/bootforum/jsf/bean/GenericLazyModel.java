@@ -3,6 +3,7 @@ package com.github.chipolaris.bootforum.jsf.bean;
 import java.util.List;
 import java.util.Map;
 
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
@@ -30,19 +31,15 @@ public class GenericLazyModel<T> extends LazyDataModel<T> {
 	}
 	
 	@Override
-    public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+    public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
     	
     	logger.debug("first is " + first + ", pageSize is " + pageSize);
     	
-    	List<T> batches = null;
+    	Map<String, Object> filters = LazyModelUtil.toObjectMap(filterBy);
     		
 		this.setRowCount(this.genericService.countEntities(type, filters).getDataObject().intValue());
     	
-    	batches = 
-    			this.genericService.getEntities(type, filters, first, pageSize, 
-    					sortField, sortOrder == SortOrder.DESCENDING ? true : false).getDataObject();
-    	
-    	return batches;
+		return this.genericService.getEntities(type, filters, first, pageSize, 
+    		sortField, sortOrder == SortOrder.DESCENDING ? true : false).getDataObject();
     }
-
 }

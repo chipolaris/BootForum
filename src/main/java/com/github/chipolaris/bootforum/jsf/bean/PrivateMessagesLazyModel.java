@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
@@ -36,17 +37,11 @@ public class PrivateMessagesLazyModel extends LazyDataModel<PrivateMessage> {
 	}
 	
     @Override
-    public List<PrivateMessage> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+    public List<PrivateMessage> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
     	
     	logger.debug("first is " + first + ", pageSize is " + pageSize);
     	
-    	/* 
-    	 * Note: filters could be null, e.g., if dataTable declared in the UI facelet does not include filter, or 
-    	 * the load call come from dataList component
-    	 */
-    	if(filters == null) {
-    		filters = new HashMap<>();
-    	}
+    	Map<String, Object> filters = LazyModelUtil.toObjectMap(filterBy);
     	
     	filters.put("owner", this.owner);
     	filters.put("deleted", this.deleted);

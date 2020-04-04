@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+                version="2.0">
+
+    <namespace>http://bootforum.chipolaris.github.com/jsf/component</namespace>
+
+ 	<tag>
+    	<tag-name>fullOverlay</tag-name>
+    	<component>
+    		<component-type>com.github.chipolaris.bootforum.jsf.component.Overlay.FullOverlay</component-type>
+    		<renderer-type>com.github.chipolaris.bootforum.jsf.component.FullOverlayRenderer</renderer-type>
+    	</component>
+    	<attribute>
+            <description>Id of the widget</description>
+            <name>widgetVarId</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>Background color</description>
+            <name>backgroundColor</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>Opacity</description>
+            <name>opacity</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>Transition, default 0.5 second</description>
+            <name>transition</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>textAlign</description>
+            <name>textAlign</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>closeButtonX</description>
+            <name>closeButtonX</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>closeButtonY</description>
+            <name>closeButtonY</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>closeButtonColor</description>
+            <name>closeButtonColor</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    
+    <tag>
+    	<tag-name>slideshow</tag-name>
+    	<component>
+    		<component-type>com.github.chipolaris.jsf.components.display.Slideshow</component-type>
+    		<renderer-type>com.github.chipolaris.jsf.components.display.Slideshow</renderer-type>
+    	</component>
+    	<attribute>
+            <description>Id of the widget</description>
+            <name>widgetVarId</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>Maximum width of the view port of the slideshow</description>
+            <name>maxWidth</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>Expression that should evaluate to expression</description>
+            <name>value</name>
+            <required>true</required>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>Exports only current page instead of whole dataset.</description>
+            <name>var</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+   
+</facelet-taglib>

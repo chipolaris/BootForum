@@ -1,9 +1,9 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class ForumDiscussionsLazyModel extends LazyDataModel<Discussion> {
 	}
 	
     @Override
-    public List<Discussion> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+    public List<Discussion> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,FilterMeta> filterBy) {
     	
     	logger.debug("first is " + first + ", pageSize is " + pageSize);
     	
@@ -40,9 +40,7 @@ public class ForumDiscussionsLazyModel extends LazyDataModel<Discussion> {
     	 * Note: filters could be null, e.g., if dataTable declared in the UI facelet does not include filter, or 
     	 * the load call come from dataList component
     	 */
-    	if(filters == null) {
-    		filters = new HashMap<>();
-    	}
+    	Map<String, Object> filters = LazyModelUtil.toObjectMap(filterBy);
     	
     	filters.put("forum", this.forum);
     	

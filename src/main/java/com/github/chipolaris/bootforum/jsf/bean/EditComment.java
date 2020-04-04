@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -147,7 +147,7 @@ public class EditComment {
 		//   http://stackoverflow.com/questions/18049671/pfileupload-always-give-me-null-contents
 		// TODO:clean up the following code
 		try {
-			uploadedFileData.setContents(IOUtils.toByteArray(uploadedFile.getInputstream()));
+			uploadedFileData.setContents(IOUtils.toByteArray(uploadedFile.getInputStream()));
 		} 
 		catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -9,14 +9,12 @@ import java.util.Base64;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 
 import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -81,11 +79,13 @@ public class FileHandler {
 			
 			File file = serviceResponse.getDataObject();
 			
-			InputStream inputStream = new FileInputStream(file);
-			
 			String downloadFilename = messageAttachment.getDescription();
 			
-			return new DefaultStreamedContent(inputStream, messageAttachment.getContentType(), downloadFilename);
+			@SuppressWarnings("resource")
+			InputStream inputStream = new FileInputStream(file);
+			
+			return DefaultStreamedContent.builder().stream(() -> inputStream).
+				contentType(messageAttachment.getContentType()).name(downloadFilename).build();
 		}
 		
 		return new DefaultStreamedContent();
@@ -100,8 +100,6 @@ public class FileHandler {
 		
 		File file = serviceResponse.getDataObject();
 		
-		InputStream inputStream = new FileInputStream(file);
-		
 		// filepath is of format <yyyymmdd>.<time>.<name>.<extension>
 		// extract the last parts of the filename of the file for download, e.g., the <name>.<extension> part 
 		String path = commentAttachment.getPath();
@@ -109,44 +107,36 @@ public class FileHandler {
 		int length = tokens.length;
 		String downloadFilename = tokens[length - 2] + "." + tokens[length - 1];
 		
-		return new DefaultStreamedContent(inputStream, commentAttachment.getContentType(), downloadFilename);
-	}
+		@SuppressWarnings("resource")
+		InputStream inputStream = new FileInputStream(file);
 	
+		return DefaultStreamedContent.builder().stream(() -> inputStream).
+			contentType(commentAttachment.getContentType()).name(downloadFilename).build();
+	}	
 	/*
 	 * End Comment Attachment
 	 */
 	
-	
-	
 	/*
 	 * Comment Thumbnail
 	 */
-	
 	public StreamedContent getCommentThumbnail(FileInfo commentThumbnail) throws IOException {
+
+    	ServiceResponse<File> serviceResponse = fileService.getCommentThumnail(commentThumbnail.getPath());
 		
-    	/**
-         * see this link https://stackoverflow.com/questions/8207325/display-dynamic-image-from-database-with-pgraphicimage-and-streamedcontent
-         * for explanation of the logic
-         */
-        FacesContext context = FacesContext.getCurrentInstance();
-        
-        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-            // So, we're rendering the HTML. Return a stub StreamedContent so that it will generate right URL.
-            return new DefaultStreamedContent();
-        }
-        else {
-        	ServiceResponse<File> serviceResponse = fileService.getCommentThumnail(commentThumbnail.getPath());
+    	File file = serviceResponse.getDataObject();
+    	
+    	if(file.exists()) { // make sure file exist
     		
-        	File file = serviceResponse.getDataObject();
-        	
-        	if(file.exists()) { // make sure file exist
-        		return new DefaultStreamedContent(new FileInputStream(file)); 
-        	}
-        	else {
-        		// TODO: return error image
-        		return new DefaultStreamedContent();
-        	}
-        }
+    		@SuppressWarnings("resource")
+			InputStream inputStream = new FileInputStream(file);
+    		
+    		return DefaultStreamedContent.builder().stream(() -> inputStream).build();
+    	}
+    	else {
+    		// TODO: return error image
+    		return new DefaultStreamedContent();
+    	}
 	}
 	
 	public String getCommentThumbnailBase64(FileInfo commentThumbnail) throws IOException {
@@ -172,7 +162,6 @@ public class FileHandler {
     		return THUMBNAIL_NOT_FOUND_BASE_64;
     	}
 	}
-	
 	/*
 	 * End Comment Thumbnail
 	 */
@@ -180,7 +169,6 @@ public class FileHandler {
 	/*
 	 * Avatar 
 	 */
-	
 	public boolean isExists(String username) {
 		
 		ServiceResponse<File> serviceResponse = fileService.getAvatar(username);
@@ -240,31 +228,22 @@ public class FileHandler {
 	}
 	
     public StreamedContent getAvatar(String username) throws IOException {
-        
-    	/**
-         * see this link https://stackoverflow.com/questions/8207325/display-dynamic-image-from-database-with-pgraphicimage-and-streamedcontent
-         * for explanation of the logic
-         */
-        FacesContext context = FacesContext.getCurrentInstance();
-        
-        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-            // So, we're rendering the HTML. Return a stub StreamedContent so that it will generate right URL.
-            return new DefaultStreamedContent();
-        }
-        else {
-        	
-        	ServiceResponse<File> serviceResponse = fileService.getAvatar(username);
-        	
-        	File file = serviceResponse.getDataObject();
-        	
-        	if(file.exists()) { // make sure file exist
-        		return new DefaultStreamedContent(new FileInputStream(file)); 
-        	}
-        	else {
-        		// TODO: return error image
-        		return new DefaultStreamedContent();
-        	}
-        }
+    	
+    	ServiceResponse<File> serviceResponse = fileService.getAvatar(username);
+    	
+    	File file = serviceResponse.getDataObject();
+    	
+    	if(file.exists()) { // make sure file exist
+    		
+    		@SuppressWarnings("resource")
+			InputStream inputStream = new FileInputStream(file);
+    		
+    		return DefaultStreamedContent.builder().stream(() -> inputStream).build();	
+    	}
+    	else {
+    		// TODO: return error image
+    		return new DefaultStreamedContent();
+    	}
     }
     
     public void uploadAvatar(FileUploadEvent event) {  
@@ -275,7 +254,7 @@ public class FileHandler {
         InputStream inputStream = null;
         
         try {
-        	inputStream = uploadedFile.getInputstream();
+        	inputStream = uploadedFile.getInputStream();
         }
         catch(IOException ioe) {
         	JSFUtils.addErrorStringMessage("messages", "Error uploading file");
@@ -322,9 +301,7 @@ public class FileHandler {
     		JSFUtils.addErrorStringMessage("messages", "Unable to delete avatar");
     	}
     }
-    
     /*
      * end Avatar section
      */
-  
 }

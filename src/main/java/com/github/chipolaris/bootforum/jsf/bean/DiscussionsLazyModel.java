@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class DiscussionsLazyModel extends LazyDataModel<Discussion> {
 	}
 	
     @Override
-    public List<Discussion> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+    public List<Discussion> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,FilterMeta> filterBy) {
     	
     	logger.debug("first is " + first + ", pageSize is " + pageSize);
     	

@@ -3,6 +3,7 @@ package com.github.chipolaris.bootforum.jsf.bean;
 import java.util.List;
 import java.util.Map;
 
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
@@ -78,7 +79,7 @@ public class CommentSearchLazyModel extends LazyDataModel<Comment> {
 
 	@Override
 	public List<Comment> load(int first, int pageSize, String sortField,
-			SortOrder sortOrder, Map<String, Object> filters) {
+			SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
 		
 		logger.info("first is " + first + ", pageSize is " + pageSize);
 		

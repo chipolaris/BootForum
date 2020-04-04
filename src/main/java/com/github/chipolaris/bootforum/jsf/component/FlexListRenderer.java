@@ -12,6 +12,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.FacesRenderer;
 import javax.faces.render.Renderer;
 
+import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 
 import com.github.chipolaris.bootforum.util.VelocityTemplateUtil;
@@ -113,7 +114,7 @@ public class FlexListRenderer extends Renderer {
 		// data
 		LazyDataModel<?> lazyDataModel = (LazyDataModel<?>) flexList.getDataModelValue();
 		
-		Map<String, Object> filters = new HashMap<>();
+		Map<String, FilterMeta> filters = new HashMap<>();
 		
 		if(flexList.getFilterFields() != null && !flexList.getFilterFields().isEmpty() 
 				&& flexList.getFilterValue() != null && !flexList.getFilterValue().isEmpty()) {
@@ -121,7 +122,7 @@ public class FlexListRenderer extends Renderer {
 			String[] fields = flexList.getFilterFields().split(", ");
 			
 			for(String field : fields) {
-				filters.put(field, flexList.getFilterValue());
+				filters.put(field, new FilterMeta(field, flexList.getFilterValue()));
 			}
 		}
 		

@@ -154,7 +154,7 @@
 						
 						<p/>
 						
-						<p:fileUpload fileUploadListener="#{replyComment.commentThumbnailManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');"
+						<p:fileUpload listener="#{replyComment.commentThumbnailManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');"
 		        			update=":thumbnailPanel" auto="true" sizeLimit="#{applicationProperties['Comment.thumbnail.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
 		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(replyComment.commentThumbnailManagement.uploadedFileList)}"/>
           				
@@ -211,7 +211,7 @@
 						
 						<p/>
 						
-						<p:fileUpload fileUploadListener="#{replyComment.commentAttachmentManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');"
+						<p:fileUpload listener="#{replyComment.commentAttachmentManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');"
 			        			update=":attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Comment.attachment.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
 			        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(replyComment.commentAttachmentManagement.uploadedFileList)}"/>
 		          		
