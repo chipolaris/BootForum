@@ -85,27 +85,29 @@ public class DiscussionEventsListener {
 		
 		ForumGroup forumGroup = forum.getForumGroup();
 		
-		/*
-		 *  forumGroup stat
-		 */
-		ForumGroupStat forumGroupStat = forumGroup.getStat();
-		forumGroupStat.setCommentCount(forumGroupStat.getCommentCount() + 1);
-		forumGroupStat.setDiscussionCount(forumGroupStat.getDiscussionCount() + 1);
-		//forumGroupStat.setLastComment(lastComment);
-		genericDAO.merge(forumGroupStat);
-		
-		/*
-		 * parent forum group stats if any
-		 */
-		ForumGroup parentForumGroup = forumGroup.getParent();
-		while(parentForumGroup != null) {
-			ForumGroupStat parentForumGroupStat = parentForumGroup.getStat();
-			parentForumGroupStat.setCommentCount(parentForumGroupStat.getCommentCount() + 1);
-			parentForumGroupStat.setDiscussionCount(parentForumGroupStat.getDiscussionCount() + 1);
+		if(forumGroup != null) {
+			/*
+			 *  forumGroup stat
+			 */
+			ForumGroupStat forumGroupStat = forumGroup.getStat();
+			forumGroupStat.setCommentCount(forumGroupStat.getCommentCount() + 1);
+			forumGroupStat.setDiscussionCount(forumGroupStat.getDiscussionCount() + 1);
+			//forumGroupStat.setLastComment(lastComment);
+			genericDAO.merge(forumGroupStat);
 			
-			genericDAO.merge(parentForumGroupStat);
-			
-			parentForumGroup = parentForumGroup.getParent();
+			/*
+			 * parent forum group stats if any
+			 */
+			ForumGroup parentForumGroup = forumGroup.getParent();
+			while(parentForumGroup != null) {
+				ForumGroupStat parentForumGroupStat = parentForumGroup.getStat();
+				parentForumGroupStat.setCommentCount(parentForumGroupStat.getCommentCount() + 1);
+				parentForumGroupStat.setDiscussionCount(parentForumGroupStat.getDiscussionCount() + 1);
+				
+				genericDAO.merge(parentForumGroupStat);
+				
+				parentForumGroup = parentForumGroup.getParent();
+			}
 		}
 		
 		/*

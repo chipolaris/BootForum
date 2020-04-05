@@ -173,6 +173,11 @@
 									</h:link>
 								</p>
 								<p>
+									<h:link outcome="/secure/privateMessages">
+										<i class="fa fa-envelope-o fa-fw"></i> My Messages
+									</h:link>
+								</p>
+								<p>
 									<h:link outcome="/secure/switchTheme">
 										<i class="fa fa-paint-brush fa-fw"></i> UI Theme/Color
 									</h:link>
@@ -250,9 +255,9 @@
 						
 							<p>
 								Latest Comment:
-								<h:link outcome="memberProfile"> 
+								<h:link outcome="commentThread"> 
 									<b>#{systemInfo.statistics.lastComment.updateBy}</b>
-									<f:param name="username" value="#{systemInfo.statistics.lastComment.updateBy}"/>
+									<f:param name="id" value="#{systemInfo.statistics.lastComment.id}"/>
 								</h:link>
 								- <pe:timeAgo value="#{systemInfo.statistics.lastComment.updateDate}" styleClass="w3-small"/>
 							</p>

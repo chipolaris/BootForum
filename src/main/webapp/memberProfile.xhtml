@@ -117,7 +117,7 @@
 						<div class="w3-panel w3-round-large w3-padding w3-theme-l5">
 							<p>
 								<b>Posted <pe:timeAgo value="#{comment.createDate}"/>:&#160;</b>
-								<h:outputLink value="commentThread.xhtml?commentId=#{comment.id}"><span><b>'#{comment.title}'</b></span></h:outputLink>
+								<h:outputLink value="commentThread.xhtml?id=#{comment.id}"><span><b>'#{comment.title}'</b></span></h:outputLink>
 								in discussion <h:outputLink value="viewDiscussion.xhtml?id=#{comment.discussion.id}"><span class="w3-large">#{comment.discussion.title}</span></h:outputLink>
 	 						</p>
 							

@@ -1,6 +1,6 @@
 package com.github.chipolaris.bootforum;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.annotation.Resource;
 
@@ -10,6 +10,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.User;
@@ -17,6 +20,8 @@ import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
 import com.github.chipolaris.bootforum.service.AckCodeType;
+import com.github.chipolaris.bootforum.service.CommentService;
+import com.github.chipolaris.bootforum.service.ForumService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 import com.github.chipolaris.bootforum.service.StatService;
@@ -36,6 +41,12 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 	@Resource
 	private UserService userService;
 	
+	@Resource
+	private ForumService forumService;
+	
+	@Resource
+	private CommentService commentService;
+	
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent arg0) {
 		
@@ -48,18 +59,20 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 			logger.info("System Admin user already exists");
 		}
 		else {
-			logger.info("System Admin user does not exist, inserting....");
+			logger.info("System Admin user does not exist, creating....");
 			adminUser = createAdminUser();
 			ServiceResponse<Void> response = userService.addUser(adminUser);
 			
 			if(response.getAckCode() != AckCodeType.SUCCESS) {
-				logger.error("System Admin user does not exist but unable to insert one");
+				logger.error("System Admin user does not exist but unable to create one");
 				for(String msg : response.getMessages()) {
 					logger.error(msg);
 				}
 			}
 			else {
-				logger.info("System Admin user inserted successfully");
+				logger.info("System Admin user created successfully. Creating Announcements forum and Welcome discussion");
+				Forum announcementsForum = createAnouncementsForum(adminUser);
+				createWelcomeDiscussion(announcementsForum, adminUser);
 			}
 		}
 	}
@@ -85,5 +98,32 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		// Security Challenges
 		
 		return admin;
+	}
+	
+	private Forum createAnouncementsForum(User user) {
+		
+		Forum forum = new Forum();
+		
+		forum.setTitle("Anouncements");
+		forum.setIcon("fa fa-bullhorn");
+		forum.setIconColor("ff7e00"); // Amber (SAE/ECE)
+		
+		forum = forumService.addForum(forum, null).getDataObject();
+		
+		return forum;
+	}
+	
+	private void createWelcomeDiscussion(Forum forum, User admin) {
+		
+		Discussion discussion = new Discussion();
+		discussion.setForum(forum);
+		discussion.setSticky(true);
+		discussion.setTitle("Welcome to BootForum");
+		
+		Comment comment = new Comment();
+		
+		comment.setContent("Welcome. Please read forum announcements from forum administrators");
+		
+		commentService.addDiscussion(discussion, comment, admin, new ArrayList<>(), new ArrayList<>());
 	}
 }

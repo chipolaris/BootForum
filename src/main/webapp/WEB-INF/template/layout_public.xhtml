@@ -249,7 +249,7 @@
 							        </f:facet>
 							        <h:outputLink value="commentThread.xhtml">
 										<span>#{comment.id}: #{comment.title}</span>
-										<f:param name="commentId" value="#{comment.id}"/>
+										<f:param name="id" value="#{comment.id}"/>
 									</h:outputLink>
 								</p:dataList>
 								<p:dataList value="#{searchSuggestion.usernames}" var="username" rendered="#{not empty searchSuggestion.usernames}">
