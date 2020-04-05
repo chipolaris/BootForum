@@ -16,12 +16,16 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
  */
 public class VelocityTemplateUtil {
 
-	public static String build(String templatePath, Map<String, String> paramsMap) {
-		
-		VelocityEngine velocityEngine = new VelocityEngine();
+	static VelocityEngine velocityEngine;
+	
+	static {
+		velocityEngine = new VelocityEngine();
         velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
         velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
         velocityEngine.init();
+	}
+	
+	public static String build(String templatePath, Map<String, String> paramsMap) {
          
         Template template = velocityEngine.getTemplate(templatePath);
          

@@ -5,6 +5,7 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:sec="http://www.springframework.org/security/tags"
 	template="/WEB-INF/template/layout_public.xhtml">
 	
 	<ui:define name="title">
@@ -24,115 +25,268 @@
 					<!-- welcome text -->
 				</p>
 			</div>
+
+			<div class="w3-row">
 			
-			<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
-				<i class="fa fa-clock-o"/> Most Recent Discussions
-			</div>
-			<div class="w3-container">
-				<p:repeat var="discussion" value="#{homePageBacking.mostRecentDiscussions}">
-					<p>
-						<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
-						started by
-						<h:link outcome="memberProfile">
-							<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
-							<f:param name="username" value="#{discussion.createBy}"/>
-						</h:link>
-						- <pe:timeAgo value="#{discussion.createDate}"/>
-						<p:repeat var="tag" value="#{discussion.tags}">
-							<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
-								<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
-							</h:outputLink>
-						</p:repeat>
-					</p>
-				</p:repeat>
-			</div>
-			<h:outputLink value="listDiscussions.xhtml">
-				More ...
-				<f:param name="sort" value="createDate"/>
-			</h:outputLink>
-			<p/>
+				<div class="w3-col l9 m12 s12 w3-container">
 			
-			<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
-				<i class="fa fa-eye"/> Most Views Discussions
-			</div>
-			<div class="w3-container">
-				<p:repeat var="discussion" value="#{homePageBacking.mostViewsDiscussions}">
-					<p>
-						<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
-						<b>(#{discussion.stat.viewCount} views)</b>
-						started by
-						<h:link outcome="memberProfile">
-							<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
-							<f:param name="username" value="#{discussion.createBy}"/>
-						</h:link> 
-						- <pe:timeAgo value="#{discussion.createDate}"/>
-						<p:repeat var="tag" value="#{discussion.tags}">
-							<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
-								<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
-							</h:outputLink>
-						</p:repeat>
-					</p>
-				</p:repeat>
-			</div>
-			<h:outputLink value="listDiscussions.xhtml">
-				More ...
-				<f:param name="sort" value="stat.viewCount"/>
-			</h:outputLink>
-			<p/>
-			
-			<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
-				<i class="fa fa-comment-o"/> Most Comments Discussions
-			</div>
-			<div class="w3-container">
-				<p:repeat var="discussion" value="#{homePageBacking.mostCommentsDiscussions}">
-					<p>
-						<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
-						<b>(#{discussion.stat.commentCount} comments)</b>
-						started by
-						<h:link outcome="memberProfile">
-							<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
-							<f:param name="username" value="#{discussion.createBy}"/>
-						</h:link>						
-						- <pe:timeAgo value="#{discussion.createDate}"/>
-						<p:repeat var="tag" value="#{discussion.tags}">
-							<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
-								<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
-							</h:outputLink>
-						</p:repeat>
-					</p>
-				</p:repeat>
-			</div>
-			<h:outputLink value="listDiscussions.xhtml">
-				More ...
-				<f:param name="sort" value="stat.commentCount"/>
-			</h:outputLink>
-			<p/>
-			
-			<p:repeat var="tag" value="#{homePageBacking.tags}">
-				<div jsf:rendered="#{not empty tag.discussions}">
-					<div class="w3-xlarge" 
-						style="border-bottom-style:solid; border-width: 6px; border-color:##{tag.color}; color:##{tag.color}">
-						<i class="fa #{tag.icon}"/> #{tag.label}
+					<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
+						<i class="fa fa-clock-o"/> Most Recent Discussions
 					</div>
 					<div class="w3-container">
-						<p:repeat var="discussion" value="#{tag.discussions}">
+						<p:repeat var="discussion" value="#{homePageBacking.mostRecentDiscussions}">
 							<p>
-								<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
+								<h:link outcome="viewDiscussion">
+									<f:param name="id" value="#{discussion.id}"/>
+									<b>#{discussion.title}</b>
+								</h:link>
 								started by
 								<h:link outcome="memberProfile">
 									<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
 									<f:param name="username" value="#{discussion.createBy}"/>
 								</h:link>
 								- <pe:timeAgo value="#{discussion.createDate}"/>
+								<p:repeat var="tag" value="#{discussion.tags}">
+									<h:link outcome="viewTag">
+										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+										<f:param name="id" value="#{tag.id}"/>
+									</h:link>
+								</p:repeat>
 							</p>
 						</p:repeat>
 					</div>
-					<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
-						More #{tag.label}...
-					</h:outputLink>
+					<h:link outcome="listDiscussions">
+						More ...
+						<f:param name="sort" value="createDate"/>
+					</h:link>
 					<p/>
+					
+					<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
+						<i class="fa fa-eye"/> Most Views Discussions
+					</div>
+					<div class="w3-container">
+						<p:repeat var="discussion" value="#{homePageBacking.mostViewsDiscussions}">
+							<p>
+								<h:link outcome="viewDiscussion">
+									<f:param name="id" value="#{discussion.id}"/>
+									<b>#{discussion.title}</b>
+								</h:link>
+								<b>(#{discussion.stat.viewCount} views)</b>
+								started by
+								<h:link outcome="memberProfile">
+									<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
+									<f:param name="username" value="#{discussion.createBy}"/>
+								</h:link> 
+								- <pe:timeAgo value="#{discussion.createDate}"/>
+								<p:repeat var="tag" value="#{discussion.tags}">
+									<h:link outcome="viewTag">
+										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+										<f:param name="id" value="#{tag.id}"/>
+									</h:link>
+								</p:repeat>
+							</p>
+						</p:repeat>
+					</div>
+					<h:link outcome="listDiscussions">
+						More ...
+						<f:param name="sort" value="stat.viewCount"/>
+					</h:link>
+					<p/>
+					
+					<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
+						<i class="fa fa-comment-o"/> Most Comments Discussions
+					</div>
+					<div class="w3-container">
+						<p:repeat var="discussion" value="#{homePageBacking.mostCommentsDiscussions}">
+							<p>
+								<h:link outcome="viewDiscussion">
+									<f:param name="id" value="#{discussion.id}"/>
+									<b>#{discussion.title}</b>
+								</h:link>
+								<b>(#{discussion.stat.commentCount} comments)</b>
+								started by
+								<h:link outcome="memberProfile">
+									<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
+									<f:param name="username" value="#{discussion.createBy}"/>
+								</h:link>						
+								- <pe:timeAgo value="#{discussion.createDate}"/>
+								<p:repeat var="tag" value="#{discussion.tags}">
+									<h:link outcome="viewTag">
+										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+										<f:param name="id" value="#{tag.id}"/>
+									</h:link>
+								</p:repeat>
+							</p>
+						</p:repeat>
+					</div>
+					<h:link outcome="listDiscussions">
+						More ...
+						<f:param name="sort" value="stat.commentCount"/>
+					</h:link>
+					<p/>
+					
+					<p:repeat var="tag" value="#{homePageBacking.tags}">
+						<div jsf:rendered="#{not empty tag.discussions}">
+							<div class="w3-xlarge" 
+								style="border-bottom-style:solid; border-width: 6px; border-color:##{tag.color}; color:##{tag.color}">
+								<i class="fa #{tag.icon}"/> #{tag.label}
+							</div>
+							<div class="w3-container">
+								<p:repeat var="discussion" value="#{tag.discussions}">
+									<p>
+										<h:link outcome="viewDiscussion">
+											<f:param name="id" value="#{discussion.id}"/>
+											<b>#{discussion.title}</b>
+										</h:link>
+										started by
+										<h:link outcome="memberProfile">
+											<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
+											<f:param name="username" value="#{discussion.createBy}"/>
+										</h:link>
+										- <pe:timeAgo value="#{discussion.createDate}"/>
+									</p>
+								</p:repeat>
+							</div>
+							<h:link outcome="viewTag">
+								More #{tag.label}...
+								<f:param name="id" value="#{tag.id}"/>
+							</h:link>
+							<p/>
+						</div>
+					</p:repeat>
+					
+					<hr/>
+						
+				</div> <!-- end div class=w3-col l9 m12 s12 -->
+				
+				<div class="w3-col l3 m12 s12 w3-container" id="infoDiv" style="position: -webkit-sticky; /* Safari */; position: sticky; top: 70px;">
+					
+					<div class="w3-card">
+						<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+							<header class="w3-container w3-theme-l1 w3-center">
+						  		<h4>Welcome <b>#{userSession.user.username}</b></h4>
+							</header>
+							<div class="w3-container">
+								<p>
+									<h:link outcome="/secure/index">
+										<i class="fa fa-gear fa-fw"/> My Account
+									</h:link>
+								</p>
+								<p>
+									<h:link outcome="/secure/switchTheme">
+										<i class="fa fa-paint-brush fa-fw"></i> UI Theme/Color
+									</h:link>
+								</p>
+								<p>
+									<a href="#{request.contextPath}/logout"><i class="fa fa-sign-out fa-fw"/> Logout</a>
+								</p>
+							</div>
+						</sec:authorize>
+						<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
+							
+							<header class="w3-container w3-theme-l1 w3-center">
+						  		<h4>Login</h4>
+							</header>
+			    			
+			    			<form action="#{request.contextPath}/login" method="post" class="w3-container">
+			    			
+			    				<div class="w3-section w3-center">
+				    				<p>
+				    					<input type="text" name="username" placeholder="&#xf007; Enter Username" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+				    				</p>
+				    				<p>
+				    					<input type="password" name="password" placeholder="&#xf084; Enter Password" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+				    				</p>
+				    				<p>
+				    					<input type="submit" value="&#xf090; Login" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
+				    				</p>
+				    				<p>
+				    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> Remember Me
+				    				</p>
+			    				</div>
+			    			</form>
+							
+						</sec:authorize>
+					</div>
+					
+					<p/>
+					
+					<div class="w3-card">
+						<header class="w3-container w3-theme-l1 w3-center">
+						  <h4>Tags</h4>
+						</header>
+						
+						<div class="w3-container w3-padding-small">
+							<p:repeat var="tag" value="#{homePageBacking.tags}">
+								<h:link outcome="viewTag">
+									<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;margin-top:8px;"><i class="fa fa-tag"/> #{tag.label}</span>
+									<f:param name="id" value="#{tag.id}"/>
+								</h:link>
+							</p:repeat>
+							<p/>
+						</div>
+					</div>
+					
+					<p/>
+					
+					<div class="w3-card">
+						<header class="w3-container w3-theme-l1 w3-center">
+						  <h4>System Info</h4>
+						</header>
+						
+						<div class="w3-container w3-small">
+						
+							<p>
+								Comment Count: <b>#{systemInfo.statistics.commentCount}</b>
+							</p>
+						
+							<p>
+								Discussion Count: <b>#{systemInfo.statistics.discussionCount}</b>
+							</p>
+						
+							<p>
+								Forum Count: <b>#{systemInfo.statistics.forumCount}</b>
+							</p>
+						
+							<p>
+								Latest Comment:
+								<h:link outcome="memberProfile"> 
+									<b>#{systemInfo.statistics.lastComment.updateBy}</b>
+									<f:param name="username" value="#{systemInfo.statistics.lastComment.updateBy}"/>
+								</h:link>
+								- <pe:timeAgo value="#{systemInfo.statistics.lastComment.updateDate}" styleClass="w3-small"/>
+							</p>
+							
+							<p>
+								Registered Users: <b>#{systemInfo.statistics.userCount}</b>
+							</p>
+						
+							<p>
+								Latest User:
+								<h:link outcome="memberProfile"> 
+									<b>#{systemInfo.statistics.lastRegisteredUser}</b>
+									<f:param name="username" value="#{systemInfo.statistics.lastRegisteredUser}"/>
+								</h:link> 
+								- <pe:timeAgo value="#{systemInfo.statistics.lastUserRegisteredDate}" styleClass="w3-small"/>
+							</p>
+						
+							<p>
+								Logged on Users: <b>#{fn:length(systemInfo.loggedOnUsers)}</b>
+							</p>
+							
+							<p>
+								Anonymous Users: <b>#{systemInfo.sessionCount - fn:length(systemInfo.loggedOnUsers)}</b>
+							</p>
+						</div>
+
+					</div>
+					
+					<p/>
+					
 				</div>
-			</p:repeat>
+			
+			</div> <!-- end div class=w3-row -->
+			
 			
 		</div>
 		

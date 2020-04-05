@@ -31,7 +31,7 @@ public class CommentListLazyModel extends LazyDataModel<Comment> {
 		this.discussion = discussion;
 	}
 	
-    //@Override
+    @Override
     public List<Comment> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
     	
     	logger.debug("first is " + first + ", pageSize is " + pageSize);
