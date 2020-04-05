@@ -43,4 +43,4 @@
 
 
 ### <ins>UI Theme<ins>
-![UITheme](https://user-images.githubusercontent.com/46733006/78212642-53de4b80-747e-11ea-97a0-f7602059c855.PNG)
+![UITheme](https://user-images.githubusercontent.com/46733006/78465746-77480700-76c7-11ea-842f-8e0c69ee665a.PNG)
