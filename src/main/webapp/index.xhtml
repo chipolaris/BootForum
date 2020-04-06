@@ -29,8 +29,8 @@
 			<div class="w3-row">
 			
 				<div class="w3-col l9 m12 s12 w3-container">
-			
-					<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
+					<div class="w3-xlarge" 
+						style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
 						<i class="fa fa-clock-o"/> Most Recent Discussions
 					</div>
 					<div class="w3-container">
@@ -61,7 +61,8 @@
 					</h:link>
 					<p/>
 					
-					<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
+					<div class="w3-xlarge" 
+						style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
 						<i class="fa fa-eye"/> Most Views Discussions
 					</div>
 					<div class="w3-container">
@@ -93,7 +94,8 @@
 					</h:link>
 					<p/>
 					
-					<div class="w3-xlarge w3-bottombar w3-border-grey w3-text-grey">
+					<div class="w3-xlarge" 
+						style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
 						<i class="fa fa-comment-o"/> Most Comments Discussions
 					</div>
 					<div class="w3-container">
@@ -128,7 +130,7 @@
 					<p:repeat var="tag" value="#{homePageBacking.tags}">
 						<div jsf:rendered="#{not empty tag.discussions}">
 							<div class="w3-xlarge" 
-								style="border-bottom-style:solid; border-width: 6px; border-color:##{tag.color}; color:##{tag.color}">
+								style="border-bottom-style:solid; border-width: 2px; border-color:##{tag.color}; color:##{tag.color}">
 								<i class="fa #{tag.icon}"/> #{tag.label}
 							</div>
 							<div class="w3-container">

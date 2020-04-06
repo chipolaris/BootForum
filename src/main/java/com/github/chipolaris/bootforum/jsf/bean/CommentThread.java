@@ -50,6 +50,15 @@ public class CommentThread {
 		this.comment = comment;
 	}
 	
+	private Comment selectedComment;
+	
+	public Comment getSelectedComment() {
+		return selectedComment;
+	}
+	public void setSelectedComment(Comment selectedComment) {
+		this.selectedComment = selectedComment;
+	}
+	
 	public void onLoad() {
 		
 		if(this.commentId != null) {

@@ -16,40 +16,21 @@
 	</ui:define>
 	
 	<ui:define name="content">
-		
-		<style type="text/css">
-		
-				
-		</style>
 	
-		<script>
-			//<![CDATA[
-			
-			//]]>
-		</script>
-		
 		<!-- set request parameter values from URL to backing bean -->
 		<f:metadata>
 			<f:viewParam name="id" value="#{commentThread.commentId}"/>
 			<f:viewAction action="#{commentThread.onLoad}"/>
 		</f:metadata>
 	
-		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
-						
-			<div>
-				<p:messages id="messages" showDetail="true" showSummary="false" globalOnly="true">
-					<p:autoUpdate/>
-				</p:messages>
-			</div>
+		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">
 			
 			<div jsf:id="commentThreadDiv" >
-			
-				<div>
-					<p:breadCrumb class="w3-hide-small">
-						<p:menuitem value="Home" url="#{request.contextPath}/" />
-						<p:menuitem value="Discussion: '#{commentThread.comment.discussion.title}'" url="#{request.contextPath}/viewDiscussion.xhtml?id=#{commentThread.comment.discussion.id}" />
-   						<p:menuitem value="Comment Thread" url="#{request.requestURI}?#{request.queryString}"/>
-					</p:breadCrumb>
+				
+				<p/>
+				
+				<div class="w3-hide-small">
+					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(commentThread.comment)}"/>
 				</div>
 				
 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
@@ -59,82 +40,267 @@
   				<div id="commentThreads" class="w3-container">
   					
   					<h:link outcome="viewDiscussion">
-  						<h4>In Discussion '#{commentThread.comment.discussion.title}'</h4>
+  						<center><h4>In Discussion <b>#{commentThread.comment.discussion.title}</b></h4></center>
   						<f:param name="id" value="#{commentThread.comment.discussion.id}"/>
   					</h:link>
+  						
+  					<div class="timeline">
   					
- 					<p:repeat var="comment" value="#{commentThread.comments}">
- 						
-						<div class="w3-panel w3-round-large w3-padding w3-theme-light">
-							
-							<p>
-								<b>Posted <pe:timeAgo value="#{comment.createDate}"/></b> by
-								
-								<h:link outcome="memberProfile">
-									<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
-											id="commentorAvatar" height="36" width="36" title="#{comment.createBy}"
-											rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
-											
-									<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" title="#{comment.createBy}"
-	  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
-	  									#{fn:substring(comment.createBy, 0, 3)}
-	  								</span>
-									<f:param name="username" value="#{comment.createBy}"/>
-								</h:link>								
-								
-	 						</p>
+	 					<p:repeat var="comment" value="#{commentThread.comments}" varStatus="status">
 	 						
-	 						<p style="font-size:12pt;">
-	 							<b>#{comment.title}</b>
-	 						</p>
-							
-							<p>
-						  		<h:outputText value="#{comment.content}" escape="false"/>
-						  	</p>
-						  	
-							<p:fieldset legend="Thumbnails" rendered="#{not empty comment.thumbnails}" toggleable="true" collapsed="true" style="margin-bottom:10px;">
-								<bf:slideshow value="#{comment.thumbnails}" var="thumbnail" maxWidth="800px;" id="slideshow">
-								
-									<h:graphicImage value="#{requestContext}/thumbnail/#{thumbnail.id}"/>
-								
-								</bf:slideshow>
-							</p:fieldset>
-															
-							<p:fieldset legend="Attachments" rendered="#{not empty comment.attachments}" toggleable="true" collapsed="true" style="margin-bottom:10px;">
-								
-					    		<div class="w3-row" style="padding:0">
-			
-					    			<div class="w3-section">
-					    				
-			    						<p:repeat var="attachment" value="#{comment.attachments}" varStatus="rowNumber">
-																							
-											<p:panel styleClass="w3-col w3-quarter" style="margin:5px; text-align:center;width:135px;word-wrap: break-word;">
+	 						<div class="#{status.index mod 2 eq 0 ? 'container left' : 'container right'}">
+	 						
+								<div class="w3-round-large w3-padding" style="background-color:lightgray">
+									
+									<p>
+										<b>Posted <pe:timeAgo value="#{comment.createDate}"/></b> by
+										
+										<h:link outcome="memberProfile">
+											<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
+													id="commentorAvatar" height="36" width="36" title="#{comment.createBy}"
+													rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
 													
-												<f:facet name="header"><span style="font-size:8pt;">#{empty attachment.description ? 'File ' + (rowNumber.index + 1) : attachment.description}</span></f:facet>
-													
-												<h:commandLink>
-													<p:fileDownload value="#{fileHandler.getCommentAttachment(attachment)}"/>
-													<p:graphicImage alt="#{attachment.description}" library="images" name="#{func:contentTypeIcon(attachment.contentType)}"/>
-												</h:commandLink>
-														
-											</p:panel>
+											<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" title="#{comment.createBy}"
+			  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+			  									#{fn:substring(comment.createBy, 0, 3)}
+			  								</span>
+											<f:param name="username" value="#{comment.createBy}"/>
+										</h:link>								
+										
+			 						</p>
+			 						
+			 						<p style="font-size:12pt;">
+			 							<b>#{comment.title}</b>
+			 						</p>
+									
+									<p>
+								  		<h:outputText value="#{comment.content}" escape="false"/>
+								  	</p>
+								  	
+								  	<p jsf:rendered="#{not empty comment.thumbnails or not empty comment.attachments}">
+								  		
+							  			<p:commandLink update=":thumbnailAttachmentsContent" oncomplete="$('#thumbnailAttachmentModal').show();">
+							  				<f:setPropertyActionListener value="#{comment}" target="#{commentThread.selectedComment}"/>
+							  				<b>[ <i class="fa fa-paperclip"/> View Thumbnails/Attachments ]</b>
+							  			</p:commandLink>
+								  		
+								  	</p>
+															  	
+								</div>
 																
-										</p:repeat>
-					    				
-					    			</div>
-					    					    			
-					    		</div>
-								
-							</p:fieldset>
-													  	
-						</div>
+							</div>	
+						
+	 					</p:repeat>
  					
- 					</p:repeat>
- 				</div>
+ 					</div>
+ 					
+ 				</div> <!-- end commentThreads -->
  				
+			</div> <!-- end contentThreadDiv -->
+			
+			<div id="thumbnailAttachmentModal" class="w3-modal">
+				<div class="w3-modal-content w3-card-4 w3-animate-zoom" jsf:id="thumbnailAttachmentsContent">
+		
+					<span onclick="$('#thumbnailAttachmentModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+		
+					<header class="w3-container w3-padding w3-theme-dark w3-center">
+						<span class="w3-xlarge"><i class="fa fa-paperclip"/> Comment's thumbnails/attachments</span>
+					</header>
+					
+					<p/>
+
+					<p:fieldset legend="Thumbnails" rendered="#{not empty commentThread.selectedComment.thumbnails}" 
+						toggleable="true" collapsed="false" styleClass="w3-margin">
+						<bf:slideshow value="#{commentThread.selectedComment.thumbnails}" var="thumbnail" maxWidth="800px;" id="slideshow">
+						
+							<h:graphicImage value="#{requestContext}/thumbnail/#{thumbnail.id}"/>
+						
+						</bf:slideshow>
+					</p:fieldset>
+													
+					<p:fieldset legend="Attachments" rendered="#{not empty commentThread.selectedComment.attachments}" 
+						toggleable="true" collapsed="false" styleClass="w3-margin">
+						
+			    		<div class="w3-row">
+	
+			    			<div class="w3-section">
+			    				<h:form>
+		    						<p:repeat var="attachment" value="#{commentThread.selectedComment.attachments}" varStatus="rowNumber">
+																						
+										<p:panel styleClass="w3-col w3-quarter" style="margin:5px; text-align:center;width:135px;word-wrap: break-word;">
+												
+											<f:facet name="header"><span style="font-size:8pt;">#{empty attachment.description ? 'File ' + (rowNumber.index + 1) : attachment.description}</span></f:facet>
+												
+											<h:commandLink>
+												<p:fileDownload value="#{fileHandler.getCommentAttachment(attachment)}"/>
+												<p:graphicImage alt="#{attachment.description}" library="images" name="#{func:contentTypeIcon(attachment.contentType)}"/>
+											</h:commandLink>
+													
+										</p:panel>
+															
+									</p:repeat>
+			    				</h:form>
+			    			</div>
+			    					    			
+			    		</div>
+						
+					</p:fieldset>
+					
+					<p>&#160;</p>
+					
+				</div>
+				
 			</div>
 			
-		</div>
+		</div> <!-- end mainContentDiv -->
+		
+		<style type="text/css">
+		
+			/* * {
+			  box-sizing: border-box;
+			} */
+			
+			/* body {
+			  background-color: #474e5d;
+			  font-family: Helvetica, sans-serif;
+			} */
+			
+			/* Timeline component is slightly adjusted (for sizes and colors) from here:
+				https://www.w3schools.com/howto/howto_css_timeline.asp
+			*/
+			
+			/* The actual timeline (the vertical ruler) */
+			.timeline {
+			  position: relative;
+			  /* orig: max-width: 1200px; */
+			  margin: 0 auto;
+			}
+			
+			/* The actual timeline (the vertical ruler) */
+			.timeline::after {
+			  content: '';
+			  position: absolute;
+			  width: 6px;
+			  background-color: gray;
+			  top: 0;
+			  bottom: 0;
+			  left: 50%;
+			  margin-left: -3px;
+			}
+			
+			/* Container around content */
+			.container {
+			  padding: 10px 40px;
+			  position: relative;
+			  background-color: inherit;
+			  width: 50%;
+			}
+			
+			/* The circles on the timeline */
+			.container::after {
+			  content: '';
+			  position: absolute;
+			  width: 25px;
+			  height: 25px;
+			  right: -13px; /* orig: -17px */
+			  background-color: white;
+			  border: 4px solid #FF9F55;
+			  top: 18px; /* orig: 15px */
+			  border-radius: 50%;
+			  z-index: 1;
+			}
+			
+			/* Place the container to the left */
+			.left {
+			  left: 0;
+			}
+			
+			/* Place the container to the right */
+			.right {
+			  left: 50%;
+			}
+			
+			/* Add arrows to the left container (pointing right) */
+			.left::before {
+			  content: " ";
+			  height: 0;
+			  position: absolute;
+			  top: 22px;
+			  width: 0;
+			  z-index: 1;
+			  right: 30px;
+			  border: medium solid lightgray;
+			  border-width: 10px 0 10px 10px;
+			  border-color: transparent transparent transparent lightgray;
+			}
+			
+			/* Add arrows to the right container (pointing left) */
+			.right::before {
+			  content: " ";
+			  height: 0;
+			  position: absolute;
+			  top: 22px;
+			  width: 0;
+			  z-index: 1;
+			  left: 30px;
+			  border: medium solid lightgray;
+			  border-width: 10px 10px 10px 0;
+			  border-color: transparent lightgray transparent transparent;
+			}
+			
+			/* Fix the circle for containers on the right side */
+			.right::after {
+			  left: -12px; /* orig: -16px */
+			}
+			
+			/* The actual content */
+			.content {
+			  padding: 20px 30px;
+			  background-color: white;
+			  position: relative;
+			  border-radius: 6px;
+			}
+			
+			/* Media queries - Responsive timeline on screens less than 600px wide */
+			@media screen and (max-width: 600px) {
+			  /* Place the timelime to the left */
+			  .timeline::after {
+			  	left: 31px;
+			  }
+			  
+			  /* Full-width containers */
+			  .container {
+			  	width: 100%;
+			  	padding-left: 70px;
+			  	padding-right: 25px;
+			  }
+			  
+			  /* Make sure that all arrows are pointing leftwards */
+			  .container::before {
+			  	left: 60px;
+			  	border: medium solid white;
+			  	border-width: 10px 10px 10px 0;
+			  	border-color: transparent white transparent transparent;
+			  }
+			
+			  /* Make sure all circles are at the same spot */
+			  .left::after, .right::after {
+			  	left: 15px;
+			  }
+			  
+			  /* Make all right containers behave like the left ones */
+			  .right {
+			  	left: 0%;
+			  }
+			}	
+		</style>
+	
+		<script>
+			//<![CDATA[
+			
+			//]]>
+		</script>		
+		
 	</ui:define>
 	
 </ui:composition>
