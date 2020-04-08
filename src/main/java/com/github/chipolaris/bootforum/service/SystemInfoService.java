@@ -84,7 +84,7 @@ public class SystemInfoService {
 	}
 	
 	/**
-	 * Current user sessions (both logged-on an anonymous sessions)
+	 * Current user sessions (both logged-on and anonymous sessions)
 	 */
     private AtomicInteger sessionCount = new AtomicInteger(0);
 

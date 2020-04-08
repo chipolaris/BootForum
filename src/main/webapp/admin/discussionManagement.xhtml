@@ -37,7 +37,6 @@
  				
  				$(document).ready(function(){
 					customizeDatatableStyle();
-					changeAvatarBackgrounds();
 				});
 				
 				function customizeDatatableStyle() {
@@ -57,26 +56,6 @@
 							}
 						}
 					);
-				}
-				
-				function changeAvatarBackgrounds() {
-					$(".avatarSpan").each(function() {						
-						$(this).css('background-color', stringToColor($(this).prop('title')));
-					});
-				}
-				
-				// from https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
-				function stringToColor(str) {
-					var hash = 0;
-					for (var i = 0; i < str.length; i++) {
-						hash = str.charCodeAt(i) + ((hash << 5) - hash);
-					}
-					var colour = '#';
-					for (var i = 0; i < 3; i++) {
-						var value = (hash >> (i * 8)) & 0xFF;
-					    colour += ('00' + value.toString(16)).substr(-2);
-					}
-					return colour;
 				}				
 			//]]>	
 		</script>
@@ -188,7 +167,7 @@
 					</header>
 					
 					<div class="w3-padding-large">
-						<p:tree id="forumMapTree" value="#{viewForumGroup.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
+						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
 							<p:treeNode>
 								<h:link outcome="discussionManagement" rendered="#{forumNode.type eq 'Forum'}">
 									<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{forumNode.bean.iconColor};">

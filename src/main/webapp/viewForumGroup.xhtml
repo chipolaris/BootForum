@@ -79,7 +79,7 @@
 				
 				<h:form>
 				
-					<p:treeTable value="#{viewForumGroup.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;" styleClass="borderless">
+					<p:treeTable value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;" styleClass="borderless">
 				        
 				        <p:column headerText="Category/Name" style="text-align:left;" priority="1">
 				        	<h:outputLink value="viewForum.xhtml?id=#{forumNode.bean.id}" rendered="#{forumNode.type eq 'Forum'}">
@@ -97,28 +97,28 @@
 				        </p:column>
 				        
 				        <p:column headerText="Discussions" style="text-align:center;width:100px;" priority="3">
-				        	<span jsf:rendered="#{forumNode.type eq 'Forum'}">#{viewForumGroup.getForumStat(forumNode.bean).getDiscussionCount()}<!-- #{forumNode.bean.stat.discussionCount} --></span>
+				        	<span jsf:rendered="#{forumNode.type eq 'Forum'}">#{forumMap.getForumStat(forumNode.bean).getDiscussionCount()}<!-- #{forumNode.bean.stat.discussionCount} --></span>
 				        </p:column>
 				        
 				        <p:column headerText="Comments" style="text-align:center;width:100px;" priority="4">
-				        	<span jsf:rendered="#{forumNode.type eq 'Forum'}">#{viewForumGroup.getForumStat(forumNode.bean).getCommentCount()}<!-- #{forumNode.bean.stat.commentCount} --></span>
+				        	<span jsf:rendered="#{forumNode.type eq 'Forum'}">#{forumMap.getForumStat(forumNode.bean).getCommentCount()}<!-- #{forumNode.bean.stat.commentCount} --></span>
 				        </p:column>
 
 						<p:column headerText="Last Comment" style="text-align:right;" priority="2">
 							<div jsf:rendered="#{forumNode.type eq 'Forum' and not empty forumNode.bean.stat.lastComment.updateBy}">
-								<pe:timeAgo value="#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateDate()}" titlePattern="MMMMM dd yyyy " /> by <b>#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy()} </b>
+								<pe:timeAgo value="#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateDate()}" titlePattern="MMMMM dd yyyy " /> by <b>#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy()} </b>
 								
 								<h:link outcome="memberProfile">
 									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(forumNode.bean.stat.lastComment.updateBy)}" class="w3-circle"
 											id="commentorAvatar" height="36" width="36" style="border:3px;margin-right:15px;" title="#{forumNode.bean.stat.lastComment.updateBy}"/> -->
-									<h:graphicImage value="#{requestContext}/avatar/#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}" class="w3-circle"
-											id="commentorAvatar" height="36" width="36" title="#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}"
-											rendered="#{fileHandler.isAvatarExists(viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy())}"/>
+									<h:graphicImage value="#{requestContext}/avatar/#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36" title="#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}"
+											rendered="#{fileHandler.isAvatarExists(forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy())}"/>
 											
-									<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy())}"
-										title="#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}"
+									<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy())}"
+										title="#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}"
 	  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
-	  									#{fn:substring(viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy(), 0, 3)}
+	  									#{fn:substring(forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy(), 0, 3)}
 	  								</span>
 									<f:param name="username" value="#{forumNode.bean.stat.lastComment.updateBy}"/>
 								</h:link>

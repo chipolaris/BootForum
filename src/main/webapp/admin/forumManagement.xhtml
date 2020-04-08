@@ -155,7 +155,7 @@
 				  			
 				  				<div class="w3-row">
 					  				<p:commandButton id="editForumGroup" ajax="true" action="#{forumManagement.editForumGroup}"
-						            	value="#{msg['userAction.save']}" update=":messages :forumGroupInfoDiv"
+						            	value="#{msg['userAction.save']}" update=":messages :forumGroupInfoDiv :forumMapContent"
 						            	icon="fa fa-save"/>
 						            <p:commandButton type="button" onclick="toggleDiv('forumGroupInfoDiv')" 
 						            	value="#{msg['userAction.cancel']}" icon="fa fa-close" style="margin-left:5px;"/>
@@ -229,7 +229,7 @@
 			  				<div class="w3-row">
 	
 				  				<p:commandButton id="createForumGroup" ajax="true" action="#{forumManagement.createForumGroup}"
-					            	value="Submit" update=":forumGroupsDiv :messages" oncomplete="window.scrollTo(0,0)"
+					            	value="Submit" update=":forumGroupsDiv :forumMapContent :messages" oncomplete="window.scrollTo(0,0)"
 					            	icon="fa fa-plus"/>
 					            <p:commandButton type="button" onclick="toggleDiv('forumGroupInfoDiv');" value="Cancel"
 	            					icon="fa fa-close" style="margin-left:5px;"/>
@@ -301,7 +301,7 @@
 			  				
 			  				<div class="w3-row">
 				  				<p:commandButton id="createForum" ajax="true" action="#{forumManagement.createForum}"
-					            	value="Submit" update=":forumsDiv :messages" oncomplete="window.scrollTo(0,0)"
+					            	value="Submit" update=":forumsDiv :forumMapContent :messages" oncomplete="window.scrollTo(0,0)"
 					            	icon="fa fa-plus"/>
 					            <p:commandButton type="button" onclick="toggleDiv('forumGroupInfoDiv');" value="Cancel"
 	            					icon="fa fa-close" style="margin-left:5px;"/>	
@@ -383,7 +383,7 @@
 			  			
 			  				<div class="w3-row">
 				  				<p:commandButton id="editForum" ajax="true" action="#{forumManagement.editForum}"
-					            	value="#{msg['userAction.save']}" update=":messages :forumsDiv" oncomplete="window.scrollTo(0,0);"
+					            	value="#{msg['userAction.save']}" update=":messages :forumsDiv :forumMapContent" oncomplete="window.scrollTo(0,0);"
 					            	icon="fa fa-save" styleClass="w3-btn w3-theme-dark w3-border-0"/>
 					            <p:commandButton type="button" value="#{msg['userAction.cancel']}" icon="fa fa-close" style="margin-left:5px;"
 					            	onclick="toggleDiv('forumGroupInfoDiv');" styleClass="w3-btn w3-theme-dark w3-border-0"/>
@@ -433,10 +433,10 @@
 								</p:link>
 				        		
 								<p:commandLink title="Delete this Forum Group" style="margin-left:5px;"
-									action="#{forumManagement.deleteForumGroup}" update=":forumGroupsDiv :messages"
+									action="#{forumManagement.deleteForumGroup}" update=":forumGroupsDiv :forumMapContent :messages"
 		        					oncomplete="toggleDiv('forumGroupInfoDiv');window.scrollTo(0,0);">
 				        			<i class="fa fa-trash w3-xlarge w3-text-black"/>
-				        			<p:confirm header="Confirm Delete" message="Delete Forum Group and associated sub-groups, Forums, and Discussions?" icon="fa fa-exclamation-triangle"/>
+				        			<p:confirm header="Confirm Delete" message="Delete Forum Group '#{forumManagement.selectedForumGroup.title}' and associated sub Forum Groups?" icon="fa fa-exclamation-triangle"/>
 				        			<f:setPropertyActionListener value="#{forumGroup}" target="#{forumManagement.selectedForumGroup}"/>
 				        		</p:commandLink>				        		
 								
@@ -490,10 +490,10 @@
 					        	</p:commandLink>
 																
 								<p:commandLink title="Delete this Forum" style="margin-left:5px;"
-									action="#{forumManagement.deleteForum}" update=":forumsDiv :messages"
+									action="#{forumManagement.deleteForum}" update=":forumsDiv :forumMapContent :messages"
 		        					oncomplete="toggleDiv('forumGroupInfoDiv');window.scrollTo(0,0);">
 				        			<i class="fa fa-trash w3-xlarge w3-text-black"/>
-				        			<p:confirm header="Confirm Delete" message="Delete Forum and associated Discussions?" icon="fa fa-exclamation-triangle"/>
+				        			<p:confirm header="Confirm Delete" message="Delete Forum '#{forumManagement.selectedForum.title}' ?" icon="fa fa-exclamation-triangle"/>
 				        			<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
 				        		</p:commandLink>	
 								
@@ -525,7 +525,7 @@
 					</header>
 					
 					<div class="w3-padding-large">
-						<p:tree id="forumMapTree" value="#{viewForumGroup.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
+						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
 							<p:treeNode>
 								
 								<span jsf:rendered="#{forumNode.type eq 'Forum'}" class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{forumNode.bean.iconColor};">

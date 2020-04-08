@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.event.ForumGroupAddEvent;
 import com.github.chipolaris.bootforum.event.ForumGroupUpdateEvent;
-import com.github.chipolaris.bootforum.jsf.bean.ViewForumGroup;
+import com.github.chipolaris.bootforum.jsf.bean.ForumMap;
 
 @Component
 public class ForumGroupEventsListener {
@@ -17,14 +17,14 @@ public class ForumGroupEventsListener {
 	private static final Logger logger = LoggerFactory.getLogger(ForumGroupEventsListener.class);
 	
 	@Resource
-	private ViewForumGroup viewForumGroup;
+	private ForumMap forumMap;
 	
 	@EventListener
 	public void handleForumGroupAddEvent(ForumGroupAddEvent forumGroupAddEvent) {
 		
 		logger.info("Handle Forum Group Add");
 		
-		viewForumGroup.init();
+		forumMap.init();
 	}
 	
 	@EventListener
@@ -32,6 +32,6 @@ public class ForumGroupEventsListener {
 		
 		logger.info("Handle Forum Group Update");
 		
-		viewForumGroup.init();
+		forumMap.init();
 	}
 }

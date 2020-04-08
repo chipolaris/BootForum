@@ -12,6 +12,7 @@ import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.CachingConfig;
@@ -21,11 +22,11 @@ import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 // application scope JSF backing bean
-//@Scope("application"), not needed because it is default
-@Component(value="viewForumGroup")
-public class ViewForumGroup {
+@Component
+@Scope("application")
+public class ForumMap {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ViewForumGroup.class);
+	private static final Logger logger = LoggerFactory.getLogger(ForumMap.class);
 
 	@Resource
 	private GenericService genericService;

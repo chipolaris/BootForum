@@ -172,9 +172,27 @@
 										<p:commandLink update=":userDetailsForm:userStatOutputPanel" action="#{userStatManager.loadUserStat(comment.createBy)}" 
 											oncomplete="PF('userStatOverlayPanel').show('#{component.clientId}')">
                						
-               							<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
-											id="commentorAvatar" height="65" width="65" style="margin-right:15px;float:left;" 
-											title="click to view #{comment.createBy} profile"/>
+	               							<!-- <h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
+												id="commentorAvatar" height="65" width="65" style="margin-right:15px;float:left;" 
+												title="click to view #{comment.createBy} profile"/> -->
+
+		               						<div class="w3-display-container" style="width:65px">
+		               						
+			               						<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
+													id="commentorAvatar" height="65" width="65" style="float:left;" 
+													title="click to view #{comment.createBy} profile"
+													rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
+												
+												<span jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" class="w3-circle avatarSpan"
+													title="#{comment.createBy}"
+				  									style="display:inline-block;font-size:1.7rem;line-height:65px;width:65px;text-align:center;text-transform: uppercase;color:white;">
+				  									#{fn:substring(comment.createBy, 0, 3)}
+				  								</span>
+												
+												<!-- TODO: show icon for user based on group(s) user is in. For now, hard code to fa-user -->
+												<span class="w3-display-topright w3-badge w3-theme-dark" title="user"><i class="fa fa-user fa-lg"/></span>
+											
+											</div>
 										
            								</p:commandLink>									
 									</td>
