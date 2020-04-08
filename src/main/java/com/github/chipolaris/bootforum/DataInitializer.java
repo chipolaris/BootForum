@@ -1,6 +1,6 @@
 package com.github.chipolaris.bootforum;
 
-import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.annotation.Resource;
 
@@ -124,6 +124,6 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		
 		comment.setContent("Welcome. Please read forum announcements from forum administrators");
 		
-		commentService.addDiscussion(discussion, comment, admin, new ArrayList<>(), new ArrayList<>());
+		commentService.addDiscussion(discussion, comment, admin, Collections.emptyList(), Collections.emptyList());
 	}
 }

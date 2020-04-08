@@ -62,8 +62,8 @@
 		
 		<!-- set request parameter values from URL to backing bean -->
 		<f:metadata>
-			<f:viewParam name="forumGroupId" value="#{forumManagement.forumGroupId}"/>
-			<f:viewAction action="#{forumManagement.onLoad}"/>
+			<f:viewParam name="forumId" value="#{discussionManagement.forumId}"/>
+			<f:viewAction action="#{discussionManagement.onLoad}"/>
 		</f:metadata>
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
@@ -71,6 +71,12 @@
 			<p:messages id="messages" showDetail="true">
 				<p:autoUpdate/>
 			</p:messages>
+			
+			<div class="w3-center w3-margin">
+ 				<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
+ 					<i class="fa fa-sitemap"/> View Forum Map
+ 				</button>
+ 			</div>
 			
 			<div class="w3-panel w3-round w3-theme-d5 w3-center w3-round">
  				<h2>#{msg['discussionManagement.page.title']}</h2>
@@ -141,7 +147,41 @@
 				</p:dataTable>
 
 		    </h:form>
-			
+
+    		<div id="forumMapModal" class="w3-modal">
+    			<div class="w3-modal-content w3-animate-zoom" jsf:id="forumMapContent">
+    				<span onclick="$('#forumMapModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+		
+					<header class="w3-container w3-padding w3-theme-dark w3-center">
+						<span class="w3-xlarge"><i class="fa fa-sitemap"/> Forum Map</span>
+					</header>
+					
+					<div class="w3-padding-large">
+						<p:tree id="forumMapTree" value="#{viewForumGroup.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
+							<p:treeNode>
+								<h:link outcome="discussionManagement" rendered="#{forumNode.type eq 'Forum'}">
+									<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{forumNode.bean.iconColor};">
+					        			<i class="fa-lg #{forumNode.bean.icon}"/>
+					        		</span>
+					        		<span>
+					        			<b>#{forumNode.bean.title}</b>
+					        		</span>
+					        		<f:param name="forumId" value="#{forumNode.bean.id}"/>
+				        		</h:link>
+				        		
+				        		<h:link rendered="#{forumNode.type eq 'ForumGroup'}" outcome="forumManagement">				        	
+						        	<span class="w3-large w3-opacity-min">
+						        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+						        	</span>
+						        	<f:param name="forumGroupId" value="#{forumNode.bean.id}"/>
+					        	</h:link>						
+								
+							</p:treeNode>
+						</p:tree>
+					</div>
+					
+    			</div>
+    		</div>
 
 		</div> <!-- end mainContentDiv -->
 

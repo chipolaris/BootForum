@@ -42,12 +42,6 @@
 				
 				/* set table header's background color */
 				document.querySelectorAll('.ui-treetable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
-			});
-			
-			$(document).ready(function(){
-				
-				var selectedForum = document.getElementById("selectedForum");
-				if(selectedForum) { selectedForum.scrollIntoView(); }
 				
 				customizeDatatableStyle();
 			});
@@ -88,27 +82,30 @@
 					<p:treeTable value="#{viewForumGroup.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;" styleClass="borderless">
 				        
 				        <p:column headerText="Category/Name" style="text-align:left;" priority="1">
-				        	<h:outputLink value="viewForum.xhtml?id=#{forumNode.bean.id}" rendered="#{forumNode.type=='Forum'}">
-								<span class="w3-badge" style="line-height:36px;width:36px;height:36px;color:#fff;background-color:##{forumNode.bean.iconColor};">
-				        			<i class="#{forumNode.bean.icon}"/>
+				        	<h:outputLink value="viewForum.xhtml?id=#{forumNode.bean.id}" rendered="#{forumNode.type eq 'Forum'}">
+								<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{forumNode.bean.iconColor};">
+				        			<i class="fa-lg #{forumNode.bean.icon}"/>
 				        		</span>
 				        		<span class="w3-large"><b>#{forumNode.bean.title}</b></span>
 				        	</h:outputLink>
-				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type=='ForumGroup' and param['id'] != forumNode.bean.id}">#{forumNode.bean.title}</span>
-				        	<span class="w3-large w3-theme-d5" jsf:rendered="#{forumNode.type=='ForumGroup' and param['id'] == forumNode.bean.id}" 
-				        		id="selectedForum">#{forumNode.bean.title}</span>
+				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'ForumGroup' and param['id'] ne forumNode.bean.id}">
+				        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+				        	</span>
+				        	<span class="w3-tag w3-large w3-theme-d5" jsf:rendered="#{forumNode.type eq 'ForumGroup' and param['id'] eq forumNode.bean.id}" id="selectedForum">
+				        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+				        	</span>
 				        </p:column>
 				        
 				        <p:column headerText="Discussions" style="text-align:center;width:100px;" priority="3">
-				        	<span jsf:rendered="#{forumNode.type=='Forum'}">#{viewForumGroup.getForumStat(forumNode.bean).getDiscussionCount()}<!-- #{forumNode.bean.stat.discussionCount} --></span>
+				        	<span jsf:rendered="#{forumNode.type eq 'Forum'}">#{viewForumGroup.getForumStat(forumNode.bean).getDiscussionCount()}<!-- #{forumNode.bean.stat.discussionCount} --></span>
 				        </p:column>
 				        
 				        <p:column headerText="Comments" style="text-align:center;width:100px;" priority="4">
-				        	<span jsf:rendered="#{forumNode.type=='Forum'}">#{viewForumGroup.getForumStat(forumNode.bean).getCommentCount()}<!-- #{forumNode.bean.stat.commentCount} --></span>
+				        	<span jsf:rendered="#{forumNode.type eq 'Forum'}">#{viewForumGroup.getForumStat(forumNode.bean).getCommentCount()}<!-- #{forumNode.bean.stat.commentCount} --></span>
 				        </p:column>
 
 						<p:column headerText="Last Comment" style="text-align:right;" priority="2">
-							<div jsf:rendered="#{forumNode.type=='Forum' and not empty forumNode.bean.stat.lastComment.updateBy}">
+							<div jsf:rendered="#{forumNode.type eq 'Forum' and not empty forumNode.bean.stat.lastComment.updateBy}">
 								<pe:timeAgo value="#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateDate()}" titlePattern="MMMMM dd yyyy " /> by <b>#{viewForumGroup.getForumStat(forumNode.bean).getLastComment().getUpdateBy()} </b>
 								
 								<h:link outcome="memberProfile">

@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -221,7 +222,7 @@ public class SimulateDataService {
 		
 		if(admin != null) {
 		
-			commentService.addDiscussion(discussion, comment, admin, new ArrayList<>(), new ArrayList<>());
+			commentService.addDiscussion(discussion, comment, admin, Collections.emptyList(), Collections.emptyList());
 		
 			createSimulateComments(discussion, numComments, commentors);
 		}
@@ -253,7 +254,7 @@ public class SimulateDataService {
 			comment.setTitle(generateRandomString());
 			comment.setContent(generateRandomParagraphs());
 			
-			commentService.addReply(comment, user, new ArrayList<>(), new ArrayList<>());
+			commentService.addReply(comment, user, Collections.emptyList(), Collections.emptyList());
 			
 			createdComments.add(comment);
 		}

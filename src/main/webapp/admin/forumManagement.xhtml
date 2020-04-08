@@ -13,6 +13,29 @@
 	</ui:define>
 	
 	<ui:define name="content">
+
+		<style type="text/css">
+			
+		</style>
+
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+				$(document).ready(function(){
+					
+					customizePrimefaceButtons();
+				});
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+				
+				function toggleDiv(divIdToShow) {
+					$('.toggleDiv').hide();
+					$('#' + divIdToShow).show();
+				}
+			//]]>	
+		</script>
 		
 		<!-- set request parameter values from URL to backing bean -->
 		<f:metadata>
@@ -22,74 +45,69 @@
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 		
-			<p:messages id="messages" showDetail="true">
+			<p:messages id="messages" showDetail="true" closable="true">
 				<p:autoUpdate/>
 			</p:messages>
+			
+			<div class="w3-center w3-margin">
+ 				<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
+ 					<i class="fa fa-sitemap"/> View Forum Map
+ 				</button>
+ 			</div>
 			
 			<div class="w3-panel w3-round w3-theme-d5 w3-center w3-round">
  				<h2>#{msg['forumManagement.page.title']}</h2>
  			</div>
  			
- 			<h:form id="breadCrumbForm">
-				
-				<p:breadCrumb>
+			<div jsf:id="editForumGroupContentDiv">
+								
+				<div jsf:id="forumGroupInfoDiv" class="toggleDiv w3-section w3-center w3-animate-right">
 					
-					<!-- home/root ForumGroup -->
-					<p:menuitem value="Home" url="forumManagement.xhtml"/>
-					
-					<c:forEach items="#{forumManagement.breadCrumb}" var="forumGroup">
-						<p:menuitem value="#{forumGroup.title}" url="?forumGroupId=#{forumGroup.id}"/>
-					</c:forEach>
-				</p:breadCrumb>
-			</h:form>			
-			
-			<div class="w3-panel w3-border w3-round w3-display-container">
-				
-				<div jsf:id="editForumGroupContentDiv">
-									
-					<div jsf:id="forumGroupIconDiv" class="w3-section w3-center">
+					<div class="w3-padding-16" style="margin:auto;max-width:450px;color:white;background-color: ##{empty forumManagement.forumGroup ? '808080' : forumManagement.forumGroup.iconColor}">
 						
-						<div class="w3-padding-16" style="margin:auto;max-width:450px;color:white;background-color: ##{empty forumManagement.forumGroup ? '808080' : forumManagement.forumGroup.iconColor}">
-							
-					        <div class="w3-center">
-					        	<h5>Forum Group</h5>
-					        	<p/>
-					        	<i class="#{empty forumManagement.forumGroup ? 'fa fa-home' : forumManagement.forumGroup.icon} fa-5x"/>
-					        	<p/>
-					        	<h3>#{empty forumManagement.forumGroup ? 'Home' : forumManagement.forumGroup.title}</h3>
-					        </div>
-					    </div>
-												
-					</div>
-					
+				        <div class="w3-center">
+				        	<h5>Forum Group</h5>
+				        	<p/>
+				        	<i class="#{empty forumManagement.forumGroup ? 'fa fa-home' : forumManagement.forumGroup.icon} fa-5x"/>
+				        	<p/>
+				        	<h3>#{empty forumManagement.forumGroup ? 'Home' : forumManagement.forumGroup.title}</h3>
+				        </div>
+				    </div>
+				    
 					<p/>
 					
 					<div class="w3-center">
 
-						<button jsf:rendered="#{not empty forumManagement.forumGroup}" class="w3-button w3-left-align w3-border"
-							onclick="$('.formDiv').hide();$('#editForumGroupDiv').show();return false;">
-							<i class="fa fa-edit"/> #{msg['forumManagement.page.editForumInfo']}
+						<button jsf:rendered="#{not empty forumManagement.forumGroup}" class="w3-button w3-border"
+							onclick="toggleDiv('editForumGroupDiv');return false;">
+							<i class="fa fa-edit"/> Edit Info
 						</button>
-
-						<button onclick="$('.formDiv').hide();$('#newForumDiv').show();return false;" class="w3-button w3-left-align w3-border">
-							<i class="fa fa-list-alt"/>
-							Add New Forum
-						</button>
-						<button onclick="$('.formDiv').hide();$('#newForumGroupDiv').show();return false;" class="w3-button w3-left-align w3-border">
-							<i class="fa fa-th-list"/>
+						
+						<button onclick="toggleDiv('newForumGroupDiv');return false;" class="w3-button w3-border">
+							<i class="fa fa-plus"/>
 							Add Sub Forum Group
 						</button>
+						<button onclick="toggleDiv('newForumDiv');return false;" class="w3-button w3-border">
+							<i class="fa fa-plus"/>
+							Add Forum
+						</button>						
 					
-					</div>
+					</div>					    
+											
+				</div>
 
-					<p/>					
+				<p/>					
+				
+				<div id="editForumGroupDiv" class="toggleDiv" 
+					jsf:rendered="#{not empty forumManagement.forumGroup}" style="display:none">
 					
-					<div id="editForumGroupDiv" class="formDiv w3-panel w3-round w3-border w3-display-container w3-animate-right" 
-						jsf:rendered="#{not empty forumManagement.forumGroup}" style="display:none">
-						<span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">X</span>
+					<h3><i class="fa fa-edit"/> Edit Forum Group</h3>
+					
+					<div class="w3-panel w3-border w3-round w3-animate-right">
+						<span onclick="toggleDiv('forumGroupInfoDiv')" class="w3-button w3-display-topright">X</span>
 						
 						<p>&#160;</p>
-						
+					
 						<h:form>
 							<div class="w3-row-padding" style="margin:0 -16px;"> <!-- responsive -->
 							
@@ -137,9 +155,9 @@
 				  			
 				  				<div class="w3-row">
 					  				<p:commandButton id="editForumGroup" ajax="true" action="#{forumManagement.editForumGroup}"
-						            	value="#{msg['userAction.save']}" update=":messages :breadCrumbForm :forumGroupIconDiv"
-						            	icon="fa fa-save" style="margin-top: 5px;"/>
-						            <p:commandButton type="button" onclick="document.getElementById('editForumGroupDiv').style.display='none';" 
+						            	value="#{msg['userAction.save']}" update=":messages :forumGroupInfoDiv"
+						            	icon="fa fa-save"/>
+						            <p:commandButton type="button" onclick="toggleDiv('forumGroupInfoDiv')" 
 						            	value="#{msg['userAction.cancel']}" icon="fa fa-close" style="margin-left:5px;"/>
 				  				</div>	
 				  				
@@ -147,16 +165,94 @@
 		  				</h:form>
 		  				
 		  				<p/>
+		  				
 					</div>
-				
-				</div> <!-- end editForumGroupContentDiv -->
-				
-				<div id="newForumDiv" class="formDiv w3-panel w3-border w3-display-container w3-animate-right" style="display:none">
-					<span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">X</span>
 					
-					<h4>#{msg['forumManagement.createForum.dialog.title']}</h4>
+				</div>
+			
+			</div> <!-- end editForumGroupContentDiv -->
+			
+			<div id="newForumGroupDiv" class="toggleDiv" style="display:none">
+			
+				<h3><i class="fa fa-plus"/> #{msg['forumManagement.createForumGroup.dialog.title']}</h3>
+				
+				<div class="w3-panel w3-round w3-border w3-animate-right">
+					<span onclick="toggleDiv('forumGroupInfoDiv')" class="w3-button w3-display-topright">X</span>
 					
-					<div class="w3-row w3-section"/> <!-- vertical spacer -->
+					<p>&#160;</p>
+					
+					<h:form>
+						<div class="w3-row-padding" style="margin:0 -16px;"> <!-- responsive -->
+						
+							<div class="w3-col m4 l3">
+								<h:outputText value="#{msg['forumManagement.createForumGroup.form.title']}:"/>
+							</div>
+							<div class="w3-col m8 l9">
+				  				<p:inputText value="#{forumManagement.newForumGroup.title}" validatorMessage="Forum Group Title is required" style="width:100%;">
+				  					<f:validateLength  minimum="1" maximum="255"/>
+				  				</p:inputText>
+				  			</div>
+				  			
+				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
+				  			
+				  			<div class="w3-col m4 l3">		
+				  				<h:outputText value="#{msg['forumManagement.createForumGroup.form.icon']}:"/>
+				  			</div>
+				  			<div class="w3-col m8 l9">
+				  				<p:selectOneMenu value="#{forumManagement.newForumGroup.icon}" panelStyle="width:250px" style="width:270px;"
+				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
+				  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
+				  					
+					  				<p:column style="width:10%">
+					  					<i class="#{f} fa-2x"/>
+					  				</p:column>
+					  				
+					  				<p:column>
+					  					<h:outputText value="#{f}"/>
+					  				</p:column>
+				  					
+				  				</p:selectOneMenu>
+		  				
+				  			</div>
+				  			
+				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
+				  			
+				  			<div class="w3-col m4 l3">	
+				  				<h:outputText value="#{msg['forumManagement.createForumGroup.form.iconColor']}:"/>
+				  			</div>
+				  			<div class="w3-col m8 l9">
+				  				<p:colorPicker value="#{forumManagement.newForumGroup.iconColor}" mode="inline" />
+			  				</div>
+			  				
+			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
+			  				
+			  				<div class="w3-row">
+	
+				  				<p:commandButton id="createForumGroup" ajax="true" action="#{forumManagement.createForumGroup}"
+					            	value="Submit" update=":forumGroupsDiv :messages" oncomplete="window.scrollTo(0,0)"
+					            	icon="fa fa-plus"/>
+					            <p:commandButton type="button" onclick="toggleDiv('forumGroupInfoDiv');" value="Cancel"
+	            					icon="fa fa-close" style="margin-left:5px;"/>
+		            			
+			  				</div>	
+			  				
+		  				</div>
+	  				</h:form>
+	  				
+	  				<p/>
+										
+				</div>
+				
+			</div> <!-- end newForumGroupDiv -->
+
+			<div id="newForumDiv" class="toggleDiv" style="display:none">
+			
+				<h3><i class="fa fa-plus"/> Add Forum</h3>
+					
+				<div class="w3-panel w3-border w3-round w3-animate-right">
+					<span onclick="toggleDiv('forumGroupInfoDiv')" class="w3-button w3-display-topright">X</span>
+					
+					<p>&#160;</p>
 					
 					<h:form>
 						<div class="w3-row-padding" style="margin:0 -16px;"> <!-- responsive -->
@@ -205,9 +301,9 @@
 			  				
 			  				<div class="w3-row">
 				  				<p:commandButton id="createForum" ajax="true" action="#{forumManagement.createForum}"
-					            	value="Submit" update=":forumContentDiv :messages" oncomplete="window.scrollTo(0,0)"
-					            	icon="fa fa-plus" style="margin-top: 5px;"/>
-					            <p:commandButton type="button" onclick="document.getElementById('newForumDiv').style.display='none';" value="Cancel"
+					            	value="Submit" update=":forumsDiv :messages" oncomplete="window.scrollTo(0,0)"
+					            	icon="fa fa-plus"/>
+					            <p:commandButton type="button" onclick="toggleDiv('forumGroupInfoDiv');" value="Cancel"
 	            					icon="fa fa-close" style="margin-left:5px;"/>	
 			  				</div>	
 			  				
@@ -215,90 +311,19 @@
 	  				</h:form>
 	  				
 	  				<p/>
-				</div> <!-- end newForumDiv -->
-				
-				<div id="newForumGroupDiv" class="formDiv w3-panel w3-round w3-border w3-display-container w3-animate-right" style="display:none">
-					<span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">X</span>
-					
-					<h4>#{msg['forumManagement.createForumGroup.dialog.title']}</h4>
-					
-					<div class="w3-row w3-section"/> <!-- vertical spacer -->
-					
-					<h:form>
-						<div class="w3-row-padding" style="margin:0 -16px;"> <!-- responsive -->
-						
-							<div class="w3-col m4 l3">
-								<h:outputText value="#{msg['forumManagement.createForumGroup.form.title']}:"/>
-							</div>
-							<div class="w3-col m8 l9">
-				  				<p:inputText value="#{forumManagement.newForumGroup.title}" validatorMessage="Forum Group Title is required" style="width:100%;">
-				  					<f:validateLength  minimum="1" maximum="255"/>
-				  				</p:inputText>
-				  			</div>
-				  			
-				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
-				  			
-				  			<div class="w3-col m4 l3">		
-				  				<h:outputText value="#{msg['forumManagement.createForumGroup.form.icon']}:"/>
-				  			</div>
-				  			<div class="w3-col m8 l9">
-				  				<p:selectOneMenu value="#{forumManagement.newForumGroup.icon}" panelStyle="width:250px" style="width:270px;"
-				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
-				  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
-				  					
-					  				<p:column style="width:10%">
-					  					<i class="#{f} fa-2x"/>
-					  				</p:column>
-					  				
-					  				<p:column>
-					  					<h:outputText value="#{f}"/>
-					  				</p:column>
-				  					
-				  				</p:selectOneMenu>
-		  				
-				  			</div>
-				  			
-				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
-				  			
-				  			<div class="w3-col m4 l3">	
-				  				<h:outputText value="#{msg['forumManagement.createForumGroup.form.iconColor']}:"/>
-				  			</div>
-				  			<div class="w3-col m8 l9">
-				  				<p:colorPicker value="#{forumManagement.newForumGroup.iconColor}" mode="inline" />
-			  				</div>
-			  				
-			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
-			  				
-			  				<div class="w3-row">
-
-				  				<p:commandButton id="createForumGroup" ajax="true" action="#{forumManagement.createForumGroup}"
-					            	value="Submit" update=":forumGroupContentDiv :messages" oncomplete="window.scrollTo(0,0)"
-					            	icon="fa fa-plus" style="margin-top: 5px;"/>
-					            <p:commandButton type="button" onclick="document.getElementById('newForumGroupDiv').style.display='none';" value="Cancel"
-	            					icon="fa fa-close" style="margin-left:5px;"/>
-		            			
-			  				</div>	
-			  				
-		  				</div>
-	  				</h:form>
 	  				
-	  				<p/>
-				</div> <!-- end newForumGroupDiv -->
+				</div>				
 
-				<!-- edit Forum div -->
-				<div jsf:id="editForumDiv" class="formDiv w3-panel w3-border w3-display-container w3-animate-right" style="display:none">
-						
-					<span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">X</span>
-										
-					<h3 class="w3-opacity" jsf:id="forumHeading" jsf:rendered="#{not empty forumManagement.selectedForum}">Edit Forum <b>#{forumManagement.selectedForum.title}</b></h3>
+			</div> <!-- end newForumDiv -->
+
+
+			<!-- edit Forum div -->
+			<div jsf:id="editForumDiv" class="toggleDiv" style="display:none">
+			
+				<h3><i class="fa fa-edit"/> Edit Forum</h3>
 					
-					<p>&#160;</p>
-					
-					<div jsf:id="forumIconDiv" class="w3-center" jsf:rendered="#{not empty forumManagement.selectedForum}">
-						<span class="w3-tag w3-xlarge w3-white w3-border w3-border-grey">
-							<i class="#{forumManagement.selectedForum.icon} fa-5x" style="color:##{forumManagement.selectedForum.iconColor}"/>
-						</span>
-					</div>					
+				<div class="w3-panel w3-border w3-round w3-animate-right">
+					<span onclick="toggleDiv('forumGroupInfoDiv')" class="w3-button w3-display-topright">X</span>
 					
 					<p>&#160;</p>
 					
@@ -351,159 +376,188 @@
 				  				<h:outputText value="#{msg['forumManagement.createForum.form.active']}:"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:selectBooleanCheckbox value="#{forumManagement.selectedForum.active}"/>
+				  				<h:selectBooleanCheckbox value="#{forumManagement.selectedForum.active}" styleClass="w3-check"/>
 			  				</div>
 			  			
 			  				<p>&#160;</p>
 			  			
 			  				<div class="w3-row">
 				  				<p:commandButton id="editForum" ajax="true" action="#{forumManagement.editForum}"
-					            	value="#{msg['userAction.save']}" update=":messages :forumContentDiv" oncomplete="document.getElementById('editForumDiv').style.display='none';window.scrollTo(0,0);"
-					            	icon="fa fa-save" style="margin-top: 5px;"/>
+					            	value="#{msg['userAction.save']}" update=":messages :forumsDiv" oncomplete="window.scrollTo(0,0);"
+					            	icon="fa fa-save" styleClass="w3-btn w3-theme-dark w3-border-0"/>
 					            <p:commandButton type="button" value="#{msg['userAction.cancel']}" icon="fa fa-close" style="margin-left:5px;"
-					            	onclick="document.getElementById('editForumDiv').style.display='none';
-					            			document.getElementById('forumContentDiv').style.display='flex';"/>
+					            	onclick="toggleDiv('forumGroupInfoDiv');" styleClass="w3-btn w3-theme-dark w3-border-0"/>
 			  				</div>	
 			  				
 		  				</div>
 	  				</h:form>
 	  				
-	  				<p/>					
-				
-				</div> <!-- end editForumDiv -->
-
-
-				
-				<hr/>
-									
-				<h4 class="w3-opacity">Sub Forum Groups:</h4>
-				
-				<!-- 
-					Display list of sub forum groups in the flow layout and responsive manner 
-					Note: to achieve the flowlayout behavior, use the 'display:flex' and 'flex-wrap:wrap'
-				 -->
-				
-				<div jsf:id="forumGroupContentDiv" style="display:flex;flex-wrap:wrap;" class="w3-padding-large">
-					<p:repeat var="forumGroup" value="#{forumManagement.forumGroups}">
-					
-						<div class="w3-center w3-padding-large">
-						
-							<div class="w3-tooltip">
-								
-								<i class="#{forumGroup.icon} fa-5x" title="#{forumGroup.title}" style="color:##{forumGroup.iconColor}"/>
-																
-								<!-- Note: use 'min-width:150px', 'max-width: 180px' and 'width:auto' to control the min/max width for each entry -->
-								<h5 class="w3-text-theme" style="min-width: 150px;max-width: 180px;width: auto;">#{forumGroup.title}</h5>
-								
-								<span class="w3-text">
-									
-									<!-- link to same page with param forumGroupId -->
-									<p:linkButton icon="fa fa-eye" styleClass="w3-button" title="Edit this Forum Group" value=" View"> 
-										<f:param name="forumGroupId" value="#{forumGroup.id}"/>
-									</p:linkButton>
-									
-									<p:commandButton ajax="true" icon="fa fa-trash" styleClass="w3-button" style="margin-left:5px;"
-										oncomplete="PF('deleteForumGroupConfirmation').show();" title="Delete this Forum Group" value="#{msg['userAction.delete']}">
-										<f:setPropertyActionListener value="#{forumGroup}" target="#{forumManagement.selectedForumGroup}" />  
-									</p:commandButton>
-								</span>
-							</div>
-						</div>
-						
-					</p:repeat>
-					
-					<h5 jsf:rendered="#{empty forumManagement.forumGroups}" class="w3-text-theme"><b>No Sub Forum Group</b></h5>
-					
+	  				<p/>
+	  				
 				</div>
 				
-				<hr/>
+			</div> <!-- end editForumDiv -->
+								
+			<hr style="border-bottom:2px solid gray;"/>
+			
+			<div class="w3-panel w3-round w3-theme-light w3-center">
+				<h3>Sub Forum Groups:</h3>
+			</div>
+			
+			<!--
+				Display list of sub forum groups in the flow layout and responsive manner 
+				Note: to achieve the flowlayout behavior, use the 'display:flex' and 'flex-wrap:wrap'
+			 -->
+			
+			<div jsf:id="forumGroupsDiv" class="w3-row">
+			
+				<p:repeat var="forumGroup" value="#{forumManagement.forumGroups}">
 				
-				<h4 class="w3-opacity">Forums:</h4>
-
-				<div jsf:id="forumContentDiv" style="display:flex;flex-wrap:wrap;" class="w3-padding-large">
-				
-					<p:repeat var="forum" value="#{forumManagement.forums}">
+					<div class="w3-col l3 m6 s12" style="padding: 8px;position:relative">
 					
-						<div class="w3-center w3-padding-large">
-						
-							<div class="w3-tooltip">
+						<div class="w3-display-container w3-padding-16 w3-hover-grey" style="color:white;background-color:##{forumGroup.iconColor}">
 							
-								<i class="#{forum.icon} fa-5x" title="#{forum.title}" style="color:##{forum.iconColor}"/>
-								
-								<h5 class="w3-text-theme" style="min-width: 150px;max-width: 180px;width: auto;">#{forum.title}</h5>
-								
-								<span class="w3-text">
-								
-									<!-- <p:commandButton ajax="true" icon="fa fa-edit" styleClass="w3-button" update=":editForumDiv"
-										oncomplete="$('.formDiv').hide();$('#editForumDiv').show();document.getElementById('editForumDiv').scrollIntoView();" 
-										title="Edit this Forum" value="#{msg['userAction.edit']}">
-										<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
-									</p:commandButton>
-									
-									<p:commandButton ajax="true" icon="fa fa-trash" styleClass="w3-button" value="#{msg['userAction.delete']}"
-										oncomplete="PF('deleteForumConfirmation').show();" title="Delete this Forum" style="margin-left:5px;">
-										<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}" />  
-									</p:commandButton> -->
-									
-									
-									<button onclick="editForumRC();return false;" class="w3-button w3-left-align w3-border">
-										<i class="fa fa-edit"/>
-										#{msg['userAction.edit']}
-									</button>
-									
-									<button onclick="deleteForumRC();return false;" class="w3-button w3-left-align w3-border">
-										<i class="fa fa-trash"/>
-										#{msg['userAction.delete']}
-									</button>
-									
-									<p:remoteCommand name="editForumRC" update=":editForumDiv" oncomplete="$('.formDiv').hide();$('#editForumDiv').show();document.getElementById('editForumDiv').scrollIntoView();">
-										<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
-									</p:remoteCommand>
-									
-									<p:remoteCommand name="deleteForumRC" oncomplete="PF('deleteForumConfirmation').show();">
-										<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
-									</p:remoteCommand>
-									
-								</span>	
+							<div class="w3-center">
+								<i class="#{forumGroup.icon} w3-xxxlarge" title="#{forumGroup.title}"/>
+								<p/>
+								<h4>#{forumGroup.title}</h4>
 							</div>
 							
+							<!-- use w3-display-hover to only show these when the mouse is hovered over -->
+				        	<div class="w3-display-bottommiddle w3-display-hover">
+								
+								<!-- link to same page with param forumGroupId -->
+								<p:link outcome="forumManagement" title="View/Edit">
+									<i class="fa fa-eye w3-xlarge w3-text-black"/>
+									<f:param name="forumGroupId" value="#{forumGroup.id}"/>
+								</p:link>
+				        		
+								<p:commandLink title="Delete this Forum Group" style="margin-left:5px;"
+									action="#{forumManagement.deleteForumGroup}" update=":forumGroupsDiv :messages"
+		        					oncomplete="toggleDiv('forumGroupInfoDiv');window.scrollTo(0,0);">
+				        			<i class="fa fa-trash w3-xlarge w3-text-black"/>
+				        			<p:confirm header="Confirm Delete" message="Delete Forum Group and associated sub-groups, Forums, and Discussions?" icon="fa fa-exclamation-triangle"/>
+				        			<f:setPropertyActionListener value="#{forumGroup}" target="#{forumManagement.selectedForumGroup}"/>
+				        		</p:commandLink>				        		
+								
+							</div>
 						</div>
-						
-					</p:repeat>
+					</div>
 					
-					<h5 jsf:rendered="#{empty forumManagement.forums}" class="w3-text-theme"><b>No Forum</b></h5>
+				</p:repeat>
+				
+				<h4 jsf:rendered="#{empty forumManagement.forumGroups}" class="w3-text-theme"><b>No Sub Forum Group</b></h4>
+				
+				<div class="w3-container w3-padding-small w3-col l12 m12 s12">
 					
-				</div> <!-- end forumContentDiv -->
+					<button onclick="toggleDiv('newForumGroupDiv');return false;" class="w3-button w3-left-align w3-border">
+						<i class="fa fa-plus"/> Add Forum Group
+					</button>
+				
+				</div>					
 				
 			</div>
+			
+			<!-- <h3 class="w3-opacity" style="border-bottom:2px solid lightgray;">Forums:</h3> -->
+			<div class="w3-panel w3-round w3-theme-light w3-center">
+				<h3>Forums:</h3>
+			</div>
 
-			<p:confirmDialog message="Delete Forum Group and All Sub Groups, associated Forums, and Discussions?" showEffect="fade" hideEffect="fade"  
-		        header="Confirm" severity="alert" widgetVar="deleteForumGroupConfirmation">
-		  		<h:form>
-			        <p:commandButton value="Yes" icon="fa fa-check"
-			        	update=":forumGroupContentDiv :messages"  
-			        	actionListener="#{forumManagement.deleteForumGroup}"
-			        	oncomplete="PF('deleteForumGroupConfirmation').hide()"/>  
-			        <p:commandButton value="Cancel" oncomplete="PF('deleteForumGroupConfirmation').hide();window.scrollTo(0,0);"
-			        	icon="fa fa-close" style="margin-left:5px;">
-			        	<f:setPropertyActionListener value="#{null}" target="#{forumManagement.selectedForumGroup}" />
-			        </p:commandButton>  
-		  		</h:form>
-		    </p:confirmDialog>
+			<div jsf:id="forumsDiv" class="w3-row">
+			
+				<p:repeat var="forum" value="#{forumManagement.forums}">
+				
+					<div class="w3-col l3 m6 s12" style="padding: 8px;position:relative">
+					
+						<div class="w3-display-container w3-padding-16 w3-hover-grey" style="color:white;background-color:##{forum.iconColor}">
+							
+							<span jsf:rendered="#{not forum.active}" class="w3-display-topright" style="color:lightgrey;">
+					        	<i class="fa fa-ban w3-xxlarge" title="Inactive"/>
+					        </span>
+					        
+							<div class="w3-center">
+								<i class="#{forum.icon} w3-xxxlarge" title="#{forum.title}"/>
+								<p/>
+								<h4>#{forum.title}</h4>
+							</div>
+							
+							<!-- use w3-display-hover to only show these when the mouse is hovered over -->
+				        	<div class="w3-display-bottommiddle w3-display-hover">
+								
+								<p:commandLink ajax="true" oncomplete="toggleDiv('editForumDiv');" update=":editForumDiv" title="Edit this forum">
+					        		<i class="fa fa-edit w3-xlarge w3-text-black"/>
+					        		<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
+					        	</p:commandLink>
+																
+								<p:commandLink title="Delete this Forum" style="margin-left:5px;"
+									action="#{forumManagement.deleteForum}" update=":forumsDiv :messages"
+		        					oncomplete="toggleDiv('forumGroupInfoDiv');window.scrollTo(0,0);">
+				        			<i class="fa fa-trash w3-xlarge w3-text-black"/>
+				        			<p:confirm header="Confirm Delete" message="Delete Forum and associated Discussions?" icon="fa fa-exclamation-triangle"/>
+				        			<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
+				        		</p:commandLink>	
+								
+							</div>	
+						</div>
+						
+					</div>
+					
+				</p:repeat>
+				
+				<h4 jsf:rendered="#{empty forumManagement.forums}" class="w3-text-theme"><b>No Forum</b></h4>
+				
+				<div class="w3-container w3-padding-small w3-col l12 m12 s12">
+					
+					<button onclick="toggleDiv('newForumDiv');return false;" class="w3-button w3-left-align w3-border">
+						<i class="fa fa-plus"/> Add Forum
+					</button>
+				
+				</div>
+				
+			</div> <!-- end forumsDiv -->
 
-			<p:confirmDialog message="Delete Forum and associated discussions?" showEffect="fade" hideEffect="fade"  
-		        header="Confirm" severity="alert" widgetVar="deleteForumConfirmation" responsive="true">
-		  		<h:form>
-			        <p:commandButton value="Yes" icon="fa fa-check"
-			        	update=":forumContentDiv :messages"  
-			        	actionListener="#{forumManagement.deleteForum}"
-			        	oncomplete="PF('deleteForumConfirmation').hide();window.scrollTo(0,0);"/>  
-			        <p:commandButton value="Cancel" oncomplete="PF('deleteForumConfirmation').hide();"
-			        	icon="fa fa-close" style="margin-left:5px;">
-			        	<f:setPropertyActionListener value="#{null}" target="#{forumManagement.selectedForum}" />
-			        </p:commandButton>  
-		  		</h:form>
-		    </p:confirmDialog>
+    		<div id="forumMapModal" class="w3-modal">
+    			<div class="w3-modal-content w3-animate-zoom" jsf:id="forumMapContent">
+    				<span onclick="$('#forumMapModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+		
+					<header class="w3-container w3-padding w3-theme-dark w3-center">
+						<span class="w3-xlarge"><i class="fa fa-sitemap"/> Forum Map</span>
+					</header>
+					
+					<div class="w3-padding-large">
+						<p:tree id="forumMapTree" value="#{viewForumGroup.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
+							<p:treeNode>
+								
+								<span jsf:rendered="#{forumNode.type eq 'Forum'}" class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{forumNode.bean.iconColor};">
+				        			<i class="fa-lg #{forumNode.bean.icon}"/>
+				        		</span>
+				        		<span jsf:rendered="#{forumNode.type eq 'Forum'}">
+				        			<b>#{forumNode.bean.title}</b>
+				        		</span>
+				        		
+				        		<h:link rendered="#{forumNode.type eq 'ForumGroup' and param['forumGroupId'] ne forumNode.bean.id}">				        	
+						        	<span class="w3-large w3-opacity-min">
+						        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+						        	</span>
+						        	<f:param name="forumGroupId" value="#{forumNode.bean.id}"/>
+					        	</h:link>
+					        	
+					        	<span class="w3-tag w3-large w3-theme-d5" jsf:rendered="#{forumNode.type eq 'ForumGroup' and param['forumGroupId'] eq forumNode.bean.id}">
+					        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+					        	</span>							
+								
+							</p:treeNode>
+						</p:tree>
+					</div>
+					
+    			</div>
+    		</div>
+
+			<!-- global confirm dialog -->
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
+        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+    		</p:confirmDialog>
 
 		</div> <!-- end mainContentDiv -->
 

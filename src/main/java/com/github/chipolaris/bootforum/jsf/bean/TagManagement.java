@@ -1,6 +1,8 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -64,6 +66,16 @@ public class TagManagement {
 	public void createTag() {
 		
 		logger.info("Creating tag " + newTag.getLabel());
+		
+		// check if tag.label exists
+		Map<String, Object> filters = new HashMap<>();
+		filters.put("label", newTag.getLabel());
+		Long tagCount = genericService.countEntities(Tag.class, filters).getDataObject();
+		if(tagCount > 0) {
+			JSFUtils.addErrorStringMessage(null, String.format("Tag's label '%s' already exists", newTag.getLabel()));
+			return;
+		}
+		
     	ServiceResponse<Long> response = genericService.saveEntity(newTag);
     	
     	if(response.getAckCode().equals(AckCodeType.SUCCESS)) {
