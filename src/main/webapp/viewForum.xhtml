@@ -109,7 +109,7 @@
 						widgetVar="discussionTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
 						rows="10" lazy="true" id="discussionTable" draggableColumns="true">
 						
-						<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 						
 						<p:column sortBy="#{discussion.title}" style="text-align:left;" priority="1">
 							<f:facet name="header">

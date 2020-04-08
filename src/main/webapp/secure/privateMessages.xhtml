@@ -134,7 +134,7 @@
 
 		<div id="viewMessagesDiv">
 			
-			<div id="tabButtons" class="w3-bottombar" style="padding-bottom: 2px;">
+			<div id="tabButtons" style="padding-bottom: 2px;border-bottom: 3px solid gray;">
 				<span class="w3-button w3-border w3-padding-16 tab-button" id="receivedButton" onclick="switchTab($(this));showReceivedTab();hideMessageDetailsDiv();"><b><i class="fa fa-envelope-o"/> Received</b></span>
 				<span class="w3-button w3-border w3-padding-16 tab-button" id="sentButton" onclick="switchTab($(this));showSentTab();hideMessageDetailsDiv();"><b><i class="fa fa-envelope"/> Sent</b></span>
 				<span class="w3-button w3-border w3-padding-16 tab-button" id="deletedButton" onclick="switchTab($(this));showDeletedTab();hideMessageDetailsDiv();"><b><i class="fa fa-trash"/> Deleted</b></span>
@@ -298,8 +298,18 @@
 						            
 						            <p:column style="width:10%">
 						            
-										<h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(toUser)}" class="w3-circle"
-											height="35" width="35" style="border:2px;" title="#{toUser}"/>
+										<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(toUser)}" class="w3-circle"
+											height="36" width="36" style="border:3px;" title="#{toUser}"/> -->
+											
+										<h:graphicImage value="#{requestContext}/avatar/#{toUser}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36" style="border:3px;" title="#{toUser}"
+											rendered="#{fileHandler.isAvatarExists(toUser)}"/>
+												
+										<span jsf:rendered="#{!fileHandler.isAvatarExists(toUser)}" class="w3-circle avatarSpan" title="#{toUser}"
+		  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;background-color:#{func:stringToColor(toUser)};">
+		  									#{fn:substring(toUser, 0, 3)}
+		  								</span>
+										
 						            </p:column>
 						             
 						            <p:column style="width:90%;">

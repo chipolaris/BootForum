@@ -37,6 +37,7 @@
  				
  				$(document).ready(function(){
 					customizeDatatableStyle();
+					changeAvatarBackgrounds();
 				});
 				
 				function customizeDatatableStyle() {
@@ -57,6 +58,26 @@
 						}
 					);
 				}
+				
+				function changeAvatarBackgrounds() {
+					$(".avatarSpan").each(function() {						
+						$(this).css('background-color', stringToColor($(this).prop('title')));
+					});
+				}
+				
+				// from https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
+				function stringToColor(str) {
+					var hash = 0;
+					for (var i = 0; i < str.length; i++) {
+						hash = str.charCodeAt(i) + ((hash << 5) - hash);
+					}
+					var colour = '#';
+					for (var i = 0; i < 3; i++) {
+						var value = (hash >> (i * 8)) & 0xFF;
+					    colour += ('00' + value.toString(16)).substr(-2);
+					}
+					return colour;
+				}				
 			//]]>	
 		</script>
 		
@@ -90,7 +111,7 @@
 					currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} discussions"
 					rows="10" lazy="true" id="discussionTable" draggableColumns="true">
     				
-					<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+					<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 					
 					<p:column sortBy="#{discussion.title}" style="text-align:left;width:33%;" priority="1">
 						<f:facet name="header">
@@ -139,8 +160,18 @@
 						<span>
 							<pe:timeAgo value="#{discussion.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy" />
 							by <b>#{discussion.stat.lastComment.updateBy} </b>
-							<h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(discussion.stat.lastComment.updateBy)}" class="w3-circle"
-									id="commentorAvatar" height="40" width="40" style="border:3px;" title="#{discussion.stat.lastComment.updateBy}"/>
+							
+							<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(discussion.stat.lastComment.updateBy)}" class="w3-circle"
+									id="commentorAvatar" height="40" width="40" style="border:3px;" title="#{discussion.stat.lastComment.updateBy}"/> -->
+							<h:graphicImage value="#{requestContext}/avatar/#{discussion.stat.lastComment.updateBy}" class="w3-circle"
+								id="commentorAvatar" height="30" width="30" title="#{discussion.stat.lastComment.updateBy}"
+								rendered="#{fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}"/>
+															
+							<span jsf:rendered="#{!fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}" class="w3-circle avatarSpan"
+								title="#{discussion.stat.lastComment.updateBy}"
+ 								style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white">
+ 								#{fn:substring(discussion.stat.lastComment.updateBy, 0, 3)}
+ 							</span>
 						</span>
 					</p:column>
 				
