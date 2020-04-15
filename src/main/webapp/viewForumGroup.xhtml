@@ -82,12 +82,16 @@
 					<p:treeTable value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;" styleClass="borderless">
 				        
 				        <p:column headerText="Category/Name" style="text-align:left;" priority="1">
-				        	<h:outputLink value="viewForum.xhtml?id=#{forumNode.bean.id}" rendered="#{forumNode.type eq 'Forum'}">
+				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'Root'}">
+				        		<i class="fa fa-lg fa-sitemap"/> Forum Home
+				        	</span>
+				        	<h:link outcome="viewForum" rendered="#{forumNode.type eq 'Forum'}">
 								<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{forumNode.bean.iconColor};">
 				        			<i class="fa-lg #{forumNode.bean.icon}"/>
 				        		</span>
-				        		<span class="w3-large"><b>#{forumNode.bean.title}</b></span>
-				        	</h:outputLink>
+				        		<span class="w3-large">#{forumNode.bean.title}</span>
+				        		<f:param name="id" value="#{forumNode.bean.id}"/>
+				        	</h:link>
 				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'ForumGroup' and param['id'] ne forumNode.bean.id}">
 				        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
 				        	</span>

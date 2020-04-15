@@ -35,13 +35,25 @@ public class DiscussionManagement {
 		this.forumId = forumId;
 	}
 	
+	private Forum forum;
+	
+	public Forum getForum() {
+		return forum;
+	}
+	public void setForum(Forum forum) {
+		this.forum = forum;
+	}
+	
 	public void onLoad() {
 		if(forumId == null) {
 			this.lazyModel = new GenericLazyModel<>(Discussion.class, genericService);
 		}
 		else {
-			Forum forum = genericService.getEntity(Forum.class, forumId).getDataObject();
-			this.lazyModel = new ForumDiscussionsLazyModel(genericService, forum);
+			if(forumId > 0) {
+				this.forum = genericService.getEntity(Forum.class, forumId).getDataObject();
+			}
+
+			this.lazyModel = new ForumDiscussionsLazyModel(genericService, this.forum);
 		}
 	}
 }

@@ -6,12 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.github.chipolaris.bootforum.dao.StatDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.event.CommentVoteEvent;
 import com.github.chipolaris.bootforum.service.GenericService;
-import com.github.chipolaris.bootforum.service.StatService;
 
 @Component
 public class CommentVoteEventListener implements ApplicationListener<CommentVoteEvent> {
@@ -22,16 +23,16 @@ public class CommentVoteEventListener implements ApplicationListener<CommentVote
 	private GenericService genericService;
 	
 	@Resource
-	private StatService statService;
+	private StatDAO statDAO;
 	
-	@Override
+	@Override @Transactional(readOnly = false)
 	public void onApplicationEvent(CommentVoteEvent commentVoteEvent) {
 		
 		logger.info("commentVoteEvent published"); 
 		
 		short voteValue = commentVoteEvent.getVoteValue();
 		Comment comment = commentVoteEvent.getComment();
-		UserStat stat = statService.getUserStat(comment.getCreateBy()).getDataObject();
+		UserStat stat = statDAO.getUserStat(comment.getCreateBy());
 		stat.setReputation(stat.getReputation() + voteValue);
 		
 		genericService.updateEntity(stat);

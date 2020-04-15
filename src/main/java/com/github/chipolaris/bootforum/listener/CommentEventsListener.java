@@ -1,5 +1,7 @@
 package com.github.chipolaris.bootforum.listener;
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -14,16 +16,16 @@ import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
-import com.github.chipolaris.bootforum.domain.ForumGroup;
-import com.github.chipolaris.bootforum.domain.ForumGroupStat;
 import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.event.CommentAddEvent;
+import com.github.chipolaris.bootforum.event.CommentFileEvent;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
 
-@Component @Transactional
+@Component
 public class CommentEventsListener {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DiscussionEventsListener.class);
@@ -36,22 +38,69 @@ public class CommentEventsListener {
 	
 	@Resource 
 	private CacheManager cacheManager;
+
+	@EventListener @Transactional(readOnly=false) 
+	public void handleCommentFileEvent(CommentFileEvent commentFileEvent) {
+		
+		logger.info("Handling commentFileEvent");
+		
+		DiscussionStat discussionStat = commentFileEvent.getComment().getDiscussion().getStat();
+		UserStat userStat = commentFileEvent.getUser().getStat();
+		
+		if(commentFileEvent.getType() == CommentFileEvent.Type.THUMBNAIL) {
+			if(commentFileEvent.getAction() == CommentFileEvent.Action.ADD) {
+				discussionStat.addThumbnailCount(1);
+				userStat.addCommentThumbnailCount(1);
+			}
+			else if(commentFileEvent.getAction() == CommentFileEvent.Action.DELETE) {
+				discussionStat.addThumbnailCount(-1);
+				userStat.addCommentThumbnailCount(-1);
+			}
+		}
+		else if(commentFileEvent.getType() == CommentFileEvent.Type.ATTACHMENT) {
+			if(commentFileEvent.getAction() == CommentFileEvent.Action.ADD) {
+				discussionStat.addAttachmentCount(1);
+				userStat.addCommentAttachmentCount(1);
+			}
+			else if(commentFileEvent.getAction() == CommentFileEvent.Action.DELETE) {
+				discussionStat.addAttachmentCount(-1);
+				userStat.addCommentAttachmentCount(-1);
+			}
+		}
+		
+		genericDAO.merge(discussionStat);
+		genericDAO.merge(userStat);
+	}
 	
-	@EventListener
+	@EventListener @Transactional(readOnly=false)
 	public void handleCommentAddEvent(CommentAddEvent commentAddEvent) {
 		
-		logger.info("commentAddEvent published");
+		logger.info("Handling commentAddEvent");
 		updateStats4newComment(commentAddEvent.getComment(), commentAddEvent.getUser());
 	}
 	
-	@Transactional(readOnly=false)
 	private void updateStats4newComment(Comment comment, User user) {
 
 		Discussion discussion = comment.getDiscussion();
-		Forum forum = discussion.getForum();
-		CommentInfo lastComment = discussion.getStat().getLastComment();
+		DiscussionStat discussionStat = discussion.getStat();
+		
+		// update lastComment info
+		CommentInfo lastComment = discussionStat.getLastComment();
+		lastComment.setUpdateBy(user.getUsername());
+		lastComment.setTitle(comment.getTitle());
+		lastComment.setCommentId(comment.getId());
+		lastComment.setContentAbbr(comment.getContent().length() > 100 ? 
+				comment.getContent().substring(0, 97) + "..." : comment.getContent());
+		
+		discussionStat.addCommentCount(1);
+		discussionStat.addAttachmentCount(comment.getAttachments().size());
+		discussionStat.addThumbnailCount(comment.getThumbnails().size());
+		add2FirstUsersMap(discussionStat, user.getUsername());
+		
+		genericDAO.merge(discussionStat);
 		
 		// forum stat
+		Forum forum = discussion.getForum();
 		ForumStat forumStat = forum.getStat();
 		forumStat.setCommentCount(forumStat.getCommentCount() + 1);
 		
@@ -61,30 +110,11 @@ public class CommentEventsListener {
 		// evict cache's entry with key forumStat.id
 		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(forumStat.getId());
 		
-		ForumGroup forumGroup = forum.getForumGroup();
-		
-		// forum group stat
-		ForumGroupStat forumGroupStat = forumGroup.getStat();
-		forumGroupStat.setCommentCount(forumGroupStat.getCommentCount() + 1);
-		//forumGroupStat.setLastComment(lastComment);
-		genericDAO.merge(forumGroupStat);
-		
-		/*
-		 * parent forum group stats if any
-		 */
-		ForumGroup parentForumGroup = forumGroup.getParent();
-		while(parentForumGroup != null) {
-			ForumGroupStat parentForumGroupStat = parentForumGroup.getStat();
-			parentForumGroupStat.setCommentCount(parentForumGroupStat.getCommentCount() + 1);
-			
-			genericDAO.merge(parentForumGroupStat);
-			
-			parentForumGroup = parentForumGroup.getParent();
-		}
-		
 		// user stat
 		UserStat userStat = user.getStat();
-		userStat.setCommentCount(userStat.getCommentCount() + 1);
+		userStat.addCommentCount(1);
+		userStat.addCommentThumbnailCount(comment.getThumbnails().size());
+		userStat.addCommentAttachmentCount(comment.getAttachments().size());
 		userStat.setLastComment(lastComment);
 		genericDAO.merge(userStat);
 		
@@ -95,5 +125,16 @@ public class CommentEventsListener {
 		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
 		systemStat.setCommentCount(systemStat.getCommentCount() + 1);
 		systemStat.setLastComment(lastComment);
+	}
+
+	private void add2FirstUsersMap(DiscussionStat discussionStat, String username) {
+		
+		Map<String, Integer> firstUsersMap = discussionStat.getFirstUsersMap();
+		if(firstUsersMap.containsKey(username)) {
+			firstUsersMap.put(username, firstUsersMap.get(username) + 1);
+		}
+		else if(firstUsersMap.size() < 10) {
+			firstUsersMap.put(username, 1);
+		}
 	}
 }

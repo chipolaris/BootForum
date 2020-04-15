@@ -72,22 +72,41 @@
 				<p:autoUpdate/>
 			</p:messages>
 			
-			<div class="w3-center w3-margin">
- 				<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
- 					<i class="fa fa-sitemap"/> View Forum Map
- 				</button>
- 			</div>
-			
-			<div class="w3-panel w3-round w3-theme-d5 w3-center w3-round">
+			<div class="w3-panel w3-round w3-theme-d5 w3-center">
  				<h2>#{msg['discussionManagement.page.title']}</h2>
+ 				<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
+ 					<i class="fa fa-sitemap"/> Filter Discussions by Forum
+ 				</button>
+ 				<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
+ 					<i class="fa fa-comments"/> Discussions with no associated Forum
+ 					<f:param name="forumId" value="0"/>
+ 				</h:link>
+ 				<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
+ 					All Discussions
+ 				</h:link><p/>
  			</div>
-
+ 			
 			<h:form>
+				<center>
+					<h4> Showing
+						<c:choose>
+							<c:when test="#{not empty discussionManagement.forum}">
+								Discussions in Forum <b>#{discussionManagement.forum.title}</b>
+							</c:when>
+							<c:when test="#{discussionManagement.forumId eq 0}">
+								Discussions with no associated Forum
+							</c:when>
+							<c:otherwise>
+								All Discussions
+							</c:otherwise>
+						</c:choose>
+					</h4>
+				</center>
 			
 				<p:dataTable var="discussion" value="#{discussionManagement.lazyModel}" style="margin: 0 auto;" styleClass="borderless"
 					widgetVar="discussionTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-					currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} discussions"
+					currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} discussions"
 					rows="10" lazy="true" id="discussionTable" draggableColumns="true">
     				
 					<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
@@ -167,25 +186,37 @@
 					</header>
 					
 					<div class="w3-padding-large">
+						
+						<div class="w3-margin w3-center w3-large">
+							Select a Forum below to view Discussions.
+						</div>
+					
 						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
 							<p:treeNode>
-								<h:link outcome="discussionManagement" rendered="#{forumNode.type eq 'Forum'}">
-									<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{forumNode.bean.iconColor};">
-					        			<i class="fa-lg #{forumNode.bean.icon}"/>
+								        	
+					        	<span jsf:rendered="#{forumNode.type eq 'Root'}" class="w3-large w3-opacity-min">
+					        		<i class="fa fa-lg fa-sitemap"/> Root
+					        	</span>
+					        						        								
+								<h:link rendered="#{forumNode.type eq 'Forum' and forumNode.bean.id ne param['forumId']}">
+									<span class="w3-tag" style="line-height:24px;width:24px;height:24px;border-radius:2px;color:#fff;background-color:##{forumNode.bean.iconColor};">
+					        			<i class="#{forumNode.bean.icon}"/>
 					        		</span>
-					        		<span>
-					        			<b>#{forumNode.bean.title}</b>
+					        		<span class="w3-large">
+					        			#{forumNode.bean.title} [#{forumNode.bean.stat.discussionCount} discussions]
 					        		</span>
 					        		<f:param name="forumId" value="#{forumNode.bean.id}"/>
 				        		</h:link>
 				        		
-				        		<h:link rendered="#{forumNode.type eq 'ForumGroup'}" outcome="forumManagement">				        	
-						        	<span class="w3-large w3-opacity-min">
-						        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
-						        	</span>
-						        	<f:param name="forumGroupId" value="#{forumNode.bean.id}"/>
-					        	</h:link>						
-								
+				        		<span jsf:rendered="#{forumNode.type eq 'Forum' and forumNode.bean.id eq param['forumId']}"
+				        			class="w3-tag w3-theme-dark w3-large">
+				        			<i class="#{forumNode.bean.icon}"/> #{forumNode.bean.title} [#{forumNode.bean.stat.discussionCount} discussions]
+				        		</span>		        	
+						        	
+						        <span jsf:rendered="#{forumNode.type eq 'ForumGroup'}" class="w3-large w3-opacity-min">
+						        	<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+						        </span>
+						        
 							</p:treeNode>
 						</p:tree>
 					</div>

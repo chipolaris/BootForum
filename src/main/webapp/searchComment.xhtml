@@ -112,7 +112,7 @@
 							<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xf002; Search"
 								style="font-family:Open Sans, FontAwesome;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
 								onclick="PF('searchResultDatatable').getPaginator().setPage(0);" update=":searchResultDiv"
-								oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();"/>
+								oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();changeAvatarBackgrounds();"/>
 						</div>
 					</div>
 				
@@ -134,7 +134,7 @@
 					        type="none" rendered="#{not empty searchComment.commentSearchLazyModel}">
 
 						<p:ajax event="rowToggle" oncomplete="$('.commentContent').mark($('#searchForm\\:keywords').val());"/>
-						<p:ajax event="page" oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();"/>
+						<p:ajax event="page" oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();changeAvatarBackgrounds();"/>
 
 					  	<f:facet name="header">
 	           				 <h4 class="w3-opacity-min">Found #{searchComment.commentSearchLazyModel.rowCount} comments for '#{searchComment.keywords}'</h4>
@@ -146,9 +146,9 @@
 								height="50" width="50" style="border:3px;margin-right:15px;" 
 								title="#{comment.createBy}" rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
 
-							<span jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" class="w3-circle w3-purple"
+							<span jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" class="w3-circle avatarSpan"
 								title="#{comment.createBy}"
-								style="display:inline-block;font-size:1.2rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;">
+								style="display:inline-block;font-size:1.2rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;color:white;">
 								#{fn:substring(comment.createBy, 0, 3)}
 							</span>
 							
@@ -189,7 +189,7 @@
 						</p:column>
 						
 						<p:rowExpansion>
-							<div class="w3-panel w3-border w3-round-large w3-theme-l3">
+							<div class="w3-panel w3-border w3-round-large w3-padding" style="background-color: lightgray;">
 								<h:outputText value="#{comment.content}" escape="false" styleClass="commentContent"/>
 							</div>
 						</p:rowExpansion>

@@ -40,6 +40,7 @@ public class UserStatManager {
 		this.username = username;
 	}
 	
+	// TODO: refactor this method to make this @Cacheable
 	public void loadUserStat(String username) {
 		
 		this.username = username;

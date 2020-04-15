@@ -11,11 +11,13 @@ import org.primefaces.model.file.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.FileInfo;
+import com.github.chipolaris.bootforum.event.CommentFileEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.CommentService;
@@ -37,6 +39,9 @@ public class EditComment {
 	
 	@Resource
 	private LoggedOnSession userSession;
+	
+	@Resource
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	@Value("${Comment.thumbnail.maxPerComment}")
 	private short maxThumbnailsPerComment;
@@ -100,6 +105,10 @@ public class EditComment {
 			else {
 				this.comment = serviceResponse.getDataObject();
 				JSFUtils.addInfoStringMessage(null, "Thumbnail added");
+				
+				applicationEventPublisher.publishEvent(
+						new CommentFileEvent(this, CommentFileEvent.Type.THUMBNAIL, 
+								CommentFileEvent.Action.ADD, comment, userSession.getUser()));
 			}
 		}
 		else {
@@ -124,6 +133,10 @@ public class EditComment {
 			else {
 				this.comment = serviceResponse.getDataObject();
 				JSFUtils.addInfoStringMessage(null, "Attachment added");
+				
+				applicationEventPublisher.publishEvent(
+						new CommentFileEvent(this, CommentFileEvent.Type.ATTACHMENT, 
+								CommentFileEvent.Action.ADD, comment, userSession.getUser()));
 			}
 		}
 		else {
@@ -166,6 +179,10 @@ public class EditComment {
 			if(serviceResponse.getAckCode() != AckCodeType.FAILURE) {
 				this.selectedThumbnail = null; // reset selectedThumbnail
 				JSFUtils.addInfoStringMessage(null, "Thumbnail deleted");
+				
+				applicationEventPublisher.publishEvent(
+						new CommentFileEvent(this, CommentFileEvent.Type.THUMBNAIL, 
+								CommentFileEvent.Action.DELETE, comment, userSession.getUser()));
 			}
 			else {
 				JSFUtils.addServiceErrorMessage(serviceResponse);
@@ -186,6 +203,10 @@ public class EditComment {
 			if(serviceResponse.getAckCode() != AckCodeType.FAILURE) {
 				this.selectedAttachment = null; // reset selectedAttachment
 				JSFUtils.addInfoStringMessage(null, "Attachment deleted");
+				
+				applicationEventPublisher.publishEvent(
+						new CommentFileEvent(this, CommentFileEvent.Type.ATTACHMENT, 
+								CommentFileEvent.Action.DELETE, comment, userSession.getUser()));
 			}
 			else {
 				JSFUtils.addServiceErrorMessage(serviceResponse);

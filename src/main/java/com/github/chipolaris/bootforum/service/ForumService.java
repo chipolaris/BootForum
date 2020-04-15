@@ -1,12 +1,9 @@
 package com.github.chipolaris.bootforum.service;
 
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -20,7 +17,6 @@ import com.github.chipolaris.bootforum.dao.ForumDAO;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
-import com.github.chipolaris.bootforum.domain.ForumGroupStat;
 import com.github.chipolaris.bootforum.domain.ForumStat;
 
 @Service
@@ -87,25 +83,13 @@ public class ForumService {
 		
 		ServiceResponse<ForumGroup> response = new ServiceResponse<>();
 		
-		newForumGroup.setStat(new ForumGroupStat());
 		newForumGroup.setParent(parent);
 		newForumGroup = genericDAO.merge(newForumGroup);
 		response.setDataObject(newForumGroup);
 		
 		if(parent != null) {
-		
 			parent.getSubGroups().add(newForumGroup);
-			ForumGroupStat parentStat = parent.getStat();
-			parentStat.setSubForumGroupCount(parentStat.getSubForumGroupCount() + 1);
-			genericDAO.merge(parent); // 
-			
-			// traverse up the parent's group hierarchy to update forum group stat
-			for(parent = parent.getParent(); parent != null; parent = parent.getParent()) {
-				parentStat = parent.getStat();
-				parentStat.setSubForumGroupCount(parentStat.getSubForumGroupCount() + 1);
-				
-				genericDAO.merge(parentStat); // 
-			}
+			genericDAO.merge(parent);
 		}
 		
 		// add 1 to system's forum group count
@@ -115,62 +99,77 @@ public class ForumService {
 		return  response;
 	}
 	
+	/**
+	 * Delete Forum Group. The following effects are expected:
+	 * 	
+	 * 	All discussions under this forum group (including sub-groups) are moved to no-forum list
+	 * 	Parent's forum group (if exists) stats are updated:
+	 * 		this forum group's parent's children list
+	 * 		each forums group up stream in the hierarchy is updated with stat:
+	 * 			forum count is decreased by by count of forums under this forum group
+	 * 	This forum group and all sub-groups and all forums in the forum tree are removed
+	 * 
+	 * @param forumGroup
+	 * @return
+	 */
 	@Transactional(readOnly = false)
-	public ServiceResponse<ForumGroup> deleteForumGroup(ForumGroup forumGroup) {
+	public ServiceResponse<Void> deleteForumGroup(ForumGroup forumGroup) {
 		
-		ServiceResponse<ForumGroup> response = new ServiceResponse<>();
+		ServiceResponse<Void> response = new ServiceResponse<>();
 		
-		ForumGroupStat stat = forumGroup.getStat();
-		long commentCount = stat.getCommentCount();
-		long discussionCount = stat.getDiscussionCount();
-		long forumCount = stat.getForumCount();
+		// first reset all discussions under this forumGroup's hierarchy to no associated Forum
+		resetDiscussions(forumGroup);
 		
-		ForumGroup parent = forumGroup.getParent();
+		ForumGroup parentGroup = forumGroup.getParent();
 		
-		if(parent != null) {
-		
-			parent.getSubGroups().remove(forumGroup);
-			ForumGroupStat parentStat = parent.getStat();
-			// subtract 1 to system's forum group count
-			parentStat.setSubForumGroupCount(parentStat.getSubForumGroupCount() - 1);
-			// subtract forum count
-			parentStat.setForumCount(parentStat.getForumCount() - forumCount);
-			// subtract discussion count
-			parentStat.setDiscussionCount(parentStat.getDiscussionCount() - discussionCount);
-			// subtract comment count
-			parentStat.setCommentCount(parentStat.getCommentCount() - commentCount);
-			genericDAO.merge(parent); // 
+		if(parentGroup != null) {
 			
-			// traverse up the parent's group hierarchy to update forum group stat
-			for(parent = parent.getParent(); parent != null; parent = parent.getParent()) {
-				parentStat = parent.getStat();
-				// subtract 1 to system's forum group count
-				parentStat.setSubForumGroupCount(parentStat.getSubForumGroupCount() - 1);
-				// subtract forum count
-				parentStat.setForumCount(parentStat.getForumCount() - forumCount);
-				// subtract discussion count
-				parentStat.setDiscussionCount(parentStat.getDiscussionCount() - discussionCount);
-				// subtract comment count
-				parentStat.setCommentCount(parentStat.getCommentCount() - commentCount);
-				
-				genericDAO.merge(parentStat); // 
-			}
+			parentGroup.getSubGroups().remove(forumGroup);
+			genericDAO.merge(parentGroup); // 
 		}
-				
-		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
-		// subtract 1 to system's forum group count
-		systemStat.addForumGroupCount(-1);
-		// subtract forum count
-		systemStat.addForumCount(-forumCount);
-		// subtract discussion count
-		systemStat.addDiscussionCount(-discussionCount);
-		// subtract comment count
-		systemStat.addCommentCount(-commentCount);
 		
-		// finally, remove forumGroup
-		genericDAO.remove(forumGroup);
+		// remove forumGroup
+		removeForumGroup(forumGroup);
+		
+		// reset forum count
+		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
+		systemStat.setForumCount(genericDAO.countEntities(Forum.class));
 		
 		return  response;
+	}
+	
+	/**
+	 * helper method to reset each discussion under this forumGroup hierarchy to null
+	 * @param forumGroup
+	 */
+	private void resetDiscussions(ForumGroup forumGroup) {
+		
+		for(Forum forum : forumGroup.getForums()) {
+			// set discussions' references to forum to NULL
+			forumDAO.moveDiscussions(forum, null);
+		}
+		
+		for(ForumGroup subGroup : forumGroup.getSubGroups()) {
+			resetDiscussions(subGroup);
+		}
+	}
+
+	/**
+	 * Helper (recursive) method to delete a forumGroup and all sub groups as well as forums
+	 * @param forumGroup
+	 */
+	private void removeForumGroup(ForumGroup forumGroup) {
+		
+		for(Forum forum : forumGroup.getForums()) {
+			forumDAO.moveDiscussions(forum, null);
+			genericDAO.remove(forum);
+		}
+		
+		for(ForumGroup subGroup : forumGroup.getSubGroups()) {
+			removeForumGroup(subGroup);
+		}
+		
+		genericDAO.remove(forumGroup);
 	}
 	
 	@Transactional(readOnly = false)
@@ -196,70 +195,65 @@ public class ForumService {
     	 * if forumGroup is null, this forum is a top level, with no parent ForumGroup
     	 */
     	if(forumGroup != null) {
-	    	ForumGroupStat forumGroupStat = forumGroup.getStat();
-	    	forumGroupStat.setForumCount(forumGroupStat.getForumCount() + 1);
-			
 			forumGroup.getForums().add(newForum);
 			genericDAO.merge(forumGroup);
-			
-			// traverse up the parent's group hierarchy to update forum group stat
-			for(ForumGroup parent = forumGroup.getParent(); parent != null; parent = parent.getParent()) {
-				forumGroupStat = parent.getStat();
-				// add 1 to system's forum group count
-				forumGroupStat.setForumCount(forumGroupStat.getForumCount() + 1);
-				
-				genericDAO.merge(forumGroupStat); // 
-			}
     	}
     	
 		// add 1 to system's forum count
 		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
-		systemStat.setForumCount(systemStat.getForumCount() + 1);
+		systemStat.addForumCount(1);
 		
 		return response;
 	}
 	
+	/**
+	 * Delete forum from system. The following effects are expected:
+	 * 	- all discussions under this forum are move to no-forum discussion list
+	 * 	- forum is removed from the forum group that contains this forum
+	 * 	- all forum group's stats upper in the hierarchy are updated:
+	 * 		forum count is decreased by 1
+	 * 		discussion count is decreased by count of discussions under the forum
+	 * 		comment count is decreased by count of comment under the forum 
+	 * 		latest comment is recalculated. 
+	 * 
+	 * @param forum
+	 * @return
+	 */
 	@Transactional(readOnly = false)
 	public ServiceResponse<Void> deleteForum(Forum forum) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
 		
-		ForumStat stat = forum.getStat();
-		long commentCount = stat.getCommentCount();
-		long discussionCount = stat.getDiscussionCount();
-		
+		// set discussions' references to forum to NULL
+		forumDAO.moveDiscussions(forum, null);
     	
     	ForumGroup forumGroup = forum.getForumGroup();
-    	/*
-    	 * if forumGroup is null, this forum is a top level, with no parent ForumGroup
-    	 */
+    	
     	if(forumGroup != null) {
-	    	ForumGroupStat forumGroupStat = forumGroup.getStat();
-	    	forumGroupStat.setForumCount(forumGroupStat.getForumCount() - 1);
-	    	forumGroupStat.setDiscussionCount(forumGroupStat.getDiscussionCount() - discussionCount);
-	    	forumGroupStat.setCommentCount(forumGroupStat.getCommentCount() - commentCount);
-			
-			forumGroup.getForums().add(forum);
+			forumGroup.getForums().remove(forum);
 			genericDAO.merge(forumGroup);
-			
-			// traverse up the parent's group hierarchy to update forum group stat
-			for(ForumGroup parent = forumGroup.getParent(); parent != null; parent = parent.getParent()) {
-				forumGroupStat = parent.getStat();
-				// subtract 1 to system's forum group count
-				forumGroupStat.setForumCount(forumGroupStat.getForumCount() - 1);
-		    	forumGroupStat.setDiscussionCount(forumGroupStat.getDiscussionCount() - discussionCount);
-		    	forumGroupStat.setCommentCount(forumGroupStat.getCommentCount() - commentCount);
-				
-				genericDAO.merge(forumGroupStat); // 
-			}
     	}
     	
 		// subtract 1 to system's forum count
 		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
-		systemStat.addForumCount(- 1);
+		systemStat.addForumCount(-1);
 		
 		// finally, remove forum
 		genericDAO.remove(forum);
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<Integer> moveDiscussions(Forum fromForum, Forum toForum) {
+		
+		ServiceResponse<Integer> response = new ServiceResponse<>();
+		
+		response.setDataObject(forumDAO.moveDiscussions(fromForum, toForum));
+		
+		// update forumStats
+		ForumStat fromStat = fromForum.getStat();
+		fromStat.getDiscussionCount();
 		
 		return response;
 	}
@@ -277,86 +271,5 @@ public class ForumService {
 		response.setDataObject(topLevelForumGroups); 
 		
 		return response;
-	}
-	
-	/*
-	 *  
-	 */
-	@Deprecated 
-	private List<ForumGroup> getTopLevelForumGroups(List<ForumGroup> leafForumGroups) {
-		
-		List<ForumGroup> forumGroups = new ArrayList<ForumGroup>();
-		
-		Set<ForumGroup> visitedNodes = new HashSet<ForumGroup>();
-		
-		for(ForumGroup forumGroup : leafForumGroups) {
-			ForumGroup topLevelForumGroup = getTopLevelForumGroup(forumGroup, visitedNodes);
-			if(topLevelForumGroup != null) {
-				forumGroups.add(topLevelForumGroup);
-			}
-		}
-		
-		return forumGroups;
-	}
-
-	@Deprecated
-	private ForumGroup getTopLevelForumGroup(ForumGroup forumGroup, Set<ForumGroup> visitedNodes) {
-		
-		visitedNodes.add(forumGroup);
-		
-		if(forumGroup.getParent() != null) {
-			if(visitedNodes.contains(forumGroup.getParent())) { // already looked at parent
-				return null;
-			}
-			else {
-				return getTopLevelForumGroup(forumGroup.getParent(), visitedNodes);
-			}
-		}
-		else { // this is the top level node
-			return forumGroup;
-		}
-	}
-
-	//
-	// old/deprecated stuffs, the getForumGroupsOld() method below is
-	// replaced by the getTopLevelForumGroups() method above
-	//
-	//
-	@Transactional(readOnly = true) @Deprecated
-	public ServiceResponse<List<ForumGroup>> getForumGroupsOld() {
-		
-		ServiceResponse<List<ForumGroup>> response = new ServiceResponse<List<ForumGroup>>();
-		
-		// top level, e.g., ForumGroup that has parent as null
-		Map<String, Object> equalAttrs = new HashMap<String, Object>();
-		equalAttrs.put("parent", null);
-		
-		List<ForumGroup> forumGroups = genericDAO.getEntities(ForumGroup.class, equalAttrs);
-		
-		for(ForumGroup forumGroup : forumGroups) {
-			fetchChildren(forumGroup);
-		}
-		
-		response.setDataObject(forumGroups);
-		
-		return response;
-	}
-
-	/**
-	 * utility method to eager fetch children of the given ForumGroup
-	 * @param forumGroup
-	 */
-	@Deprecated
-	private void fetchChildren(ForumGroup forumGroup) {
-
-		// fetch forum
-		forumGroup.getForums().size();
-		
-		// fetch subgroups if any
-		List<ForumGroup> subGroups = forumGroup.getSubGroups();
-		
-		for(ForumGroup subGroup : subGroups) {
-			fetchChildren(subGroup);
-		} 
 	}
 }

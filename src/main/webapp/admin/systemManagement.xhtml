@@ -169,9 +169,10 @@
 		    		<h:panelGrid columns="2"> <!-- use h:panelGrid to make the buttons row responsive -->
 			    		<p:commandButton action="#{systemManagement.synchSystemStat}" icon="fa fa-refresh" 
 			    			value="Synchronize System Statistics" update=":systemStatForm"/>
-			    			
-			    		<p:commandButton action="#{systemManagement.synchForumStats}" icon="fa fa-refresh" 
-			    			value="Synchronize Forum Statistics" update=":systemStatForm"/>
+			    		
+			    		<!-- not supported for now -->	
+			    		<!-- <p:commandButton action="#{systemManagement.synchForumStats}" icon="fa fa-refresh" 
+			    			value="Synchronize Forum Statistics" update=":systemStatForm"/> -->
 		    		</h:panelGrid>	
 		    	</h:form>
 			</p:fieldset>

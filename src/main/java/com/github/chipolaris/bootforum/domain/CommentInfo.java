@@ -36,7 +36,7 @@ public class CommentInfo extends BaseEntity {
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="CommentInfoIdGenerator")
 	private Long id;
 	
-	@Column(name="TITLE", length=100)
+	@Column(name="TITLE", length=255)
 	private String title;
 	
 	@Column(name="CONTENT_ABBR", length=100)

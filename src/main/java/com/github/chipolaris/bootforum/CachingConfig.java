@@ -69,7 +69,7 @@ public class CachingConfig {
     	
     	// forumStatCache
     	CaffeineCache forumStatCache = 
-    			buildAccessBasedCache(FORUM_STAT, forumStatMaximumSize, forumStatExpireAfterAccessMinutes);
+    			buildAccessBasedCache(FORUM_STAT, forumStatMaximumSize, forumStatExpireAfterWriteMinutes);
     	
     	// activeTags, a list of active tags, no expiration
     	CaffeineCache activeTagsCache = buildTimeBasedCache(ACTIVE_TAGS, 1, Integer.MAX_VALUE);
@@ -132,6 +132,6 @@ public class CachingConfig {
     @Value("${Cache.forumStat.maximumSize}")
     private Integer forumStatMaximumSize;
     
-    @Value("${Cache.forumStat.expireAfterAccessMinutes}")
-    private Integer forumStatExpireAfterAccessMinutes;
+    @Value("${Cache.forumStat.expireAfterWriteMinutes}")
+    private Integer forumStatExpireAfterWriteMinutes;
 }

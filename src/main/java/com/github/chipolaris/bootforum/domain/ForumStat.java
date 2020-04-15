@@ -28,9 +28,6 @@ public class ForumStat extends BaseEntity {
 	@Column(name="COMMENT_COUNT")
 	private long commentCount;
 	
-	@Column(name="VIEW_COUNT")
-	private long viewCount;
-	
 	@Column(name="DISCUSSION_COUNT")
 	private long discussionCount;
 
@@ -55,12 +52,8 @@ public class ForumStat extends BaseEntity {
 	public void setCommentCount(long commentCount) {
 		this.commentCount = commentCount;
 	}
-		
-	public long getViewCount() {
-		return viewCount;
-	}
-	public void setViewCount(long viewCount) {
-		this.viewCount = viewCount;
+	public void addCommentCount(long adjustAmount) {
+		this.commentCount += adjustAmount;
 	}
 	
 	public long getDiscussionCount() {
@@ -68,5 +61,8 @@ public class ForumStat extends BaseEntity {
 	}
 	public void setDiscussionCount(long discussionCount) {
 		this.discussionCount = discussionCount;
+	}
+	public void addDiscussionCount(long adjustAmount) {
+		this.discussionCount += adjustAmount;
 	}
 }

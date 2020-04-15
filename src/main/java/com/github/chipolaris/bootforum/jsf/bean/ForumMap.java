@@ -19,6 +19,7 @@ import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
 import com.github.chipolaris.bootforum.domain.ForumStat;
+import com.github.chipolaris.bootforum.event.ForumDeleteEvent;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 // application scope JSF backing bean
@@ -54,7 +55,11 @@ public class ForumMap {
 				
 		forumRootTreeNode = new DefaultTreeNode(new ForumNode(null, null), null);
 		forumRootTreeNode.setExpanded(true);
-		buildForumTreeNodes(forums, forumGroups, forumRootTreeNode);
+		
+		TreeNode rootTreeNode = new DefaultTreeNode(new ForumNode(null, "Root"), forumRootTreeNode);
+		rootTreeNode.setExpanded(true);
+		
+		buildForumTreeNodes(forums, forumGroups, rootTreeNode);
 	}
 
 	private void buildForumTreeNodes(List<Forum> forums, List<ForumGroup> forumGroups, TreeNode parent) {

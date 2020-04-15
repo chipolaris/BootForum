@@ -49,14 +49,12 @@
 				<p:autoUpdate/>
 			</p:messages>
 			
-			<div class="w3-center w3-margin">
- 				<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
- 					<i class="fa fa-sitemap"/> View Forum Map
- 				</button>
- 			</div>
-			
-			<div class="w3-panel w3-round w3-theme-d5 w3-center w3-round">
+			<div class="w3-panel w3-round w3-theme-d5 w3-center">
  				<h2>#{msg['forumManagement.page.title']}</h2>
+ 				<button class="w3-button w3-border" 
+ 					onclick="$('#forumMapModal').show();return false;">
+ 					<i class="fa fa-sitemap"/> View Forum Map
+ 				</button><p/>
  			</div>
  			
 			<div jsf:id="editForumGroupContentDiv">
@@ -479,6 +477,7 @@
 								<i class="#{forum.icon} w3-xxxlarge" title="#{forum.title}"/>
 								<p/>
 								<h4>#{forum.title}</h4>
+								<h6><b>Discussion count: #{forum.stat.discussionCount}</b></h6>
 							</div>
 							
 							<!-- use w3-display-hover to only show these when the mouse is hovered over -->
@@ -525,11 +524,21 @@
 					</header>
 					
 					<div class="w3-padding-large">
-						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
+						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;" >
 							<p:treeNode>
+							
+								<h:link rendered="#{forumNode.type eq 'Root' and not empty param['forumGroupId']}">				        	
+						        	<span class="w3-large w3-opacity-min">
+						        		<i class="fa fa-lg fa-sitemap"/> Root
+						        	</span>
+					        	</h:link>
+					        	<span class="w3-tag w3-large w3-theme-d5" title="We are here"
+					        		jsf:rendered="#{forumNode.type eq 'Root' and empty param['forumGroupId']}">
+					        		<i class="fa fa-lg fa-sitemap"/> Root
+					        	</span>
 								
-								<span jsf:rendered="#{forumNode.type eq 'Forum'}" class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{forumNode.bean.iconColor};">
-				        			<i class="fa-lg #{forumNode.bean.icon}"/>
+								<span jsf:rendered="#{forumNode.type eq 'Forum'}" class="w3-tag" style="line-height:24px;width:24px;height:24px;border-radius:2px;color:#fff;background-color:##{forumNode.bean.iconColor};">
+				        			<i class="#{forumNode.bean.icon}"/>
 				        		</span>
 				        		<span jsf:rendered="#{forumNode.type eq 'Forum'}">
 				        			<b>#{forumNode.bean.title}</b>
@@ -542,7 +551,8 @@
 						        	<f:param name="forumGroupId" value="#{forumNode.bean.id}"/>
 					        	</h:link>
 					        	
-					        	<span class="w3-tag w3-large w3-theme-d5" jsf:rendered="#{forumNode.type eq 'ForumGroup' and param['forumGroupId'] eq forumNode.bean.id}">
+					        	<span class="w3-tag w3-large w3-theme-d5" title="We are here"
+					        		jsf:rendered="#{forumNode.type eq 'ForumGroup' and param['forumGroupId'] eq forumNode.bean.id}">
 					        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
 					        	</span>							
 								

@@ -58,10 +58,7 @@ public class Forum extends BaseEntity {
 	@JoinColumn(name="FORUM_GROUP_ID")
 	private ForumGroup forumGroup; // point to the ForumGroup that contains this
 	
-	/**
-	 * Note: set cascade to REMOVE to enable automatic removal of associated Discussions
-	 */
-	@OneToMany(cascade=CascadeType.REMOVE, fetch=FetchType.LAZY, mappedBy="forum")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="forum")
 	private List<Discussion> discussions;
 	
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)

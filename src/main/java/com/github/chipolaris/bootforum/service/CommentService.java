@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +23,8 @@ import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.CommentVote;
 import com.github.chipolaris.bootforum.domain.Discussion;
-import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.FileInfo;
 import com.github.chipolaris.bootforum.domain.Forum;
-import com.github.chipolaris.bootforum.domain.ForumGroup;
-import com.github.chipolaris.bootforum.domain.ForumGroupStat;
 import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.User;
@@ -203,22 +201,7 @@ public class CommentService {
 			
 			// replyTo.getReplies().add(reply);
 			// genericDAO.merge(replyTo);
-		}		
-		
-		// discussion stat
-		//DiscussionStat discussionStat = statManager.getDiscussionStat(discussion.getStat().getId()); // replaced by line below
-		DiscussionStat discussionStat = discussion.getStat();
-		
-		// update lastComment
-		CommentInfo lastComment = discussionStat.getLastComment();
-		//lastComment.setUpdateDate(Calendar.getInstance().getTime());
-		lastComment.setUpdateBy(user.getUsername());
-		lastComment.setTitle(reply.getTitle());
-		lastComment.setCommentId(reply.getId());
-		lastComment.setContentAbbr(reply.getContent().length() > 100 ? 
-				reply.getContent().substring(0, 97) + "..." : reply.getContent());
-		
-		discussionStat.setCommentCount(discussionStat.getCommentCount() + 1);
+		}
 		
 		genericDAO.merge(discussion); // this merge will cascade to discussionStat
 
@@ -272,25 +255,11 @@ public class CommentService {
 		// commentVote
 		comment.setCommentVote(new CommentVote());
 		
-		CommentInfo lastComment = new CommentInfo();
-		lastComment.setCreateBy(username);
-		lastComment.setUpdateBy(username);
-		lastComment.setTitle(comment.getTitle());
-		lastComment.setContentAbbr(comment.getContent().length() > 100 ? 
-				comment.getContent().substring(0, 97) + "..." : comment.getContent());
-		
-		// discussion stat
-		DiscussionStat discussionStat = new DiscussionStat();
-		discussionStat.setCommentCount(1);
-		discussionStat.setLastComment(lastComment);
-		newDiscussion.setStat(discussionStat);
-		
-		genericDAO.persist(newDiscussion); // this persist will cascade down to discussionStat
+		newDiscussion.setComments(Arrays.asList(comment));
+		genericDAO.persist(newDiscussion); 
 		
 		comment.setDiscussion(newDiscussion);
 		genericDAO.persist(comment);
-		
-		lastComment.setCommentId(comment.getId());
 		
 		// merge discussion's forum
 		Forum forum = newDiscussion.getForum();
@@ -338,9 +307,6 @@ public class CommentService {
 			fileService.deleteCommentThumbnail(path);
 		}
 		
-		statDAO.resetForumStat(discussion.getStat().getLastComment());
-		statDAO.resetUserStat(discussion.getStat().getLastComment());
-		
 		/*
 		 * delete comments has the following effects:
 		 * 		delete related comment vote
@@ -362,7 +328,7 @@ public class CommentService {
 
 	private void updateStats4DeleteDiscussion(Forum forum, int deletedCommentCount, List<String> commentors) {
 		
-		CommentInfo newLastComment = statDAO.getLastCommentInfo(forum);
+		CommentInfo newLastComment = statDAO.latestCommentInfo(forum);
 		
 		ForumStat forumStat = forum.getStat();
 		forumStat.setDiscussionCount(forumStat.getDiscussionCount() - 1);
@@ -372,17 +338,6 @@ public class CommentService {
 		
 		// evict cache FORUM_STAT
 		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(forumStat.getId());
-		
-		ForumGroup forumGroup = forum.getForumGroup();
-		while(forumGroup != null) {
-			ForumGroupStat forumGroupStat = forumGroup.getStat();
-			forumGroupStat.setDiscussionCount(forumGroupStat.getDiscussionCount() - 1);
-			forumGroupStat.setCommentCount(forumGroupStat.getCommentCount() - deletedCommentCount);
-			
-			genericDAO.merge(forumGroupStat);
-			
-			forumGroup = forumGroup.getParent();
-		}
 		
 		// update userStat for each commentor
 		for(String commentor : commentors) {

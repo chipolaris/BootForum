@@ -1,9 +1,5 @@
 package com.github.chipolaris.bootforum.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -22,8 +18,6 @@ import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
-import com.github.chipolaris.bootforum.domain.ForumGroup;
-import com.github.chipolaris.bootforum.domain.ForumGroupStat;
 import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.domain.UserStat;
 
@@ -62,58 +56,6 @@ public class StatService {
 		return response;
 	}
 
-	@Transactional(readOnly =  false)
-	public void synchStats() {
-
-		// top level, e.g., ForumGroup that has parent as null
-		Map<String, Object> equalAttrs = new HashMap<String, Object>();
-		equalAttrs.put("parent", null);
-		List<ForumGroup> forumGroups = genericDAO.getEntities(ForumGroup.class, equalAttrs);
-		
-		for(ForumGroup forumGroup : forumGroups) {
-			ForumGroupStat forumGroupStat = synchForumGroupStat(forumGroup);
-			genericDAO.merge(forumGroupStat);
-		}
-	}
-
-	@Transactional(readOnly =  false, propagation=Propagation.MANDATORY)
-	private ForumGroupStat synchForumGroupStat(ForumGroup forumGroup) {
-		
-		long commentCount = 0;
-		long discussionCount = 0;
-		long forumCount = 0;
-		long subForumGroupCount = 0;
-
-		for(ForumGroup subGroup : forumGroup.getSubGroups()) {
-			ForumGroupStat subGroupStat = synchForumGroupStat(subGroup);
-			
-			commentCount += subGroupStat.getCommentCount();
-			discussionCount += subGroupStat.getDiscussionCount();
-			forumCount += subGroupStat.getForumCount();
-			subForumGroupCount += subGroupStat.getSubForumGroupCount();
-		}
-		
-		for(Forum forum : forumGroup.getForums()) {
-			ForumStat forumStat = synchForumStat(forum);
-			
-			commentCount += forumStat.getCommentCount();
-			discussionCount += forumStat.getDiscussionCount();
-		}
-		
-		forumCount += forumGroup.getForums().size();
-		subForumGroupCount += forumGroup.getSubGroups().size();
-		
-		ForumGroupStat forumGroupStat = forumGroup.getStat();
-		forumGroupStat.setCommentCount(commentCount);
-		forumGroupStat.setDiscussionCount(discussionCount);
-		forumGroupStat.setForumCount(forumCount);
-		forumGroupStat.setSubForumGroupCount(subForumGroupCount);
-		
-		genericDAO.merge(forumGroupStat);
-		
-		return forumGroupStat;
-	}
-
 	@Transactional(readOnly =  false, propagation=Propagation.MANDATORY)
 	private ForumStat synchForumStat(Forum forum) {
 		
@@ -121,7 +63,7 @@ public class StatService {
 			DiscussionStat discussionStat = synchDiscussionStat(discussion);
 		}
 		
-		CommentInfo lastComment = statDAO.getLastCommentInfo(forum);
+		CommentInfo lastComment = statDAO.latestCommentInfo(forum);
 		Long commentCount = statDAO.countComment(forum);
 		
 		ForumStat forumStat = forum.getStat();
@@ -168,7 +110,7 @@ public class StatService {
 		userStat.setReputation(voteDAO.getReputation4User(username));
 		
 		// latest commentInfo for user
-		Comment lastComment = statDAO.getLastComment(username);
+		Comment lastComment = statDAO.getLatestComment(username);
 		
 		if(lastComment != null) {
 			CommentInfo commentInfo = lastComment.getDiscussion().getStat().getLastComment();

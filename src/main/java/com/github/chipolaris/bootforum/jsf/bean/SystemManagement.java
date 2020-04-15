@@ -89,16 +89,6 @@ public class SystemManagement {
 		
 		JSFUtils.addInfoStringMessage("messages", "Complete System Statistics Synchronized");
 	}
-	
-	/**
-	 * synch Forum Stats
-	 */
-	public void synchForumStats() {
-		
-		statService.synchStats();
-		
-		JSFUtils.addInfoStringMessage("messages", "Complete Forum Statistics Synchronized");
-	}
 
 	public class Property implements Comparable<Property>{
 		

@@ -22,23 +22,19 @@ public class StatDAO {
 	// no need to specify the unitName if there is only one PersistenceContext configured
 	@PersistenceContext//(unitName = "BootForumPersistenceUnit")
 	protected EntityManager entityManager;
-	
-	public void resetUserStat(CommentInfo commentInfo) {
+
+	public Long countThumbnail(Discussion discussion) {
+		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT SUM(SIZE(c.thumbnails)) FROM Comment c WHERE c.discussion = :discussion", Long.class);
+		typedQuery.setParameter("discussion", discussion);
 		
-		String updateStr = "UPDATE UserStat u SET u.lastComment = NULL WHERE u.lastComment = :commentInfo";
-		Query query = entityManager.createQuery(updateStr);
-		query.setParameter("commentInfo", commentInfo);
-		
-		query.executeUpdate();
+		return typedQuery.getSingleResult();
 	}
 	
-	public void resetForumStat(CommentInfo commentInfo) {
+	public Long countAttachment(Discussion discussion) {
+		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT SUM(SIZE(c.attachments)) FROM Comment c WHERE c.discussion = :discussion", Long.class);
+		typedQuery.setParameter("discussion", discussion);
 		
-		String updateStr = "UPDATE ForumStat f SET f.lastComment = NULL WHERE f.lastComment = :commentInfo";
-		Query query = entityManager.createQuery(updateStr);
-		query.setParameter("commentInfo", commentInfo);
-		
-		query.executeUpdate();
+		return typedQuery.getSingleResult();
 	}
 	
 	public Long countComment(Forum forum) {
@@ -49,7 +45,15 @@ public class StatDAO {
 		return typedQuery.getSingleResult();
 	}
 	
-	public CommentInfo getLastCommentInfo(Forum forum) {
+	public Long countDiscussion(Forum forum) {
+		
+		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT COUNT(d) FROM Discussion d WHERE d.forum = :forum", Long.class);
+		typedQuery.setParameter("forum", forum);
+		
+		return typedQuery.getSingleResult();
+	}
+	
+	public CommentInfo latestCommentInfo(Forum forum) {
 		
 		String queryStr = "SELECT d.stat.lastComment FROM Discussion d WHERE d.forum = :forum ORDER BY d.stat.lastComment.updateDate DESC";
 		
@@ -61,7 +65,7 @@ public class StatDAO {
 		return resultList.isEmpty() ? null : resultList.get(0);
 	}
 	
-	public CommentInfo getLastCommentInfo() {
+	public CommentInfo latestCommentInfo() {
 		
 /*		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		
@@ -154,7 +158,7 @@ public class StatDAO {
 	 * @param commentor
 	 * @return
 	 */
-	public Comment getLastComment(String commentor) {
+	public Comment getLatestComment(String commentor) {
 		TypedQuery<Comment> typedQuery = entityManager.createQuery("SELECT c FROM Comment c WHERE c.createBy = :commentor ORDER BY c.createDate DESC", Comment.class);
 		typedQuery.setParameter("commentor", commentor);
 		

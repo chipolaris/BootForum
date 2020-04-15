@@ -53,7 +53,6 @@
 								<div class="w3-round-large w3-padding" style="background-color:lightgray">
 									
 									<p>
-										<b>Posted <pe:timeAgo value="#{comment.createDate}"/></b> by
 										
 										<h:link outcome="memberProfile">
 											<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
@@ -67,6 +66,8 @@
 											<f:param name="username" value="#{comment.createBy}"/>
 										</h:link>								
 										
+										<b>Posted <pe:timeAgo value="#{comment.createDate}"/></b>
+																				
 			 						</p>
 			 						
 			 						<p style="font-size:12pt;">

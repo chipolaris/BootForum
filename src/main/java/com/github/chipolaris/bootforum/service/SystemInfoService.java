@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -35,18 +34,10 @@ public class SystemInfoService {
 	@Resource
 	private StatDAO statDAO;
 	
-	@PostConstruct
-	private void postConstruct() {
-		
-		logger.info("Initialize System Information");
-		
-		loggedOnUsers = Collections.synchronizedSet(new HashSet<String>());
-		 
-		refreshStatistics();
-	}
-	
 	@Transactional(readOnly = true)
 	public ServiceResponse<Void> refreshStatistics() {
+		
+		logger.info("Refreshing statistics data");
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
 		
@@ -64,14 +55,14 @@ public class SystemInfoService {
 		stat.setForumCount(genericDAO.countEntities(Forum.class));
 		stat.setForumGroupCount(genericDAO.countEntities(ForumGroup.class));
 		stat.setUserCount(genericDAO.countEntities(User.class));
-		stat.setLastComment(statDAO.getLastCommentInfo());
+		stat.setLastComment(statDAO.latestCommentInfo());
 		stat.setLastRegisteredUser(statDAO.getLatestUsername());
 		stat.setLastUserRegisteredDate(statDAO.getLastUserRegisteredDate());
 		
 		return stat;
 	}
 	
-	private Statistics statistics;
+	private Statistics statistics = new Statistics();
 	
 	@Transactional(readOnly = true)
 	public ServiceResponse<Statistics> getStatistics() {
@@ -118,7 +109,7 @@ public class SystemInfoService {
     /**
      * List of logged on users
      */
-    private Set<String> loggedOnUsers;
+    private Set<String> loggedOnUsers = Collections.synchronizedSet(new HashSet<String>());;
     
 	public ServiceResponse<Void> addLoggedOnUser(String username) {
 		ServiceResponse<Void> response = new ServiceResponse<>();

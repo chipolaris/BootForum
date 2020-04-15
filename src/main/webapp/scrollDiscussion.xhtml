@@ -206,7 +206,7 @@
 								        	title="[by #{comment.createBy} on #{comment.createDate}. Last edited on #{comment.updateDate}]"/>
 									    
 									    <p:commandLink rendered="#{not empty comment.replyTo}" 
-									    	onclick="document.getElementById('replyTo_#{rowIndex}_Div').style.display='block'; return false;">
+									    	onclick="$('#replyTo_#{rowIndex}_Div').toggle(300); return false;">
 									    	<i class="fa fa-share"/>
 									    	<span>@#{comment.replyTo.createBy}: </span>
 									    	<h:outputText value=" #{comment.replyTo.title}" style="text-decoration:none;font-weight:bold;font-style:italic;" />
@@ -244,7 +244,7 @@
 					        		
 					        		<p/>
 					        		
-					        		<a onclick="document.getElementById('replyTo_#{rowIndex}_Div').style.display='none';" style="cursor:pointer;font-size: large;">
+					        		<a onclick="$('#replyTo_#{rowIndex}_Div').hide();" style="cursor:pointer;font-size: large;">
 					        			[ <i class="fa fa-caret-up" title="Collapse"/> Collapse ]
 					        		</a>
 					        		

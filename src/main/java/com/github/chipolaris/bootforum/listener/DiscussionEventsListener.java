@@ -13,12 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
+import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
-import com.github.chipolaris.bootforum.domain.ForumGroup;
-import com.github.chipolaris.bootforum.domain.ForumGroupStat;
 import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
@@ -26,7 +25,7 @@ import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
 import com.github.chipolaris.bootforum.event.DiscussionViewEvent;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
 
-@Component @Transactional
+@Component
 public class DiscussionEventsListener {
 
 	private static final Logger logger = LoggerFactory.getLogger(DiscussionEventsListener.class);
@@ -40,40 +39,65 @@ public class DiscussionEventsListener {
 	@Resource 
 	private CacheManager cacheManager;
 	
-	@EventListener
+	@EventListener @Transactional(readOnly = false)
 	public void handleDiscussionViewEvent(DiscussionViewEvent discussionViewEvent) {
 		logger.info("Handling DiscussionViewEvent");
 		
 		updateDiscussionStat(discussionViewEvent);
 	}
 	
-	@EventListener
+	@EventListener @Transactional(readOnly = false)
 	public void handleDiscussionAddEvent(DiscussionAddEvent discussionAddEvent) {
 		logger.info("Handling DiscussionAddEvent");
 		
 		updateStats4newDiscussion(discussionAddEvent.getDiscussion(), discussionAddEvent.getUser());
 	}
 	
-	@Transactional(readOnly = false)
 	private void updateDiscussionStat(DiscussionViewEvent discussionViewEvent) {
 		Discussion discussion = discussionViewEvent.getDiscussion();
 		DiscussionStat stat = discussion.getStat();
 		
-		stat.setViewCount(stat.getViewCount() + 1);
+		stat.addViewCount(1);
 		stat.setLastViewed(new Date());
 		
 		genericDAO.merge(stat);
 	}
 	
-	@Transactional(readOnly = false)
 	private void updateStats4newDiscussion(Discussion discussion, User user) {
 
-		Forum forum = discussion.getForum();
-		CommentInfo lastComment = discussion.getStat().getLastComment();
+		String username = user.getUsername();
+		Comment comment = discussion.getComments().get(0);
+		
+		/*
+		 * discussion stat
+		 */
+		CommentInfo lastComment = new CommentInfo();
+		lastComment.setCreateBy(username);
+		lastComment.setUpdateBy(username);
+		lastComment.setTitle(comment.getTitle());
+		lastComment.setContentAbbr(comment.getContent().length() > 100 ? 
+				comment.getContent().substring(0, 97) + "..." : comment.getContent());
+		lastComment.setCommentId(comment.getId());
+		
+		DiscussionStat discussionStat = new DiscussionStat();
+		discussionStat.setCommentCount(1);
+		discussionStat.setLastComment(lastComment);
+		discussionStat.getFirstUsersMap().put(username, 1);
+		discussionStat.setThumbnailCount(comment.getThumbnails().size());
+		discussionStat.setAttachmentCount(comment.getAttachments().size());
+		
+		genericDAO.persist(discussionStat);
+		
+		discussion.setStat(discussionStat);
+		
+		genericDAO.merge(discussion);
 		
 		/*
 		 *  forum stat
 		 */
+		Forum forum = discussion.getForum();
+		//CommentInfo lastComment = discussion.getStat().getLastComment();
+		
 		ForumStat forumStat = forum.getStat();
 		forumStat.setDiscussionCount(forumStat.getDiscussionCount() + 1);
 		forumStat.setCommentCount(forumStat.getCommentCount() + 1);
@@ -83,39 +107,14 @@ public class DiscussionEventsListener {
 		// evict cache's entry with key forumStat.id
 		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(forumStat.getId());
 		
-		ForumGroup forumGroup = forum.getForumGroup();
-		
-		if(forumGroup != null) {
-			/*
-			 *  forumGroup stat
-			 */
-			ForumGroupStat forumGroupStat = forumGroup.getStat();
-			forumGroupStat.setCommentCount(forumGroupStat.getCommentCount() + 1);
-			forumGroupStat.setDiscussionCount(forumGroupStat.getDiscussionCount() + 1);
-			//forumGroupStat.setLastComment(lastComment);
-			genericDAO.merge(forumGroupStat);
-			
-			/*
-			 * parent forum group stats if any
-			 */
-			ForumGroup parentForumGroup = forumGroup.getParent();
-			while(parentForumGroup != null) {
-				ForumGroupStat parentForumGroupStat = parentForumGroup.getStat();
-				parentForumGroupStat.setCommentCount(parentForumGroupStat.getCommentCount() + 1);
-				parentForumGroupStat.setDiscussionCount(parentForumGroupStat.getDiscussionCount() + 1);
-				
-				genericDAO.merge(parentForumGroupStat);
-				
-				parentForumGroup = parentForumGroup.getParent();
-			}
-		}
-		
 		/*
 		 *  user stat
 		 */
 		UserStat userStat = user.getStat();
-		userStat.setDiscussionCount(userStat.getDiscussionCount() + 1);
-		userStat.setCommentCount(userStat.getCommentCount() + 1);
+		userStat.addDiscussionCount(1);
+		userStat.addCommentCount(1);
+		userStat.addCommentThumbnailCount(comment.getThumbnails().size());
+		userStat.addCommentAttachmentCount(comment.getAttachments().size());
 		userStat.setLastComment(lastComment);
 		genericDAO.merge(userStat);
 		

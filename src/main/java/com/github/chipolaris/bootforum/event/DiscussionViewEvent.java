@@ -21,7 +21,6 @@ public class DiscussionViewEvent extends ApplicationEvent {
 	public Discussion getDiscussion() {
 		return discussion;
 	}
-
 	public void setDiscussion(Discussion discussion) {
 		this.discussion = discussion;
 	}

@@ -114,23 +114,77 @@
  					<h2>#{viewDiscussion.discussion.title}</h2>
  				</div>
 				
-				<div>
-						
-					[Started by
-					<h:link outcome="memberProfile"> 
-						<b>#{viewDiscussion.discussion.createBy}</b>
-						<f:param name="username" value="#{viewDiscussion.discussion.createBy}"/>
-					</h:link>
-					on #{viewDiscussion.discussion.createDate}], <b>In Tags:</b>
+				<div class="w3-border w3-center w3-container w3-margin-bottom">
+					
+					<span class="w3-tag w3-theme-light w3-padding">
+						Started by<br/>
+						<h:link outcome="memberProfile"> 
+
+			        		<h:graphicImage value="#{requestContext}/avatar/#{viewDiscussion.discussion.createBy}" class="w3-circle"
+								height="36" width="36" title="#{viewDiscussion.discussion.createBy}" rendered="#{fileHandler.isAvatarExists(viewDiscussion.discussion.createBy)}"/>
+								
+							<span jsf:rendered="#{!fileHandler.isAvatarExists(viewDiscussion.discussion.createBy)}" class="w3-circle avatarSpan"
+								title="#{viewDiscussion.discussion.createBy}"
+								style="display:inline-block;font-size:0.9rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+								#{fn:substring(viewDiscussion.discussion.createBy, 0, 3)}
+							</span>
+							<f:param name="username" value="#{viewDiscussion.discussion.createBy}"/>
+						</h:link><br/>
+						<pe:timeAgo value="#{viewDiscussion.discussion.createDate}" titlePattern="MMM dd, yyyy"/>
+					</span>
+					<span class="w3-tag w3-theme-light w3-padding">
+						Last comment<br/>
+						<h:link outcome="memberProfile"> 
+
+			        		<h:graphicImage value="#{requestContext}/avatar/#{viewDiscussion.discussion.stat.lastComment.updateBy}" class="w3-circle"
+								height="36" width="36" title="#{viewDiscussion.discussion.stat.lastComment.updateBy}" rendered="#{fileHandler.isAvatarExists(viewDiscussion.discussion.stat.lastComment.updateBy)}"/>
+								
+							<span jsf:rendered="#{!fileHandler.isAvatarExists(viewDiscussion.discussion.stat.lastComment.updateBy)}" class="w3-circle avatarSpan"
+								title="#{viewDiscussion.discussion.stat.lastComment.updateBy}"
+								style="display:inline-block;font-size:0.9rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+								#{fn:substring(viewDiscussion.discussion.stat.lastComment.updateBy, 0, 3)}
+							</span>
+							<f:param name="username" value="#{viewDiscussion.discussion.stat.lastComment.updateBy}"/>
+						</h:link><br/>
+						<pe:timeAgo value="#{viewDiscussion.discussion.stat.lastComment.updateDate}" titlePattern="MMM dd, yyyy"/>
+					</span>
+					<span class="w3-tag w3-theme-light w3-padding">
+						Comments: #{viewDiscussion.discussion.stat.commentCount}<br/><br/>
+						Views: #{viewDiscussion.discussion.stat.viewCount}
+					</span>
+					
 					<p:repeat var="tag" value="#{viewDiscussion.discussion.tags}">
-						<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
-							<span class="w3-tag w3-large" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
-						</h:outputLink>
+						<h:link outcome="viewTag">
+							<span class="w3-tag w3-padding" style="background-color:##{tag.color};width:120px;">
+								
+								<i class="#{tag.icon}" style="font-size: 32px;"/><br/>
+								#{tag.label}
+							</span>
+							<f:param name="id" value="#{tag.id}"/>
+						</h:link>
+					</p:repeat>
+					
+					<p:repeat var="username" value="#{viewDiscussion.discussion.stat.firstUsersMap.keySet().toArray()}">
+						
+						<h:link outcome="memberProfile"> 
+
+			        		<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+								height="36" width="36" title="#{username}" rendered="#{fileHandler.isAvatarExists(username)}"/>
+								
+							<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
+								title="#{username}"
+								style="display:inline-block;font-size:0.9rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+								#{fn:substring(username, 0, 3)}
+							</span>
+							<f:param name="username" value="#{username}"/>
+						</h:link>
+						<span class="w3-display-topright w3-badge w3-theme-dark" title="comments in this discussion">#{viewDiscussion.discussion.stat.firstUsersMap[username]}</span>
+					
 					</p:repeat>
 					
 					<p/>
 					
-					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{! viewDiscussion.discussion.closed}" >
+					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
 						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
 						<i class="fa fa-comment-o"/> Add new Comment
 					</h:link>
@@ -147,7 +201,7 @@
 				    	
 				    	<p:ajax event="page" oncomplete="customizePaginatorStyle();changeAvatarBackgrounds();"/>
 				    	
-				        <f:facet name="header">
+				        <!-- <f:facet name="header">
 				        	
 				        	<div jsf:rendered="#{viewDiscussion.discussion.closed}">
 				        		<h:outputText value="This discussion is closed" style="font-size:16pt; color:red;"/>
@@ -155,7 +209,7 @@
 				        	
 				        	<h:outputText value="There are #{viewDiscussion.discussion.stat.commentCount} comments in this discussion. This discussion has been viewed #{viewDiscussion.discussion.stat.viewCount} times"/>
 				        	
-				        </f:facet>
+				        </f:facet> -->
 	
 						<div class="w3-container" style="padding:0;">
 						
@@ -197,7 +251,7 @@
 								        	title="[by #{comment.createBy} on #{comment.createDate}. Last edited on #{comment.updateDate}]"/>
 									    
 									    <p:commandLink rendered="#{not empty comment.replyTo}" 
-									    	onclick="document.getElementById('replyTo_#{rowIndex}_Div').style.display='block'; return false;">
+									    	onclick="$('#replyTo_#{rowIndex}_Div').toggle(300); return false;">
 									    	<i class="fa fa-share"/>
 									    	<span>@#{comment.replyTo.createBy}: </span>
 									    	<h:outputText value=" #{comment.replyTo.title}" style="text-decoration:none;font-weight:bold;font-style:italic;" />
@@ -235,7 +289,7 @@
 					        		
 					        		<p/>
 					        		
-					        		<a onclick="document.getElementById('replyTo_#{rowIndex}_Div').style.display='none';" style="cursor:pointer;font-size: large;">
+					        		<a onclick="$('#replyTo_#{rowIndex}_Div').hide();" style="cursor:pointer;font-size: large;">
 					        			[ <i class="fa fa-caret-up" title="Collapse"/> Collapse ]
 					        		</a>
 					        		

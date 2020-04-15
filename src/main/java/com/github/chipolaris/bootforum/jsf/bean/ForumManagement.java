@@ -1,7 +1,6 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
 import com.github.chipolaris.bootforum.event.ForumAddEvent;
+import com.github.chipolaris.bootforum.event.ForumDeleteEvent;
 import com.github.chipolaris.bootforum.event.ForumGroupAddEvent;
 import com.github.chipolaris.bootforum.event.ForumGroupUpdateEvent;
 import com.github.chipolaris.bootforum.event.ForumUpdateEvent;
@@ -57,23 +57,11 @@ public class ForumManagement {
 		this.forumGroup = forumGroup;
 	}
 	
-	private List<ForumGroup> breadCrumb;
-
-	public List<ForumGroup> getBreadCrumb() {
-		return breadCrumb;
-	}
-	public void setBreadCrumb(List<ForumGroup> breadCrumb) {
-		this.breadCrumb = breadCrumb;
-	}
-	
 	public void onLoad() {
 		
 		ServiceResponse<ForumGroup> forumGroupResponse = genericService.getEntity(ForumGroup.class, forumGroupId);
 		
 		this.forumGroup = forumGroupResponse.getDataObject();
-		
-		// build breadcrumb to display
-		this.breadCrumb = buildBreadCrumb(this.forumGroup);
 		
 		ServiceResponse<AbstractMap.SimpleEntry<List<Forum>, List<ForumGroup>>> childForumAndForumGroupResponse =	
 				forumService.getChildForumsAndForumGroups(this.forumGroup);
@@ -87,18 +75,6 @@ public class ForumManagement {
 			logger.error(errorString);
 			JSFUtils.addErrorStringMessage(null, errorString);
 		}
-		
-	}
-	
-	private List<ForumGroup> buildBreadCrumb(ForumGroup forumGroup) {
-		
-		List<ForumGroup> breadCrumb = new ArrayList<>();
-		
-		for(ForumGroup parentGroup = forumGroup; parentGroup != null; parentGroup = parentGroup.getParent()) {
-			breadCrumb.add(0, parentGroup);
-		}
-		
-		return breadCrumb;
 	}
 
 	private List<Forum> forums;
@@ -275,27 +251,47 @@ public class ForumManagement {
 	}
 	public void setSelectedForum(Forum selectedForum) {
 		this.selectedForum = selectedForum;
-	}
-	
+	}	
 	
 	public void deleteForum() {
 		
 		if(this.selectedForum != null) {
 			// 
-	    	ServiceResponse<Void> response = genericService.deleteEntity(this.selectedForum);
-	    	
-	    	if(response.getAckCode() != AckCodeType.FAILURE) {
-	    		JSFUtils.addInfoStringMessage(null, String.format("Forum '%s' (id: %d) deleted", selectedForum.getTitle(), selectedForum.getId()));
-	    		this.forums.remove(this.selectedForum);
-	    		// reset for next delete action
-	    		this.selectedForum = null;
-	    	}
-	    	else {
-	    		JSFUtils.addErrorStringMessage(null, String.format("Unable to delete Forum '%s' (id: %d)", selectedForum.getTitle(), selectedForum.getId()));
-	    	}
+			ServiceResponse<Void> response = forumService.deleteForum(this.selectedForum);
+			
+			if(response.getAckCode() != AckCodeType.FAILURE) {
+				JSFUtils.addInfoStringMessage(null, String.format("Forum '%s' (id: %d) deleted", selectedForum.getTitle(), selectedForum.getId()));
+				
+				applicationEventPublisher.publishEvent(new ForumDeleteEvent(this, selectedForum));
+				
+				this.forums.remove(this.selectedForum);
+				// reset for next delete action
+				this.selectedForum = null;
+			}
+			else {
+				JSFUtils.addErrorStringMessage(null, String.format("Unable to delete Forum '%s' (id: %d)", selectedForum.getTitle(), selectedForum.getId()));
+			}
 		}
 		else {
 			JSFUtils.addErrorStringMessage(null, "deleteForum called on null selectedForum");
 		}
+		
+		/*if(this.selectedForum != null) {
+			// 
+			ServiceResponse<Void> response = genericService.deleteEntity(this.selectedForum);
+			
+			if(response.getAckCode() != AckCodeType.FAILURE) {
+				JSFUtils.addInfoStringMessage(null, String.format("Forum '%s' (id: %d) deleted", selectedForum.getTitle(), selectedForum.getId()));
+				this.forums.remove(this.selectedForum);
+				// reset for next delete action
+				this.selectedForum = null;
+			}
+			else {
+				JSFUtils.addErrorStringMessage(null, String.format("Unable to delete Forum '%s' (id: %d)", selectedForum.getTitle(), selectedForum.getId()));
+			}
+		}
+		else {
+			JSFUtils.addErrorStringMessage(null, "deleteForum called on null selectedForum");
+		}*/
 	}
 }

@@ -25,6 +25,7 @@ import com.github.chipolaris.bootforum.service.ForumService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 import com.github.chipolaris.bootforum.service.StatService;
+import com.github.chipolaris.bootforum.service.SystemInfoService;
 import com.github.chipolaris.bootforum.service.UserService;
 
 @Component
@@ -47,10 +48,13 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 	@Resource
 	private CommentService commentService;
 	
+	@Resource
+	private SystemInfoService systemInfoService;
+	
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent arg0) {
+	public void onApplicationEvent(ContextRefreshedEvent event) {
 		
-		logger.info("Checking application intial data...");
+		logger.info("Checking application initial data...");
 		
 		// create admin user if not already exist in the system
 		User adminUser = userService.getSystemAdminUser().getDataObject();
@@ -75,6 +79,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 				createWelcomeDiscussion(announcementsForum, adminUser);
 			}
 		}
+		
+		systemInfoService.refreshStatistics();
 	}
 
 	private User createAdminUser() {

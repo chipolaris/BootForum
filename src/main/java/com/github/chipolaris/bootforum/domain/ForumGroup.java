@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -73,10 +72,6 @@ public class ForumGroup extends BaseEntity {
 	@OrderColumn(name="SORT_ORDER") // note: this SORT_ORDER column is in ForumGroup table
 	private List<ForumGroup> subGroups; // use List instead of Set to sort
 	
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="FORUM_GROUP_STAT_ID")
-	private ForumGroupStat stat;
-	
 	@Override
 	public Long getId() {
 		return id;
@@ -125,12 +120,5 @@ public class ForumGroup extends BaseEntity {
 	}
 	public void setSubGroups(List<ForumGroup> subGroups) {
 		this.subGroups = subGroups;
-	}
-	
-	public ForumGroupStat getStat() {
-		return stat;
-	}
-	public void setStat(ForumGroupStat stat) {
-		this.stat = stat;
 	}
 }

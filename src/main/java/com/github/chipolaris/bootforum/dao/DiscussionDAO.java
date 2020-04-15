@@ -5,11 +5,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Tag;
 
 @Repository
@@ -86,5 +88,14 @@ public class DiscussionDAO {
 		}
 		
 		return typedQuery.getResultList();
+	}
+
+	public Integer assignForum(List<Discussion> discussions, Forum forum) {
+
+		String queryStr = "UPDATE Discussion d SET d.forum = :forum WHERE d in :discussions";
+		
+		Query query = entityManager.createQuery(queryStr);
+		
+		return query.setParameter("forum", forum).setParameter("discussions", discussions).executeUpdate();
 	}
 }

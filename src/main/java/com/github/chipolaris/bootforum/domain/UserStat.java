@@ -37,6 +37,12 @@ public class UserStat extends BaseEntity {
 	@OneToOne(fetch=FetchType.EAGER)
 	private CommentInfo lastComment; // info about last comment, used for display
 	
+	@Column(name="COMMENT_THUMBNAIL_COUNT")
+	private long commentThumbnailCount;
+	
+	@Column(name="COMMENT_ATTACHMENT_COUNT")
+	private long commentAttachmentCount;
+	
 	@Column(name="COMMENT_COUNT")
 	private long commentCount;
 	
@@ -45,7 +51,7 @@ public class UserStat extends BaseEntity {
 	
 	@Column(name="REPUTATION")
 	private long reputation;
-	
+
 	@Column(name="PROFILE_VIEWED")
 	private long profileViewed;
 	
@@ -71,11 +77,34 @@ public class UserStat extends BaseEntity {
 		this.lastComment = lastComment;
 	}
 	
+	public long getCommentThumbnailCount() {
+		return commentThumbnailCount;
+	}
+	public void setCommentThumbnailCount(long thumbnailCount) {
+		this.commentThumbnailCount = thumbnailCount;
+	}
+	public void addCommentThumbnailCount(long number) {
+		this.commentThumbnailCount += number;
+	}
+	
+	public long getCommentAttachmentCount() {
+		return commentAttachmentCount;
+	}
+	public void setCommentAttachmentCount(long commentAttachmentCount) {
+		this.commentAttachmentCount = commentAttachmentCount;
+	}
+	public void addCommentAttachmentCount(long number) {
+		this.commentAttachmentCount += number;
+	}
+	
 	public long getCommentCount() {
 		return commentCount;
 	}
 	public void setCommentCount(long commentCount) {
 		this.commentCount = commentCount;
+	}
+	public void addCommentCount(long number) {
+		this.commentCount += number;
 	}
 	
 	public long getDiscussionCount() {
@@ -83,6 +112,9 @@ public class UserStat extends BaseEntity {
 	}
 	public void setDiscussionCount(long discussionCount) {
 		this.discussionCount = discussionCount;
+	}
+	public void addDiscussionCount(long number) {
+		this.discussionCount += number;
 	}
 		
 	public long getReputation() {
@@ -97,6 +129,9 @@ public class UserStat extends BaseEntity {
 	}
 	public void setProfileViewed(long profileViewed) {
 		this.profileViewed = profileViewed;
+	}
+	public void addProfileViewed(long adjustAmount) {
+		this.profileViewed += adjustAmount;
 	}
 	
 	public Date getLastLogin() {

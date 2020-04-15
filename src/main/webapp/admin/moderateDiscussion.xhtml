@@ -92,7 +92,7 @@
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">		
 						
 			<div>
-				<p:messages id="messages" showDetail="true" showSummary="false">
+				<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
 					<p:autoUpdate/>
 				</p:messages>
 			</div>
@@ -108,11 +108,20 @@
 				
 				<div class="w3-panel w3-theme-dark w3-center w3-round">
  					<h2>Moderate Discussion '#{moderateDiscussion.discussion.title}'</h2>
- 					[Started by <b>#{moderateDiscussion.discussion.createBy}</b> on #{moderateDiscussion.discussion.createDate}]
- 					<p/>
  				</div>
 				
-				<div>
+				<div class="w3-center">
+				
+					<div class="w3-margin w3-large">
+						Started by <b>#{moderateDiscussion.discussion.createBy}</b> on #{moderateDiscussion.discussion.createDate}
+					</div>
+				
+					<div class="w3-large" jsf:id="forumTitleDiv">
+						<b>In Forum '#{moderateDiscussion.discussion.forum.title}'</b> 
+	 					<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
+	 						<i class="fa fa-sitemap"/> Assign new Forum
+	 					</button><p/>
+					</div>
 					
 					<h:form>
 						<h:outputText id="discussionStatusText" value="This discussion is #{moderateDiscussion.discussion.closed ? 'CLOSED' : 'OPEN'} "
@@ -131,14 +140,14 @@
 					
 					<h:form>
 						
-						<h:panelGrid columns="3">
-							<h:outputText value="Apply Tags: "/>
+						<h:panelGrid columns="3" style="margin: 0 auto;">
+							<h:outputText value="Tags: "/>
 							<p:selectCheckboxMenu id="tags" value="#{moderateDiscussion.discussion.tags}" multiple="true"
 	                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px" converter="#{moderateDiscussion.tagConverter}">
 					            <f:selectItems value="#{moderateDiscussion.tags}" var="tag" itemLabel="#{tag.label}" itemValue="#{tag}"/>
 					        </p:selectCheckboxMenu>
-					         <p:commandButton ajax="true" value="&#160;Save" action="#{moderateDiscussion.updateDiscussionTag}" update=":messages" icon="fa fa-check"
-					         	styleClass="w3-btn w3-theme-dark w3-border-0" style="margin-top:-5px;"/>
+					        <p:commandButton ajax="true" value="&#160;Apply" action="#{moderateDiscussion.updateDiscussionTag}" update=":messages" icon="fa fa-check"
+					         	styleClass="w3-theme-dark w3-border-0" style="margin-top:-5px;"/>
 				        </h:panelGrid>
 				        
 					</h:form>	
@@ -353,6 +362,56 @@
 			        </p:commandButton>  
 		  		</h:form>
 		    </p:confirmDialog>			
+	
+    		<div id="forumMapModal" class="w3-modal">
+    			<div class="w3-modal-content w3-animate-zoom" jsf:id="forumMapContent">
+    				<span onclick="$('#forumMapModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+		
+					<header class="w3-container w3-padding w3-theme-dark w3-center">
+						<span class="w3-xlarge"><i class="fa fa-sitemap"/> Forum Map</span>
+					</header>
+					
+					<div class="w3-padding-large">
+					
+						<div class="w3-margin w3-center w3-large">
+							Select a Forum below to assign to this Discussion
+						</div>
+					
+						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
+							<p:treeNode>
+							
+					        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'Root'}">
+					        		<i class="fa fa-lg fa-sitemap"/> Root
+					        	</span>
+					        	
+					        	<p:commandLink rendered="#{forumNode.type eq 'Forum' and forumNode.bean.id ne moderateDiscussion.discussion.forum.id}"
+					        		title="Assign to this Forum" 
+									action="#{moderateDiscussion.updateDiscussion}" update=":messages :forumTitleDiv :forumMapContent"
+		        					oncomplete="$('#forumMapModal').hide();">
+				        			<span class="w3-tag" style="line-height:24px;width:24px;height:24px;border-radius:2px;color:#fff;background-color:##{forumNode.bean.iconColor};">
+					        			<i class="#{forumNode.bean.icon}"/>
+					        		</span>
+					        		<span class="w3-large">
+					        			#{forumNode.bean.title} [#{forumNode.bean.stat.discussionCount} discussions]
+					        		</span>
+				        			<f:setPropertyActionListener value="#{forumNode.bean}" target="#{moderateDiscussion.discussion.forum}"/>
+				        		</p:commandLink>
+				        		
+				        		<span jsf:rendered="#{forumNode.type eq 'Forum' and forumNode.bean.id eq moderateDiscussion.discussion.forum.id}"
+				        			class="w3-tag w3-theme-dark w3-large">
+				        			<i class="#{forumNode.bean.icon}"/> #{forumNode.bean.title} [#{forumNode.bean.stat.discussionCount} discussions]
+				        		</span>
+				        		 	
+					        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'ForumGroup'}">
+					        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+					        	</span>
+								
+							</p:treeNode>
+						</p:tree>
+					</div>
+					
+    			</div>
+    		</div>	
 			
 		</div>
 	</ui:define>

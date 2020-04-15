@@ -11,14 +11,50 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.DiscussionDAO;
+import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.DiscussionStat;
+import com.github.chipolaris.bootforum.domain.Forum;
+import com.github.chipolaris.bootforum.domain.ForumStat;
 
 @Service
 @Transactional
 public class DiscussionService {
 
 	@Resource
+	private GenericDAO genericDAO;
+	
+	@Resource
 	private DiscussionDAO discussionDAO;
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<Void> assignNewForum(Discussion discussion, Forum forum) {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+		
+		DiscussionStat discussionStat = discussion.getStat();
+		
+		Forum oldForum = discussion.getForum();
+		if(oldForum != null) {
+			oldForum.getDiscussions().remove(discussion);
+			ForumStat oldStat = oldForum.getStat();
+			oldStat.addCommentCount(-discussionStat.getCommentCount());
+			oldStat.addDiscussionCount(-1);
+			genericDAO.merge(oldForum);
+		}
+		
+		ForumStat newStat = forum.getStat();
+		newStat.addCommentCount(discussionStat.getCommentCount());
+		newStat.addDiscussionCount(1);
+		
+		discussion.setForum(forum);
+		forum.getDiscussions().add(discussion);
+		
+		genericDAO.merge(discussion);
+		genericDAO.merge(forum);
+		
+		return response;
+	}
 	
 	@Transactional(readOnly = true)
 	@Cacheable(value=CachingConfig.DISCCUSIONS, key="{'discussionService.getLatestDiscussions', #maxResult}")

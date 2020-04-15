@@ -40,6 +40,10 @@ public class SimulateDataService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SimulateDataService.class);
 	
+	private Random random = new Random();
+	
+	private Lorem lorem = LoremIpsum.getInstance();
+	
 	@Resource
 	private GenericService genericService;
 	
@@ -156,12 +160,10 @@ public class SimulateDataService {
 		
 		ForumGroup simulatedForumGroup = createSimulatedForumGroup(forumGroupTitle);
 		Forum simulatedForum = createSimulatedForum(simulatedForumGroup, forumTitle);
-
-		Random random = new Random();
 		
 		for(int i = 0; i < numDiscussions; i++) {
 			// create a discussion with random number of comments between 2 and 10
-			createSimulatedDiscussion(simulatedForum, discussionTitle + " " + i, 
+			createSimulatedDiscussion(simulatedForum, StringUtils.capitalize(lorem.getWords(4, 8)) + " [Simulated " + i + "]", 
 					2 + random.nextInt(9), commentors);
 		}
 		
@@ -216,9 +218,10 @@ public class SimulateDataService {
 		
 		Comment comment = new Comment();
 		
-		comment.setContent(generateRandomParagraphs());
+		comment.setContent(lorem.getParagraphs(2, 4));
 		
-		User admin = findUser("admin");
+		String discussionCreator = commentors.get(random.nextInt(commentors.size()));
+		User admin = findUser(discussionCreator);
 		
 		if(admin != null) {
 		
@@ -231,8 +234,6 @@ public class SimulateDataService {
 	private void createSimulateComments(Discussion discussion, int commentCount, List<String> commentors) {
 		
 		List<Comment> createdComments = new ArrayList<>();
-		
-		Random random = new Random();
 		
 		for(int i = 0; i < commentCount; i++) {
 			
@@ -251,28 +252,12 @@ public class SimulateDataService {
 			}
 			comment.setDiscussion(discussion);
 			
-			comment.setTitle(generateRandomString());
-			comment.setContent(generateRandomParagraphs());
+			comment.setTitle(StringUtils.capitalize(lorem.getWords(4, 8)));
+			comment.setContent(lorem.getParagraphs(2, 4));
 			
 			commentService.addReply(comment, user, Collections.emptyList(), Collections.emptyList());
 			
 			createdComments.add(comment);
 		}
-	}
-
-	private String generateRandomParagraphs() {
-		
-		Lorem lorem = LoremIpsum.getInstance();
-		
-		// generate between 2 and 4 paragraphs
-		return lorem.getParagraphs(2, 4);
-	}
-	
-	private String generateRandomString() {
-		
-		Lorem lorem = LoremIpsum.getInstance();
-		
-		// generate between 5 and 10 words
-		return lorem.getWords(5, 10);
 	}
 }
