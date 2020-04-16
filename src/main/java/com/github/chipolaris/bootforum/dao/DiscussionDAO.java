@@ -20,9 +20,16 @@ public class DiscussionDAO {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
-	public List<Discussion> findByTag(Tag tag, Integer startPosition, Integer maxResult) {
+	public List<Discussion> findByTag(Tag tag, Integer startPosition, Integer maxResult, String sortField, Boolean descending) {
 		
-		String queryStr = "FROM Discussion d WHERE :tag MEMBER OF d.tags ORDER BY d.createDate DESC";
+		String queryStr = "FROM Discussion d WHERE :tag MEMBER OF d.tags";
+		
+		if(sortField != null && descending != null) {
+			queryStr += " ORDER BY d." + sortField + (descending ? " DESC" : " ASC");
+		}
+		else {
+			queryStr += " ORDER BY d.createDate DESC";
+		}
 		
 		TypedQuery<Discussion> typedQuery = entityManager.createQuery(queryStr, Discussion.class);
 		typedQuery.setParameter("tag", tag);
@@ -37,6 +44,16 @@ public class DiscussionDAO {
 		return typedQuery.getResultList();
 	}
 
+	public Long countCommentsForTag(Tag tag) {
+		
+		String queryStr = "SELECT SUM(SIZE(d.comments)) FROM Discussion d WHERE :tag MEMBER OF d.tags";
+		
+		TypedQuery<Long> typedQuery = entityManager.createQuery(queryStr, Long.class);
+		typedQuery.setParameter("tag", tag);
+		
+		return typedQuery.getSingleResult();
+	}
+	
 	public Long countDiscusionsForTag(Tag tag) {
 		
 		String queryStr = "SELECT COUNT(d) FROM Discussion d WHERE :tag MEMBER OF d.tags";

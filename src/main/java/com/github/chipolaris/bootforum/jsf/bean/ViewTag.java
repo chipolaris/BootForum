@@ -46,6 +46,15 @@ public class ViewTag {
 		this.tagDiscussionsLazyModel = tagDiscussionsLazyModel;
 	}
 	
+	private Long commentCount;
+	
+	public Long getCommentCount() {
+		return commentCount;
+	}
+	public void setCommentCount(Long commentCount) {
+		this.commentCount = commentCount;
+	}
+	
 	public void onLoad() {
 		
 		if(this.tagId != null) {
@@ -54,6 +63,7 @@ public class ViewTag {
 			
 			if(tag != null) {
 				this.tagDiscussionsLazyModel = new TagDiscussionsLazyModel(tagService, this.tag);
+				this.commentCount = tagService.countCommentsForTag(tag).getDataObject();
 			}
 		}
 	}

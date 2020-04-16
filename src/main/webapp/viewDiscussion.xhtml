@@ -48,10 +48,23 @@
 				display: block;
 				margin-top: 5px;
 			}
-			 
+			
 			blockquote cite:before {
 				content: "\2014 \2009";
-			}	
+			}
+			
+			/* https://stackoverflow.com/questions/26173376/rotate-font-awesome-icon-on-click/26173496 */
+			.rotate{
+			    -moz-transition: all 0.3s linear;
+			    -webkit-transition: all 0.3s linear;
+			    transition: all 0.3s linear;
+			}
+			
+			.rotate.down{
+			    -moz-transform:rotate(90deg);
+			    -webkit-transform:rotate(90deg);
+			    transform:rotate(90deg);
+			}
 			
 		</style>
 		
@@ -76,7 +89,7 @@
 							}
 						}
 					);
-				}
+				}				
 			//]]>
 		</script>
 		
@@ -92,7 +105,7 @@
 				
 				<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true"/>
 				
-				<p:messages id="messages" showDetail="true" showSummary="false">
+				<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
 					<p:autoUpdate/>
 				</p:messages>
 			</div>
@@ -112,11 +125,16 @@
 				
 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					<h2>#{viewDiscussion.discussion.title}</h2>
+ 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">
+						Comments: <b>#{viewDiscussion.discussion.stat.commentCount}</b>,
+						Views: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
+						&#160;&#160;<i class="fa fa-chevron-right rotate" id="discussionInfoToggleIcon"/>
+					</span>
  				</div>
 				
-				<div class="w3-border w3-center w3-container w3-margin-bottom">
+				<div class="w3-card w3-center w3-container w3-padding w3-margin-bottom" id="discussionInfo" style="display:none">
 					
-					<span class="w3-tag w3-theme-light w3-padding">
+					<span class="w3-tag w3-theme-light">
 						Started by<br/>
 						<h:link outcome="memberProfile"> 
 
@@ -132,7 +150,7 @@
 						</h:link><br/>
 						<pe:timeAgo value="#{viewDiscussion.discussion.createDate}" titlePattern="MMM dd, yyyy"/>
 					</span>
-					<span class="w3-tag w3-theme-light w3-padding">
+					<span class="w3-tag w3-theme-light">
 						Last comment<br/>
 						<h:link outcome="memberProfile"> 
 
@@ -148,41 +166,50 @@
 						</h:link><br/>
 						<pe:timeAgo value="#{viewDiscussion.discussion.stat.lastComment.updateDate}" titlePattern="MMM dd, yyyy"/>
 					</span>
-					<span class="w3-tag w3-theme-light w3-padding">
-						Comments: #{viewDiscussion.discussion.stat.commentCount}<br/><br/>
-						Views: #{viewDiscussion.discussion.stat.viewCount}
-					</span>
-					
-					<p:repeat var="tag" value="#{viewDiscussion.discussion.tags}">
-						<h:link outcome="viewTag">
-							<span class="w3-tag w3-padding" style="background-color:##{tag.color};width:120px;">
-								
-								<i class="#{tag.icon}" style="font-size: 32px;"/><br/>
-								#{tag.label}
-							</span>
-							<f:param name="id" value="#{tag.id}"/>
-						</h:link>
-					</p:repeat>
 					
 					<p:repeat var="username" value="#{viewDiscussion.discussion.stat.firstUsersMap.keySet().toArray()}">
-						
-						<h:link outcome="memberProfile"> 
-
-			        		<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
-								height="36" width="36" title="#{username}" rendered="#{fileHandler.isAvatarExists(username)}"/>
-								
-							<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
-								title="#{username}"
-								style="display:inline-block;font-size:0.9rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
-								#{fn:substring(username, 0, 3)}
-							</span>
-							<f:param name="username" value="#{username}"/>
-						</h:link>
-						<span class="w3-display-topright w3-badge w3-theme-dark" title="comments in this discussion">#{viewDiscussion.discussion.stat.firstUsersMap[username]}</span>
-					
+						<span class="w3-tag w3-white">
+							&#160;<br/>
+							<h:link outcome="memberProfile" style="position: relative"> 
+	
+				        		<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+									height="36" width="36" title="#{username}" rendered="#{fileHandler.isAvatarExists(username)}"/>
+									
+								<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan" title="#{username}"
+									style="display:inline-block;font-size:0.9rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+									#{fn:substring(username, 0, 3)}
+								</span>
+								<f:param name="username" value="#{username}"/>
+								<span class="w3-badge w3-theme-dark" style="position:absolute; top: -16px; right:-8px;">
+									<b>#{viewDiscussion.discussion.stat.firstUsersMap[username]}</b>
+								</span>
+							</h:link><br/>
+							&#160;
+						</span>
 					</p:repeat>
+
+					<p jsf:rendered="#{not empty viewDiscussion.discussion.tags}">
 					
-					<p/>
+						<b>Tags:</b>
+						
+						<p:repeat var="tag" value="#{viewDiscussion.discussion.tags}">
+							<!-- <h:link outcome="viewTag">
+								<span class="w3-tag w3-padding" style="background-color:##{tag.color};width:120px;">
+									
+									<i class="fa-lg #{tag.icon}"/><br/>
+									#{tag.label}
+								</span>
+								<f:param name="id" value="#{tag.id}"/>
+							</h:link> -->
+							<h:link outcome="viewTag">
+								<span class="w3-tag w3-padding" style="margin-top:4px;background-color:##{tag.color};">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
+								<f:param name="id" value="#{tag.id}"/>
+							</h:link>
+						</p:repeat>
+					</p>
+				</div>
+				
+				<div class="w3-center">
 					
 					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
 						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
@@ -190,7 +217,6 @@
 					</h:link>
 					
 					<p/>
-					
 				</div>
 				
 				<h:form>

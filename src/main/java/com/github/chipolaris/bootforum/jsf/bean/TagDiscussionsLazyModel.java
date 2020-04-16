@@ -29,6 +29,7 @@ public class TagDiscussionsLazyModel extends LazyDataModel<Discussion> {
 	public TagDiscussionsLazyModel(TagService tagService, Tag tag) {
 		this.tagService = tagService;
 		this.tag = tag;
+		this.setRowCount(this.tagService.countDiscussionsForTag(this.tag).getDataObject().intValue());
 	}
 	
     @Override
@@ -36,9 +37,8 @@ public class TagDiscussionsLazyModel extends LazyDataModel<Discussion> {
     	
     	logger.debug("first is " + first + ", pageSize is " + pageSize);
     	
-    	this.setRowCount(this.tagService.countDiscussionsForTag(this.tag).getDataObject().intValue());
-    	
-    	List<Discussion> discussions = this.tagService.getDiscussionsForTag(this.tag, first, pageSize).getDataObject();
+    	List<Discussion> discussions = this.tagService.getDiscussionsForTag(this.tag, first, pageSize, sortField,
+    			sortOrder == SortOrder.DESCENDING ? true : false).getDataObject();
     	
     	return discussions;
     }

@@ -47,17 +47,28 @@ public class TagService {
 		
 		ServiceResponse<List<Discussion>> response = new ServiceResponse<>();
 		
-		response.setDataObject(discussionDAO.findByTag(tag, 0, size));
+		response.setDataObject(discussionDAO.findByTag(tag, 0, size, null, null));
 		
 		return response;
 	}
 	
 	@Transactional(readOnly = true)
-	public ServiceResponse<List<Discussion>> getDiscussionsForTag(Tag tag, int startPosition, int maxResult) {
+	public ServiceResponse<List<Discussion>> getDiscussionsForTag(Tag tag, int startPosition, 
+			int maxResult, String sortField, Boolean descending) {
 		
 		ServiceResponse<List<Discussion>> response = new ServiceResponse<>();
 		
-		response.setDataObject(discussionDAO.findByTag(tag, startPosition, maxResult));
+		response.setDataObject(discussionDAO.findByTag(tag, startPosition, maxResult, sortField, descending));
+		
+		return response;
+	}
+
+	@Transactional(readOnly = true)
+	public ServiceResponse<Long> countCommentsForTag(Tag tag) {
+		
+		ServiceResponse<Long> response = new ServiceResponse<>();
+		
+		response.setDataObject(discussionDAO.countCommentsForTag(tag));
 		
 		return response;
 	}

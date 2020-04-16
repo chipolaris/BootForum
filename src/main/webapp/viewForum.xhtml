@@ -88,20 +88,26 @@
 				</div>
 
 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2>Forum #{viewForum.forum.title}</h2>
+ 					<h2>Forum "#{viewForum.forum.title}"</h2>
+ 					
+ 					<span class="w3-tag w3-theme-light w3-padding">
+ 						Discussions: <b>#{viewForum.forum.stat.discussionCount}</b>,
+ 						Comments: <b>#{viewForum.forum.stat.commentCount}</b>
+ 					</span>
+ 					&#160;
+ 					<span class="w3-tag w3-black w3-padding" jsf:rendered="#{not viewForum.forum.active}">Forum is not active</span>
  				</div>
- 							
-				<div>
-					<!-- <p:button href="#{request.contextPath}/secure/addDiscussion.xhtml?forumId=#{viewForum.forumId}" styleClass="w3-button w3-theme-dark w3-round w3-border-0" 
-						value="Start new Discussion" icon="fa fa-plus" rendered="#{viewForum.forum.active}"/> -->
-					<a href="#{request.contextPath}/secure/addDiscussion.xhtml?forumId=#{viewForum.forumId}" class="w3-button w3-border">
-						<i class="fa fa-plus"/> Start new Discussion
-					</a>
-					
-					<h:outputText value="Forum is not active" rendered="#{!viewForum.forum.active}"/>
-				</div>
 				
 				<p/>
+				
+				<div class="w3-center">
+					<h:link outcome="/secure/addDiscussion" styleClass="w3-button w3-border" rendered="#{viewForum.forum.active}">
+ 						<i class="fa fa-plus"/> Start new Discussion
+ 						<f:param name="forumId" value="#{viewForum.forumId}"/>
+ 					</h:link>
+ 					
+ 					<p/>
+				</div>
 				
 				<h:form>
 				
@@ -110,15 +116,34 @@
 						rows="10" lazy="true" id="discussionTable" draggableColumns="true">
 						
 						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						<p:ajax event="sort" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 						
 						<p:column sortBy="#{discussion.title}" style="text-align:left;" priority="1">
 							<f:facet name="header">
 								<h:outputText value="Discussion Title" style="font-weight:bold;"/>
 							</f:facet>
 							
-							<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><span class="w3-large"><b>#{discussion.title}</b></span></h:outputLink>
+							<h:link outcome="viewDiscussion">
+								<span class="w3-large"><b>#{discussion.title}</b></span>
+								<f:param name="id" value="#{discussion.id}"/>
+							</h:link>
 							<br/>
-							<span>Started by <b>#{discussion.createBy} </b><pe:timeAgo value="#{discussion.createDate}" titlePattern="MMMMM dd yyyy" /></span>
+
+							<h:link outcome="memberProfile">
+								<h:graphicImage value="#{requestContext}/avatar/#{discussion.createBy}" class="w3-circle"
+										id="creatorAvatar" height="30" width="30" title="#{discussion.createBy}"
+										rendered="#{fileHandler.isAvatarExists(discussion.createBy)}"/>
+																
+								<span  jsf:rendered="#{!fileHandler.isAvatarExists(discussion.createBy)}" class="w3-circle avatarSpan"
+									 title="#{discussion.createBy}"
+  									style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white">
+  									#{fn:substring(discussion.createBy, 0, 3)}
+  								</span>									
+								<f:param name="username" value="#{discussion.createBy}"/>
+							</h:link>
+	
+							started <pe:timeAgo value="#{discussion.createDate}" titlePattern="MMMMM dd yyyy" />
+							
 							<p:repeat var="tag" value="#{discussion.tags}">
 								<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
 									<span class="w3-tag" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
@@ -150,8 +175,7 @@
 							</f:facet>
 							
 							<div>
-								<pe:timeAgo value="#{discussion.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy" />
-								by <b>#{discussion.stat.lastComment.updateBy} </b>
+								<pe:timeAgo value="#{discussion.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy" /> by
 								<h:link outcome="memberProfile">
 									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(discussion.stat.lastComment.updateBy)}" class="w3-circle"
 											id="commentorAvatar" height="40" width="40" style="border:3px;margin-right:15px;" title="#{discussion.stat.lastComment.updateBy}"/> -->

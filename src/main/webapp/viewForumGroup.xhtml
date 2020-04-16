@@ -110,7 +110,7 @@
 
 						<p:column headerText="Last Comment" style="text-align:right;" priority="2">
 							<div jsf:rendered="#{forumNode.type eq 'Forum' and not empty forumNode.bean.stat.lastComment.updateBy}">
-								<pe:timeAgo value="#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateDate()}" titlePattern="MMMMM dd yyyy " /> by <b>#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy()} </b>
+								<pe:timeAgo value="#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateDate()}" titlePattern="MMMMM dd yyyy " /> by
 								
 								<h:link outcome="memberProfile">
 									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(forumNode.bean.stat.lastComment.updateBy)}" class="w3-circle"
