@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum.listener;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
+import com.github.chipolaris.bootforum.dao.StatDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.Discussion;
@@ -22,7 +24,9 @@ import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
+import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
 import com.github.chipolaris.bootforum.event.DiscussionViewEvent;
+import com.github.chipolaris.bootforum.service.StatService;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
 
 @Component
@@ -33,8 +37,14 @@ public class DiscussionEventsListener {
 	@Resource
 	private GenericDAO genericDAO;
 	
+	@Resource 
+	private StatDAO statDAO;
+	
 	@Resource
 	private SystemInfoService systemInfoService;
+	
+	@Resource
+	private StatService statService;
 	
 	@Resource 
 	private CacheManager cacheManager;
@@ -51,6 +61,14 @@ public class DiscussionEventsListener {
 		logger.info("Handling DiscussionAddEvent");
 		
 		updateStats4newDiscussion(discussionAddEvent.getDiscussion(), discussionAddEvent.getUser());
+	}
+	
+	@EventListener @Transactional(readOnly = false)
+	public void handleDiscussionDeleteEvent(DiscussionDeleteEvent discussionDeleteEvent) {
+		logger.info("Handling DiscussionDeleteEvent");
+		
+		updateStats4DeleteDiscussion(discussionDeleteEvent.getDiscussion(), 
+				discussionDeleteEvent.getCommentors(), discussionDeleteEvent.getDeletedCommentCount());
 	}
 	
 	private void updateDiscussionStat(DiscussionViewEvent discussionViewEvent) {
@@ -128,5 +146,39 @@ public class DiscussionEventsListener {
 		systemStat.setDiscussionCount(systemStat.getDiscussionCount() + 1);
 		systemStat.setCommentCount(systemStat.getCommentCount() + 1);
 		systemStat.setLastComment(lastComment);
+	}
+	
+	private void updateStats4DeleteDiscussion(Discussion discussion, List<String> commentors, long deletedCommentCount) {
+		
+		Forum forum = discussion.getForum();
+		
+		CommentInfo newLastComment = statDAO.latestCommentInfo(forum);
+		
+		// forumStat
+		ForumStat forumStat = forum.getStat();
+		forumStat.addDiscussionCount(-1);
+		forumStat.addCommentCount(-deletedCommentCount);
+		forumStat.setLastComment(newLastComment);
+		genericDAO.merge(forumStat);
+		
+		// evict cache FORUM_STAT
+		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(forumStat.getId());
+		
+		// update userStat for each commentor
+		for(String commentor : commentors) {
+			
+			statService.synUserStat(commentor);
+			// evict cache's entry with key commentor
+			cacheManager.getCache(CachingConfig.USER_STAT).evict(commentor);
+		}
+		
+		// update SystemInfoService.Statistics
+		SystemInfoService.Statistics statistics = systemInfoService.getStatistics().getDataObject();
+		statistics.addCommentCount(-deletedCommentCount);
+		statistics.addDiscussionCount(-1);
+		statistics.setLastComment(statDAO.latestCommentInfo());
+		
+		// lastly, remove discussion.stat.lastComment
+		genericDAO.remove(discussion.getStat().getLastComment());
 	}
 }

@@ -10,10 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -29,8 +29,7 @@ import com.github.chipolaris.bootforum.enumeration.UserRole;
 
 @Entity
 @Table(name="USER_T", 
-	indexes = {@Index(name="USER_USERNAME_IDX", columnList = "USER_NAME")}, 
-	uniqueConstraints= {@UniqueConstraint(columnNames="USER_NAME", name="USER_UNIQUE_USER_NAME")})
+	uniqueConstraints= {@UniqueConstraint(columnNames="USER_NAME", name="UNIQ_USER_USER_NAME")})
 @TableGenerator(name="UserIdGenerator", table="ENTITY_ID_T", pkColumnName="GEN_KEY", 
 	pkColumnValue="USER_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
 public class User extends BaseEntity {
@@ -52,7 +51,7 @@ public class User extends BaseEntity {
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="UserIdGenerator")
 	private Long id;
 	
-	@Column(name="USER_NAME", length=50, unique=true, nullable=false)
+	@Column(name="USER_NAME", length=50, nullable=false)
 	private String username;
 	
 	@Column(name="PASSWORD", length=200, nullable=false)
@@ -63,11 +62,11 @@ public class User extends BaseEntity {
 	private UserRole userRole;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="PERSON_ID")
+	@JoinColumn(name="PERSON_ID", foreignKey = @ForeignKey(name="FK_USER_PERS"))
 	private Person person;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="PREFERENCE_ID")
+	@JoinColumn(name="PREFERENCE_ID", foreignKey = @ForeignKey(name="FK_USER_PREF"))
 	private Preferences preferences;
 
 	@Enumerated(EnumType.STRING)
@@ -79,7 +78,7 @@ public class User extends BaseEntity {
 	private List<SecurityChallenge> securityChallenges;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="USER_STAT_ID")
+	@JoinColumn(name="USER_STAT_ID", foreignKey = @ForeignKey(name="FK_USER_USER_STAT"))
 	private UserStat stat;
 	
 	@Override

@@ -4,15 +4,17 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.chipolaris.bootforum.CachingConfig;
+import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.StatDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.event.CommentVoteEvent;
-import com.github.chipolaris.bootforum.service.GenericService;
 
 @Component
 public class CommentVoteEventListener implements ApplicationListener<CommentVoteEvent> {
@@ -20,10 +22,13 @@ public class CommentVoteEventListener implements ApplicationListener<CommentVote
 	private static final Logger logger = LoggerFactory.getLogger(CommentVoteEventListener.class);
 	
 	@Resource
-	private GenericService genericService;
+	private GenericDAO genericDAO;
 	
 	@Resource
 	private StatDAO statDAO;
+	
+	@Resource 
+	private CacheManager cacheManager;
 	
 	@Override @Transactional(readOnly = false)
 	public void onApplicationEvent(CommentVoteEvent commentVoteEvent) {
@@ -32,9 +37,12 @@ public class CommentVoteEventListener implements ApplicationListener<CommentVote
 		
 		short voteValue = commentVoteEvent.getVoteValue();
 		Comment comment = commentVoteEvent.getComment();
-		UserStat stat = statDAO.getUserStat(comment.getCreateBy());
-		stat.setReputation(stat.getReputation() + voteValue);
+		String username = comment.getCreateBy();
+		UserStat stat = statDAO.getUserStat(username);
+		stat.addReputation(voteValue);
 		
-		genericService.updateEntity(stat);
+		genericDAO.merge(stat);
+		
+		cacheManager.getCache(CachingConfig.USER_STAT).evict(username);
 	}
 }

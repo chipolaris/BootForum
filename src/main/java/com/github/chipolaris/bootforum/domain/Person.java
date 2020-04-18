@@ -11,7 +11,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name="PERSON_T",
-	uniqueConstraints= {@UniqueConstraint(columnNames="EMAIL", name="PERSON_UNIQUE_EMAIL")})
+	uniqueConstraints= {@UniqueConstraint(columnNames="EMAIL", name="UNIQ_PERSON_EMAIL")})
 @TableGenerator(name="PersonIdGenerator", table="ENTITY_ID_T", pkColumnName="GEN_KEY", 
 	pkColumnValue="PERSON_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
 public class Person extends BaseEntity {

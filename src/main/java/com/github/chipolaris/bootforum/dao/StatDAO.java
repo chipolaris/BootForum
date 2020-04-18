@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -125,6 +124,22 @@ public class StatDAO {
 
 		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.discussion = :discussion", Long.class);
 		typedQuery.setParameter("discussion", discussion);
+		
+		return typedQuery.getSingleResult();
+	}
+
+	public Long countCommentThumbnails(String username) {
+		
+		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT SUM(SIZE(c.thumbnails)) FROM Comment c WHERE c.createBy = :createBy", Long.class);
+		typedQuery.setParameter("createBy", username);
+		
+		return typedQuery.getSingleResult();
+	}
+	
+	public Long countCommentAttachments(String username) {
+		
+		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT SUM(SIZE(c.attachments)) FROM Comment c WHERE c.createBy = :createBy", Long.class);
+		typedQuery.setParameter("createBy", username);
 		
 		return typedQuery.getSingleResult();
 	}

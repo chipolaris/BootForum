@@ -60,6 +60,7 @@ public class StatService {
 	private ForumStat synchForumStat(Forum forum) {
 		
 		for(Discussion discussion : forum.getDiscussions()) {
+			@SuppressWarnings("unused")
 			DiscussionStat discussionStat = synchDiscussionStat(discussion);
 		}
 		
@@ -105,6 +106,8 @@ public class StatService {
 		
 		UserStat userStat = statDAO.getUserStat(username);
 		
+		userStat.setCommentThumbnailCount(statDAO.countCommentThumbnails(username));
+		userStat.setCommentAttachmentCount(statDAO.countCommentAttachments(username));
 		userStat.setCommentCount(statDAO.countComment(username));
 		userStat.setDiscussionCount(statDAO.countDiscussion(username));
 		userStat.setReputation(voteDAO.getReputation4User(username));

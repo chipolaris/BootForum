@@ -29,7 +29,7 @@ public class DiscussionStat extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="DiscussionStatIdGenerator")	private Long id;
 	
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToOne(fetch=FetchType.EAGER)
 	private CommentInfo lastComment; // last comment of this discussion
 	
 	@Column(name="COMMENT_COUNT")

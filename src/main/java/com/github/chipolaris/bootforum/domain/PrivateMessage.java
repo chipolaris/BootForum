@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,10 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 @Entity
-@Table(name="PRIVATE_MESSAGE_T", indexes = {@Index(name="PRV_MSG_OWNER_IDX", columnList = "OWNER"), @Index(name="PRV_MSG_MESSAGE_TYPE_IDX", columnList = "MESSAGE_TYPE"), @Index(name="PRV_MSG_IS_DELETED_IDX", columnList = "IS_DELETED")})
+@Table(name="PRIVATE_MESSAGE_T", 
+	indexes = {@Index(name="IDX_PRV_MSG_OWNER", columnList = "OWNER"), 
+			@Index(name="IDX_PRV_MSG_MESSAGE_TYPE", columnList = "MESSAGE_TYPE"), 
+			@Index(name="IDX_PRV_MSG_IS_DELETED", columnList = "IS_DELETED")})
 @TableGenerator(name="PrivateMessageIdGenerator", table="ENTITY_ID_T", pkColumnName="GEN_KEY", 
 	pkColumnValue="PRIVATE_MESSAGE_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
 public class PrivateMessage extends BaseEntity {
@@ -51,7 +55,7 @@ public class PrivateMessage extends BaseEntity {
 	private String owner;
 	
 	@OneToOne // Note: no cascade operation since Message instance is shared between multiple PrivateMessage instances 
-	@JoinColumn(name="MESSAGE_ID")
+	@JoinColumn(name="MESSAGE_ID", foreignKey = @ForeignKey(name="FK_PRIVA_MESSAG_MESSAG"))
 	private Message message;
 	
 	@Column(name="IS_READ")
@@ -68,10 +72,11 @@ public class PrivateMessage extends BaseEntity {
 	 * OK to eager fetch attachments as only a handful attachments are expected for each message
 	 */
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinTable(name="PRV_MSG_ATTACHMENT_T", joinColumns={@JoinColumn(name="PRIVATE_MESSAGE_ID")}, 
-		inverseJoinColumns={@JoinColumn(name="FILE_INFO_ID")},
-		indexes = {@Index(name="PRV_MSG_ATTACHMENT_IDX", columnList="PRIVATE_MESSAGE_ID,FILE_INFO_ID")})
-	@OrderColumn(name="ORDERED")
+	@JoinTable(name="PRIVATE_MESSAGE_ATTACHMENT_T", 
+		joinColumns={@JoinColumn(name="PRIVATE_MESSAGE_ID", foreignKey = @ForeignKey(name="FK_PRIV_MESSA_ATT_PRIV_MESSA"))}, 
+		inverseJoinColumns={@JoinColumn(name="FILE_INFO_ID", foreignKey = @ForeignKey(name="FK_PRIV_MESSA_ATT_FILE_INFO"))},
+		indexes = {@Index(name="IDX_PRIVAT_MESSAG_ATTACH", columnList="PRIVATE_MESSAGE_ID,FILE_INFO_ID")})
+	@OrderColumn(name="SORT_ORDER")
 	private List<FileInfo> attachments;
 		
 	@Override

@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -62,7 +63,7 @@ public class ForumGroup extends BaseEntity {
 	private List<Forum> forums; // use List instead of Set to sort
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="PARENT_ID")
+	@JoinColumn(name="PARENT_ID", foreignKey = @ForeignKey(name="FK_FORUM_GROUP_PARENT"))
 	private ForumGroup parent;
 	
 	/**

@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,7 +53,7 @@ public class Comment extends BaseEntity {
 	private Long id;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="DISCUSSION_ID")
+	@JoinColumn(name="DISCUSSION_ID", foreignKey = @ForeignKey(name="FK_COMMEN_DISCUS"))
 	private Discussion discussion;
 	
 	@Column(name="TITLE", length=255)
@@ -63,7 +64,7 @@ public class Comment extends BaseEntity {
 	private String content; // content of the comment
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="REPLY_TO_ID")
+	@JoinColumn(name="REPLY_TO_ID", foreignKey = @ForeignKey(name="FK_COMMEN_REPLY_TO"))
 	private Comment replyTo; // parent of this comment, top level ones will have this field as null
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="replyTo")
@@ -77,27 +78,29 @@ public class Comment extends BaseEntity {
 	 * OK to eager fetch attachments as only a handful attachments are expected for each comment
 	 */
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinTable(name="COMMENT_ATTACHMENT_T", joinColumns={@JoinColumn(name="COMMENT_ID")}, 
-		inverseJoinColumns={@JoinColumn(name="FILE_INFO_ID")}, 
-		indexes = {@Index(name="COMMENT_ATTACHMENT_IDX", columnList = "COMMENT_ID,FILE_INFO_ID")})
-	@OrderColumn(name="ORDERED")
+	@JoinTable(name="COMMENT_ATTACHMENT_T", 
+		joinColumns={@JoinColumn(name="COMMENT_ID", foreignKey = @ForeignKey(name="FK_COMMEN_ATTACH_COMMEN"))}, 
+		inverseJoinColumns={@JoinColumn(name="FILE_INFO_ID", foreignKey = @ForeignKey(name="FK_COMMEN_ATTACH_FILE_INFO"))}, 
+		indexes = {@Index(name="IDX_COMMEN_ATTACH", columnList = "COMMENT_ID,FILE_INFO_ID")})
+	@OrderColumn(name="SORT_ORDER")
 	private List<FileInfo> attachments;
 	
 	/**
 	 * OK to eager fetch attachments as only a handful thumbnails are expected for each comment
 	 */
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinTable(name="COMMENT_THUMBNAIL_T", joinColumns={@JoinColumn(name="COMMENT_ID")}, 
-		inverseJoinColumns={@JoinColumn(name="FILE_INFO_ID")},
-		indexes = {@Index(name="COMMENT_THUMBNAIL_IDX", columnList = "COMMENT_ID,FILE_INFO_ID")})
-	@OrderColumn(name="ORDERED")
+	@JoinTable(name="COMMENT_THUMBNAIL_T", 
+		joinColumns={@JoinColumn(name="COMMENT_ID", foreignKey = @ForeignKey(name="FK_COMMEN_THUMB_COMMEN"))}, 
+		inverseJoinColumns={@JoinColumn(name="FILE_INFO_ID", foreignKey = @ForeignKey(name="FK_COMMEN_ATTACH_FILE_INFO"))},
+		indexes = {@Index(name="IDX_COMMEN_THUMBN", columnList = "COMMENT_ID,FILE_INFO_ID")})
+	@OrderColumn(name="SORT_ORDER")
 	private List<FileInfo> thumbnails;
 	
 	@Column(name="HIDDEN")
 	private boolean hidden;
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="COMMENT_VOTE_ID")
+	@JoinColumn(name="COMMENT_VOTE_ID", foreignKey = @ForeignKey(name="FK_COMMEN_COMMEN_VOTE"))
 	private CommentVote commentVote;
 
 	@Override

@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,9 +34,10 @@ public class CommentVote extends BaseEntity {
 	private int voteDownCount;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinTable(name="COMMENT_VOTE_VOTE_T", joinColumns={@JoinColumn(name="COMMENT_VOTE_ID")}, 
-		inverseJoinColumns={@JoinColumn(name="VOTE_ID")},
-		indexes = {@Index(name="COMMENT_VOTE_VOTE_IDX", columnList = "COMMENT_VOTE_ID,VOTE_ID")})
+	@JoinTable(name="COMMENT_VOTE_VOTE_T", 
+		joinColumns={@JoinColumn(name="COMMENT_VOTE_ID", foreignKey = @ForeignKey(name="FK_COMMEN_VOT_VOT_COMMEN_VOTE"))}, 
+		inverseJoinColumns={@JoinColumn(name="VOTE_ID", foreignKey = @ForeignKey(name="FK_COMMEN_VOT_VOT_VOTE"))},
+		indexes = {@Index(name="IDX_COMMEN_VOTE_VOTE", columnList = "COMMENT_VOTE_ID,VOTE_ID")})
 	private Set<Vote> votes;
 	
 	@Override

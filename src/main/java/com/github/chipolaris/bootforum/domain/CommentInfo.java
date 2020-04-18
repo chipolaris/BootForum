@@ -39,7 +39,7 @@ public class CommentInfo extends BaseEntity {
 	@Column(name="TITLE", length=255)
 	private String title;
 	
-	@Column(name="CONTENT_ABBR", length=100)
+	@Column(name="CONTENT_ABBR", length=255)
 	private String contentAbbr; // abbreviation of content for display
 	
 	@Column(name="COMMENT_ID")

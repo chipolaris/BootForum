@@ -3,13 +3,14 @@ package com.github.chipolaris.bootforum.domain;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -35,6 +36,7 @@ public class UserStat extends BaseEntity {
 	private Long id;
 	
 	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="LAST_COMMENT_ID", foreignKey = @ForeignKey(name="FK_USER_STAT_LAST_COMMEN"))
 	private CommentInfo lastComment; // info about last comment, used for display
 	
 	@Column(name="COMMENT_THUMBNAIL_COUNT")
@@ -59,9 +61,6 @@ public class UserStat extends BaseEntity {
 	@Column(name="LAST_LOGIN")
 	private Date lastLogin;
 	
-	@Column(name="ONLINE")
-	private Boolean online;
-	
 	@Override
 	public Long getId() {
 		return id;
@@ -83,8 +82,8 @@ public class UserStat extends BaseEntity {
 	public void setCommentThumbnailCount(long thumbnailCount) {
 		this.commentThumbnailCount = thumbnailCount;
 	}
-	public void addCommentThumbnailCount(long number) {
-		this.commentThumbnailCount += number;
+	public void addCommentThumbnailCount(long value) {
+		this.commentThumbnailCount += value;
 	}
 	
 	public long getCommentAttachmentCount() {
@@ -93,8 +92,8 @@ public class UserStat extends BaseEntity {
 	public void setCommentAttachmentCount(long commentAttachmentCount) {
 		this.commentAttachmentCount = commentAttachmentCount;
 	}
-	public void addCommentAttachmentCount(long number) {
-		this.commentAttachmentCount += number;
+	public void addCommentAttachmentCount(long value) {
+		this.commentAttachmentCount += value;
 	}
 	
 	public long getCommentCount() {
@@ -103,8 +102,8 @@ public class UserStat extends BaseEntity {
 	public void setCommentCount(long commentCount) {
 		this.commentCount = commentCount;
 	}
-	public void addCommentCount(long number) {
-		this.commentCount += number;
+	public void addCommentCount(long value) {
+		this.commentCount += value;
 	}
 	
 	public long getDiscussionCount() {
@@ -113,8 +112,8 @@ public class UserStat extends BaseEntity {
 	public void setDiscussionCount(long discussionCount) {
 		this.discussionCount = discussionCount;
 	}
-	public void addDiscussionCount(long number) {
-		this.discussionCount += number;
+	public void addDiscussionCount(long value) {
+		this.discussionCount += value;
 	}
 		
 	public long getReputation() {
@@ -123,6 +122,9 @@ public class UserStat extends BaseEntity {
 	public void setReputation(long reputation) {
 		this.reputation = reputation;
 	}
+	public void addReputation(long value) {
+		this.reputation += value;
+	}
 	
 	public long getProfileViewed() {
 		return profileViewed;
@@ -130,8 +132,8 @@ public class UserStat extends BaseEntity {
 	public void setProfileViewed(long profileViewed) {
 		this.profileViewed = profileViewed;
 	}
-	public void addProfileViewed(long adjustAmount) {
-		this.profileViewed += adjustAmount;
+	public void addProfileViewed(long value) {
+		this.profileViewed += value;
 	}
 	
 	public Date getLastLogin() {
@@ -139,12 +141,5 @@ public class UserStat extends BaseEntity {
 	}
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
-	}
-	
-	public Boolean getOnline() {
-		return online;
-	}
-	public void setOnline(Boolean online) {
-		this.online = online;
 	}
 }

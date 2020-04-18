@@ -14,8 +14,7 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="TAG_T",
-	uniqueConstraints= {@UniqueConstraint(columnNames="LABEL", name="TAG_UNIQUE_LABEL")})
+@Table(name="TAG_T", uniqueConstraints = {@UniqueConstraint(columnNames="LABEL", name="UNIQ_TAG_LABEL")})
 @TableGenerator(name="TagIdGenerator", table="ENTITY_ID_T", pkColumnName="GEN_KEY", 
 	pkColumnValue="TAG_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
 @Cacheable(true)

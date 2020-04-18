@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,14 +56,14 @@ public class Forum extends BaseEntity {
 	private String iconColor;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="FORUM_GROUP_ID")
+	@JoinColumn(name="FORUM_GROUP_ID", foreignKey = @ForeignKey(name="FK_FORUM_FORUM_GROUP"))
 	private ForumGroup forumGroup; // point to the ForumGroup that contains this
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="forum")
 	private List<Discussion> discussions;
 	
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="FORUM_STAT_ID")
+	@JoinColumn(name="FORUM_STAT_ID", foreignKey = @ForeignKey(name="FK_FORUM_FORUM_STAT"))
 	private ForumStat stat;
 	
 	@Column(name="ACTIVE")

@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +41,8 @@ public class Message extends BaseEntity {
 	private String fromUser;
 	
 	@ElementCollection
-	@CollectionTable(name = "MESSAGE_TO_USER", joinColumns = @JoinColumn(name="MESSAGE_ID"))
+	@CollectionTable(name = "MESSAGE_TO_USER_T", joinColumns = @JoinColumn(name="MESSAGE_ID"), 
+		foreignKey = @ForeignKey(name="FK_MESSAG_TO_USER_MESSAG"))
 	@Column(name="TO_USER", length = 50)
 	private Set<String> toUsers;
 	

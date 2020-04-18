@@ -14,22 +14,23 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.CommentDAO;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.StatDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
-import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.CommentVote;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.FileInfo;
 import com.github.chipolaris.bootforum.domain.Forum;
-import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.event.CommentAddEvent;
 import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
+import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
 
 @Service @Transactional
 public class CommentService {
@@ -294,60 +295,48 @@ public class CommentService {
 		
 		List<String> commentors = commentDAO.getCommentorsForDiscussion(discussion);
 		
-		// delete physical files 
 		List<String> attachmentPaths = commentDAO.getAttachmentPathsForDiscussion(discussion);
-		
-		for(String path : attachmentPaths) {
-			fileService.deleteCommentAttachment(path);
-		}
-		
 		List<String> thumbnailPaths = commentDAO.getThumnailPathsForDiscussion(discussion);
 		
-		for(String path : thumbnailPaths) {
-			fileService.deleteCommentThumbnail(path);
-		}
+		/*
+		 * add a hook to transaction callback to remove files if transaction success (committed)
+		 */
+		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+			@Override
+			public void afterCompletion(int status) {
+				if(status == TransactionSynchronization.STATUS_COMMITTED) {
+					for(String path : thumbnailPaths) {
+						fileService.deleteCommentThumbnail(path);
+					}
+					for(String path : attachmentPaths) {
+						fileService.deleteCommentAttachment(path);
+					}
+				}
+			}
+		});
 		
 		/*
 		 * delete comments has the following effects:
 		 * 		delete related comment vote
-		 * 		delete related attachments/thumbnails
+		 * 		delete related attachments/thumbnails (fileInfo)
+		 * 
+		 * Update: is the below necessary?
 		 */
-		commentDAO.deleteCommentsForDiscussion(discussion);
+		//commentDAO.deleteCommentsForDiscussion(discussion);
 		
 		/*
 		 * delete discussion has the following effects:
-		 * 		delete related discussionStat
-		 * 			delete related commentInfo
+		 *		- delete comments has the following effects:
+		 * 			- delete related comment vote
+		 * 			- delete related attachments/thumbnails (fileInfo)
+		 * 		- delete related discussionStat
 		 */
 		genericDAO.remove(discussion);
 		
-		updateStats4DeleteDiscussion(forum, commentIds.size(), commentors);
+		applicationEventPublisher.publishEvent(new DiscussionDeleteEvent(this, discussion,
+				commentors, commentIds.size()));
 		
 		return response;
-	}
-
-	private void updateStats4DeleteDiscussion(Forum forum, int deletedCommentCount, List<String> commentors) {
-		
-		CommentInfo newLastComment = statDAO.latestCommentInfo(forum);
-		
-		ForumStat forumStat = forum.getStat();
-		forumStat.setDiscussionCount(forumStat.getDiscussionCount() - 1);
-		forumStat.setCommentCount(forumStat.getCommentCount() - deletedCommentCount);
-		forumStat.setLastComment(newLastComment);
-		genericDAO.merge(forumStat);
-		
-		// evict cache FORUM_STAT
-		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(forumStat.getId());
-		
-		// update userStat for each commentor
-		for(String commentor : commentors) {
-			statService.synUserStat(commentor);
-			// evict cache's entry with key commentor
-			cacheManager.getCache(CachingConfig.USER_STAT).evict(commentor);
-		}
-		
-		// update SystemInfoService.Statistics
-		systemInfoService.refreshStatistics();
 	}
 	
 	@Transactional(readOnly = false)

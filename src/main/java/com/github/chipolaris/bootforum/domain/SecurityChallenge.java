@@ -2,6 +2,7 @@ package com.github.chipolaris.bootforum.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ public class SecurityChallenge extends BaseEntity {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="USER_ID")	
+	@JoinColumn(name="USER_ID", foreignKey = @ForeignKey(name = "FK_SECURI_CHALLE_USER"))	
 	private User user;
 	
 	@Column(name="QUESTION", length=200)

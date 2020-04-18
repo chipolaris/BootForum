@@ -8,9 +8,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -67,12 +69,14 @@ public class Discussion extends BaseEntity {
 	private DiscussionStat stat;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="FORUM_ID")
+	@JoinColumn(name="FORUM_ID", foreignKey=@ForeignKey(name="FK_DISCUSSION_FORUM"))
 	private Forum forum;
 	
 	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="DISCUSSION_TAG_T", joinColumns={@JoinColumn(name="DISCUSSION_ID")}, 
-		inverseJoinColumns={@JoinColumn(name="TAG_ID")})
+	@JoinTable(name="DISCUSSION_TAG_T", 
+		joinColumns={@JoinColumn(name="DISCUSSION_ID", foreignKey = @ForeignKey(name="FK_DISCUS_TAG_DISCUSSION"))}, 
+		inverseJoinColumns={@JoinColumn(name="TAG_ID", foreignKey = @ForeignKey(name="FK_DISCUS_TAG_TAG"))},
+		indexes = {@Index(name="IDX_DISCUS_TAG", columnList = "DISCUSSION_ID,TAG_ID")})
 	private List<Tag> tags;
 
 	@Override
