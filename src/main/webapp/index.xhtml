@@ -220,7 +220,7 @@
 					
 					<div class="w3-card">
 						<header class="w3-container w3-theme-l1 w3-center">
-						  <h4>Tags</h4>
+						  <h4>Discussion Tags</h4>
 						</header>
 						
 						<div class="w3-container w3-padding-small">
@@ -242,18 +242,17 @@
 						</header>
 						
 						<div class="w3-container w3-small">
-						
 							<p>
-								Comment Count: <b>#{systemInfo.statistics.commentCount}</b>
+								Forums: <b>#{systemInfo.statistics.forumCount}</b>
+							</p>
+							
+							<p>
+								Discussions: <b>#{systemInfo.statistics.discussionCount}</b>
 							</p>
 						
 							<p>
-								Discussion Count: <b>#{systemInfo.statistics.discussionCount}</b>
-							</p>
-						
-							<p>
-								Forum Count: <b>#{systemInfo.statistics.forumCount}</b>
-							</p>
+								Comments: <b>#{systemInfo.statistics.commentCount}</b>
+							</p>							
 						
 							<p>
 								Latest Comment:
@@ -265,11 +264,11 @@
 							</p>
 							
 							<p>
-								Registered Users: <b>#{systemInfo.statistics.userCount}</b>
+								Members: <b>#{systemInfo.statistics.userCount}</b>
 							</p>
 						
 							<p>
-								Latest User:
+								Latest Member:
 								<h:link outcome="memberProfile"> 
 									<b>#{systemInfo.statistics.lastRegisteredUser}</b>
 									<f:param name="username" value="#{systemInfo.statistics.lastRegisteredUser}"/>
@@ -278,7 +277,7 @@
 							</p>
 						
 							<p>
-								Logged on Users: <b>#{fn:length(systemInfo.loggedOnUsers)}</b>
+								Logged on Members: <b>#{fn:length(systemInfo.loggedOnUsers)}</b>
 							</p>
 							
 							<p>

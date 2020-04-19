@@ -134,7 +134,7 @@
 										id="creatorAvatar" height="30" width="30" title="#{discussion.createBy}"
 										rendered="#{fileHandler.isAvatarExists(discussion.createBy)}"/>
 																
-								<span  jsf:rendered="#{!fileHandler.isAvatarExists(discussion.createBy)}" class="w3-circle avatarSpan"
+								<span jsf:rendered="#{!fileHandler.isAvatarExists(discussion.createBy)}" class="w3-circle avatarSpan"
 									 title="#{discussion.createBy}"
   									style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white">
   									#{fn:substring(discussion.createBy, 0, 3)}

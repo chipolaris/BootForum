@@ -68,9 +68,13 @@
 			
 			<div class="w3-panel w3-theme-d5 w3-center w3-round">
  				<h2 id="title">#{msg['userManagement.page.title']}</h2>
+ 				<h:link outcome="userManagement" styleClass="w3-button w3-border">
+ 					<i class="fa fa-table"/>
+ 					View as Table
+ 				</h:link><p/>
  			</div>
 			
-			<div jsf:id="userListDiv" class="w3-margin-top w3-animate-right">
+			<div jsf:id="userListDiv" class="w3-margin-top w3-animate-right toggleDiv">
 			
 				<h:form id="filterForm">
 					<div style="display:flex;flex-wrap:wrap;">
@@ -81,10 +85,14 @@
 						
 								<p:inputText id="filterInputText" value="#{userList.searchValue}" placeholder="Enter search value" size="25" maxlength="50"/>
 			
-						        <p:splitButton value="For Username" action="#{userList.search('username')}" update=":form:userList" style="margin-left:2px;">
-						            <p:menuitem value="For First name" action="#{userList.search('person.firstName')}" update=":form:userList"/>
-						            <p:menuitem value="For Last name" action="#{userList.search('person.lastName')}" update=":form:userList"/>
-						            <p:menuitem value="For Email" action="#{userList.search('person.email')}" update=":form:userList"/>
+						        <p:splitButton value="For Username" action="#{userList.search('username')}" update=":form:userList"
+						        	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" style="margin-left:2px;">
+						            <p:menuitem value="For First name" action="#{userList.search('person.firstName')}"
+						            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
+						            <p:menuitem value="For Last name" action="#{userList.search('person.lastName')}"
+						            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
+						            <p:menuitem value="For Email" action="#{userList.search('person.email')}"
+						            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
 						        </p:splitButton>
 						
 							</h:panelGrid>
@@ -95,10 +103,11 @@
 							
 								<p:outputLabel value="Account Status:"/>
 								
-						        <p:selectOneMenu value="#{userList.lazyModel.accountStatus}" >
-						        	<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.name}"/>
+						        <p:selectOneMenu value="#{userList.lazyModel.accountStatus}">
+						        	<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
 						        	<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
-						        	<f:ajax render=":form:userList"/>
+						        	<p:ajax event="change" update=":form:userList" 
+						        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 						        </p:selectOneMenu>
 							</h:panelGrid>
 						</div>
@@ -116,25 +125,30 @@
 							currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} users"
 							emptyMessage="No user found" itemType="square">
 							
-							<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+							<p:ajax event="page" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 							
 							<div class="w3-tooltip">
 							
-								<h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(user.username)}"
-									id="avatarImage" height="60" width="60" style="border:3px;"/>
+								<h:graphicImage value="#{requestContext}/avatar/#{user.username}" class="w3-circle" 
+									rendered="#{fileHandler.isAvatarExists(user.username)}"
+									id="memberAvatar" height="60" width="60" style="border:3px;" />
 									
-								<p class="w3-large w3-opacity">Username: #{user.username}</p>
-								<p class="w3-large w3-opacity">Role: #{user.userRole}</p>
-								<p class="w3-large w3-opacity">Name: #{user.person.firstName} #{user.person.lastName}</p>
-								<p class="w3-large w3-opacity">Email: #{user.person.email}</p>
-								<p class="w3-large w3-opacity">Account Status: #{user.accountStatus}</p>
+								<span jsf:rendered="#{not fileHandler.isAvatarExists(user.username)}" class="w3-circle avatarSpan"
+									title="#{user.username}"
+  									style="display:inline-block;font-size:1.4rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white;">
+  									#{fn:substring(user.username, 0, 3)}
+  								</span>
+									
+								<p class="w3-small">Username: <b>#{user.username}</b></p>
+								<p class="w3-small">Role: <b>#{user.userRole.label}</b></p>
+								<p class="w3-small">Name: <b>#{user.person.firstName} #{user.person.lastName}</b></p>
+								<p class="w3-small">Email: <b>#{user.person.email}</b></p>
+								<p class="w3-small">Account Status: <b>#{user.accountStatus.label}</b></p>
 		
 								<span class="w3-text">
 								
 									<p:commandButton ajax="true" icon="fa fa-edit" styleClass="w3-button" update=":userEditDiv" process="@this"
-										oncomplete="document.getElementById('userListDiv').style.display='none';
-														document.getElementById('userEditDiv').style.display='block';
-														document.getElementById('userEditDiv').scrollIntoView();" 
+										oncomplete="$('.toggleDiv').toggle();changeAvatarBackgrounds();customizePrimefaceButtons();" 
 										title="Edit user #{user.username}" value="#{msg['userAction.edit']}">
 										<f:setPropertyActionListener value="#{user}" target="#{userList.selectedRecord}"/>
 									</p:commandButton>
@@ -156,16 +170,14 @@
 		    
 			</div>
 			
-			<div jsf:id="userEditDiv" class="w3-animate-right">
+			<div jsf:id="userEditDiv" class="w3-animate-right toggleDiv" style="display:none">
 			
 		    	<div class="w3-container">
 						
-					<h:form id="editForm" rendered="#{userList.selectedRecord != null}">
+					<h:form id="editForm" rendered="#{not empty userList.selectedRecord}">
 											       
 				        <a href="javascript:void(0)" class="w3-button w3-border w3-theme-light"
-				        	onclick="document.getElementById('userEditDiv').style.display='none';
-									document.getElementById('userListDiv').style.display='block';
-									document.getElementById('userListDiv').scrollIntoView();">
+				        	onclick="$('.toggleDiv').toggle();">
 				        	<i class="fa fa-users"/> Back to User List
 				        </a>
 				        
@@ -176,14 +188,22 @@
 					  			<h:panelGrid columns="2" cellspacing="10" columnClasses="panelGridCol1 panelGridCol2">
 					  			
 					  				<h:outputText value="Avatar:"/>
-									<h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(userList.selectedRecord.username)}"
-										id="avatarImage" height="60" width="60" style="border:3px;"/>
+
+									<h:graphicImage value="#{requestContext}/avatar/#{userList.selectedRecord.username}" class="w3-circle" 
+										rendered="#{fileHandler.isAvatarExists(userList.selectedRecord.username)}"
+										id="memberAvatar" height="60" width="60" style="border:3px;" />
+										
+									<span jsf:rendered="#{not fileHandler.isAvatarExists(userList.selectedRecord.username)}" class="w3-circle avatarSpan"
+										title="#{userList.selectedRecord.username}"
+	  									style="display:inline-block;font-size:1.4rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white;">
+	  									#{fn:substring(userList.selectedRecord.username, 0, 3)}
+	  								</span>
 									
 			 		  				<h:outputText value="User ID:"/>
 					  				<h:outputText value="#{userList.selectedRecord.username}"/>
 					  				
 					  				<h:outputText value="Role:"/>
-					  				<h:outputText value="#{userList.selectedRecord.userRole}"/>
+					  				<h:outputText value="#{userList.selectedRecord.userRole.label}" style="font-weight:bold;"/>
 					  				
 					  				<h:outputText value="First Name:"/>
 					  				<h:outputText value="#{userList.selectedRecord.person.firstName}"/>
@@ -216,21 +236,21 @@
 					  			<h:panelGrid columns="2" cellspacing="10" columnClasses="panelGridCol1 panelGridCol2">	
 			 		  				<h:outputLabel value="Account Status:" for="accountStatus"/>
 									<p:selectOneMenu value="#{userList.selectedRecord.accountStatus}" id="accountStatus">
-										<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.name}"/>
+										<!-- <f:converter converterId="accountStatusConverter"/> -->
+										<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
 										<!-- If we want ajax update, can use the p:ajax event="change" as below to initiate call to server side action -->
 										<!-- <p:ajax event="change" listener="#{userList.updateAccountStatus}" update=":form:userTable"></p:ajax> -->
 									</p:selectOneMenu>
 					  				
-					  				<h:outputLabel value="New Role:" for="userRole"/>
+					  				<h:outputLabel value="Set New Role:" for="userRole"/>
 					  				<p:selectOneMenu value="#{userList.selectedRecord.userRole}" id="userRole">
-					  					<f:selectItems value="#{referenceData.userRoles}" var="role" itemValue="#{role}" itemLabel="#{role.name}"/>
+					  					<!-- <f:converter converterId="userRoleConverter"/> -->
+					  					<f:selectItems value="#{referenceData.userRoles}" var="role" itemValue="#{role}" itemLabel="#{role.label}"/>
 					  				</p:selectOneMenu>
 					  				
 					  				<h:outputText value=""/>
 					  				<p:commandButton id="updateUser" ajax="true" action="#{userList.update}" styleClass="w3-button" 
-						            	oncomplete="document.getElementById('userEditDiv').style.display='none';
-						            	document.getElementById('userListDiv').style.display='block';
-										document.getElementById('userListDiv').scrollIntoView();" 
+						            	oncomplete="$('.toggleDiv').toggle();customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" 
 										value="&#160;Update" update=":form:userList" icon="fa fa-save"/>										
 									
 					  			</h:panelGrid>

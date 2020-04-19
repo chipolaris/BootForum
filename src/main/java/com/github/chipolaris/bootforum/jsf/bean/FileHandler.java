@@ -139,6 +139,14 @@ public class FileHandler {
     	}
 	}
 	
+	/**
+	 * Get comment thumbnail (image) content in text (base64)
+	 * 
+	 * Note: example usage in JSF markup:
+	 * 
+	 *	<h:graphicImage value="data:#{thumbnail.contentType};base64,#{fileHandler.getCommentThumbnailBase64(thumbnail)}"/>
+	 *
+	 */
 	public String getCommentThumbnailBase64(FileInfo commentThumbnail) throws IOException {
 		
 		ServiceResponse<File> serviceResponse = fileService.getCommentThumnail(commentThumbnail.getPath());
@@ -178,6 +186,12 @@ public class FileHandler {
 	}
 	
 	/**
+	 * Get avatar (image) content in text (base64)
+	 * 
+	 * Note: example usage in JSF markup:
+	 * 
+	 *	<h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(username)}"
+	 *		id="avatarImage" height="60" width="60" style="border:3px;"/>
 	 * 
 	 * @param username
 	 * @return

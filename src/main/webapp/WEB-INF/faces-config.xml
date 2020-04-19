@@ -23,6 +23,11 @@
     	<converter-id>accountStatusConverter</converter-id>
     	<converter-class>com.github.chipolaris.bootforum.jsf.converter.AccountStatusConverter</converter-class>
     </converter>
+
+    <converter>
+    	<converter-id>userRoleConverter</converter-id>
+    	<converter-class>com.github.chipolaris.bootforum.jsf.converter.UserRoleConverter</converter-class>
+    </converter>
     
     <validator>
         <validator-id>captchaValidator</validator-id>

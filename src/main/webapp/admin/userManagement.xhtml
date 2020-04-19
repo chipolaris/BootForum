@@ -13,15 +13,57 @@
 	</ui:define>
 	
 	<ui:define name="content">
+
+		<style type="text/css">
+		
+		</style>
+		
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+ 				$(document).ready(function(){
+					customizeDatatableStyle();
+					customizePrimefaceButtons();
+				});
+				
+				function customizeDatatableStyle() {
+					/* set datatable header's background color */
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+					
+					/* set datatable paginator button color */
+					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
+						function(el) {
+							el.className += ' w3-button';
+							
+							if(el.className.indexOf('ui-state-active') >= 0) {
+								el.className += ' w3-theme-dark';	
+							}
+							else {
+								el.className += ' w3-white';
+							}
+						}
+					);
+				}
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}
+			//]]>	
+		</script>
+
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white">
 
-			<p:messages id="messages" showDetail="true">
+			<p:messages id="messages" showDetail="true" closable="true">
 				<p:autoUpdate/>
 			</p:messages>
 
 			<div class="w3-panel w3-theme-d5 w3-center w3-round">
  				<h2>#{msg['userManagement.page.title']}</h2>
+ 				<h:link outcome="userList" styleClass="w3-button w3-border">
+ 					<i class="fa fa-list"/>
+ 					View as List
+ 				</h:link><p/>
  			</div>
 		
 			<p/>
@@ -29,11 +71,15 @@
 			<h:form id="form">
 			
 				<p:dataTable var="user" value="#{userManagement.lazyModel}" style="margin: 0 auto;"
-					widgetVar="userTableVar" rowIndexVar="rowIndex" paginator="true" reflow="true"
+					widgetVar="userTableVar" rowIndexVar="rowIndex" paginator="true" reflow="false"
 					rows="25" lazy="true" id="userTable" filterEvent="enter" 
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					currentPageReportTemplate="Number of Records: ({totalRecords})"
-					rowsPerPageTemplate="1, 15,25,100" editable="true" draggableColumns="true">
+					currentPageReportTemplate="Member count: ({totalRecords})"
+					rowsPerPageTemplate="15,25,100" editable="true" draggableColumns="true">
+					
+					<p:ajax event="page" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+					<p:ajax event="sort" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+					<p:ajax event="filter" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 	
 					<f:facet name="footer">
 						<!-- Note: use div class w3-theme-* and style margin of negative values to cover the default 
@@ -52,48 +98,77 @@
 						
 					</f:facet>
 		       		
-					<p:column sortBy="#{user.username}" filterBy="#{user.username}">
+					<p:column sortBy="#{user.username}" filterBy="#{user.username}" priority="1">
 						<f:facet name="header">
 							<h:outputText value="User Name" style="font-weight:bold;"/>
 						</f:facet>
-						<h:outputText value="#{user.username}" />
+						
+						<h:graphicImage value="#{requestContext}/avatar/#{user.username}" class="w3-circle"
+							id="commentorAvatar" height="30" width="30" title="#{user.username}"
+							rendered="#{fileHandler.isAvatarExists(user.username)}"/>
+														
+						<span jsf:rendered="#{!fileHandler.isAvatarExists(user.username)}" class="w3-circle avatarSpan"
+							title="#{user.username}"
+							style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white">
+							#{fn:substring(user.username, 0, 3)}
+						</span>						
+						&#160;
+						<h:outputText value="#{user.username}" style="font-weight:bold"/>
+						
 					</p:column>
 		
-					<p:column sortBy="#{user.person.firstName}" filterBy="#{user.person.firstName}">
+					<p:column sortBy="#{user.person.firstName}" filterBy="#{user.person.firstName}" priority="5">
 						<f:facet name="header">
 							<h:outputText value="First Name" style="font-weight:bold;"/>
 						</f:facet>
 						<h:outputText value="#{user.person.firstName}" />
 					</p:column>
 		
-					<p:column sortBy="#{user.person.lastName}" filterBy="#{user.person.lastName}">
+					<p:column sortBy="#{user.person.lastName}" filterBy="#{user.person.lastName}" priority="4">
 						<f:facet name="header">
 							<h:outputText value="Last Name" style="font-weight:bold;"/>
 						</f:facet>
 						<h:outputText value="#{user.person.lastName}" />
 					</p:column>
 		
-					<p:column sortBy="#{user.person.email}" filterBy="#{user.person.email}">
+					<!-- <p:column sortBy="#{user.person.email}" filterBy="#{user.person.email}" priority="6">
 						<f:facet name="header">
 							<h:outputText value="Email Address" style="font-weight:bold;"/>
 						</f:facet>
 						<h:outputText value="#{user.person.email}" />
-					</p:column>
-					
-					<p:column sortBy="#{user.accountStatus}" filterBy="#{user.accountStatus}">
+					</p:column> -->
+
+					<p:column sortBy="#{user.userRole}" filterBy="#{user.userRole}" style="text-align:center;font-weight:bold;" priority="2">
 						<f:facet name="header">
-							<h:outputText value="Account Active" style="font-weight:bold;"/>
+							<h:outputText value="Role" style="font-weight:bold;"/>
 						</f:facet>
 
 						<f:facet name="filter">
-			      			<p:selectOneMenu onchange="PF('userTableVar').filter()">
-			      				<f:converter converterId="accountStatusConverter"/>
-								<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.name}"/>
+			      			<p:selectOneMenu onchange="PF('userTableVar').filter()" converter="#{enumConverters.userRole}">
+			      				<!-- <f:converter converterId="userRoleConverter"/> -->
+								<f:selectItems value="#{referenceData.userRoles}" var="role" itemLabel="#{role.label}"/>
+								<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
+							</p:selectOneMenu>
+		            	</f:facet>
+		            						
+						<h:outputText value="#{user.userRole.label}" />
+					</p:column>
+					
+					<p:column sortBy="#{user.accountStatus}" filterBy="#{user.accountStatus}" style="text-align:center;font-weight:bold;" priority="3">
+						<f:facet name="header">
+							<h:outputText value="Account Status" style="font-weight:bold;"/>
+						</f:facet>
+
+						<f:facet name="filter">
+			      			<p:selectOneMenu onchange="PF('userTableVar').filter()" converter="#{enumConverters.accountStatus}">
+			      				<!-- <f:converter converterId="accountStatusConverter"/> -->
+								<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
+								<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
 							</p:selectOneMenu>
 		            	</f:facet>
 		            						
 						<h:outputText value="#{user.accountStatus == 'ACTIVE' ? 'Yes' : 'No'}" />
-					</p:column>
+					</p:column>					
 
 					<p:column exportable="false"
 						style="vertical-align:middle;width:50px;text-align:center;">
@@ -103,7 +178,7 @@
 						</f:facet>
 						
 						<p:commandButton update=":editModal" 
-							oncomplete="document.getElementById('editModal').style.display='block'" 
+							oncomplete="$('#editModal').toggle();customizePrimefaceButtons();changeAvatarBackgrounds();" 
 							icon="fa fa-edit" title="Edit">
 							<f:setPropertyActionListener value="#{user}" target="#{userManagement.selectedRecord}" />
 						</p:commandButton>
@@ -143,9 +218,16 @@
 				  			<h:panelGrid columns="2" cellspacing="10">
 				  			
 				  				<h:outputText value="Avatar:"/>
-								
-								<h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(userManagement.selectedRecord.username)}"
-									id="avatarImage" height="60" width="60" style="border:3px;"/>
+									
+								<h:graphicImage value="#{requestContext}/avatar/#{userManagement.selectedRecord.username}" class="w3-circle"
+									id="commentorAvatar" height="60" width="60" title="#{userManagement.selectedRecord.username}"
+									rendered="#{fileHandler.isAvatarExists(userManagement.selectedRecord.username)}"/>
+																
+								<span jsf:rendered="#{!fileHandler.isAvatarExists(userManagement.selectedRecord.username)}" class="w3-circle avatarSpan"
+									title="#{userManagement.selectedRecord.username}"
+									style="display:inline-block;font-size:1.7rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white">
+									#{fn:substring(userManagement.selectedRecord.username, 0, 3)}
+								</span>									
 								
 		 		  				<h:outputText value="Username:"/>
 				  				<h:outputText value="#{userManagement.selectedRecord.username}"/>
@@ -158,31 +240,46 @@
 				  				
 				  				<h:outputText value="Email:"/>
 				  				<h:outputText value="#{userManagement.selectedRecord.person.email}"/>
+
+				  				<h:outputText value="Discussions Started"/>
+				  				<h:outputText value="#{userManagement.selectedRecord.stat.discussionCount}"/>
+				  				
+				  				<h:outputText value="Comments:"/>
+				  				<h:outputText value="#{userManagement.selectedRecord.stat.commentCount}"/>
+				  				
+				  				<h:outputText value="Comment Thumbnails Uploaded:"/>
+				  				<h:outputText value="#{userManagement.selectedRecord.stat.commentThumbnailCount}"/>
+				  				
+				  				<h:outputText value="Comment Attachments Uploaded:"/>
+				  				<h:outputText value="#{userManagement.selectedRecord.stat.commentAttachmentCount}"/>
+				  				
+				  				<h:outputText value="Reputation:"/>
+				  				<h:outputText value="#{userManagement.selectedRecord.stat.reputation}"/>
 				  				
 		 		  				<h:outputLabel value="Account Status" for="accountStatus"/>						
 								<p:selectOneMenu value="#{userManagement.selectedRecord.accountStatus}" id="accountStatus">
-									<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.name}"/>
+									<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
 									<!-- If we want ajax update, can use the p:ajax event="change" as below to initiate call to server side action -->
 									<!-- <p:ajax event="change" listener="#{userManagement.updateAccountStatus}" update=":form:userTable"></p:ajax> -->
 								</p:selectOneMenu>
 								
 								<h:outputLabel value="Role:" for="userRole"/>
 								<p:selectOneMenu value="#{userManagement.selectedRecord.userRole}" id="userRole">
-									<f:selectItems value="#{referenceData.userRoles}" var="userRole" itemValue="#{userRole}" itemLabel="#{userRole.name}"/>
+									<f:selectItems value="#{referenceData.userRoles}" var="userRole" itemValue="#{userRole}" itemLabel="#{userRole.label}"/>
 								</p:selectOneMenu>
 				  				
-				  				<h:outputLabel value="New Password:" for="newPassword/>
+				  				<h:outputLabel value="New Password:" for="newPassword"/>
 				  				<p:password id="newPassword" value="#{userManagement.newPassword}" feedback="true"/>
 				  			</h:panelGrid>
 				  		
 				  		</div>
 				  		<div class="w3-section">
 				            <p:commandButton id="updateUser" ajax="true" action="#{userManagement.update}"
-				            	oncomplete="document.getElementById('editModal').style.display='none'" value="Save"
-				            	update=":form:userTable" icon="fa fa-save" style="margin-top: 5px;"/>
+				            	oncomplete="$('#editModal').toggle();customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" value="Save"
+				            	update=":form:userTable" icon="fa fa-save"/>
 					  		
 					  		<p:commandButton value="Cancel"
-								onclick="document.getElementById('editModal').style.display='none';return false;"
+								onclick="$('#editModal').toggle();"
 								type="button" icon="fa fa-times" style="margin-left:5px;" />
 				  		</div>
 			  		</h:form>

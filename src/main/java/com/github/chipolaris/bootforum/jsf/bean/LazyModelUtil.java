@@ -17,7 +17,10 @@ public class LazyModelUtil {
     	 */
     	if(filterMetaMap != null) {
 	    	for(String key : filterMetaMap.keySet()) {
-	    		objectMap.put(key, filterMetaMap.get(key).getFilterValue());
+	    		Object filterValue = filterMetaMap.get(key).getFilterValue();
+	    		if(filterValue != null) {
+	    			objectMap.put(key, filterMetaMap.get(key).getFilterValue());
+	    		}
 	    	}
     	}
     	

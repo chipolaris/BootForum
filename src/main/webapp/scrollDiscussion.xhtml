@@ -127,7 +127,7 @@
 				
 				<div class="w3-card w3-center w3-container w3-padding w3-margin-bottom" id="discussionInfo" style="display:none">
 					
-					<span class="w3-tag w3-white">
+					<span class="w3-tag w3-theme-light">
 						Started by<br/>
 						<h:link outcome="memberProfile"> 
 
@@ -143,7 +143,7 @@
 						</h:link><br/>
 						<pe:timeAgo value="#{viewDiscussion.discussion.createDate}" titlePattern="MMM dd, yyyy"/>
 					</span>
-					<span class="w3-tag w3-white">
+					<span class="w3-tag w3-theme-light">
 						Last comment<br/>
 						<h:link outcome="memberProfile"> 
 
@@ -173,7 +173,7 @@
 									#{fn:substring(username, 0, 3)}
 								</span>
 								<f:param name="username" value="#{username}"/>
-								<span class="w3-badge w3-theme-dark" style="position:absolute; top: -16px; left:-8px;">
+								<span class="w3-badge w3-theme-dark w3-tiny" style="position:absolute; top: -12px; right:-8px;">
 									<b>#{viewDiscussion.discussion.stat.firstUsersMap[username]}</b>
 								</span>
 							</h:link><br/>
@@ -183,21 +183,26 @@
 
 					<p/>
 					
-					<p:repeat var="tag" value="#{viewDiscussion.discussion.tags}">
-						<!-- <h:link outcome="viewTag">
-							<span class="w3-tag w3-padding" style="background-color:##{tag.color};width:120px;">
-								
-								<i class="#{tag.icon}" style="font-size: 32px;"/><br/>
-								#{tag.label}
-							</span>
-							<f:param name="id" value="#{tag.id}"/>
-						</h:link> -->
-						<h:link outcome="viewTag">
-							<span class="w3-tag w3-large" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
-							<f:param name="id" value="#{tag.id}"/>
-						</h:link>
-					</p:repeat>
+					<p jsf:rendered="#{not empty viewDiscussion.discussion.tags}">
 					
+						<b>Tags:</b>
+					
+						<p:repeat var="tag" value="#{viewDiscussion.discussion.tags}">
+							
+							<!-- <h:link outcome="viewTag">
+								<span class="w3-tag w3-padding" style="background-color:##{tag.color};width:120px;">
+									
+									<i class="#{tag.icon}" style="font-size: 32px;"/><br/>
+									#{tag.label}
+								</span>
+								<f:param name="id" value="#{tag.id}"/>
+							</h:link> -->
+							<h:link outcome="viewTag">
+								<span class="w3-tag w3-large" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
+								<f:param name="id" value="#{tag.id}"/>
+							</h:link>
+						</p:repeat>
+					</p>
 				</div>
 				
 				<div class="w3-center">

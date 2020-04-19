@@ -110,9 +110,14 @@
 	        						<f:facet name="targetCaption">Chosen</f:facet>
 	        						
 							        <p:column style="width:20%">
-							        	<h:graphicImage value="#{requestContext}/avatar/#{commentor}" class="w3-circle"
+							        	<h:graphicImage value="#{requestContext}/avatar/#{commentor}" class="w3-circle" rendered="#{fileHandler.isAvatarExists(commentor)}"
 											id="commentorAvatar" height="50" width="50" style="border:3px;" 
 											/>
+										<span jsf:rendered="#{not fileHandler.isAvatarExists(commentor)}" class="w3-circle avatarSpan"
+											title="#{commentor}"
+		  									style="display:inline-block;font-size:1.2rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;color:white;">
+		  									#{fn:substring(commentor, 0, 3)}
+		  								</span>
 							        </p:column>
 							 
 							        <p:column style="width:80%;">
@@ -177,9 +182,14 @@
 	        						<f:facet name="targetCaption">Chosen</f:facet>
 	        						
 							        <p:column style="width:20%">
-							        	<h:graphicImage value="#{requestContext}/avatar/#{commentor}" class="w3-circle"
+							        	<h:graphicImage value="#{requestContext}/avatar/#{commentor}" class="w3-circle" rendered="#{fileHandler.isAvatarExists(commentor)}"
 											id="commentorAvatar" height="50" width="50" style="border:3px;" 
 											/>
+										<span jsf:rendered="#{not fileHandler.isAvatarExists(commentor)}" class="w3-circle avatarSpan"
+											title="#{commentor}"
+		  									style="display:inline-block;font-size:1.2rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;color:white;">
+		  									#{fn:substring(commentor, 0, 3)}
+		  								</span>
 							        </p:column>
 							 
 							        <p:column style="width:80%;">
