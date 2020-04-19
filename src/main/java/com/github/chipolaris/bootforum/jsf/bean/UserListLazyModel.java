@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
+import com.github.chipolaris.bootforum.enumeration.UserRole;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 public class UserListLazyModel extends LazyDataModel<User> {
@@ -25,6 +26,7 @@ public class UserListLazyModel extends LazyDataModel<User> {
 	private GenericService genericService;
 
 	private AccountStatus accountStatus = AccountStatus.ACTIVE;
+	private UserRole userRole = null;
 	private String filterValue = null;
 	private String filterType = null;
 
@@ -45,6 +47,10 @@ public class UserListLazyModel extends LazyDataModel<User> {
     		filters.put("accountStatus", this.accountStatus);
     	}
     	
+    	if(this.userRole != null) {
+    		filters.put("userRole", this.userRole);
+    	}
+    	
     	if(filterValue != null && !filterValue.isEmpty()) {
     		filters.put(this.filterType, this.filterValue);
     	}
@@ -62,5 +68,13 @@ public class UserListLazyModel extends LazyDataModel<User> {
 
 	public void setAccountStatus(AccountStatus accountStatus) {
 		this.accountStatus = accountStatus;
+	}
+
+	public UserRole getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
 	}
 }

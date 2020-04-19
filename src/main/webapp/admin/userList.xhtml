@@ -17,7 +17,7 @@
 		<style type="text/css">
 		
 			.panelGridCol1 {
-				width: 180px;
+				width: 250px;
 			}
 			.panelGridCol2 {
 				
@@ -97,6 +97,22 @@
 						
 							</h:panelGrid>
 						</div>
+						
+						<div class="w3-padding-large" style="margin:auto;vertical-align:top;">
+							
+							<h:panelGrid columns="2">
+							
+								<p:outputLabel value="User Role:"/>
+								
+						        <p:selectOneMenu value="#{userList.lazyModel.userRole}">
+						        	<f:selectItems value="#{referenceData.userRoles}" var="role" itemValue="#{role}" itemLabel="#{role.label}"/>
+						        	<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
+						        	<p:ajax event="change" update=":form:userList" 
+						        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+						        </p:selectOneMenu>
+							</h:panelGrid>
+						</div>
+												
 						<div class="w3-padding-large" style="margin:auto;vertical-align:top;">
 							
 							<h:panelGrid columns="2">
@@ -120,14 +136,15 @@
 				
 					<h:form id="form">
 					
-						<p:dataList id="userList" value="#{userList.lazyModel}" var="user" lazy="true" paginator="true" rows="10"
-							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-							currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} users"
-							emptyMessage="No user found" itemType="square">
+					    <p:dataGrid var="user" value="#{userList.lazyModel}" columns="3" layout="grid" lazy="true"
+					        rows="15" paginator="true" id="userList"
+					        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					        currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} users" emptyMessage="No user found"
+					        rowsPerPageTemplate="15,30,60">
 							
 							<p:ajax event="page" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 							
-							<div class="w3-tooltip">
+							<div class="w3-tooltip w3-center w3-border w3-round" style="padding: 16px 0px;">
 							
 								<h:graphicImage value="#{requestContext}/avatar/#{user.username}" class="w3-circle" 
 									rendered="#{fileHandler.isAvatarExists(user.username)}"
@@ -135,7 +152,7 @@
 									
 								<span jsf:rendered="#{not fileHandler.isAvatarExists(user.username)}" class="w3-circle avatarSpan"
 									title="#{user.username}"
-  									style="display:inline-block;font-size:1.4rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white;">
+  									style="display:inline-block;font-size:1.7rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white;">
   									#{fn:substring(user.username, 0, 3)}
   								</span>
 									
@@ -160,10 +177,8 @@
 									
 								</span>
 							</div>
-							
-							<p/>
 						
-						</p:dataList>
+						</p:dataGrid>
 					</h:form>
 				
 				</div>
@@ -195,39 +210,45 @@
 										
 									<span jsf:rendered="#{not fileHandler.isAvatarExists(userList.selectedRecord.username)}" class="w3-circle avatarSpan"
 										title="#{userList.selectedRecord.username}"
-	  									style="display:inline-block;font-size:1.4rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white;">
+	  									style="display:inline-block;font-size:1.7rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white;">
 	  									#{fn:substring(userList.selectedRecord.username, 0, 3)}
 	  								</span>
 									
 			 		  				<h:outputText value="User ID:"/>
-					  				<h:outputText value="#{userList.selectedRecord.username}"/>
+					  				<h:outputText value="#{userList.selectedRecord.username}" style="font-weight:bold;"/>
 					  				
 					  				<h:outputText value="Role:"/>
 					  				<h:outputText value="#{userList.selectedRecord.userRole.label}" style="font-weight:bold;"/>
 					  				
 					  				<h:outputText value="First Name:"/>
-					  				<h:outputText value="#{userList.selectedRecord.person.firstName}"/>
+					  				<h:outputText value="#{userList.selectedRecord.person.firstName}" style="font-weight:bold;"/>
 					  				
 					  				<h:outputText value="Last Name:"/>
-					  				<h:outputText value="#{userList.selectedRecord.person.lastName}"/>
+					  				<h:outputText value="#{userList.selectedRecord.person.lastName}" style="font-weight:bold;"/>
 					  				
 					  				<h:outputText value="Email:"/>
-					  				<h:outputText value="#{userList.selectedRecord.person.email}"/>
+					  				<h:outputText value="#{userList.selectedRecord.person.email}" style="font-weight:bold;"/>
 				  				
 				  					<h:outputText value="Discussions Started"/>
-				  					<h:outputText value="#{userList.selectedRecord.stat.discussionCount}"/>
+				  					<h:outputText value="#{userList.selectedRecord.stat.discussionCount}" style="font-weight:bold;"/>
 				  					
 				  					<h:outputText value="Comments"/>
-				  					<h:outputText value="#{userList.selectedRecord.stat.commentCount}"/>
+				  					<h:outputText value="#{userList.selectedRecord.stat.commentCount}" style="font-weight:bold;"/>
 				  					
 				  					<h:outputText value="Last Comment"/>
-				  					<pe:timeAgo value="#{userList.selectedRecord.stat.lastComment.updateDate}" titlePattern="MMMMM dd, yyyy" />
+				  					<pe:timeAgo value="#{userList.selectedRecord.stat.lastComment.updateDate}" titlePattern="MMMMM dd, yyyy" style="font-weight:bold;"/>
+				  					
+					  				<h:outputText value="Comment Thumbnails Uploaded:"/>
+					  				<h:outputText value="#{userList.selectedRecord.stat.commentThumbnailCount}" style="font-weight:bold;"/>
+					  				
+					  				<h:outputText value="Comment Attachments Uploaded:"/>
+					  				<h:outputText value="#{userList.selectedRecord.stat.commentAttachmentCount}" style="font-weight:bold;"/>
 				  					
 				  					<h:outputText value="Last Login"/>
-				  					<pe:timeAgo value="#{userList.selectedRecord.stat.lastLogin}" titlePattern="MMMMM dd, yyyy" />
+				  					<pe:timeAgo value="#{userList.selectedRecord.stat.lastLogin}" titlePattern="MMMMM dd, yyyy" style="font-weight:bold;"/>
 				  					
 				  					<h:outputText value="Reputation"/>
-				  					<h:outputText value="#{userList.selectedRecord.stat.reputation}"/>
+				  					<h:outputText value="#{userList.selectedRecord.stat.reputation}" style="font-weight:bold;"/>
 				  				</h:panelGrid>
 				  			</div>
 				  			
