@@ -130,6 +130,8 @@ public class ReplyComment {
 	
 	public String submit() {
 		
+		reply.setIpAddress(JSFUtils.getRemoteIPAddress());
+		
 		ServiceResponse<Long> response = 
 				commentService.addReply(reply, userSession.getUser(), 
 						commentThumbnailManagement.getUploadedFileList(), 

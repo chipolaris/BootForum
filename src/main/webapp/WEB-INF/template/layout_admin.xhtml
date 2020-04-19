@@ -59,9 +59,9 @@
 					title="#{userSession.user.username}"
 					rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"/>
 				
-				<span jsf:rendered="#{!fileHandler.isAvatarExists(userSession.user.username)}" class="w3-circle w3-purple"
+				<span jsf:rendered="#{!fileHandler.isAvatarExists(userSession.user.username)}" class="w3-circle avatarSpan"
 					title="#{userSession.user.username}"
-					style="display:inline-block;font-size:1.2rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;">
+					style="display:inline-block;font-size:1.7rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white;">
 					#{fn:substring(userSession.user.username, 0, 3)}
 				</span>
 			</a>

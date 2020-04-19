@@ -95,8 +95,6 @@ public class SimulateDataService {
 		
 		User user = new User();
 		
-		LoremIpsum loremIpsum = LoremIpsum.getInstance();
-		
 		user.setUsername(createUsername());
 		user.setPassword(this.encodedPassword);
 		user.setUserRole(UserRole.USER);
@@ -105,9 +103,9 @@ public class SimulateDataService {
 		Person person = new Person();
 		user.setPerson(person);
 		
-		person.setFirstName(StringUtils.capitalize(loremIpsum.getFirstName()));
-		person.setLastName(StringUtils.capitalize(loremIpsum.getLastName()));
-		person.setEmail(loremIpsum.getEmail());
+		person.setFirstName(StringUtils.capitalize(lorem.getFirstName()));
+		person.setLastName(StringUtils.capitalize(lorem.getLastName()));
+		person.setEmail(createRandomEmail());
 		
 		user.setPreferences(new Preferences());
 		user.setStat(new UserStat());
@@ -131,6 +129,20 @@ public class SimulateDataService {
 		}
 		
 		return username;
+	}
+	
+	private String createRandomEmail() {
+		
+		String email = null;
+		
+		while(email == null) {
+			email = lorem.getEmail();
+			if(userDAO.emailExists(email)) {
+				email = null;
+			}
+		}
+		
+		return email;
 	}
 	
 	@Transactional(readOnly = false)

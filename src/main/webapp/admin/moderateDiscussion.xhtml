@@ -171,7 +171,7 @@
 						<div class="w3-container" style="padding:0;">
 						
 							<div class="w3-right-align">
-								<h:outputText value="#{comment.createDate} "/>
+								<h:outputText value="[IP: #{empty comment.ipAddress ? 'unknown' : comment.ipAddress}] #{comment.createDate} "/>
 					        	<h:outputText value="[#{rowIndex + 1}]" style="font-weight:bold;"/>
 							</div>
 							

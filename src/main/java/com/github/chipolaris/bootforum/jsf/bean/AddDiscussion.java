@@ -98,7 +98,7 @@ public class AddDiscussion {
 	}
 	
 	public String submit() {
-		
+		comment.setIpAddress(JSFUtils.getRemoteIPAddress());
 		ServiceResponse<Long> response = 
 				commentService.addDiscussion(discussion, comment, userSession.getUser(),
 						commentThumbnailManagement.getUploadedFileList(), commentAttachmentManagement.getUploadedFileList());
@@ -108,7 +108,6 @@ public class AddDiscussion {
 			JSFUtils.addInfoStringMessage(null, "New Discussion '" + discussion.getTitle() + "' added");
 			
 			return "/viewDiscussion?faces-redirect=true&id=" + discussion.getId();
-		
 		}
 		else {
 		

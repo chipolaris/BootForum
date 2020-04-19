@@ -28,6 +28,31 @@ public class JSFUtils {
 	}
 	
 	/**
+	 * get remote IP address for request
+	 * 
+	 * ref: https://stackoverflow.com/questions/4678797/how-do-i-get-the-remote-address-of-a-client-in-servlet
+	 */
+	public static String getRemoteIPAddress() {
+		
+		String[] forwardHeaderParams = {"X-Forwarded-For","Proxy-Client-IP",
+				"WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"};
+		
+		FacesContext context = FacesContext.getCurrentInstance();
+		
+		HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+		
+		String ip = null;
+		int index = 0;
+		while((ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) 
+				&& index < forwardHeaderParams.length) {
+			
+			ip = request.getHeader(forwardHeaderParams[index++]);
+		}
+		
+		return ip == null || ip.isEmpty() || ip.equalsIgnoreCase("unknown") ? request.getRemoteAddr() : ip;
+	}
+	
+	/**
 	 * retrieve the contextPath of the request
 	 * @return
 	 */

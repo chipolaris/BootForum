@@ -78,6 +78,8 @@ public class EditComment {
 	public void submit() {
 		
 		logger.info("Edit comment (id): " + comment.getId());
+		
+		comment.setIpAddress(JSFUtils.getRemoteIPAddress());
 		ServiceResponse<Comment> serviceResponse = genericService.updateEntity(comment);
 		
 		if(serviceResponse.getAckCode() == AckCodeType.FAILURE) {
