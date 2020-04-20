@@ -56,7 +56,7 @@
 					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 98vw;">
 					
 						<header class="w3-container w3-padding-16 w3-theme-dark w3-center">
-							<span class="w3-xlarge"><i class="fa fa-lock"/> Login to #{msg['application.title']}</span>
+							<span class="w3-xlarge"><i class="fa fa-lock"/> Login to <h:outputLink value="#{request.contextPath}">#{msg['application.title']}</h:outputLink></span>
 						</header>
 
 						<div class="w3-center w3-pale-green" jsf:rendered="#{param.logout_success != null}" 
