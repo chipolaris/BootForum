@@ -3,44 +3,58 @@
 
 
 ### <ins>Welcome<ins>
-![Welcome](https://user-images.githubusercontent.com/46733006/78465733-5384c100-76c7-11ea-8cbc-cc946e264945.PNG)
+![Welcome](https://user-images.githubusercontent.com/46733006/79707551-de021e80-828a-11ea-85f1-30c20049d444.PNG)
 
 
 
 ### <ins>List Discussions By Forum<ins>
-![ListDiscussionsPerForum](https://user-images.githubusercontent.com/46733006/78465739-66979100-76c7-11ea-8397-51909a91ceab.PNG)
+![Forum](https://user-images.githubusercontent.com/46733006/79707555-e78b8680-828a-11ea-8148-6d95cda04e65.PNG)
 
 
 
 ### <ins>List Discussions<ins>
-![ListDiscussions](https://user-images.githubusercontent.com/46733006/78465741-68f9eb00-76c7-11ea-9b78-6b08fa1f2014.PNG)
+![ListDiscussions](https://user-images.githubusercontent.com/46733006/79707558-ec503a80-828a-11ea-88e8-f4f618bd0b32.PNG)
 
 
 
 
 ### <ins>Discussion<ins>
-![Discussion](https://user-images.githubusercontent.com/46733006/78465742-6b5c4500-76c7-11ea-9003-9f551de7dcf5.PNG)
+![Discussion](https://user-images.githubusercontent.com/46733006/79707576-fa05c000-828a-11ea-8a95-d6c4d2ff7c34.PNG)
+
+
+
+
+### <ins>Comment Thread (sliced off discussion)<ins>
+![CommentThread](https://user-images.githubusercontent.com/46733006/79707579-fb36ed00-828a-11ea-99ac-a4bdb25576da.PNG)
 
 
 
 
 ### <ins>Members<ins>
-![Members](https://user-images.githubusercontent.com/46733006/78465743-6e573580-76c7-11ea-89ec-0ea1d769ccf7.PNG)
+![Members](https://user-images.githubusercontent.com/46733006/79707562-ef4b2b00-828a-11ea-8c3f-31e3130a803a.PNG)
 
 
 
 
 ### <ins>Member Profile<ins>
-![MemberProfile](https://user-images.githubusercontent.com/46733006/78465744-70b98f80-76c7-11ea-874c-9a28881d74b2.PNG)
+![MemberProfile](https://user-images.githubusercontent.com/46733006/79707567-f07c5800-828a-11ea-8b71-fdd77296edff.PNG)
 
 
 
 
 ### <ins>Account<ins>
-![Account](https://user-images.githubusercontent.com/46733006/78465745-7616da00-76c7-11ea-81b1-abb3d3168de0.PNG)
+![Dashboard](https://user-images.githubusercontent.com/46733006/79707588-012cce00-828b-11ea-91a8-19aa760c44f1.PNG)
 
 
 
+### <ins>Admin User Management</ins>
+![UserManagement](https://user-images.githubusercontent.com/46733006/79707593-0558eb80-828b-11ea-9d27-9942a3df1c0c.PNG)
 
-### <ins>UI Theme<ins>
-![UITheme](https://user-images.githubusercontent.com/46733006/78465746-77480700-76c7-11ea-842f-8e0c69ee665a.PNG)
+
+![UserManagementGrid](https://user-images.githubusercontent.com/46733006/79707597-09850900-828b-11ea-8618-d11e04e54113.PNG)
+
+
+
+### <ins>UI Theme (customized by each forum member)<ins>
+![Theme1](https://user-images.githubusercontent.com/46733006/79707605-10138080-828b-11ea-811b-eb073feea9ab.PNG)
+![Theme2](https://user-images.githubusercontent.com/46733006/79707606-1144ad80-828b-11ea-9ddb-c6f4319d7c62.PNG)
