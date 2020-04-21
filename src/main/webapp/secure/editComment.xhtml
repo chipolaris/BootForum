@@ -55,7 +55,7 @@
 			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{applicationProperties['Comment.allowEdit'] and empty editComment.comment}">
 			
 				<h3>Error!</h3>
-				<h4>Must specified a valid comment to edit</h4>
+				<h4>#{editComment.loadingErrorMessage}</h4>
 			
 			</div>
 		

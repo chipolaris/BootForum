@@ -38,10 +38,6 @@
 		</script>	
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
-	
-			<!-- <div class="w3-panel w3-round w3-theme-d5 w3-center">
- 				<h2>#{msg['replyComment.page.title']}</h2>
- 			</div> -->
 			
 			<p/>
 			
@@ -51,14 +47,14 @@
 				</p:messages>
 			</div>
 			
-			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{replyComment.reply == null}">
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty replyComment.reply}">
 			
 				<h3>Error!</h3>
-				<h4>Must specified a valid comment or discussion to post a reply</h4>
+				<h4>#{replyComment.loadingErrorMessage}</h4>
 			
 			</div>
 		
-			<div jsf:id="replyCommentDiv" jsf:rendered="#{replyComment.reply != null}">
+			<div jsf:id="replyCommentDiv" jsf:rendered="#{not empty replyComment.reply}">
 
 				<div>
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(replyComment.reply.discussion)}"/>

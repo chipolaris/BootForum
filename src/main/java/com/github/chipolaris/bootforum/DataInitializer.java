@@ -123,6 +123,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		
 		Discussion discussion = new Discussion();
 		discussion.setForum(forum);
+		discussion.setImportant(true);
 		discussion.setSticky(true);
 		discussion.setTitle("Welcome to BootForum");
 		

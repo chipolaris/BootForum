@@ -94,21 +94,21 @@ public class Discussion extends BaseEntity {
 		this.title = title;
 	}
 	
-	public boolean getClosed() {
+	public boolean isClosed() {
 		return closed;
 	}
 	public void setClosed(boolean closed) {
 		this.closed = closed;
 	}
 		
-	public boolean getSticky() {
+	public boolean isSticky() {
 		return sticky;
 	}
 	public void setSticky(boolean sticky) {
 		this.sticky = sticky;
 	}
 	
-	public boolean getImportant() {
+	public boolean isImportant() {
 		return important;
 	}
 	public void setImportant(boolean important) {

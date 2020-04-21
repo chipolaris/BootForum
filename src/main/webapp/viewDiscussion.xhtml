@@ -209,14 +209,15 @@
 					</p>
 				</div>
 				
-				<div class="w3-center">
+				<div class="w3-center w3-section">
 					
 					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
 						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
 						<i class="fa fa-comment-o"/> Add new Comment
 					</h:link>
 					
-					<p/>
+					<span jsf:rendered="#{viewDiscussion.discussion.closed}" class="w3-tag w3-red"><b>Discussion is closed</b></span>
+					
 				</div>
 				
 				<h:form>

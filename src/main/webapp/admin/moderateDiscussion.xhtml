@@ -124,16 +124,22 @@
 					</div>
 					
 					<h:form>
-						<h:outputText id="discussionStatusText" value="This discussion is #{moderateDiscussion.discussion.closed ? 'CLOSED' : 'OPEN'} "
-							style="font-weight:bold;color:#{moderateDiscussion.discussion.closed ? 'Tomato' : 'LimeGreen'};"/>
 					
+						<h:outputLabel id="discussionStatusLabel" for="discussionCloseButton" value="This discussion is #{moderateDiscussion.discussion.closed ? 'CLOSED' : 'OPEN'} "
+							style="font-weight:bold;color:#{moderateDiscussion.discussion.closed ? 'Tomato' : 'LimeGreen'};"/>
 						<p:selectBooleanButton id="discussionCloseButton" value="#{moderateDiscussion.discussion.closed}" title="click to change"
-							onLabel="Click to open" offLabel="Click to close" onIcon="fa fa-check" offIcon="fa fa-ban" style="width:150px;">
-	            			<p:ajax update=":messages discussionStatusText" listener="#{moderateDiscussion.updateDiscussion}" />
+							onLabel="Click to open" offLabel="Click to close" onIcon="fa fa-check" offIcon="fa fa-ban">
+	            			<p:ajax update=":messages discussionStatusLabel" listener="#{moderateDiscussion.updateDiscussion}" />
+	        			</p:selectBooleanButton>
+	        			
+						<h:outputLabel id="discussionImportantLabel" for="discussionImportantButton" value="Mark as important" style="font-weight:bold;margin:0px 5px 0px 25px;"/>
+						<p:selectBooleanButton id="discussionImportantButton" value="#{moderateDiscussion.discussion.closed}" title="click to change"
+							onLabel="Yes" offLabel="No" onIcon="fa fa-check" offIcon="fa fa-close">
+	            			<p:ajax update=":messages" listener="#{moderateDiscussion.updateDiscussion}" />
 	        			</p:selectBooleanButton>
 	        			
 	        			<p:commandButton type="button" value=" Delete this Discussion" icon="fa fa-exclamation-triangle"
-	        				onclick="PF('deleteDiscussionConfirmation').show();" styleClass="w3-red w3-border-red" style="margin-left:5px;"/>
+	        				onclick="PF('deleteDiscussionConfirmation').show();" styleClass="w3-red w3-border-red" style="margin-left:25px;"/>
 					</h:form>
 					
 					<p/>

@@ -54,15 +54,14 @@
 				</p:messages>
 			</div>
 			
-			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{addDiscussion.forum == null}">
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty addDiscussion.forum}">
 			
 				<h3>Error!</h3>
-				<h4>Must specified a valid forum to post a discussion</h4>
+				<h4>#{addDiscussion.loadingErrorMessage}</h4>
 			
 			</div>
-
 		
-			<div jsf:id="newDiscussionDiv" jsf:rendered="#{addDiscussion.forum != null}">
+			<div jsf:id="newDiscussionDiv" jsf:rendered="#{not empty addDiscussion.forum}">
 			
 				<div>
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(addDiscussion.forum)}"/>

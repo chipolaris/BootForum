@@ -51,6 +51,15 @@ public class AddDiscussion {
 	private Discussion discussion;
 	private Comment comment;
 	private Forum forum;
+
+	private String loadingErrorMessage;
+	
+	public String getLoadingErrorMessage() {
+		return loadingErrorMessage;
+	}
+	public void setLoadingErrorMessage(String loadingErrorMessage) {
+		this.loadingErrorMessage = loadingErrorMessage;
+	}
 	
 	public Forum getForum() {
 		return forum;
@@ -76,24 +85,29 @@ public class AddDiscussion {
 
 	public void onLoad() {
 		
-		if(this.forumId != null) {
-			
-			this.forum = genericService.getEntity(Forum.class, this.forumId).getDataObject();
-			
-			if(this.forum != null) {
-				logger.info("add discussion for " + forum.getTitle());
-				
-				// TODO: validate if forum is active, etc...
-				
-				this.discussion = new Discussion();
-				this.discussion.setForum(forum);
-				forum.getDiscussions().add(discussion);
-				
-				comment = new Comment();
-				
-				this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);
-				this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
+		this.forum = genericService.getEntity(Forum.class, this.forumId).getDataObject();
+
+		if (this.forum != null) {
+
+			if (!forum.isActive()) {
+				this.setLoadingErrorMessage("Forum is closed");
+				this.forum = null;
+				return;
 			}
+
+			logger.info("add discussion for " + forum.getTitle());
+
+			this.discussion = new Discussion();
+			this.discussion.setForum(forum);
+			forum.getDiscussions().add(discussion);
+
+			comment = new Comment();
+
+			this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);
+			this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
+		} 
+		else {
+			this.setLoadingErrorMessage("Forum not found");
 		}
 	}
 	

@@ -82,6 +82,15 @@ public class ReplyComment {
 		this.quote = quote;
 	}
 	
+	private String loadingErrorMessage;
+	
+	public String getLoadingErrorMessage() {
+		return loadingErrorMessage;
+	}
+	public void setLoadingErrorMessage(String loadingErrorMessage) {
+		this.loadingErrorMessage = loadingErrorMessage;
+	}
+	
 	/**
 	 * Initialize
 	 */
@@ -93,9 +102,12 @@ public class ReplyComment {
 			
 			if(this.comment != null) {
 			
-				logger.info("Reply for comment '" + comment.getTitle() + "'");
+				if(comment.getDiscussion().isClosed()) {
+					this.setLoadingErrorMessage("Discussion is closed");
+					return;
+				}
 				
-				// TODO: validate if forum is active, etc...
+				logger.info("Reply for comment '" + comment.getTitle() + "'");
 				
 				this.reply = new Comment();
 				this.reply.setReplyTo(this.comment);
@@ -109,12 +121,20 @@ public class ReplyComment {
 				this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);
 				this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
 			}
+			else {
+				this.setLoadingErrorMessage("Comment is not valid");
+			}
 		}
 		else if(discussionId != null) { // reply to main discussion
 			
 			Discussion discussion = genericService.getEntity(Discussion.class, discussionId).getDataObject();
 			
 			if(discussion != null) {
+				
+				if(discussion.isClosed()) {
+					this.setLoadingErrorMessage("Discussion is closed");
+					return;
+				}
 			
 				logger.info("Add comment for '" + discussion.getTitle() + "'");
 				
@@ -124,7 +144,12 @@ public class ReplyComment {
 				this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);
 				this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
 			}
-			
+			else {
+				this.setLoadingErrorMessage("Discussion is not valid");
+			}
+		}
+		else {
+			this.setLoadingErrorMessage("Must specified a valid comment or discussion to post a reply");
 		}
 	}
 	

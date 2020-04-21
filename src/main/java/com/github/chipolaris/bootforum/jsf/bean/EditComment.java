@@ -57,6 +57,14 @@ public class EditComment {
 		this.id = id;
 	}
 	
+	private String loadingErrorMessage;
+	public String getLoadingErrorMessage() {
+		return loadingErrorMessage;
+	}
+	public void setLoadingErrorMessage(String loadingErrorMessage) {
+		this.loadingErrorMessage = loadingErrorMessage;
+	}
+
 	private Comment comment;
 	public Comment getComment() {
 		return comment;
@@ -69,8 +77,21 @@ public class EditComment {
 		
 		this.comment = genericService.getEntity(Comment.class, id).getDataObject();
 		
-		if(this.comment == null || !this.comment.getCreateBy().equals(userSession.getUser().getUsername())) {
-			JSFUtils.addErrorStringMessage(null, "This comment cannot be edited by the current user");
+		if(this.comment != null) {
+			if(this.comment.getDiscussion().isClosed()) {
+				this.setLoadingErrorMessage("This discussion is closed");
+				
+				this.comment = null;
+			}
+			else if(!this.comment.getCreateBy().equals(userSession.getUser().getUsername())) {
+				this.setLoadingErrorMessage("This comment cannot be edited by the current user");
+				
+				this.comment = null;
+			}
+		}
+		if(this.comment == null) {
+			this.setLoadingErrorMessage("Comment is not valid");
+			
 			this.comment = null;
 		}
 	}

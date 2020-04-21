@@ -53,6 +53,27 @@
 				content: "\2014 \2009";
 			}	
 			
+			/* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top */
+			#scrollTopButton {
+				display: none;
+				position: fixed;
+				bottom: 20px;
+				right: 30px;
+				z-index: 99;
+				font-size: 18px;
+				border: none;
+				outline: none;
+				background-color: gray;
+				color: white;
+				cursor: pointer;
+				padding: 8px 16px;
+				border-radius: 4px;
+			}
+			
+			#scrollTopButton:hover {
+				background-color: #555;
+			}
+			
 		</style>
 		
 		<script>
@@ -83,6 +104,33 @@
 						a(f)
 					})
 				};
+				
+				/* scroll to top button */
+				/* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top */
+				//Get the button
+				$( document ).ready(function() {
+					scrollTopButton = document.getElementById("scrollTopButton");
+				})
+				
+				// When the user scrolls down 200px from the top of the document, show the button
+				window.onscroll = function() {scrollFunction()};
+
+				function scrollFunction() {
+					
+					if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+						scrollTopButton.style.display = "block";
+				  	} 
+					else {
+						scrollTopButton.style.display = "none";
+				  	}
+				}
+
+				// When the user clicks on the button, scroll to the top of the document
+				function topFunction() {
+				  document.body.scrollTop = 0;
+				  document.documentElement.scrollTop = 0;
+				}
+				
 			//]]>
 		</script>
 		
@@ -109,6 +157,8 @@
 				<h4>Must specified a valid discussion Id</h4>
 			
 			</div>
+			
+			<button onclick="topFunction()" id="scrollTopButton" title="Go to top"><i class="fa fa-caret-up"/></button>
 			
 			<div jsf:id="viewDiscussionDiv" jsf:rendered="#{not empty viewDiscussion.discussion}">
 			
@@ -205,14 +255,15 @@
 					</p>
 				</div>
 				
-				<div class="w3-center">
+				<div class="w3-center w3-section">
 					
 					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
 						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
 						<i class="fa fa-comment-o"/> Add new Comment
 					</h:link>
 					
-					<p/>
+					<span jsf:rendered="#{viewDiscussion.discussion.closed}" class="w3-tag w3-red"><b>Discussion is closed</b></span>
+					
 				</div>
 				
 				<h:form>
@@ -225,16 +276,6 @@
 							<p:commandButton type="button" value="View More" />
 						</f:facet> 
 						-->
-										    	
-				        <f:facet name="header">
-				        	
-				        	<div jsf:rendered="#{viewDiscussion.discussion.closed}">
-				        		<h:outputText value="This discussion is closed" style="font-size:16pt; color:red;"/>
-				        	</div>
-				        	
-				        	<h:outputText value="There are #{viewDiscussion.discussion.stat.commentCount} comments in this discussion. This discussion has been viewed #{viewDiscussion.discussion.stat.viewCount} times"/>
-				        	
-				        </f:facet>
 	
 						<div class="w3-container" style="padding:0;">
 						
