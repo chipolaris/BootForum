@@ -16,6 +16,7 @@ import com.github.chipolaris.bootforum.domain.ForumGroup;
 import com.github.chipolaris.bootforum.event.ForumAddEvent;
 import com.github.chipolaris.bootforum.event.ForumDeleteEvent;
 import com.github.chipolaris.bootforum.event.ForumGroupAddEvent;
+import com.github.chipolaris.bootforum.event.ForumGroupDeleteEvent;
 import com.github.chipolaris.bootforum.event.ForumGroupUpdateEvent;
 import com.github.chipolaris.bootforum.event.ForumUpdateEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
@@ -227,12 +228,15 @@ public class ForumManagement {
 		
 		if(this.selectedForumGroup != null) {
 			// 
-	    	ServiceResponse<Void> response = genericService.deleteEntity(this.selectedForumGroup);
+	    	ServiceResponse<Void> response = forumService.deleteForumGroup(selectedForumGroup);
 	    	
 	    	if(response.getAckCode() != AckCodeType.FAILURE) {
 	    		JSFUtils.addInfoStringMessage(null, String.format("ForumGroup '%s' (id: %d) deleted", selectedForumGroup.getTitle(), selectedForumGroup.getId()));
+	    		
+	    		applicationEventPublisher.publishEvent(new ForumGroupDeleteEvent(this, selectedForumGroup));
+	    		
 	    		this.forumGroups.remove(this.selectedForumGroup);
-	    		// reset for next delete action
+	    		// reset for next edit/delete action
 	    		this.selectedForumGroup = null;
 	    	}
 	    	else {

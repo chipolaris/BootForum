@@ -19,7 +19,6 @@ import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
 import com.github.chipolaris.bootforum.domain.ForumStat;
-import com.github.chipolaris.bootforum.event.ForumDeleteEvent;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 // application scope JSF backing bean

@@ -19,7 +19,7 @@ import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
-import com.github.chipolaris.bootforum.service.CommentService;
+import com.github.chipolaris.bootforum.service.DiscussionService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 import com.github.chipolaris.bootforum.service.StatService;
@@ -35,7 +35,7 @@ public class ModerateDiscussion {
 	private StatService statService;
 	
 	@Resource
-	private CommentService commentService;
+	private DiscussionService discusionService;
 	
 	@Resource 
 	private CacheManager cacheManager;
@@ -126,7 +126,7 @@ public class ModerateDiscussion {
 	
 	public String deleteDiscussion() {
 		
-		ServiceResponse<Void> response = commentService.deleteDiscussion(this.discussion);
+		ServiceResponse<Void> response = discusionService.deleteDiscussion(this.discussion);
 		
 		if(response.getAckCode() != AckCodeType.FAILURE) {
 			

@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.dao;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -23,17 +24,17 @@ public class StatDAO {
 	protected EntityManager entityManager;
 
 	public Long countThumbnail(Discussion discussion) {
-		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT SUM(SIZE(c.thumbnails)) FROM Comment c WHERE c.discussion = :discussion", Long.class);
+		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.thumbnails)), 0) FROM Comment c WHERE c.discussion = :discussion", BigDecimal.class);
 		typedQuery.setParameter("discussion", discussion);
 		
-		return typedQuery.getSingleResult();
+		return typedQuery.getSingleResult().longValue();
 	}
 	
 	public Long countAttachment(Discussion discussion) {
-		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT SUM(SIZE(c.attachments)) FROM Comment c WHERE c.discussion = :discussion", Long.class);
+		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.discussion = :discussion", BigDecimal.class);
 		typedQuery.setParameter("discussion", discussion);
 		
-		return typedQuery.getSingleResult();
+		return typedQuery.getSingleResult().longValue();
 	}
 	
 	public Long countComment(Forum forum) {
@@ -130,18 +131,18 @@ public class StatDAO {
 
 	public Long countCommentThumbnails(String username) {
 		
-		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT SUM(SIZE(c.thumbnails)) FROM Comment c WHERE c.createBy = :createBy", Long.class);
+		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.thumbnails)), 0) FROM Comment c WHERE c.createBy = :createBy", BigDecimal.class);
 		typedQuery.setParameter("createBy", username);
 		
-		return typedQuery.getSingleResult();
+		return typedQuery.getSingleResult().longValue();
 	}
 	
 	public Long countCommentAttachments(String username) {
 		
-		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT SUM(SIZE(c.attachments)) FROM Comment c WHERE c.createBy = :createBy", Long.class);
+		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.createBy = :createBy", BigDecimal.class);
 		typedQuery.setParameter("createBy", username);
 		
-		return typedQuery.getSingleResult();
+		return typedQuery.getSingleResult().longValue();
 	}
 	
 	public Long countComment(String username) {

@@ -20,7 +20,7 @@ import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
 import com.github.chipolaris.bootforum.service.AckCodeType;
-import com.github.chipolaris.bootforum.service.CommentService;
+import com.github.chipolaris.bootforum.service.DiscussionService;
 import com.github.chipolaris.bootforum.service.ForumService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
@@ -46,7 +46,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 	private ForumService forumService;
 	
 	@Resource
-	private CommentService commentService;
+	private DiscussionService discussionService;
 	
 	@Resource
 	private SystemInfoService systemInfoService;
@@ -131,6 +131,6 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		
 		comment.setContent("Welcome. Please read forum announcements from forum administrators");
 		
-		commentService.addDiscussion(discussion, comment, admin, Collections.emptyList(), Collections.emptyList());
+		discussionService.addDiscussion(discussion, comment, admin, Collections.emptyList(), Collections.emptyList());
 	}
 }

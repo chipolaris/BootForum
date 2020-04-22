@@ -314,7 +314,6 @@
 
 			</div> <!-- end newForumDiv -->
 
-
 			<!-- edit Forum div -->
 			<div jsf:id="editForumDiv" class="toggleDiv" style="display:none">
 			
@@ -423,21 +422,21 @@
 							
 							<!-- use w3-display-hover to only show these when the mouse is hovered over -->
 				        	<div class="w3-display-bottommiddle w3-display-hover">
-								
-								<!-- link to same page with param forumGroupId -->
-								<p:link outcome="forumManagement" title="View/Edit">
-									<i class="fa fa-eye w3-xlarge w3-text-black"/>
-									<f:param name="forumGroupId" value="#{forumGroup.id}"/>
-								</p:link>
-				        		
-								<p:commandLink title="Delete this Forum Group" style="margin-left:5px;"
-									action="#{forumManagement.deleteForumGroup}" update=":forumGroupsDiv :forumMapContent :messages"
-		        					oncomplete="toggleDiv('forumGroupInfoDiv');window.scrollTo(0,0);">
-				        			<i class="fa fa-trash w3-xlarge w3-text-black"/>
-				        			<p:confirm header="Confirm Delete" message="Delete Forum Group '#{forumManagement.selectedForumGroup.title}' and associated sub Forum Groups?" icon="fa fa-exclamation-triangle"/>
-				        			<f:setPropertyActionListener value="#{forumGroup}" target="#{forumManagement.selectedForumGroup}"/>
-				        		</p:commandLink>				        		
-								
+								<h:form>
+									<!-- link to same page with param forumGroupId -->
+									<p:link outcome="forumManagement" title="View/Edit">
+										<i class="fa fa-eye w3-xlarge w3-text-black"/>
+										<f:param name="forumGroupId" value="#{forumGroup.id}"/>
+									</p:link>
+					        		
+									<p:commandLink title="Delete this Forum Group" style="margin-left:5px;"
+										action="#{forumManagement.deleteForumGroup}" update=":forumGroupsDiv :forumMapContent :messages"
+			        					oncomplete="toggleDiv('forumGroupInfoDiv');window.scrollTo(0,0);">
+					        			<i class="fa fa-trash w3-xlarge w3-text-black"/>
+					        			<p:confirm header="Confirm Delete" message="Delete Forum Group '#{forumManagement.selectedForumGroup.title}' and associated sub Forum Groups?" icon="fa fa-exclamation-triangle"/>
+					        			<f:setPropertyActionListener value="#{forumGroup}" target="#{forumManagement.selectedForumGroup}"/>
+					        		</p:commandLink>				        		
+								</h:form>
 							</div>
 						</div>
 					</div>
@@ -482,20 +481,20 @@
 							
 							<!-- use w3-display-hover to only show these when the mouse is hovered over -->
 				        	<div class="w3-display-bottommiddle w3-display-hover">
-								
-								<p:commandLink ajax="true" oncomplete="toggleDiv('editForumDiv');" update=":editForumDiv" title="Edit this forum">
-					        		<i class="fa fa-edit w3-xlarge w3-text-black"/>
-					        		<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
-					        	</p:commandLink>
-																
-								<p:commandLink title="Delete this Forum" style="margin-left:5px;"
-									action="#{forumManagement.deleteForum}" update=":forumsDiv :forumMapContent :messages"
-		        					oncomplete="toggleDiv('forumGroupInfoDiv');window.scrollTo(0,0);">
-				        			<i class="fa fa-trash w3-xlarge w3-text-black"/>
-				        			<p:confirm header="Confirm Delete" message="Delete Forum '#{forumManagement.selectedForum.title}' ?" icon="fa fa-exclamation-triangle"/>
-				        			<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
-				        		</p:commandLink>	
-								
+								<h:form>
+									<p:commandLink ajax="true" oncomplete="toggleDiv('editForumDiv');" update=":editForumDiv" title="Edit this forum">
+						        		<i class="fa fa-edit w3-xlarge w3-text-black"/>
+						        		<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
+						        	</p:commandLink>
+																	
+									<p:commandLink title="Delete this Forum" style="margin-left:5px;"
+										action="#{forumManagement.deleteForum}" update=":forumsDiv :forumMapContent :messages"
+			        					oncomplete="toggleDiv('forumGroupInfoDiv');window.scrollTo(0,0);">
+					        			<i class="fa fa-trash w3-xlarge w3-text-black"/>
+					        			<p:confirm header="Confirm Delete" message="Delete Forum '#{forumManagement.selectedForum.title}' ?" icon="fa fa-exclamation-triangle"/>
+					        			<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
+					        		</p:commandLink>	
+								</h:form>
 							</div>	
 						</div>
 						

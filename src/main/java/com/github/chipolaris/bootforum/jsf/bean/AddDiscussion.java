@@ -14,7 +14,7 @@ import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
-import com.github.chipolaris.bootforum.service.CommentService;
+import com.github.chipolaris.bootforum.service.DiscussionService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 
@@ -34,7 +34,7 @@ public class AddDiscussion {
 	private GenericService genericService;
 	
 	@Resource
-	private CommentService commentService;
+	private DiscussionService discussionService;
 	
 	@Resource
 	private LoggedOnSession userSession;
@@ -114,7 +114,7 @@ public class AddDiscussion {
 	public String submit() {
 		comment.setIpAddress(JSFUtils.getRemoteIPAddress());
 		ServiceResponse<Long> response = 
-				commentService.addDiscussion(discussion, comment, userSession.getUser(),
+				discussionService.addDiscussion(discussion, comment, userSession.getUser(),
 						commentThumbnailManagement.getUploadedFileList(), commentAttachmentManagement.getUploadedFileList());
 		
 		if(response.getAckCode() == AckCodeType.SUCCESS) {

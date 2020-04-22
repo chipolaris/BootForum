@@ -8,6 +8,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.event.ForumGroupAddEvent;
+import com.github.chipolaris.bootforum.event.ForumGroupDeleteEvent;
 import com.github.chipolaris.bootforum.event.ForumGroupUpdateEvent;
 import com.github.chipolaris.bootforum.jsf.bean.ForumMap;
 
@@ -31,6 +32,14 @@ public class ForumGroupEventsListener {
 	public void handleForumGroupUpdatedEvent(ForumGroupUpdateEvent forumGroupUpdateEvent) {
 		
 		logger.info("Handle Forum Group Update");
+		
+		forumMap.init();
+	}
+	
+	@EventListener
+	public void handleForumGroupDeleteEvent(ForumGroupDeleteEvent forumGroupDeleteEvent) {
+		
+		logger.info("Handle Forum Group Delete");
 		
 		forumMap.init();
 	}

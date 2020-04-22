@@ -54,6 +54,9 @@ public class SimulateDataService {
 	private CommentService commentService;
 	
 	@Resource
+	private DiscussionService discussionService;
+	
+	@Resource
 	private PasswordEncoder passwordEncoder;
 	
 	private String encodedPassword;
@@ -237,7 +240,7 @@ public class SimulateDataService {
 		
 		if(admin != null) {
 		
-			commentService.addDiscussion(discussion, comment, admin, Collections.emptyList(), Collections.emptyList());
+			discussionService.addDiscussion(discussion, comment, admin, Collections.emptyList(), Collections.emptyList());
 		
 			createSimulateComments(discussion, numComments, commentors);
 		}

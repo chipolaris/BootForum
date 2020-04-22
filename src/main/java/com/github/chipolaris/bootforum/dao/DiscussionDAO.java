@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.dao;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -46,12 +47,12 @@ public class DiscussionDAO {
 
 	public Long countCommentsForTag(Tag tag) {
 		
-		String queryStr = "SELECT SUM(SIZE(d.comments)) FROM Discussion d WHERE :tag MEMBER OF d.tags";
+		String queryStr = "SELECT COALESCE(SUM(SIZE(d.comments)), 0) FROM Discussion d WHERE :tag MEMBER OF d.tags";
 		
-		TypedQuery<Long> typedQuery = entityManager.createQuery(queryStr, Long.class);
+		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery(queryStr, BigDecimal.class);
 		typedQuery.setParameter("tag", tag);
 		
-		return typedQuery.getSingleResult();
+		return typedQuery.getSingleResult().longValue();
 	}
 	
 	public Long countDiscusionsForTag(Tag tag) {

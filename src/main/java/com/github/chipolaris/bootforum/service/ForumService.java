@@ -128,8 +128,8 @@ public class ForumService {
 			genericDAO.merge(parentGroup); // 
 		}
 		
-		// remove forumGroup
-		removeForumGroup(forumGroup);
+		// delete forumGroup (and all child forums and subgroups)
+		genericDAO.remove(forumGroup);
 		
 		// reset forum count
 		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
@@ -152,24 +152,6 @@ public class ForumService {
 		for(ForumGroup subGroup : forumGroup.getSubGroups()) {
 			resetDiscussions(subGroup);
 		}
-	}
-
-	/**
-	 * Helper (recursive) method to delete a forumGroup and all sub groups as well as forums
-	 * @param forumGroup
-	 */
-	private void removeForumGroup(ForumGroup forumGroup) {
-		
-		for(Forum forum : forumGroup.getForums()) {
-			forumDAO.moveDiscussions(forum, null);
-			genericDAO.remove(forum);
-		}
-		
-		for(ForumGroup subGroup : forumGroup.getSubGroups()) {
-			removeForumGroup(subGroup);
-		}
-		
-		genericDAO.remove(forumGroup);
 	}
 	
 	@Transactional(readOnly = false)
