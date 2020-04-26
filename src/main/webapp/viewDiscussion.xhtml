@@ -124,12 +124,22 @@
 				</div>
 				
 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					
  					<h2>#{viewDiscussion.discussion.title}</h2>
- 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">
-						Comments: <b>#{viewDiscussion.discussion.stat.commentCount}</b>,
-						Views: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
-						&#160;&#160;<i class="fa fa-chevron-right rotate" id="discussionInfoToggleIcon"/>
-					</span>
+ 					
+ 					<p>
+	 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">
+							Comments: <b>#{viewDiscussion.discussion.stat.commentCount}</b>,
+							Views: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
+							&#160;&#160;<i class="fa fa-chevron-right rotate" id="discussionInfoToggleIcon"/>
+						</span>
+				    </p>
+			    	
+			    	<pe:social id="socialMedia"  
+				        shares="twitter,facebook,pinterest,linkedin"
+				        url="${requestScope['javax.servlet.forward.query_string']}"   
+				        text="#{viewDiscussion.discussion.title}"
+				        theme="flat" showLabel="true" showCount="hide" style="font-size: 12px"/>
  				</div>
 				
 				<div class="w3-card w3-center w3-container w3-padding w3-margin-bottom" id="discussionInfo" style="display:none">

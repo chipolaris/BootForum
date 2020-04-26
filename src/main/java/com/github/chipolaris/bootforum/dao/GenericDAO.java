@@ -90,45 +90,6 @@ public class GenericDAO {
 	public <E> E find(Class<E> entityClass, Object id) { 
         return entityManager.find(entityClass, id); 
     }
-
-    /** TODO: candidate for removal
-     * Find the entity given the entityType (class name, and ID)
-     * 	Also eager fetch the specified properties, this is useful if
-     *  the properties was configured as lazy fetched
-     *  
-     * @param <E>
-     * @param entityClass
-     * @param id
-     * @param eagerFetchProperties
-     * @return
-     */
-    public <E> E findById(Class<E> entityClass, Object id, List<String> eagerFetchProperties) {
-		
-    	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    	CriteriaQuery<E> criteriaQuery = criteriaBuilder.createQuery(entityClass);
-    	
-    	Root<E> entity = criteriaQuery.from(entityClass);
-    	criteriaQuery.select(entity);
-    	
-    	Predicate condition = criteriaBuilder.equal(entity.get("id"), id);
-    	
-    	criteriaQuery.where(condition);
-    	
-    	// fetch specified properties
-    	for(String property : eagerFetchProperties) {
-    		entity.fetch(property, JoinType.LEFT);
-    	}
-    	
-    	TypedQuery<E> typedQuery = entityManager.createQuery(criteriaQuery);
-    	
-    	List<E> resultList = typedQuery.getResultList();
-    	
-    	if(resultList.isEmpty()) {
-    		return null;
-    	}
-    	
-    	return resultList.get(0);
-    }
     
     /**
      * Find all entities of the given entity type
@@ -165,7 +126,7 @@ public class GenericDAO {
     	return typedQuery.getResultList();
     }
     
-    /** TODO: candidate for removal
+    /**
      * Get entities of the given entityClass and 
      * within the pagination defined by the startPosition and the maxResult
      * 
@@ -184,44 +145,6 @@ public class GenericDAO {
     	query.setMaxResults(maxResult);
     	
     	return query.getResultList();
-    }
-    
-    /** TODO: candidate for removal
-     * Get entities of the given entityClass and 
-     * within the pagination defined by the startPosition and the maxResult
-     * Also eager fetch the specified properties
-     * 
-     * Also note that this method uses Criteria Query instead of JPQL
-     * 
-     * @param <E>
-     * @param entityClass
-     * @param startPosition
-     * @param maxResult
-     * @param eagerFetchProperties
-     * @return
-     */
-    public <E> List<E> findEntitiesInBatch(Class<E> entityClass, int startPosition, 
-    		int maxResult, List<String> eagerFetchProperties) {
-    	
-    	CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    	CriteriaQuery<E> criteriaQuery = criteriaBuilder.createQuery(entityClass);
-    	
-    	Root<E> entity = criteriaQuery.from(entityClass);
-    	
-    	// order by id desc
-    	criteriaQuery.orderBy(criteriaBuilder.desc(entity.get("id")));
-    	
-    	// fetch specified properties
-    	for(String property : eagerFetchProperties) {
-    		entity.fetch(property, JoinType.LEFT);
-    	}
-    	
-    	TypedQuery<E> typedQuery = entityManager.createQuery(criteriaQuery);
-    	
-    	typedQuery.setFirstResult(startPosition);
-    	typedQuery.setMaxResults(maxResult);
-    	
-    	return typedQuery.getResultList();
     }
     
     /**
@@ -251,49 +174,6 @@ public class GenericDAO {
 		query.select(root);
 		
 		Predicate[] predicates = buildPredicates(builder, root, filters);
-		query.where(predicates);
-		
-		TypedQuery<E> typedQuery = entityManager.createQuery(query);
-		typedQuery.setMaxResults(1);
-		
-		List<E> resultList = typedQuery.getResultList();
-		
-		if(resultList.isEmpty()) {
-			return null;
-		}
-		
-		return resultList.get(0);
-	}
-
-	/**
-	 * TODO: candidate for removal
-	 * @param <E>
-	 * @param entityClass
-	 * @param equalAttrs
-	 * @param eagerFetchProperties: attributes to eager fetch
-	 * @return
-	 */
-	public <E> E getEntity(Class<E> entityClass,
-			Map<String, Object> equalAttrs, List<String> eagerFetchProperties) {
-		
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<E> query = builder.createQuery(entityClass);
-
-		Root<E> obj = query.from(entityClass);
-		query.select(obj);
-		
-		for(String property : eagerFetchProperties) {
-			obj.fetch(property, JoinType.LEFT);
-		}
-		
-		List<Predicate> predicateList = new ArrayList<Predicate>();
-		for (String paramName : equalAttrs.keySet()) {
-			Object value = equalAttrs.get(paramName);
-			Predicate equalPredicate = builder.equal(getPathGeneric(obj, paramName), value);
-			predicateList.add(equalPredicate);
-		}
-		Predicate[] predicates = new Predicate[predicateList.size()];
-		predicateList.toArray(predicates);
 		query.where(predicates);
 		
 		TypedQuery<E> typedQuery = entityManager.createQuery(query);
@@ -904,7 +784,7 @@ public class GenericDAO {
 	 * @return
 	 */
 	public <E> E load(Class<E> entityClass, Long id, List<String> fetchProperties) {
-		return load(entityClass, id, (String[])fetchProperties.toArray(new String[fetchProperties.size()]));
+		return load(entityClass, id, fetchProperties.toArray(new String[fetchProperties.size()]));
 	}
 	
 	/**
