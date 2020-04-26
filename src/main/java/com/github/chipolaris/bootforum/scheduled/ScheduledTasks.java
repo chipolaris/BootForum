@@ -1,9 +1,8 @@
 package com.github.chipolaris.bootforum.scheduled;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -41,10 +40,7 @@ public class ScheduledTasks {
 		
 		Date threshold = cal.getTime();
 		
-		Map<String, Comparable> lessThanAttributes = new HashMap<>();
-		lessThanAttributes.put("createDate", threshold);
-		
-		Integer deletedCount = genericDAO.deleteLessThan(PasswordReset.class, lessThanAttributes);
+		Integer deletedCount = genericDAO.deleteLessThan(PasswordReset.class, Collections.singletonMap("createDate", threshold));
 		
 		logger.info(String.format("%d PasswordReset records deleted", deletedCount));
 	}

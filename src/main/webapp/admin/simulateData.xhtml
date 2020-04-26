@@ -30,7 +30,7 @@
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 		
-			<p:messages id="messages" showDetail="true">
+			<p:messages id="messages" showDetail="true" closable="true">
 				<p:autoUpdate/>
 			</p:messages>
 			
@@ -55,6 +55,9 @@
 					<button class="w3-bar-item w3-button tab-button" onclick="openTab('tab', 'forumData', 'tab-button', 'forumDataButton')" id="forumDataButton">
 						<i class="fa fa-comments"/> <b>Forum Data</b>
 					</button>
+					<button class="w3-bar-item w3-button tab-button" onclick="openTab('tab', 'privateMessages', 'tab-button', 'privateMessagesButton')" id="privateMessagesButton">
+						<i class="fa fa-envelope"/> <b>Private Messages</b>
+					</button>
 				</div>
 				
 				<div class="tab" id="users">
@@ -68,7 +71,7 @@
 							
 							<div class="w3-col" style="margin:10px 0px;">
 								<p:commandButton ajax="true" value="Create Users" icon="fa fa-play" 
-									action="#{simulateData.createRandomUsers}"/>
+									action="#{simulateData.createRandomUsers}" update=":discussionForm :forumDataForm"/>
 							</div>
 						</div>
 					</h:form>				
@@ -215,6 +218,59 @@
 								
 					</h:form>
 					
+				</div>
+				
+				<div class="tab" id="privateMessages">
+					<h:form id="privateMessagesForm">
+						<div class="w3-row w3-border w3-round w3-padding">
+							
+							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Number of Private Message" for="numMessages"/><br/>
+								<p:inputText value="#{simulateData.form.numMessages}" style="width:100%;" required="true" id="numMessages"/>
+							</div>
+							
+							<div class="w3-col w3-rest w3-margin-top" style="padding: 0px 5px;">
+							
+								<h:outputLabel value="Pick Commentors" for="commentorList"/><br/>
+								
+							    <p:pickList id="commentorList" value="#{simulateData.form.commentors}" var="commentor"
+	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true">
+	         					
+	         						<f:facet name="sourceCaption">Available</f:facet>
+	        						<f:facet name="targetCaption">Chosen</f:facet>
+	        						
+							        <p:column style="width:20%">
+							        	<h:graphicImage value="#{requestContext}/avatar/#{commentor}" class="w3-circle" rendered="#{fileHandler.isAvatarExists(commentor)}"
+											id="commentorAvatar" height="50" width="50" style="border:3px;" 
+											/>
+										<span jsf:rendered="#{not fileHandler.isAvatarExists(commentor)}" class="w3-circle avatarSpan"
+											title="#{commentor}"
+		  									style="display:inline-block;font-size:1.2rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;color:white;">
+		  									#{fn:substring(commentor, 0, 3)}
+		  								</span>
+							        </p:column>
+							 
+							        <p:column style="width:80%;">
+							            <h:outputText value="#{commentor}" />
+							        </p:column>						
+	        						
+	                			</p:pickList>
+							</div>
+							
+							<div class="w3-col" style="padding: 0px 5px; margin:10px 0px;">
+								
+								<!-- submit button to show on small screen -->
+								<p:commandButton ajax="true" value="Simulate Private Messages" icon="fa fa-play" 
+									styleClass="w3-block w3-hide-large w3-hide-medium" action="#{simulateData.simulatePrivateMessages}"/>
+								
+								<!-- submit button to show on large and medium screen -->	
+								<p:commandButton ajax="true" value="Simulate Private Messages" icon="fa fa-play" 
+									styleClass="w3-hide-small" action="#{simulateData.simulatePrivateMessages}"/>
+								
+							</div>
+							
+						</div>
+					</h:form>
 				</div>
 
 			</div>

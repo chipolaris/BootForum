@@ -83,7 +83,7 @@ public class SimulateData {
 	}
 	
 	public void createRandomUsers() {
-		logger.info(String.format("Creating random %d users", form.getNumUsers()));
+		logger.info(String.format("Create random %d users", form.getNumUsers()));
 		
 		ServiceResponse<Void> response = simulateDataService.simulateUsers(form.getNumUsers());
 		
@@ -95,6 +95,21 @@ public class SimulateData {
 		}
 	}
 	
+	public void simulatePrivateMessages() {
+		
+		logger.info(String.format("Simulate %d private messages", form.getNumMessages()));
+		
+		ServiceResponse<Void> response = simulateDataService.simulatePrivateMessages(form.getNumMessages(), form.getCommentors().getTarget());
+		
+		if(response.getAckCode() != AckCodeType.SUCCESS) {
+			
+			JSFUtils.addServiceErrorMessage(response);
+		}
+		else {
+			JSFUtils.addInfoStringMessage(null, "Simulate private messages created");
+		}
+	}
+	
 	public class Form {
 	
 		private String forumGroupTitle;
@@ -102,6 +117,7 @@ public class SimulateData {
 		private String discussionTitle;
 		private int numComments;
 		private int numDiscussions;
+		private int numMessages;
 		private DualListModel<String> commentors;
 		
 		private int numUsers;
@@ -141,6 +157,12 @@ public class SimulateData {
 		}
 		public void setNumDiscussions(int numDiscussions) {
 			this.numDiscussions = numDiscussions;
+		}
+		public int getNumMessages() {
+			return numMessages;
+		}
+		public void setNumMessages(int numMessages) {
+			this.numMessages = numMessages;
 		}
 		public DualListModel<String> getCommentors() {
 			return commentors;

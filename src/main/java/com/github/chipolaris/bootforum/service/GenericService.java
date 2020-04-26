@@ -1,6 +1,6 @@
 package com.github.chipolaris.bootforum.service;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -35,9 +35,10 @@ public class GenericService {
 	
 	/**
 	 * Find entity with the given type/class and entityId
-	 * 	Note that this method is referred over the {@link #getEntity(Class, Long)} method
+	 * 	Note that this method is referred over the {@link #getEntity(Class, Long)} method.
+	 *  However, make sure entityId is not null when invoking this method
 	 * @param entityClass
-	 * @param entityId
+	 * @param entityId (must not be null)
 	 * @return
 	 */
 	@Transactional(readOnly=true)
@@ -52,20 +53,17 @@ public class GenericService {
 	
 	/**
 	 * Get entity with the given type/class and entityId
-	 * 	Note that the method {@link #findEntity(Class, Object)} is preferred over this method
 	 * @param entityClass
 	 * @param entityId
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public <E> ServiceResponse<E> getEntity(Class<E> entityClass, Long entityId) {
+	public <E> ServiceResponse<E> getEntity(Class<E> entityClass, Object entityId) {
 		
 		ServiceResponse<E> response = new ServiceResponse<E>();
-
-		Map<String, Object> equalAttrs = new HashMap<String, Object>();
-		equalAttrs.put("id", entityId);
 		
-		response.setDataObject(genericDAO.getEntity(entityClass, equalAttrs));
+		response.setDataObject(genericDAO.getEntity(entityClass, 
+				Collections.singletonMap("id", entityId)));
 		
 		return response;
 	}

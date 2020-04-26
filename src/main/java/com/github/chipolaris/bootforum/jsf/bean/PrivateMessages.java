@@ -27,8 +27,7 @@ import com.github.chipolaris.bootforum.service.UserService;
 @Component 
 @Scope("view")
 public class PrivateMessages {
-
-	@SuppressWarnings("unused")
+	
 	private static final Logger logger = LoggerFactory.getLogger(PrivateMessages.class);
 	
 	@Value("${Message.attachment.maxPerMessage}")
@@ -90,37 +89,34 @@ public class PrivateMessages {
 		this.sentMessages = new PrivateMessagesLazyModel(genericService, owner, MessageType.SENT, false);
 		this.deletedMessages = new PrivateMessagesLazyModel(genericService, owner, null, true);
 		
-		Message message = new Message();
-		message.setFromUser(owner);
-		
-		newPrivateMessage = new PrivateMessage();		
-		newPrivateMessage.setMessage(message);
+		this.message = new Message();
+		this.message.setFromUser(owner);
 		
 		this.allUsernames = userService.getAllUsernames().getDataObject();
 		
 		this.uploadedFileManager = new UploadedFileManager(this.maxAttachmentsPerMessage);
 		
-		if(!StringUtils.isBlank(toUser)) {
-			toUsers = Arrays.asList(toUser);
+		if(!StringUtils.isBlank(to)) {
+			toUsers = Arrays.asList(to);
 		}
 	}
 
-	private PrivateMessage newPrivateMessage;
+	private Message message;
 	
-	public PrivateMessage getNewPrivateMessage() {
-		return newPrivateMessage;
+	public Message getMessage() {
+		return message;
 	}
-	public void setNewPrivateMessage(PrivateMessage newPrivateMessage) {
-		this.newPrivateMessage = newPrivateMessage;
+	public void setMessage(Message message) {
+		this.message = message;
 	}
 	
-	private String toUser;
+	private String to;
 	
-	public String getToUser() {
-		return toUser;
+	public String getTo() {
+		return to;
 	}
-	public void setToUser(String toUser) {
-		this.toUser = toUser;
+	public void setTo(String to) {
+		this.to = to;
 	}
 	
 	private List<String> toUsers;
@@ -135,7 +131,7 @@ public class PrivateMessages {
 	public void createMessage() {
 		
 		ServiceResponse<Void> response = privateMessageService.createMessage(
-				newPrivateMessage, userSession.getUser(), toUsers, uploadedFileManager.getUploadedFileList());
+				message, toUsers, uploadedFileManager.getUploadedFileList());
 		
 		if(response.getAckCode() == AckCodeType.SUCCESS) {
 			
@@ -147,9 +143,8 @@ public class PrivateMessages {
 		}
 		
 		// reinitialize newMessage
-		Message message = new Message();
+		this.message = new Message();
 		message.setFromUser(userSession.getUser().getUsername());
-		newPrivateMessage.setMessage(message);
 	}
 	
 	public void deleteMessage() {
@@ -184,6 +179,19 @@ public class PrivateMessages {
 		this.selectedMessage = null;
 	}
 	
+	public void markAsRead() {
+		
+		this.selectedMessage.setRead(true);
+		
+		ServiceResponse<PrivateMessage> response = genericService.updateEntity(this.selectedMessage);
+		
+		if(response.getAckCode() == AckCodeType.SUCCESS) {
+			logger.info(String.format("Private message %d marked as read", selectedMessage.getId()));
+		}
+		else {
+			JSFUtils.addServiceErrorMessage(response);
+		}
+	}
 	
 	private PrivateMessage selectedMessage;
 	

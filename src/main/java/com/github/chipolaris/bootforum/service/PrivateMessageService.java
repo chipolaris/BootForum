@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -35,14 +36,16 @@ public class PrivateMessageService {
 	private UserDAO userDAO;
 	
 	@Transactional(readOnly = false)
-	public ServiceResponse<Void> createMessage(PrivateMessage privateMessage, User user,
+	public ServiceResponse<Void> createMessage(Message message,
 			List<String> toUsers, List<UploadedFileData> attachmentList) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
 		
+		User user = genericDAO.getEntity(User.class, Collections.singletonMap("username", message.getFromUser()));
+		
 		Preferences preference = user.getPreferences();
 		if(preference.isUseSignatureOnMessage() && StringUtils.isNotEmpty(preference.getSignature())) {
-			privateMessage.getMessage().setText(privateMessage.getMessage().getText() + preference.getSignature());
+			message.setText(message.getText().concat(preference.getSignature()));
 		}
 		
 		/*
@@ -59,7 +62,6 @@ public class PrivateMessageService {
 		
 			List<FileInfo> messageAttachments = createAttachments(attachmentList);
 			
-			Message message = privateMessage.getMessage();
 			message.setToUsers(toUserSet);
 			
 			genericDAO.persist(message);
@@ -78,11 +80,13 @@ public class PrivateMessageService {
 			}
 			
 			// save the SENT message
-			privateMessage.setOwner(message.getFromUser());
-			privateMessage.setMessageType(MessageType.SENT);
-			privateMessage.setAttachments(copyAttachments4User(messageAttachments, message.getFromUser()));
+			PrivateMessage sentMessage = new PrivateMessage();
+			sentMessage.setMessage(message);
+			sentMessage.setOwner(message.getFromUser());
+			sentMessage.setMessageType(MessageType.SENT);
+			sentMessage.setAttachments(copyAttachments4User(messageAttachments, message.getFromUser()));
 			
-			genericDAO.persist(privateMessage);
+			genericDAO.persist(sentMessage);
 		}
 		else {
 			response.setAckCode(AckCodeType.FAILURE);

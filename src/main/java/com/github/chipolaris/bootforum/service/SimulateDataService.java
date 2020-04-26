@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -19,11 +20,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.UserDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
+import com.github.chipolaris.bootforum.domain.Message;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.User;
@@ -45,7 +48,10 @@ public class SimulateDataService {
 	private Lorem lorem = LoremIpsum.getInstance();
 	
 	@Resource
-	private GenericService genericService;
+	private GenericDAO genericDAO;
+	
+	@Resource
+	private PrivateMessageService privateMessageService;
 	
 	@Resource
 	private ForumService forumService;
@@ -220,7 +226,7 @@ public class SimulateDataService {
 		
 		filters.put("username", username);
 		
-		return genericService.getEntities(User.class, filters).getDataObject().get(0);
+		return genericDAO.getEntity(User.class, filters);
 	}
 
 	private void createSimulatedDiscussion(Forum forum, String discussionTitle, int numComments, List<String> commentors) {
@@ -274,5 +280,36 @@ public class SimulateDataService {
 			
 			createdComments.add(comment);
 		}
+	}
+
+	@Transactional(readOnly = false)
+	public ServiceResponse<Void> simulatePrivateMessages(int numMessages, List<String> users) {
+		ServiceResponse<Void> response = new ServiceResponse<>();
+		
+		for(int i = 0; i < numMessages; i++) {
+			
+			// create a random message (from a random sender)
+			Message message = createRandomMessage(users);
+			
+			// create a private message to two random users. No attachment
+			privateMessageService.createMessage(message, 
+					Arrays.asList(users.get(random.nextInt(users.size())), users.get(random.nextInt(users.size()))), 
+					Collections.emptyList());
+		}
+		
+		return response;
+	}
+
+	private Message createRandomMessage(List<String> users) {
+		
+		// random sender
+		String sender = users.get(random.nextInt(users.size()));
+		
+		Message message = new Message();
+		message.setFromUser(sender);
+		message.setSubject(StringUtils.capitalize(lorem.getWords(2, 5)));
+		message.setText(lorem.getParagraphs(1, 3));
+		
+		return message;
 	}
 }

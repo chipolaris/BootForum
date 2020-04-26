@@ -1,7 +1,7 @@
 package com.github.chipolaris.bootforum.service;
 
 import java.util.AbstractMap;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -53,17 +53,15 @@ public class ForumService {
 	}
 	
 	@Transactional(readOnly = true)
-	public ServiceResponse<AbstractMap.SimpleEntry<List<Forum>, List<ForumGroup>>> getChildForumsAndForumGroups(ForumGroup forumGroup) {
+	public ServiceResponse<Map.Entry<List<Forum>, List<ForumGroup>>> getChildForumsAndForumGroups(ForumGroup forumGroup) {
 		
-		ServiceResponse<AbstractMap.SimpleEntry<List<Forum>, List<ForumGroup>>> response = new ServiceResponse<>();
+		ServiceResponse<Map.Entry<List<Forum>, List<ForumGroup>>> response = new ServiceResponse<>();
 		
-		Map<String, Object> equalAttrs = new HashMap<>();
-		equalAttrs.put("forumGroup", forumGroup);
-		List<Forum> forums = genericDAO.getEntities(Forum.class, equalAttrs);
+		List<Forum> forums = genericDAO.getEntities(Forum.class, 
+				Collections.singletonMap("forumGroup", forumGroup));
 		
-		equalAttrs.clear(); // reset/clear to add new entry
-		equalAttrs.put("parent", forumGroup);
-		List<ForumGroup> forumGroups = genericDAO.getEntities(ForumGroup.class, equalAttrs);
+		List<ForumGroup> forumGroups = genericDAO.getEntities(ForumGroup.class, 
+				Collections.singletonMap("parent", forumGroup));		
 		
 		AbstractMap.SimpleEntry<List<Forum>, List<ForumGroup>> dataObject = 
 				new AbstractMap.SimpleEntry<List<Forum>, List<ForumGroup>>(forums, forumGroups);

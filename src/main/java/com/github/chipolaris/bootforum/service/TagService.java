@@ -1,8 +1,7 @@
 package com.github.chipolaris.bootforum.service;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -32,10 +31,8 @@ public class TagService {
 		
 		ServiceResponse<List<Tag>> response = new ServiceResponse<>();
 
-		Map<String, Object> filters = new HashMap<>();
-		filters.put("disabled", Boolean.FALSE);
-
-		List<Tag> tags = genericDAO.getEntities(Tag.class, filters);
+		List<Tag> tags = genericDAO.getEntities(Tag.class, 
+				Collections.singletonMap("disabled", Boolean.FALSE));
 		response.setDataObject(tags);
 
 		return response;

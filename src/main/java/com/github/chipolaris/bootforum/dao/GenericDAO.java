@@ -91,7 +91,7 @@ public class GenericDAO {
         return entityManager.find(entityClass, id); 
     }
 
-    /**
+    /** TODO: candidate for removal
      * Find the entity given the entityType (class name, and ID)
      * 	Also eager fetch the specified properties, this is useful if
      *  the properties was configured as lazy fetched
@@ -165,7 +165,7 @@ public class GenericDAO {
     	return typedQuery.getResultList();
     }
     
-    /**
+    /** TODO: candidate for removal
      * Get entities of the given entityClass and 
      * within the pagination defined by the startPosition and the maxResult
      * 
@@ -186,7 +186,7 @@ public class GenericDAO {
     	return query.getResultList();
     }
     
-    /**
+    /** TODO: candidate for removal
      * Get entities of the given entityClass and 
      * within the pagination defined by the startPosition and the maxResult
      * Also eager fetch the specified properties
@@ -230,33 +230,27 @@ public class GenericDAO {
      * @return
      */
 	public <E> long countEntities(Class<E> entityClass) {
-    	Query query = entityManager.createQuery("SELECT count(e) FROM " + entityClass.getSimpleName() + " e");
-    	return (Long) query.getSingleResult();
+    	TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT count(e) FROM " + entityClass.getSimpleName() + " e", Long.class);
+    	return typedQuery.getSingleResult();
     }
 	
 	/**
 	 * 
 	 * @param <E>
 	 * @param entityClass
-	 * @param equalAttrs
+	 * @param filters
 	 * @return
 	 */
 	public <E> E getEntity(Class<E> entityClass,
-			Map<String, Object> equalAttrs) {
+			Map<String, Object> filters) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<E> query = builder.createQuery(entityClass);
 
-		Root<E> obj = query.from(entityClass);
-		query.select(obj);
-		List<Predicate> predicateList = new ArrayList<Predicate>();
-		for (String paramName : equalAttrs.keySet()) {
-			Object value = equalAttrs.get(paramName);
-			Predicate equalPredicate = builder.equal(getPathGeneric(obj, paramName), value);
-			predicateList.add(equalPredicate);
-		}
-		Predicate[] predicates = new Predicate[predicateList.size()];
-		predicateList.toArray(predicates);
+		Root<E> root = query.from(entityClass);
+		query.select(root);
+		
+		Predicate[] predicates = buildPredicates(builder, root, filters);
 		query.where(predicates);
 		
 		TypedQuery<E> typedQuery = entityManager.createQuery(query);
@@ -272,7 +266,7 @@ public class GenericDAO {
 	}
 
 	/**
-	 * 
+	 * TODO: candidate for removal
 	 * @param <E>
 	 * @param entityClass
 	 * @param equalAttrs
@@ -314,8 +308,18 @@ public class GenericDAO {
 		return resultList.get(0);
 	}
 	
+	/**
+	 * 
+	 * @param <T>
+	 * @param <R>
+	 * @param targetClass
+	 * @param targetPath
+	 * @param entityClass
+	 * @param filters
+	 * @return
+	 */
 	public <T, R> List<T> getEntities(Class<T> targetClass, String targetPath, 
-			Class<R> entityClass, Map<String, Object> equalAttrs) {
+			Class<R> entityClass, Map<String, Object> filters) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<T> query = builder.createQuery(targetClass);
@@ -323,14 +327,7 @@ public class GenericDAO {
 		Root<R> root = query.from(entityClass);
 		query.select(getPathGeneric(root, targetPath));
 		
-		List<Predicate> predicateList = new ArrayList<Predicate>();
-		for (String paramName : equalAttrs.keySet()) {
-			Object value = equalAttrs.get(paramName);
-			Predicate equalPredicate = builder.equal(getPathGeneric(root, paramName), value);
-			predicateList.add(equalPredicate);
-		}
-		Predicate[] predicates = new Predicate[predicateList.size()];
-		predicateList.toArray(predicates);
+		Predicate[] predicates = buildPredicates(builder, root, filters);
 		query.where(predicates);
 		
 		return entityManager.createQuery(query).getResultList();
@@ -338,28 +335,22 @@ public class GenericDAO {
 	
 	/**
 	 * Get all entities of the given type and have attributes
-	 * fit the equalAttrs
+	 * fit the filters parameter
 	 * @param <E>
 	 * @param entityClass
-	 * @param equalAttrs
+	 * @param filters
 	 * @return
 	 */
 	public <E> List<E> getEntities(Class<E> entityClass,
-			Map<String, Object> equalAttrs) {
+			Map<String, Object> filters) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<E> query = builder.createQuery(entityClass);
 
-		Root<E> obj = query.from(entityClass);
-		query.select(obj);
-		List<Predicate> predicateList = new ArrayList<Predicate>();
-		for (String paramName : equalAttrs.keySet()) {
-			Object value = equalAttrs.get(paramName);
-			Predicate equalPredicate = builder.equal(getPathGeneric(obj, paramName), value);
-			predicateList.add(equalPredicate);
-		}
-		Predicate[] predicates = new Predicate[predicateList.size()];
-		predicateList.toArray(predicates);
+		Root<E> root = query.from(entityClass);
+		query.select(root);		
+		
+		Predicate[] predicates = buildPredicates(builder, root, filters);
 		query.where(predicates);
 		
 		return entityManager.createQuery(query).getResultList();
@@ -514,49 +505,25 @@ public class GenericDAO {
 
 	/**
 	 * @param entityClass
-	 * @param equalAttrs
+	 * @param filters
 	 * @param startPosition
 	 * @param maxResult
 	 * @return
-	 */
-	@SuppressWarnings("unchecked")
+	 */	
 	public <E> List<E> getEntities(Class<E> entityClass,
-			Map<String, Object> equalAttrs, int startPosition, int maxResult, SortSpec sortSpec) {
+			Map<String, Object> filters, int startPosition, int maxResult, SortSpec sortSpec) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<E> query = builder.createQuery(entityClass);
 
-		Root<E> obj = query.from(entityClass);
-		query.select(obj);
-		List<Predicate> predicateList = new ArrayList<Predicate>();
-		for (String paramName : equalAttrs.keySet()) {
-			Object value = equalAttrs.get(paramName);
-			
-			Predicate predicate = null;
-			
-			if(value instanceof Entry) {
-				@SuppressWarnings("rawtypes")
-				Entry<Comparable, Comparable> valuePair = (Entry<Comparable, Comparable>) value;
-				@SuppressWarnings("rawtypes")
-				Comparable value1 = valuePair.getKey();
-				@SuppressWarnings("rawtypes")
-				Comparable value2 = valuePair.getValue();
-
-				predicate = builder.between(getPathGeneric(obj, paramName), value1, value2);
-			}
-			else {
-				predicate = builder.equal(getPathGeneric(obj, paramName), value);
-			}
-			
-			
-			predicateList.add(predicate);
-		}
-		Predicate[] predicates = new Predicate[predicateList.size()];
-		predicateList.toArray(predicates);
+		Root<E> root = query.from(entityClass);
+		query.select(root);
+		
+		Predicate[] predicates = buildPredicates(builder, root, filters);
 		query.where(predicates);
 		
 		query.orderBy(sortSpec.dir == Direction.ASC ?
-				builder.asc(getPathGeneric(obj, sortSpec.field)) : builder.desc(getPathGeneric(obj, sortSpec.field)));
+				builder.asc(getPathGeneric(root, sortSpec.field)) : builder.desc(getPathGeneric(root, sortSpec.field)));
 		
     	TypedQuery<E> typedQuery = entityManager.createQuery(query);
     	
@@ -829,44 +796,19 @@ public class GenericDAO {
 	 * @param entityClass
 	 *            the type of entity to be query (Client.class, Contact.class,
 	 *            etc)
-	 * @param equalAttrs
+	 * @param filters
 	 *            map that hold key/value to be applied in the query
 	 * @return number of entities matching the given entity type and predicates
 	 */
 	public <E> long countEntities(Class<E> entityClass,
-			Map<String, Object> equalAttrs) {
+			Map<String, Object> filters) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
 
-		Root<E> obj = query.from(entityClass);
-		query.select(builder.count(obj));
-		List<Predicate> predicateList = new ArrayList<Predicate>();
+		Root<E> root = query.from(entityClass);
+		query.select(builder.count(root));
 		
-		for (String paramName : equalAttrs.keySet()) {
-			Object value = equalAttrs.get(paramName);
-			
-			Predicate predicate = null;
-			
-			if(value instanceof Entry) {
-				@SuppressWarnings("rawtypes")
-				Entry<Comparable, Comparable> valuePair = (Entry<Comparable, Comparable>) value;
-				@SuppressWarnings("rawtypes")
-				Comparable value1 = valuePair.getKey();
-				@SuppressWarnings("rawtypes")
-				Comparable value2 = valuePair.getValue();
-
-				predicate = builder.between(getPathGeneric(obj, paramName), value1, value2);
-			}
-			else {
-				predicate = builder.equal(getPathGeneric(obj, paramName), value);
-			}
-			
-			
-			predicateList.add(predicate);
-		}
-		
-		Predicate[] predicates = new Predicate[predicateList.size()];
-		predicateList.toArray(predicates);
+		Predicate[] predicates = buildPredicates(builder, root, filters);
 		query.where(predicates);
 		return entityManager.createQuery(query).getSingleResult();
 	}
@@ -954,7 +896,7 @@ public class GenericDAO {
 	}
 	
 	/**
-	 * 
+	 * TODO: candidate for removal
 	 * @param <E>
 	 * @param entityClass
 	 * @param id
@@ -966,7 +908,7 @@ public class GenericDAO {
 	}
 	
 	/**
-	 * 
+	 * TODO: candidate for removal
 	 * @param <E>
 	 * @param entityClass
 	 * @param id
@@ -987,6 +929,14 @@ public class GenericDAO {
 		return entity;
 	}
 	
+	/**
+	 * 
+	 * @param <E>
+	 * @param entityClass
+	 * @param text
+	 * @param fieldPaths
+	 * @return
+	 */
 	public <E> Long searchTextCount(Class<E> entityClass, String text, List<String> fieldPaths) {
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -995,7 +945,7 @@ public class GenericDAO {
 		
 		Root<E> root = criteriaQuery.from(entityClass);
 		
-		Predicate[] predicates = buildPredicates(criteriaBuilder, root, text, fieldPaths);
+		Predicate[] predicates = buildPredicates4TextSearch(criteriaBuilder, root, fieldPaths, text);
 		criteriaQuery.select(criteriaBuilder.countDistinct(root));
 		criteriaQuery.where(criteriaBuilder.or(predicates));
 		
@@ -1023,7 +973,7 @@ public class GenericDAO {
 		
 		Root<E> root = criteriaQuery.from(entityClass);
 		
-		Predicate[] predicates = buildPredicates(criteriaBuilder, root, text, fieldPaths);
+		Predicate[] predicates = buildPredicates4TextSearch(criteriaBuilder, root, fieldPaths, text);
 		criteriaQuery.where(criteriaBuilder.or(predicates));
 		criteriaQuery.distinct(true);
 		
@@ -1035,7 +985,8 @@ public class GenericDAO {
 		return typedQuery.getResultList();
 	}
 	
-	public <E> Integer deleteEquals(Class<E> entityClass, Map<String, Comparable<Object>> lessThanAttributes) {
+	@SuppressWarnings("rawtypes")
+	public <E> Integer deleteEquals(Class<E> entityClass, Map<String, Comparable> equalAttributes) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		
@@ -1047,9 +998,9 @@ public class GenericDAO {
 		List<Predicate> predicateList = new ArrayList<Predicate>();
 		
 		// where
-		for (String paramName : lessThanAttributes.keySet()) {
+		for (String paramName : equalAttributes.keySet()) {
 			
-			Comparable<Object> value = lessThanAttributes.get(paramName);
+			Comparable value = equalAttributes.get(paramName);
 			
 			Predicate predicate = builder.equal(getPathGeneric(root, paramName), value);
 			
@@ -1065,6 +1016,7 @@ public class GenericDAO {
 		return query.executeUpdate();
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public <E> Integer deleteLessThan(Class<E> entityClass, Map<String, Comparable> lessThanAttributes) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -1095,7 +1047,8 @@ public class GenericDAO {
 		return query.executeUpdate();
 	}
 	
-	public <E> Integer deleteGreaterThan(Class<E> entityClass, Map<String, Comparable<Object>> lessThanAttributes) {
+	@SuppressWarnings("rawtypes")
+	public <E> Integer deleteGreaterThan(Class<E> entityClass, Map<String, Comparable> greaterThanAttributes) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		
@@ -1107,9 +1060,9 @@ public class GenericDAO {
 		List<Predicate> predicateList = new ArrayList<Predicate>();
 		
 		// where
-		for (String paramName : lessThanAttributes.keySet()) {
+		for (String paramName : greaterThanAttributes.keySet()) {
 			
-			Comparable<Object> value = lessThanAttributes.get(paramName);
+			Comparable value = greaterThanAttributes.get(paramName);
 			
 			Predicate predicate = builder.greaterThan(getPathGeneric(root, paramName), value);
 			
@@ -1129,23 +1082,63 @@ public class GenericDAO {
 	 * Helper method to create array of Predicate (	Predicate[] )
 	 * @param <E>
 	 * @param criteriaBuilder
-	 * @param rootEntity
-	 * @param text
+	 * @param root
+	 * @param searchText
 	 * @param fieldPaths
 	 * @return
 	 */
-	private <E> Predicate[] buildPredicates(CriteriaBuilder criteriaBuilder, Root<E> rootEntity,
-			String text, List<String> fieldPaths) {
+	private <E> Predicate[] buildPredicates4TextSearch(CriteriaBuilder criteriaBuilder, Root<E> root,
+			List<String> fieldPaths, String searchText) {
 		
 		List<Predicate> predicateList = new ArrayList<>();
 		Predicate predicate = null;
 		
 		for(String fieldPath : fieldPaths) {
-			predicate = criteriaBuilder.like(criteriaBuilder.upper(getPathGeneric(rootEntity, fieldPath)), "%"+text.toLowerCase()+"%");
+			predicate = criteriaBuilder.like(criteriaBuilder.upper(getPathGeneric(root, fieldPath)), "%"+searchText.toLowerCase()+"%");
 			predicateList.add(predicate);
 		}
 		
 		Predicate[] predicates = new Predicate[predicateList.size()];
+		predicateList.toArray(predicates);
+		
+		return predicates;
+	}
+	
+	/**
+	 * Helper method
+	 * @param <E>
+	 * @param filters
+	 * @param builder
+	 * @param root
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private <E>Predicate[] buildPredicates(CriteriaBuilder builder, Root<E> root, Map<String, Object> filters) {
+		List<Predicate> predicateList = new ArrayList<>();
+		
+		for (String paramName : filters.keySet()) {
+			Object value = filters.get(paramName);
+			
+			Predicate predicate = null;
+			
+			if(value instanceof Entry) {
+				@SuppressWarnings("rawtypes")
+				Entry<Comparable, Comparable> valuePair = (Entry<Comparable, Comparable>) value;
+				@SuppressWarnings("rawtypes")
+				Comparable value1 = valuePair.getKey();
+				@SuppressWarnings("rawtypes")
+				Comparable value2 = valuePair.getValue();
+
+				predicate = builder.between(getPathGeneric(root, paramName), value1, value2);
+			}
+			else {
+				predicate = builder.equal(getPathGeneric(root, paramName), value);
+			}
+			
+			predicateList.add(predicate);
+		}
+		
+		Predicate[] predicates = new Predicate[predicateList.size()]; 
 		predicateList.toArray(predicates);
 		
 		return predicates;

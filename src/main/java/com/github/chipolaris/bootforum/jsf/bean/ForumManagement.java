@@ -2,6 +2,7 @@ package com.github.chipolaris.bootforum.jsf.bean;
 
 import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -64,7 +65,7 @@ public class ForumManagement {
 		
 		this.forumGroup = forumGroupResponse.getDataObject();
 		
-		ServiceResponse<AbstractMap.SimpleEntry<List<Forum>, List<ForumGroup>>> childForumAndForumGroupResponse =	
+		ServiceResponse<Map.Entry<List<Forum>, List<ForumGroup>>> childForumAndForumGroupResponse =	
 				forumService.getChildForumsAndForumGroups(this.forumGroup);
 		
 		if(childForumAndForumGroupResponse.getAckCode() != AckCodeType.FAILURE) {
