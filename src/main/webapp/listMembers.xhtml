@@ -92,6 +92,7 @@
 						rows="10" rowsPerPageTemplate="10,20,50" lazy="true" id="membersTable" draggableColumns="true">
 						
 						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						<p:ajax event="filter" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 						
 						<p:column sortBy="#{user.username}" filterBy="#{user.username}">
 						

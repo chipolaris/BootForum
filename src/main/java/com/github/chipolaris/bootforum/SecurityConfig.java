@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       	.csrf().disable() // see this thread: http://stackoverflow.com/questions/20602436/in-spring-security-with-java-config-why-does-httpbasic-post-want-csrf-token
         .authorizeRequests()
         .antMatchers("/admin/**").hasRole("ADMIN")
-        .antMatchers("/secure/**").hasAnyRole("ADMIN","USER")
+        .antMatchers("/secure/**", "/chat/**", "/stomp-connect/**").hasAnyRole("ADMIN","USER")        
         .antMatchers("/**").permitAll()
         .anyRequest().authenticated()
         .and()

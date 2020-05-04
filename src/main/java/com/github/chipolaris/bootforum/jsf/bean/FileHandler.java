@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +29,7 @@ import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.FileService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 
-@Component @Scope("application")
+@Component
 public class FileHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileHandler.class);

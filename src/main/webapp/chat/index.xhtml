@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf" 
+    template="/WEB-INF/template/layout_chat.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} - Chat Dashboard
+	</ui:define>
+	
+	<ui:define name="pageTitle">
+		<b><i class="fa fa-commenting"/> Chat Dashboard</b>
+	</ui:define>
+
+	<ui:define name="content">
+	
+		<style type="text/css">
+		
+			.chatAvatarSpan {
+				display:inline-block;
+				font-size:0.9em;
+				line-height:36px;
+				width:36px;
+				text-align: center;
+				text-transform: uppercase;
+				color:white;
+			}
+			
+			.chatAvatarImage {
+				height:36px;
+				width:36px;
+			}
+			
+			/* override the w3-striped to have the first row shaded gray */
+			.w3-striped tr:nth-child(even) {
+				background-color: #fcfcfc !important;
+			}
+			.w3-striped tr:nth-child(odd) {
+				background-color: #f0f0f0;
+			}
+		</style>
+		
+		<div jsf:id="mainContentDiv">
+			
+			<p/>
+			
+			<div class="w3-panel w3-center">
+				<form class="w3-container">
+	                <div>
+	                    <button id="toggleChannel1000" class="w3-btn w3-theme-dark toggleChanel" type="submit" data-channelid="1000">Channel 1000</button>
+	                    <button id="toggleChannel1001" class="w3-btn w3-theme-dark toggleChanel" type="submit" data-channelid="1001">Channel 1001</button>
+	                </div>
+	            </form>				
+			</div>
+			
+			<div id="channel1000" class="w3-border" style="display: none;"> <!-- {*} -->
+				
+				<div class="w3-cell-row w3-theme-l1">
+					<div class="w3-cell w3-container ">
+						<h4>Chat Channel 1000</h4> <!-- {*} -->
+					</div>
+					<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
+						<form>
+							<button id="enterChannel1000" class="w3-btn w3-theme-dark enterChannel" type="submit" data-channelid="1000"> <!-- {*} {*} -->
+								<i class="fa fa-sign-in"/> Enter
+							</button>
+	                    	<button id="leaveChannel1000" class="w3-btn w3-theme-dark leaveChannel" type="submit" data-channelid="1000" disabled="disabled"> <!-- {*} -->
+	                    		<i class="fa fa-sign-out"/> Leave
+	                    	</button>
+	                    </form>
+					</div>
+				</div>
+				
+				<div class="w3-row-padding">
+			        <div class="w3-col w3-rest" style="height: 500px; overflow: auto;" id="conversationDiv1000"> <!-- {*} -->
+			            <table id="conversation1000" class="w3-table w3-striped"> <!-- {*} -->
+			                <thead>
+				                <tr class="w3-white">
+				                	<!-- define column width here -->
+				                    <th style="width:50px;"></th>
+				                    <th></th>
+				                </tr>
+			                </thead>
+			                <tbody id="channelContent1000"> <!-- {*}: append channelId -->
+			                </tbody>
+			            </table>
+			        </div>
+		        	
+		        </div>
+		        
+	            <form class="w3-container w3-padding">
+	            	<fieldset style="border:0;padding: 0;" id="fieldSet1000" disabled="disabled">
+		            	<h:outputText id="counterMessage1000" styleClass="w3-opacity"/> <!-- {*} -->
+	                	<p:inputTextarea rows="2" counter="counterMessage1000" maxlength="200" counterTemplate="{0} characters remaining." 
+	                		autoResize="false" id="messageText1000" style="overflow-x: hidden;" styleClass="w3-input" placeholder="Type your message.."/>
+	                	
+		                <button id="postMessage1000" class="w3-btn w3-theme-dark postMessage" data-channelid="1000" type="submit" style="margin-top: 5px;">
+		                	<i class="fa fa-paper-plane"/> Post
+		                </button>
+		                <label>
+		                	<input type="file" id="imageInput1000" class="imageInput" data-channelid="1000" style="display:none;" accept='image/*'/>
+		                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Post Image"><i class="fa fa-picture-o"/></span>
+		                </label>
+	                </fieldset>
+	            </form>
+				
+			</div>
+			
+			<p>&#160;</p>
+
+			<div id="channel1001" class="w3-border" style="display: none;"> <!-- {*} -->
+				
+				<div class="w3-cell-row w3-theme-l1">
+					<div class="w3-cell w3-container ">
+						<h4>Chat Channel 1001</h4> <!-- {*} -->
+					</div>
+					<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
+						<form>
+							<button id="enterChannel1001" class="w3-btn w3-theme-dark enterChannel" type="submit" data-channelid="1001"> <!-- {*} {*} -->
+								<i class="fa fa-sign-in"/> Enter
+							</button>
+	                    	<button id="leaveChannel1001" class="w3-btn w3-theme-dark leaveChannel" type="submit" disabled="disabled" data-channelid="1001"> <!-- {*} -->
+	                    		<i class="fa fa-sign-out"/> Leave
+	                    	</button>
+	                    </form>
+					</div>
+				</div>
+				
+				<div class="w3-row-padding">
+			        <div class="w3-col w3-rest" style="height: 500px; overflow: auto;" id="conversationDiv1001"> <!-- {*} -->
+			            <table id="conversation1001" class="w3-table w3-striped"> <!-- {*} -->
+			                <thead>
+				                <tr class="w3-white">
+				                	<!-- define column width here -->
+				                    <th style="width:50px;"></th>
+				                    <th></th>
+				                </tr>
+			                </thead>
+			                <tbody id="channelContent1001"> <!-- {*}: append channelId -->
+			                </tbody>
+			            </table>
+			        </div>
+		        	
+		        </div>
+		        
+	            <form class="w3-container w3-padding">
+	            	<fieldset style="border:0;padding: 0;" id="fieldSet1001" disabled="disabled">
+		            	<h:outputText id="counterMessage1001" styleClass="w3-opacity"/> <!-- {*} -->
+	                	<p:inputTextarea rows="2" counter="counterMessage1001" maxlength="200" counterTemplate="{0} characters remaining." 
+	                		autoResize="false" id="messageText1001" style="overflow-x: hidden;" styleClass="w3-input" placeholder="Type your message.."/>
+	                	
+		                <button id="postMessage1001" class="w3-btn w3-theme-dark postMessage" data-channelid="1001" type="submit" style="margin-top: 5px;">
+		                	<i class="fa fa-paper-plane"/> Post
+		                </button>
+		                <label>
+		                	<input type="file" id="imageInput1001" class="imageInput" data-channelid="1001" style="display:none;" accept='image/*'/>
+		                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Post Image"><i class="fa fa-picture-o"/></span>
+		                </label>
+	                </fieldset>
+	            </form>
+				
+			</div>
+			
+			<!-- image preview dialog -->
+			<div id="imagePreviewModal" class="w3-modal">
+				
+				<div class="w3-modal-content">
+					<div class="w3-container">
+						
+						<h5 id="imagePreviewHeader"></h5>
+						
+						<span onclick="$('#imagePreviewModal').hide();" class="w3-button w3-display-topright">&#215;</span>
+						
+						<div class="w3-center">
+							
+							<img id="imagePreview" src="#" alt="Image Preview" style="width:100%;max-width:300px;height:auto;"/>
+							<p/>
+							<form class="w3-container">
+								<button id="postImageButton" class="w3-btn w3-theme-dark" type="submit">
+		                			<i class="fa fa-paper-plane"/> Post
+		                		</button>
+		                		<button id="selectAnotherImage" class="w3-btn w3-theme-dark" type="submit" onclick="$('#imageInput' + selectedChannel).trigger('click');">
+		                			<i class="fa fa-picture-o"/> Select Another
+		                		</button>
+		                		<span class="w3-btn w3-theme-dark" onclick="$('#imagePreviewModal').hide();">
+		                			<i class="fa fa-close"/> Cancel
+		                		</span>
+							</form>
+						</div>
+						<p/>
+					</div>
+					
+				</div>
+			
+			</div>
+			
+		</div>
+		
+	</ui:define>
+	
+</ui:composition>
