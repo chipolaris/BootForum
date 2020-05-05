@@ -41,6 +41,11 @@
 			.w3-striped tr:nth-child(odd) {
 				background-color: #f0f0f0;
 			}
+			
+			#emojiTableBody > tr > td {
+				cursor: pointer;
+				background: lightgrey;
+			}
 		</style>
 		
 		<div jsf:id="mainContentDiv">
@@ -65,7 +70,7 @@
 					<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
 						<form>
 							<button id="enterChannel1000" class="w3-btn w3-theme-dark enterChannel" type="submit" data-channelid="1000"> <!-- {*} {*} -->
-								<i class="fa fa-sign-in"/> Enter
+								<i class="fa fa-sign-in"/> Join
 							</button>
 	                    	<button id="leaveChannel1000" class="w3-btn w3-theme-dark leaveChannel" type="submit" data-channelid="1000" disabled="disabled"> <!-- {*} -->
 	                    		<i class="fa fa-sign-out"/> Leave
@@ -100,9 +105,13 @@
 		                <button id="postMessage1000" class="w3-btn w3-theme-dark postMessage" data-channelid="1000" type="submit" style="margin-top: 5px;">
 		                	<i class="fa fa-paper-plane"/> Post
 		                </button>
+		                <button id="emojiInput1000" class="w3-btn w3-theme-dark emojiInput" data-channelid="1000" type="submit"
+		                	 title="Emoji" style="margin-top: 5px;">
+		                	<i class="fa fa-smile-o"/>
+		                </button>
 		                <label>
 		                	<input type="file" id="imageInput1000" class="imageInput" data-channelid="1000" style="display:none;" accept='image/*'/>
-		                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Post Image"><i class="fa fa-picture-o"/></span>
+		                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Post"><i class="fa fa-picture-o"/></span>
 		                </label>
 	                </fieldset>
 	            </form>
@@ -120,7 +129,7 @@
 					<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
 						<form>
 							<button id="enterChannel1001" class="w3-btn w3-theme-dark enterChannel" type="submit" data-channelid="1001"> <!-- {*} {*} -->
-								<i class="fa fa-sign-in"/> Enter
+								<i class="fa fa-sign-in"/> Join
 							</button>
 	                    	<button id="leaveChannel1001" class="w3-btn w3-theme-dark leaveChannel" type="submit" disabled="disabled" data-channelid="1001"> <!-- {*} -->
 	                    		<i class="fa fa-sign-out"/> Leave
@@ -155,9 +164,13 @@
 		                <button id="postMessage1001" class="w3-btn w3-theme-dark postMessage" data-channelid="1001" type="submit" style="margin-top: 5px;">
 		                	<i class="fa fa-paper-plane"/> Post
 		                </button>
+		                <button id="emojiInput1001" class="w3-btn w3-theme-dark emojiInput" data-channelid="1001" type="submit" 
+		                	style="margin-top: 5px;" title="Emoji">
+		                	<i class="fa fa-smile-o"/>
+		                </button>
 		                <label>
 		                	<input type="file" id="imageInput1001" class="imageInput" data-channelid="1001" style="display:none;" accept='image/*'/>
-		                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Post Image"><i class="fa fa-picture-o"/></span>
+		                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Image"><i class="fa fa-picture-o"/></span>
 		                </label>
 	                </fieldset>
 	            </form>
@@ -167,17 +180,21 @@
 			<!-- image preview dialog -->
 			<div id="imagePreviewModal" class="w3-modal">
 				
-				<div class="w3-modal-content">
-					<div class="w3-container">
-						
+				<div class="w3-modal-content w3-card-4" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+				
+					<header class="w3-container w3-light-blue">
 						<h5 id="imagePreviewHeader"></h5>
-						
-						<span onclick="$('#imagePreviewModal').hide();" class="w3-button w3-display-topright">&#215;</span>
+						<span onclick="$('#imagePreviewModal').hide();" class="w3-button w3-display-topright w3-large">&#215;</span>
+					</header>
+				
+					<div class="w3-container">						
 						
 						<div class="w3-center">
 							
-							<img id="imagePreview" src="#" alt="Image Preview" style="width:100%;max-width:300px;height:auto;"/>
-							<p/>
+							<div class="w3-panel w3-border w3-margin">
+								<img id="imagePreview" src="#" alt="Image Preview" style="width:100%;max-width:300px;height:auto;"/>
+							</div>
+							
 							<form class="w3-container">
 								<button id="postImageButton" class="w3-btn w3-theme-dark" type="submit">
 		                			<i class="fa fa-paper-plane"/> Post
@@ -195,6 +212,55 @@
 					
 				</div>
 			
+			</div>
+			
+			<div id="emojiModal" class="w3-modal">
+				
+				<div class="w3-modal-content w3-card-4" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+				
+					<header class="w3-container w3-light-blue">
+						<h5>Emojis <i class="fa fa-smile-o"/></h5>
+						<span onclick="$('#emojiModal').hide();" class="w3-button w3-display-topright w3-large">&#215;</span>
+					</header>
+					
+					<div class="w3-container w3-center" style="height: 500px; overflow: auto;">
+						<table id="emojiTable" style="margin:auto;" class="w3-xlarge">
+							<tbody id="emojiTableBody">
+			                </tbody>
+						</table>
+						
+						<p>
+							<span class="w3-btn w3-theme-dark" onclick="$('#emojiModal').hide();">
+		                		<i class="fa fa-close"/> Close
+		                	</span>
+						</p>
+					</div>
+					
+				</div>
+				
+			</div>			
+			
+			<!-- alert dialog -->
+			<div id="alertModal" class="w3-modal">
+				
+				<div class="w3-modal-content w3-card-4" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+				
+					<header class="w3-container w3-orange">
+						<h4>Warning</h4>
+					</header>
+				
+					<div class="w3-container w3-center">
+						
+						<p id="alertText" style="font-weight:bold;">
+						</p>
+						
+						<p>
+							<span class="w3-btn w3-theme-dark" onclick="$('#alertModal').hide();">
+			                	<i class="fa fa-check"/> OK
+			                </span>
+						</p>
+					</div>
+				</div>
 			</div>
 			
 		</div>
