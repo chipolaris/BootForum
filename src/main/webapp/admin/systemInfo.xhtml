@@ -167,11 +167,11 @@
 		    		<p/>
 		    		
 		    		<h:panelGrid columns="2"> <!-- use h:panelGrid to make the buttons row responsive -->
-			    		<p:commandButton action="#{systemManagement.synchSystemStat}" icon="fa fa-refresh" 
+			    		<p:commandButton action="#{systemInfo.synchSystemStat}" icon="fa fa-refresh" 
 			    			value="Synchronize System Statistics" update=":systemStatForm" oncomplete="customizePrimefaceButtons();"/>
 			    		
 			    		<!-- not supported for now -->	
-			    		<!-- <p:commandButton action="#{systemManagement.synchForumStats}" icon="fa fa-refresh" 
+			    		<!-- <p:commandButton action="#{systemInfo.synchForumStats}" icon="fa fa-refresh" 
 			    			value="Synchronize Forum Statistics" update=":systemStatForm"/> -->
 		    		</h:panelGrid>	
 		    	</h:form>
@@ -183,7 +183,7 @@
 			 
 			 	<h:form>
 
-					<p:dataTable var="configuredProperty" value="#{systemManagement.applicationProperties}" style="margin: 0 auto;table-layout:fixed;word-wrap:break-word;"
+					<p:dataTable var="configuredProperty" value="#{systemInfo.applicationProperties}" style="margin: 0 auto;table-layout:fixed;word-wrap:break-word;"
 						styleClass="borderless" widgetVar="configuredPropertiesTableVar" rowIndexVar="rowIndex" id="configuredPropertiesTable" reflow="true">
 						
 						<p:column sortBy="#{configuredProperty.key}" style="text-align:left;">
@@ -211,7 +211,7 @@
 			 <p:fieldset id="serverInformation" legend="Server System Properties" toggleable="true" collapsed="true">
 
 				<h:form>
-					<p:dataTable var="systemProperty" value="#{systemManagement.systemProperties}" style="margin: 0 auto;table-layout:fixed;word-wrap:break-word;"
+					<p:dataTable var="systemProperty" value="#{systemInfo.systemProperties}" style="margin: 0 auto;table-layout:fixed;word-wrap:break-word;"
 						styleClass="borderless" widgetVar="systemPropertiesTableVar" rowIndexVar="rowIndex" id="systemPropertiesTable" reflow="true">
 						
 						<p:column sortBy="#{systemProperty.key}" style="text-align:left;">

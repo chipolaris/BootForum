@@ -138,13 +138,16 @@ $(function () {
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
     
-    $( ".toggleChanel" ).click(function(){
+    $( ".toggleChannelButton" ).click(function(){
     	
     	// retrieve channelId from the button, note: use lowercase
     	var channelId = this.dataset.channelid;
     	
-    	// toggle channel div with animation (duration 400)
-    	$('#channel' + channelId).toggle(400);
+    	// hide other channels
+    	$('.toggleChannelDiv').hide();
+    	
+    	// show channel div with animation (duration 400)
+    	$('#channel' + channelId).show(400);
     });
     
     $( ".enterChannel" ).click(function(){
@@ -243,7 +246,15 @@ $(function () {
     buildEmojiTable();
     
     $("#emojiTableBody > tr > td").click(function() {
-    	alert($(this).text());
+    	//alert($(this).html());
+    	//$("#messageText" + selectedChannel).html($(this).html());
+    	var insertPosition = $("#messageText" + selectedChannel).getCursorPosition();
+    	//alert('insertPosition: ' + insertPosition);
+    	
+    	var currentText = $("#messageText" + selectedChannel).val();
+    	var newText = [currentText.slice(0, insertPosition), $(this).html(), ' ', currentText.slice(insertPosition)].join('');
+    	$("#messageText" + selectedChannel).val(newText);
+    	$("#messageText" + selectedChannel).selectRange(insertPosition + 2);
     });
     
 });
@@ -266,3 +277,49 @@ function buildEmojiTable() {
 	
 	$('#emojiTableBody').append(content);
 }
+
+/*
+ * utility functions
+ */
+(function ($, undefined) {
+
+	// get cursor position
+	// reference: https://stackoverflow.com/questions/1891444/cursor-position-in-a-textarea-character-index-not-x-y-coordinates
+	$.fn.getCursorPosition = function() {
+        var el = $(this).get(0);
+        var pos = 0;
+        if('selectionStart' in el) {
+            pos = el.selectionStart;
+        } else if('selection' in document) {
+            el.focus();
+            var Sel = document.selection.createRange();
+            var SelLength = document.selection.createRange().text.length;
+            Sel.moveStart('character', -el.value.length);
+            pos = Sel.text.length - SelLength;
+        }
+        return pos;
+    };
+    
+    // set cursor position
+    // https://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area
+    $.fn.selectRange = function(start, end) {
+        if(end === undefined) {
+            end = start;
+        }
+        return this.each(function() {
+            if('selectionStart' in this) {
+                this.selectionStart = start;
+                this.selectionEnd = end;
+            } else if(this.setSelectionRange) {
+                this.setSelectionRange(start, end);
+            } else if(this.createTextRange) {
+                var range = this.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', end);
+                range.moveStart('character', start);
+                range.select();
+            }
+        });
+    };    
+    
+})(jQuery);

@@ -14,6 +14,11 @@
 	
 	<ui:define name="content">
 	
+		<!-- load data-->
+		<f:metadata>
+			<f:viewAction action="#{homePage.onLoad}"/>
+		</f:metadata>
+	
 		<div class="w3-panel w3-card-4 w3-white">
 			
 			<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 0 -16px;">
@@ -29,12 +34,12 @@
 			<div class="w3-row">
 			
 				<div class="w3-col l9 m12 s12 w3-container">
-					<div class="w3-xlarge" 
-						style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-						<i class="fa fa-clock-o"/> Most Recent Discussions
-					</div>
-					<div class="w3-container">
-						<p:repeat var="discussion" value="#{homePageBacking.mostRecentDiscussions}">
+					<div class="w3-container" jsf:rendered="#{not empty homePage.mostRecentDiscussions}">
+						<div class="w3-xlarge" 
+							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
+							<i class="fa fa-clock-o"/> Most Recent Discussions
+						</div>
+						<p:repeat var="discussion" value="#{homePage.mostRecentDiscussions}">
 							<p>
 								<h:link outcome="viewDiscussion">
 									<f:param name="id" value="#{discussion.id}"/>
@@ -54,19 +59,22 @@
 								</p:repeat>
 							</p>
 						</p:repeat>
+						<h:link outcome="listDiscussions">
+							More ...
+							<f:param name="sort" value="createDate"/>
+						</h:link>
 					</div>
-					<h:link outcome="listDiscussions">
-						More ...
-						<f:param name="sort" value="createDate"/>
-					</h:link>
+					
 					<p/>
 					
-					<div class="w3-xlarge" 
-						style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-						<i class="fa fa-eye"/> Most Views Discussions
-					</div>
-					<div class="w3-container">
-						<p:repeat var="discussion" value="#{homePageBacking.mostViewsDiscussions}">
+					<div class="w3-container" jsf:rendered="#{not empty homePage.mostViewsDiscussions}">
+					
+						<div class="w3-xlarge" 
+							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
+							<i class="fa fa-eye"/> Most Views Discussions
+						</div>
+					
+						<p:repeat var="discussion" value="#{homePage.mostViewsDiscussions}">
 							<p>
 								<h:link outcome="viewDiscussion">
 									<f:param name="id" value="#{discussion.id}"/>
@@ -87,19 +95,23 @@
 								</p:repeat>
 							</p>
 						</p:repeat>
+						
+						<h:link outcome="listDiscussions">
+							More ...
+							<f:param name="sort" value="stat.viewCount"/>
+						</h:link>
 					</div>
-					<h:link outcome="listDiscussions">
-						More ...
-						<f:param name="sort" value="stat.viewCount"/>
-					</h:link>
+					
 					<p/>
 					
-					<div class="w3-xlarge" 
-						style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-						<i class="fa fa-comment-o"/> Most Comments Discussions
-					</div>
-					<div class="w3-container">
-						<p:repeat var="discussion" value="#{homePageBacking.mostCommentsDiscussions}">
+					<div class="w3-container" jsf:rendered="#{not empty homePage.mostCommentsDiscussions}">
+					
+						<div class="w3-xlarge" 
+							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
+							<i class="fa fa-comment-o"/> Most Comments Discussions
+						</div>
+					
+						<p:repeat var="discussion" value="#{homePage.mostCommentsDiscussions}">
 							<p>
 								<h:link outcome="viewDiscussion">
 									<f:param name="id" value="#{discussion.id}"/>
@@ -120,20 +132,22 @@
 								</p:repeat>
 							</p>
 						</p:repeat>
+						
+						<h:link outcome="listDiscussions">
+							More ...
+							<f:param name="sort" value="stat.commentCount"/>
+						</h:link>
 					</div>
-					<h:link outcome="listDiscussions">
-						More ...
-						<f:param name="sort" value="stat.commentCount"/>
-					</h:link>
+					
 					<p/>
 					
-					<p:repeat var="tag" value="#{homePageBacking.tags}">
+					<p:repeat var="tag" value="#{homePage.tags}">
 						<div jsf:rendered="#{not empty tag.discussions}">
-							<div class="w3-xlarge" 
-								style="border-bottom-style:solid; border-width: 2px; border-color:##{tag.color}; color:##{tag.color}">
-								<i class="fa #{tag.icon}"/> #{tag.label}
-							</div>
 							<div class="w3-container">
+								<div class="w3-xlarge" 
+									style="border-bottom-style:solid; border-width: 2px; border-color:##{tag.color}; color:##{tag.color}">
+									<i class="fa #{tag.icon}"/> #{tag.label}
+								</div>
 								<p:repeat var="discussion" value="#{tag.discussions}">
 									<p>
 										<h:link outcome="viewDiscussion">
@@ -148,11 +162,13 @@
 										- <pe:timeAgo value="#{discussion.createDate}"/>
 									</p>
 								</p:repeat>
+								
+								<h:link outcome="viewTag">
+									More #{tag.label}...
+									<f:param name="id" value="#{tag.id}"/>
+								</h:link>
 							</div>
-							<h:link outcome="viewTag">
-								More #{tag.label}...
-								<f:param name="id" value="#{tag.id}"/>
-							</h:link>
+							
 							<p/>
 						</div>
 					</p:repeat>
@@ -229,7 +245,7 @@
 						</header>
 						
 						<div class="w3-container w3-padding-small">
-							<p:repeat var="tag" value="#{homePageBacking.tags}">
+							<p:repeat var="tag" value="#{homePage.tags}">
 								<h:link outcome="viewTag">
 									<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;margin-top:8px;"><i class="fa fa-tag"/> #{tag.label}</span>
 									<f:param name="id" value="#{tag.id}"/>

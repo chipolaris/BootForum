@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="/WEB-INF/template/layout_admin.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} - Chat Channel Management
+	</ui:define>
+	
+	<ui:define name="content">
+	
+		<style type="text/css">	
+			 
+		</style>
+
+		<script type="text/javascript">
+ 			//<![CDATA[
+				$(document).ready(function(){
+					customizePrimefaceButtons();
+				});
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				}				
+			//]]>	
+		</script>
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
+			
+			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
+ 				<h2>#{msg['chatChannelManagement.page.title']}</h2>
+ 			</div>
+ 			
+ 			<p:messages id="messages" showDetail="true" closable="true">
+				<p:autoUpdate/>
+			</p:messages>
+			
+			<div jsf:id="newChatChannelDiv" class="w3-animate-right" style="display: none;border-bottom: 2px solid gray;">
+			
+				<h3><i class="fa fa-plus"/> Add New Chat Channel</h3>
+				
+				<div class="w3-panel w3-border w3-round w3-display-container">
+					<span onclick="$('#newChatChannelDiv').hide();" class="w3-button w3-display-topright">X</span>
+					
+					<h:form>
+						<h5>Label</h5>
+						
+						<p:inputText value="#{chatChannelManagement.newChatChannel.label}" id="label" styleClass="w3-input" maxlength="30"/>
+							
+						<h5>Icon</h5>
+		  				<p:selectOneMenu value="#{chatChannelManagement.newChatChannel.icon}" panelStyle="width:250px" style="width:270px;"
+		  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
+		  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
+		  					
+			  				<p:column style="width:10%">
+			  					<i class="#{f} fa-2x"/>
+			  				</p:column>
+			  				
+			  				<p:column>
+			  					<h:outputText value="#{f}"/>
+			  				</p:column>
+		  					
+		  				</p:selectOneMenu>
+						
+						<h5>Color</h5>
+						<p:colorPicker value="#{chatChannelManagement.newChatChannel.color}" mode="inline" />
+						
+						<span style="font-size:12pt;">Disabled</span>&#160;&#160;<h:selectBooleanCheckbox value="#{chatChannelManagement.newChatChannel.disabled}" styleClass="w3-check"/>
+						
+						<p/>
+						
+						<p:commandButton value="Submit" ajax="true" action="#{chatChannelManagement.createChatChannel}" update=":listChatChannelsDiv" icon="fa fa-check"/>
+						<p:commandButton value="Cancel" type="button" icon="fa fa-close" style="margin-left:5px;" onclick="$('#newChatChannelDiv').hide()"/>
+						
+						<p/>
+						
+					</h:form>
+				</div>
+			</div> <!-- end newChatChannelDiv -->
+
+			<div jsf:id="editChatChannelDiv" style="display: none;border-bottom: 2px solid gray;">
+				<div jsf:rendered="#{not empty chatChannelManagement.selectedChatChannel}">
+				
+					<h3><i class="fa fa-edit"/> Edit Chat Channel '#{chatChannelManagement.selectedChatChannel.label}'</h3>
+					<div class="w3-panel w3-border w3-round w3-display-container w3-animate-right">
+						<span onclick="$('#editChatChannelDiv').hide();" class="w3-button w3-display-topright">X</span>
+						<h:form>
+							<h5>Label</h5>
+							
+							<p:inputText value="#{chatChannelManagement.selectedChatChannel.label}" styleClass="w3-input" maxlength="30"/>
+								
+							<h5>Icon</h5>
+			  				<p:selectOneMenu value="#{chatChannelManagement.selectedChatChannel.icon}" panelStyle="width:250px" style="width:270px;"
+			  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
+			  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
+			  					
+				  				<p:column style="width:10%">
+				  					<i class="#{f} fa-2x"/>
+				  				</p:column>
+				  				
+				  				<p:column>
+				  					<h:outputText value="#{f}"/>
+				  				</p:column>
+			  					
+			  				</p:selectOneMenu>
+							
+							<h5>Color</h5>
+							<p:colorPicker value="#{chatChannelManagement.selectedChatChannel.color}" mode="inline" />
+							
+							<span style="font-size:12pt;">Disabled</span>&#160;&#160;<h:selectBooleanCheckbox value="#{chatChannelManagement.selectedChatChannel.disabled}" styleClass="w3-check"/>
+							
+							<p/>
+							
+							<p:commandButton value="Submit" ajax="true" action="#{chatChannelManagement.editChatChannel}" update=":listChatChannelsDiv" icon="fa fa-plus" oncomplete="$('#editChatChannelDiv').hide();"/>
+							<p:commandButton type="button" value="Cancel" icon="fa fa-close" style="margin-left:5px;" onclick="$('#editChatChannelDiv').hide()"/>
+							
+							<p/>
+							
+						</h:form>
+					</div>
+				</div>
+			</div> <!-- end editChatChannelDiv -->
+			
+			<div class="w3-panel w3-round w3-theme-light w3-center">
+				<h3>Chat Channel List</h3>
+			</div>	
+			
+			<div jsf:id="listChatChannelsDiv" class="w3-row">			
+			
+				<p:repeat var="chatChannel" value="#{chatChannelManagement.chatChannels}">
+				
+					<div class="w3-col l3 m6 s12" style="padding: 8px;position:relative">
+					    <div class="w3-display-container w3-padding-16 w3-hover-grey" style="color:white;background-color: ##{chatChannel.color}">
+							<span jsf:rendered="#{chatChannel.disabled}" class="w3-display-topright" style="color:lightgrey;">
+					        	<i class="fa fa-ban w3-xxlarge" title="Disabled"/>
+					        </span>
+					        <div class="w3-center">
+					        	<i class="#{chatChannel.icon} w3-xxxlarge"></i>
+					        	<p/>
+					        	<h4>#{chatChannel.label}</h4>
+					        </div>
+					        
+					        <!-- use w3-display-hover to only show these when the mouse is hovered over -->
+					        <div class="w3-display-bottommiddle w3-display-hover">
+					        	
+					        	<p:commandLink ajax="true" oncomplete="$('#newChatChannelDiv').hide();$('#editChatChannelDiv').show();document.getElementById('editChatChannelDiv').scrollIntoView();customizePrimefaceButtons();" 
+					        		update=":editChatChannelDiv" title="Edit this chat channel">
+					        		<i class="fa fa-edit w3-xlarge w3-text-black"/>
+					        		<f:setPropertyActionListener value="#{chatChannel}" target="#{chatChannelManagement.selectedChatChannel}"/>
+					        	</p:commandLink>
+					        	<p:commandLink action="#{chatChannelManagement.deleteChatChannel}" update=":listChatChannelsDiv :messages"  oncomplete="window.scrollTo(0,0);" 
+					        		title="Delete this Chat Channel" style="margin-left:5px;">
+					        		<i class="fa fa-trash w3-xlarge w3-text-black"/>
+					        		<p:confirm header="Confirm Delete" message="Delete Chat Channel?" icon="fa fa-exclamation-triangle"/>
+					        		<f:setPropertyActionListener value="#{chatChannel}" target="#{chatChannelManagement.selectedChatChannel}"/>
+					        	</p:commandLink>
+					        </div>
+					    </div>				
+					</div>
+				
+				</p:repeat>
+				
+				<h4 jsf:rendered="#{empty chatChannelManagement.chatChannels}"><b>No Chat Channel</b></h4>
+				
+				<div class="w3-container w3-padding-small w3-col l12 m12 s12">
+					
+					<button onclick="$('#editChatChannelDiv').hide();$('#newChatChannelDiv').show();" class="w3-button w3-left-align w3-border">
+						<i class="fa fa-plus"/> Add New Chat Channel
+					</button>
+				
+				</div>
+				
+			</div>		
+			
+			<!-- global confirm dialog -->
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
+        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+    		</p:confirmDialog>
+			
+		</div>
+	</ui:define>
+	
+</ui:composition>

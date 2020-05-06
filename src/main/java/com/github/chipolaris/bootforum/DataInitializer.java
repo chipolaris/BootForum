@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.DisplayManagement;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.Preferences;
@@ -80,7 +81,20 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 			}
 		}
 		
+		createDisplayManagement();
+		
 		systemInfoService.refreshStatistics();
+	}
+
+	private void createDisplayManagement() {
+		
+		DisplayManagement displayManagement = genericService.getEntity(DisplayManagement.class, 1L).getDataObject();
+		
+		if(displayManagement == null) {
+			displayManagement = new DisplayManagement();
+			displayManagement.setId(1L);
+			genericService.saveEntity(displayManagement);
+		}
 	}
 
 	private User createAdminUser() {

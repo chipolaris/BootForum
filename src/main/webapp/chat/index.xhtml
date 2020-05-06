@@ -4,7 +4,8 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:jsf="http://xmlns.jcp.org/jsf" 
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
     template="/WEB-INF/template/layout_chat.xhtml">
 
 	<ui:define name="title">
@@ -48,6 +49,11 @@
 			}
 		</style>
 		
+		<!-- load data-->
+		<f:metadata>
+			<f:viewAction action="#{chatPage.onLoad}"/>
+		</f:metadata>
+		
 		<div jsf:id="mainContentDiv">
 			
 			<p/>
@@ -55,127 +61,80 @@
 			<div class="w3-panel w3-center">
 				<form class="w3-container">
 	                <div>
-	                    <button id="toggleChannel1000" class="w3-btn w3-theme-dark toggleChanel" type="submit" data-channelid="1000">Channel 1000</button>
-	                    <button id="toggleChannel1001" class="w3-btn w3-theme-dark toggleChanel" type="submit" data-channelid="1001">Channel 1001</button>
+	                	<ui:repeat var="chatChannel" value="#{chatPage.displayManagement.displayChatChannels}">
+	                    	<button id="toggleChannel#{chatChannel.id}" class="w3-btn toggleChannelButton" type="submit" 
+	                    		data-channelid="#{chatChannel.id}" style="background-color:##{chatChannel.color};color:white;">
+	                    		<i class="#{chatChannel.icon}"/> #{chatChannel.label}
+	                    	</button>
+	                    </ui:repeat>
 	                </div>
 	            </form>				
 			</div>
 			
-			<div id="channel1000" class="w3-border" style="display: none;"> <!-- {*} -->
-				
-				<div class="w3-cell-row w3-theme-l1">
-					<div class="w3-cell w3-container ">
-						<h4>Chat Channel 1000</h4> <!-- {*} -->
+			<!-- 
+				important note: use build time <c:forEach> instead of render time <ui:repeat> to generate dynamic id for each jsf component
+				reference: https://stackoverflow.com/questions/16043218/refer-to-jsf-dynamically-generated-ids-based-on-iteration-index
+			  -->
+			<c:forEach items="#{chatPage.displayManagement.displayChatChannels}" var="chatChannel">
+				<div id="channel#{chatChannel.id}" class="w3-border toggleChannelDiv" style="display: none;">
+					
+					<div class="w3-cell-row" style="background-color:##{chatChannel.color};color:white;">
+					
+						<div class="w3-cell w3-container">
+							<h4><i class="#{chatChannel.icon}"/> #{chatChannel.label}</h4>
+						</div>
+						<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
+							<form>
+								<button id="enterChannel#{chatChannel.id}" class="w3-btn enterChannel" type="submit" data-channelid="#{chatChannel.id}">
+									<i class="fa fa-sign-in"/> Join
+								</button>
+		                    	<button id="leaveChannel#{chatChannel.id}" class="w3-btn leaveChannel" type="submit" data-channelid="#{chatChannel.id}" disabled="disabled">
+		                    		<i class="fa fa-sign-out"/> Leave
+		                    	</button>
+		                    </form>
+						</div>
 					</div>
-					<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
-						<form>
-							<button id="enterChannel1000" class="w3-btn w3-theme-dark enterChannel" type="submit" data-channelid="1000"> <!-- {*} {*} -->
-								<i class="fa fa-sign-in"/> Join
-							</button>
-	                    	<button id="leaveChannel1000" class="w3-btn w3-theme-dark leaveChannel" type="submit" data-channelid="1000" disabled="disabled"> <!-- {*} -->
-	                    		<i class="fa fa-sign-out"/> Leave
-	                    	</button>
-	                    </form>
-					</div>
+					
+					<div class="w3-row-padding">
+				        <div class="w3-col w3-rest" style="height: 500px; overflow: auto;" id="conversationDiv#{chatChannel.id}">
+				            <table id="conversation1000" class="w3-table w3-striped"> <!-- {*} -->
+				                <thead>
+					                <tr class="w3-white">
+					                	<!-- define column width here -->
+					                    <th style="width:50px;"></th>
+					                    <th></th>
+					                </tr>
+				                </thead>
+				                <tbody id="channelContent#{chatChannel.id}">
+				                </tbody>
+				            </table>
+				        </div>
+			        	
+			        </div>
+			        
+		            <form class="w3-container w3-padding">
+		            	<fieldset style="border:0;padding: 0;" id="fieldSet#{chatChannel.id}" disabled="disabled">
+			            	<h:outputText id="counterMessage#{chatChannel.id}" styleClass="w3-opacity"/>
+		                	<p:inputTextarea rows="2" maxlength="200" counter="counterMessage#{chatChannel.id}" counterTemplate="{0} characters remaining"
+		                		autoResize="false" id="messageText#{chatChannel.id}" style="overflow-x: hidden;" styleClass="w3-input" placeholder="Type your message.."/>
+		                	
+			                <button id="postMessage#{chatChannel.id}" class="w3-btn w3-theme-dark postMessage" data-channelid="#{chatChannel.id}" type="submit" style="margin-top: 5px;">
+			                	<i class="fa fa-lg fa-paper-plane"/> Post
+			                </button>
+			                <button id="emojiInput#{chatChannel.id}" class="w3-btn w3-theme-dark emojiInput" data-channelid="#{chatChannel.id}" type="submit"
+			                	 title="Emoji" style="margin-top: 5px;">
+			                	<i class="fa fa-lg fa-smile-o"/>
+			                </button>
+			                <label>
+			                	<input type="file" id="imageInput#{chatChannel.id}" class="imageInput" data-channelid="#{chatChannel.id}" style="display:none;" accept='image/*'/>
+			                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Image"><i class="fa fa-lg fa-picture-o"/></span>
+			                </label>
+		                </fieldset>
+		            </form>
+					
 				</div>
 				
-				<div class="w3-row-padding">
-			        <div class="w3-col w3-rest" style="height: 500px; overflow: auto;" id="conversationDiv1000"> <!-- {*} -->
-			            <table id="conversation1000" class="w3-table w3-striped"> <!-- {*} -->
-			                <thead>
-				                <tr class="w3-white">
-				                	<!-- define column width here -->
-				                    <th style="width:50px;"></th>
-				                    <th></th>
-				                </tr>
-			                </thead>
-			                <tbody id="channelContent1000"> <!-- {*}: append channelId -->
-			                </tbody>
-			            </table>
-			        </div>
-		        	
-		        </div>
-		        
-	            <form class="w3-container w3-padding">
-	            	<fieldset style="border:0;padding: 0;" id="fieldSet1000" disabled="disabled">
-		            	<h:outputText id="counterMessage1000" styleClass="w3-opacity"/> <!-- {*} -->
-	                	<p:inputTextarea rows="2" counter="counterMessage1000" maxlength="200" counterTemplate="{0} characters remaining." 
-	                		autoResize="false" id="messageText1000" style="overflow-x: hidden;" styleClass="w3-input" placeholder="Type your message.."/>
-	                	
-		                <button id="postMessage1000" class="w3-btn w3-theme-dark postMessage" data-channelid="1000" type="submit" style="margin-top: 5px;">
-		                	<i class="fa fa-paper-plane"/> Post
-		                </button>
-		                <button id="emojiInput1000" class="w3-btn w3-theme-dark emojiInput" data-channelid="1000" type="submit"
-		                	 title="Emoji" style="margin-top: 5px;">
-		                	<i class="fa fa-smile-o"/>
-		                </button>
-		                <label>
-		                	<input type="file" id="imageInput1000" class="imageInput" data-channelid="1000" style="display:none;" accept='image/*'/>
-		                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Post"><i class="fa fa-picture-o"/></span>
-		                </label>
-	                </fieldset>
-	            </form>
-				
-			</div>
-			
-			<p>&#160;</p>
-
-			<div id="channel1001" class="w3-border" style="display: none;"> <!-- {*} -->
-				
-				<div class="w3-cell-row w3-theme-l1">
-					<div class="w3-cell w3-container ">
-						<h4>Chat Channel 1001</h4> <!-- {*} -->
-					</div>
-					<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
-						<form>
-							<button id="enterChannel1001" class="w3-btn w3-theme-dark enterChannel" type="submit" data-channelid="1001"> <!-- {*} {*} -->
-								<i class="fa fa-sign-in"/> Join
-							</button>
-	                    	<button id="leaveChannel1001" class="w3-btn w3-theme-dark leaveChannel" type="submit" disabled="disabled" data-channelid="1001"> <!-- {*} -->
-	                    		<i class="fa fa-sign-out"/> Leave
-	                    	</button>
-	                    </form>
-					</div>
-				</div>
-				
-				<div class="w3-row-padding">
-			        <div class="w3-col w3-rest" style="height: 500px; overflow: auto;" id="conversationDiv1001"> <!-- {*} -->
-			            <table id="conversation1001" class="w3-table w3-striped"> <!-- {*} -->
-			                <thead>
-				                <tr class="w3-white">
-				                	<!-- define column width here -->
-				                    <th style="width:50px;"></th>
-				                    <th></th>
-				                </tr>
-			                </thead>
-			                <tbody id="channelContent1001"> <!-- {*}: append channelId -->
-			                </tbody>
-			            </table>
-			        </div>
-		        	
-		        </div>
-		        
-	            <form class="w3-container w3-padding">
-	            	<fieldset style="border:0;padding: 0;" id="fieldSet1001" disabled="disabled">
-		            	<h:outputText id="counterMessage1001" styleClass="w3-opacity"/> <!-- {*} -->
-	                	<p:inputTextarea rows="2" counter="counterMessage1001" maxlength="200" counterTemplate="{0} characters remaining." 
-	                		autoResize="false" id="messageText1001" style="overflow-x: hidden;" styleClass="w3-input" placeholder="Type your message.."/>
-	                	
-		                <button id="postMessage1001" class="w3-btn w3-theme-dark postMessage" data-channelid="1001" type="submit" style="margin-top: 5px;">
-		                	<i class="fa fa-paper-plane"/> Post
-		                </button>
-		                <button id="emojiInput1001" class="w3-btn w3-theme-dark emojiInput" data-channelid="1001" type="submit" 
-		                	style="margin-top: 5px;" title="Emoji">
-		                	<i class="fa fa-smile-o"/>
-		                </button>
-		                <label>
-		                	<input type="file" id="imageInput1001" class="imageInput" data-channelid="1001" style="display:none;" accept='image/*'/>
-		                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Image"><i class="fa fa-picture-o"/></span>
-		                </label>
-	                </fieldset>
-	            </form>
-				
-			</div>
+			</c:forEach>
 			
 			<!-- image preview dialog -->
 			<div id="imagePreviewModal" class="w3-modal">
