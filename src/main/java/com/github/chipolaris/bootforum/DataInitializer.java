@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -51,6 +52,9 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 	
 	@Resource
 	private SystemInfoService systemInfoService;
+	
+	@Value("${Application.name}")
+	private String applicationName;
 	
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -154,7 +158,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		discussion.setForum(forum);
 		discussion.setImportant(true);
 		discussion.setSticky(true);
-		discussion.setTitle("Welcome to BootForum");
+		discussion.setTitle("Welcome to " + applicationName);
 		
 		Comment comment = new Comment();
 		

@@ -10,7 +10,7 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('/BootForum/chat-connect');
+    var socket = new SockJS(contextPath + '/chat-connect');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
@@ -42,7 +42,7 @@ function postMessage(channelId) {
 		return;
 	}
 	
-    stompClient.send("/BootForum/chat/postMessage/" + channelId, {}, JSON.stringify({'messageText': messageText.trim()}));
+    stompClient.send(contextPath + "/chat/postMessage/" + channelId, {}, JSON.stringify({'messageText': messageText.trim()}));
     $("#messageText" + channelId).val(''); // clear the input field
     //$("#counterMessage" + channelId).text(origCounterMessageText);
 }
@@ -51,7 +51,7 @@ function postImage(channelId) {
 	
 	var imageBase64 = $('#imagePreview').attr('src');
 	
-    stompClient.send("/BootForum/chat/postImage/" + channelId, {}, JSON.stringify({'imageBase64': imageBase64}));
+    stompClient.send(contextPath + "/chat/postImage/" + channelId, {}, JSON.stringify({'imageBase64': imageBase64}));
 }
 
 function showMessage(channelId, messageObj) {
