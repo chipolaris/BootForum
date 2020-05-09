@@ -17,8 +17,9 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
-import com.github.chipolaris.bootforum.jsf.bean.ChatManager;
 import com.github.chipolaris.bootforum.messaging.ChannelMessage;
+import com.github.chipolaris.bootforum.messaging.ChatManager;
+import com.github.chipolaris.bootforum.messaging.SystemMessage;
 
 @Component
 public class WebSocketEventsListener {
@@ -43,6 +44,9 @@ public class WebSocketEventsListener {
 		logger.info(String.format("Connect username: %s", username));
 		
 		chatManager.addConnectedUser(username);
+		
+		this.template.convertAndSend("/system",
+				new SystemMessage(String.format("User \"%s\" connected", username), System.currentTimeMillis()));
 	}
 	
 	@EventListener
@@ -57,6 +61,9 @@ public class WebSocketEventsListener {
 		logger.info(String.format("Disconnect username: %s", username));
 		
 		chatManager.removeConnectedUser(username);
+		
+		this.template.convertAndSend("/system",
+				new SystemMessage(String.format("User \"%s\" disconnected", username), System.currentTimeMillis()));
 	}
 	
 	@EventListener
@@ -78,13 +85,18 @@ public class WebSocketEventsListener {
 			username = user.getName();
 		}
 		
-		chatManager.addSubscribedUser(simpDestination, username);
+		boolean addResult = chatManager.addSubscribedUser(simpDestination, username);
 		sessionAttributes.put(subscriptionId, simpDestination);
 		
-		logger.info(String.format("User: %s subscribes to simpDestination: %s", username, simpDestination));
-		
-		this.template.convertAndSend(simpDestination,
-				new ChannelMessage(String.format("User \"%s\" entered", username), System.currentTimeMillis()));
+		if(addResult) {
+			logger.info(String.format("User: %s subscribes to simpDestination: %s", username, simpDestination));
+			
+			this.template.convertAndSend(simpDestination,
+					new ChannelMessage(String.format("User \"%s\" entered", username), System.currentTimeMillis()));
+		}
+		else {
+			logger.info(String.format("Another session from user: %s subscribes to simpDestination: %s", username, simpDestination));
+		}
 	}
 	
 	@EventListener
@@ -104,11 +116,16 @@ public class WebSocketEventsListener {
 		Map<String, Object> sessionAttributes = simpMessageHeaderAccessor.getSessionAttributes();
 		String simpDestination = (String)sessionAttributes.get(subscriptionId);
 		
-		chatManager.removeSubscribedUser(simpDestination, username);
+		boolean removeResult = chatManager.removeSubscribedUser(simpDestination, username);
 		
-		logger.info(String.format("User %s unsubscribes to simpDestination: %s", username, simpDestination));
-		
-		this.template.convertAndSend(simpDestination,
-				new ChannelMessage(String.format("User \"%s\" left", username), System.currentTimeMillis()));
+		if(removeResult) {
+			logger.info(String.format("User %s unsubscribes from simpDestination: %s", username, simpDestination));
+			
+			this.template.convertAndSend(simpDestination,
+					new ChannelMessage(String.format("User \"%s\" left", username), System.currentTimeMillis()));
+		}
+		else {
+			logger.info(String.format("A session from user %s unsubscribes to simpDestination: %s", username, simpDestination));
+		}
 	}
 }

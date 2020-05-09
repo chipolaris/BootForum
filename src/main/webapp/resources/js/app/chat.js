@@ -3,6 +3,10 @@ var stompClient = null;
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
+    
+	// join/leave buttons
+	$('.enterChannel').prop("disabled", !connected);
+	$('.leaveChannel').prop("disabled", true);
 }
 
 function connect() {
@@ -16,6 +20,14 @@ function connect() {
 
 function disconnect() {
     if (stompClient !== null) {
+    	
+    	// unsubscribe all channels
+    	channelSubscriptions.forEach(function(channelSubscription) {
+    		channelSubscription.unsubscribe();
+    	});
+    	// clear subscriptions map
+    	channelSubscriptions.clear();
+    	
         stompClient.disconnect();
     }
     setConnected(false);
@@ -184,7 +196,7 @@ $(function () {
     	// disable leave button
     	$(this).prop("disabled", true);
     	
-    	// enable leave button
+    	// enable enter button
     	$('#enterChannel' + channelId).prop("disabled", false);
     	
     	// disable post message form fieldset
@@ -252,7 +264,7 @@ $(function () {
     	//alert('insertPosition: ' + insertPosition);
     	
     	var currentText = $("#messageText" + selectedChannel).val();
-    	var newText = [currentText.slice(0, insertPosition), $(this).html(), ' ', currentText.slice(insertPosition)].join('');
+    	var newText = [currentText.slice(0, insertPosition), $(this).html(), currentText.slice(insertPosition)].join('');
     	$("#messageText" + selectedChannel).val(newText);
     	$("#messageText" + selectedChannel).selectRange(insertPosition + 2);
     });

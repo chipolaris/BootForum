@@ -58,35 +58,34 @@
 				
 					<div class="w3-half container">
 						<h6>Show Most Views Discussions</h6>
-						<!-- <p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{manageDisplay.displayManagement.showMostViewsDiscussions}"/> -->
-						<h:selectBooleanCheckbox value="#{manageDisplay.displayManagement.showMostViewsDiscussions}" styleClass="w3-check"/>
+						<!-- <p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{manageDisplay.displayOption.showMostViewsDiscussions}"/> -->
+						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostViewsDiscussions}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-half container">
 						<h6>Number of Most Views Discussions</h6>
-						<h:inputText value="#{manageDisplay.displayManagement.numMostViewsDiscussions}" styleClass="w3-input w3-border"/>	
+						<h:inputText value="#{manageDisplay.displayOption.numMostViewsDiscussions}" styleClass="w3-input w3-border"/>	
 					</div>
 
 					<div class="w3-half container">
 						<h6>Show Most Comments Discussions</h6>
-						<!-- <p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{manageDisplay.displayManagement.showMostViewsDiscussions}"/> -->
-						<h:selectBooleanCheckbox value="#{manageDisplay.displayManagement.showMostCommentsDiscussions}" styleClass="w3-check"/>
+						<!-- <p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{manageDisplay.displayOption.showMostViewsDiscussions}"/> -->
+						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostCommentsDiscussions}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-half container">
 						<h6>Number of Most Comments Discussions</h6>
-						<h:inputText value="#{manageDisplay.displayManagement.numMostCommentsDiscussions}" styleClass="w3-input w3-border"/>	
+						<h:inputText value="#{manageDisplay.displayOption.numMostCommentsDiscussions}" styleClass="w3-input w3-border"/>	
 					</div>
 					
 					<div class="w3-half container">
 						<h6>Show Most Recent Discussions</h6>
-						<!-- <p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{manageDisplay.displayManagement.showMostViewsDiscussions}"/> -->
-						<h:selectBooleanCheckbox value="#{manageDisplay.displayManagement.showMostRecentDiscussions}" styleClass="w3-check"/>
+						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostRecentDiscussions}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-half container">
 						<h6>Number of Most Recent Discussions</h6>
-						<h:inputText value="#{manageDisplay.displayManagement.numMostRecentDiscussions}" styleClass="w3-input w3-border"/>	
+						<h:inputText value="#{manageDisplay.displayOption.numMostRecentDiscussions}" styleClass="w3-input w3-border"/>	
 					</div>
 					
 				</div>
@@ -111,8 +110,20 @@
 				
 				<div class="w3-row-padding">
 
-					<div class="w3-col w3-rest container">
-
+					<div class="w3-col w3-half w3-container">
+						<h6>Show Discussions per tags</h6>
+						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showDiscussionsForTag}" styleClass="w3-check"/>
+					</div>
+					
+					<div class="w3-col w3-half w3-container">
+						<h6>Number of Discussions per Tag</h6>
+						<h:inputText value="#{manageDisplay.displayOption.numDiscussionsPerTag}" styleClass="w3-input w3-border"/>
+					</div>
+					
+					<div class="w3-col w3-rest container"> <!-- note: use w3-rest for full-width column -->
+						
+						<p/>
+					    
 					    <p:pickList id="tagPickList" value="#{manageDisplay.tagDualList}" var="tag"
 					                itemValue="#{tag}" itemLabel="#{tag.label}" showSourceControls="true"
 					                showTargetControls="true" converter="#{manageDisplay.tagConverter}" responsive="true">

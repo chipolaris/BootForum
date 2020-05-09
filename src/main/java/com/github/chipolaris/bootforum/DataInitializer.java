@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
-import com.github.chipolaris.bootforum.domain.DisplayManagement;
+import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.Preferences;
@@ -81,19 +81,34 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 			}
 		}
 		
-		createDisplayManagement();
+		createDisplayOption();
 		
 		systemInfoService.refreshStatistics();
 	}
 
-	private void createDisplayManagement() {
+	private void createDisplayOption() {
 		
-		DisplayManagement displayManagement = genericService.getEntity(DisplayManagement.class, 1L).getDataObject();
+		DisplayOption displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
 		
-		if(displayManagement == null) {
-			displayManagement = new DisplayManagement();
-			displayManagement.setId(1L);
-			genericService.saveEntity(displayManagement);
+		if(displayOption == null) {
+			
+			displayOption = new DisplayOption();
+			displayOption.setId(1L);
+			
+			// default values
+			displayOption.setShowMostCommentsDiscussions(true);
+			displayOption.setNumMostCommentsDiscussions(5);
+			
+			displayOption.setShowMostRecentDiscussions(true);
+			displayOption.setNumMostRecentDiscussions(5);
+			
+			displayOption.setShowMostViewsDiscussions(true);
+			displayOption.setNumMostViewsDiscussions(5);
+			
+			displayOption.setShowDiscussionsForTag(true);
+			displayOption.setNumDiscussionsPerTag(5);
+			
+			genericService.saveEntity(displayOption);
 		}
 	}
 

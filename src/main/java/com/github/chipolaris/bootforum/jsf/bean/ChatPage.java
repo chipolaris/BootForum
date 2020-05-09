@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.github.chipolaris.bootforum.domain.DisplayManagement;
+import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 @Component
@@ -20,16 +20,16 @@ public class ChatPage {
 	@Resource
 	private GenericService genericService;
 	
-	private DisplayManagement displayManagement;
+	private DisplayOption displayOption;
 	
-	public DisplayManagement getDisplayManagement() {
-		return displayManagement;
+	public DisplayOption getDisplayOption() {
+		return displayOption;
 	}
-	public void setDisplayManagement(DisplayManagement displayManagement) {
-		this.displayManagement = displayManagement;
+	public void setDisplayOption(DisplayOption displayOption) {
+		this.displayOption = displayOption;
 	}
 	
 	public void onLoad() {
-		this.displayManagement = genericService.getEntity(DisplayManagement.class, 1L).getDataObject();
+		this.displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
 	}
 }

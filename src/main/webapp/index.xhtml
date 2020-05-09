@@ -141,7 +141,7 @@
 					
 					<p/>
 					
-					<p:repeat var="tag" value="#{homePage.tags}">
+					<p:repeat var="tag" value="#{homePage.displayTags}">
 						<div jsf:rendered="#{not empty tag.discussions}">
 							<div class="w3-container">
 								<div class="w3-xlarge" 
@@ -245,7 +245,7 @@
 						</header>
 						
 						<div class="w3-container w3-padding-small">
-							<p:repeat var="tag" value="#{homePage.tags}">
+							<p:repeat var="tag" value="#{homePage.allTags}">
 								<h:link outcome="viewTag">
 									<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;margin-top:8px;"><i class="fa fa-tag"/> #{tag.label}</span>
 									<f:param name="id" value="#{tag.id}"/>

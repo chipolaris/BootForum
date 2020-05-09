@@ -14,8 +14,8 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="DISPLAY_MANAGEMENT_T")
-public class DisplayManagement extends BaseEntity {
+@Table(name="DISPLAY_OPTION_T")
+public class DisplayOption extends BaseEntity {
 
 	@Id
 	private Long id;
@@ -38,16 +38,22 @@ public class DisplayManagement extends BaseEntity {
 	@Column(name = "NUM_MOST_RECENT_DIS")
 	private int numMostRecentDiscussions;
 	
+	@Column(name = "SHOW_DISC_FOR_TAG")
+	private boolean showDiscussionsForTag;
+	
+	@Column(name = "NUM_DISC_PER_TAG")
+	private int numDiscussionsPerTag;
+	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinTable(name="DISPLAY_MGT_DSP_TAG_T",
-		joinColumns=@JoinColumn(name="DISPLAY_MANAGEMENT_ID"),
+	@JoinTable(name="DISPLAY_OPT_DSP_TAG_T",
+		joinColumns=@JoinColumn(name="DISPLAY_OPTION_ID"),
 		inverseJoinColumns=@JoinColumn(name="TAG_ID"))
 	@OrderColumn(name="ORDERED")
 	private List<Tag> displayTags;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinTable(name="DISPLAY_MGT_DSP_CHAT_CHANNEL_T",
-		joinColumns=@JoinColumn(name="DISPLAY_MANAGEMENT_ID"),
+	@JoinTable(name="DISPLAY_OPT_DSP_CHAT_CHANNEL_T",
+		joinColumns=@JoinColumn(name="DISPLAY_OPTION_ID"),
 		inverseJoinColumns=@JoinColumn(name="CHAT_CHANNEL_ID"))
 	@OrderColumn(name="ORDERED")
 	private List<ChatChannel> displayChatChannels;
@@ -100,6 +106,20 @@ public class DisplayManagement extends BaseEntity {
 	}
 	public void setNumMostRecentDiscussions(int numMostRecentDiscussions) {
 		this.numMostRecentDiscussions = numMostRecentDiscussions;
+	}
+	
+	public boolean isShowDiscussionsForTag() {
+		return showDiscussionsForTag;
+	}
+	public void setShowDiscussionsForTag(boolean showDiscussionsForTag) {
+		this.showDiscussionsForTag = showDiscussionsForTag;
+	}
+	
+	public int getNumDiscussionsPerTag() {
+		return numDiscussionsPerTag;
+	}
+	public void setNumDiscussionsPerTag(int numDiscussionsPerTag) {
+		this.numDiscussionsPerTag = numDiscussionsPerTag;
 	}
 	
 	public List<Tag> getDisplayTags() {

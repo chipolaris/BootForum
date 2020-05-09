@@ -4,16 +4,17 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     template="/WEB-INF/template/layout_chat.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} - Chat Dashboard
+		#{msg['application.title']} - Live Chat
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<b><i class="fa fa-commenting"/> Chat Dashboard</b>
+		<b><i class="fa fa-commenting"/> Live Chat</b>
 	</ui:define>
 
 	<ui:define name="content">
@@ -47,6 +48,29 @@
 				cursor: pointer;
 				background: lightgrey;
 			}
+			
+			/* https://alligator.io/css/css-scrollbars/ */
+			
+			/* The emerging W3C standard
+			   that is currently Firefox-only */
+			* {
+			  scrollbar-width: thin;
+			  scrollbar-color: orange lightgrey;
+			}
+			
+			/* Works on Chrome/Edge/Safari */
+			*::-webkit-scrollbar {
+			  width: 12px;
+			}
+			*::-webkit-scrollbar-track {
+			  background: lightgrey;
+			}
+			*::-webkit-scrollbar-thumb {
+			  background-color: orange;
+			  border-radius: 20px;
+			  border: 3px solid lightgrey;
+			}			
+			
 		</style>
 		
 		<!-- load data-->
@@ -61,7 +85,7 @@
 			<div class="w3-panel w3-center">
 				<form class="w3-container">
 	                <div>
-	                	<ui:repeat var="chatChannel" value="#{chatPage.displayManagement.displayChatChannels}">
+	                	<ui:repeat var="chatChannel" value="#{chatPage.displayOption.displayChatChannels}">
 	                    	<button id="toggleChannel#{chatChannel.id}" class="w3-btn toggleChannelButton" type="submit" 
 	                    		data-channelid="#{chatChannel.id}" style="background-color:##{chatChannel.color};color:white;">
 	                    		<i class="#{chatChannel.icon}"/> #{chatChannel.label}
@@ -71,33 +95,41 @@
 	            </form>				
 			</div>
 			
+			<c:set var="chatChannelDisplayComponents" value=""/>
+			
 			<!-- 
 				important note: use build time <c:forEach> instead of render time <ui:repeat> to generate dynamic id for each jsf component
 				reference: https://stackoverflow.com/questions/16043218/refer-to-jsf-dynamically-generated-ids-based-on-iteration-index
-			  -->
-			<c:forEach items="#{chatPage.displayManagement.displayChatChannels}" var="chatChannel">
+			  -->			  
+			<c:forEach items="#{chatPage.displayOption.displayChatChannels}" var="chatChannel">
+			
+				<c:set var="chatChannelDisplayComponents" value="${chatChannelDisplayComponents} :channelUsersDiv${chatChannel.id}" />
+			
 				<div id="channel#{chatChannel.id}" class="w3-border toggleChannelDiv" style="display: none;">
 					
-					<div class="w3-cell-row" style="background-color:##{chatChannel.color};color:white;">
-					
+					<div class="w3-cell-row w3-border-bottom" style="color:##{chatChannel.color};">
 						<div class="w3-cell w3-container">
-							<h4><i class="#{chatChannel.icon}"/> #{chatChannel.label}</h4>
+							<h4><b><i class="#{chatChannel.icon}"/> #{chatChannel.label} 
+								<!-- <h:outputText value=" (users: #{fn:length(chatManager.subscribedUserMap['/channel/'.concat(chatChannel.id)])})" id="userCount#{chatChannel.id}"/> -->
+								</b>
+							</h4>
 						</div>
 						<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
 							<form>
 								<button id="enterChannel#{chatChannel.id}" class="w3-btn enterChannel" type="submit" data-channelid="#{chatChannel.id}">
-									<i class="fa fa-sign-in"/> Join
+									<b><i class="fa fa-sign-in"/> Join</b>
 								</button>
-		                    	<button id="leaveChannel#{chatChannel.id}" class="w3-btn leaveChannel" type="submit" data-channelid="#{chatChannel.id}" disabled="disabled">
-		                    		<i class="fa fa-sign-out"/> Leave
+		                    	<button id="leaveChannel#{chatChannel.id}" class="w3-btn leaveChannel" type="submit" data-channelid="#{chatChannel.id}">
+		                    		<b><i class="fa fa-sign-out"/> Leave</b>
 		                    	</button>
 		                    </form>
 						</div>
 					</div>
 					
-					<div class="w3-row-padding">
-				        <div class="w3-col w3-rest" style="height: 500px; overflow: auto;" id="conversationDiv#{chatChannel.id}">
-				            <table id="conversation1000" class="w3-table w3-striped"> <!-- {*} -->
+					<div class="w3-row-padding" style="display: flex;flex-direction: row;">
+					
+				        <div class="w3-col w3-rest w3-margin-top w3-margin-right" style="height: 500px; overflow: auto;" id="conversationDiv#{chatChannel.id}">
+				            <table id="conversation1000" class="w3-table w3-striped">
 				                <thead>
 					                <tr class="w3-white">
 					                	<!-- define column width here -->
@@ -105,11 +137,48 @@
 					                    <th></th>
 					                </tr>
 				                </thead>
-				                <tbody id="channelContent#{chatChannel.id}">
-				                </tbody>
+				                
+				                <tbody id="channelContent#{chatChannel.id}"/>
+				                
 				            </table>
 				        </div>
-			        	
+				        
+				        <div jsf:id="channelUsersDiv#{chatChannel.id}" class="w3-margin-top w3-margin-right w3-border-right w3-border-left w3-border-bottom"
+				        	style="width:250px; height: 500px;">
+				        	<div class="w3-container w3-center w3-theme-d2">
+				        		<h6><b>Joined</b></h6>
+				        	</div>
+				        	<div class="w3-bar-block w3-theme-l4" style="overflow: auto;height: 456px;">
+				        	
+				        		
+				        		<ui:repeat var="username" value="#{chatManager.subscribedUserMap['/channel/'.concat(chatChannel.id)].keySet()}">
+
+									<div class="w3-bar-item w3-button w3-row">
+										
+										<div class="w3-col s3 w3-padding-small">
+							        		<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+												height="30" width="30" title="#{username}" rendered="#{fileHandler.isAvatarExists(username)}"/>
+												
+											<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
+												title="#{username}"
+												style="display:inline-block;font-size:0.8rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white;">
+												#{fn:substring(username, 0, 3)}
+											</span>
+										</div>
+										
+										<div class="w3-col s9 w3-padding-small">
+											
+											<span class="w3-small"><b>#{username}</b></span>
+											
+										</div>
+										
+									</div>									
+				        		
+				        		</ui:repeat>
+			        			
+			        		</div>
+				        </div>
+				        
 			        </div>
 			        
 		            <form class="w3-container w3-padding">
@@ -135,6 +204,10 @@
 				</div>
 				
 			</c:forEach>
+						
+			<h:form>
+				<pe:timer timeout="25" singleRun="false" update="${chatChannelDisplayComponents}" visible="false" oncomplete="changeAvatarBackgrounds();"/>
+			</h:form>
 			
 			<!-- image preview dialog -->
 			<div id="imagePreviewModal" class="w3-modal">

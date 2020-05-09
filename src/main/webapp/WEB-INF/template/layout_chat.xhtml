@@ -45,9 +45,9 @@
     <h:body style="margin:0px;" onload="connect();" onbeforeunload="disconnect();">
 
 		<!-- Top container -->
-		<div class="w3-bar w3-top w3-theme-l3 w3-large w3-bottombar w3-border-green" style="z-index:4">
-		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-plug"></i>  Connected Users</button>
-		  <a href="#{request.contextPath}"><span class="w3-bar-item w3-right" style="font-weight:bold;">#{msg['application.title']}</span></a>
+		<div class="w3-bar w3-top w3-theme-l3 w3-large w3-bottombar w3-border-orange" style="z-index:4">
+		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="openSidebar();"><i class="fa fa-bars"/></button>
+		  <a href="#{request.contextPath}"><span class="w3-bar-item w3-right" style="font-weight:bold;">#{msg['application.title']} <i class="fa fa-home"/></span></a>
 		</div>
 		
 		<!-- Sidebar/menu -->
@@ -87,30 +87,9 @@
 		    	<h6 class="w3-text-white"><b>CONNECTED USERS <i class="fa fa-plug"/></b></h6>
 		  	</div>
 		  
-			<div class="w3-bar-block" jsf:id="connectedUsersDiv">
-				<ui:repeat var="username" value="#{chatManager.connectedUsersMap.keySet().toArray()}">
-					<!-- <div class="w3-bar-item w3-button w3-padding w3-cell-row">
-						
-						<div class="w3-container w3-cell w3-padding-small">
-			        		<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
-								height="48" width="48" title="#{username}" rendered="#{fileHandler.isAvatarExists(username)}"/>
-								
-							<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
-								title="#{username}"
-								style="display:inline-block;font-size:1.1rem;line-height:48px;width:48px;text-align:center;text-transform: uppercase;color:white;">
-								#{fn:substring(username, 0, 3)}
-							</span>
-						</div>
-						
-						<div class="w3-container w3-cell">
-							
-							<span><b>#{username}</b></span>
-							<br/>
-							<pe:timeAgo value="#{chatManager.connectedUsersMap[username]}" styleClass="w3-small"/>
-							
-						</div>
-						
-					</div> -->
+			<div jsf:id="connectedUsersDiv" class="w3-bar-block w3-theme-l3" style="overflow: auto; height: 500px;">
+				<ui:repeat var="username" value="#{chatManager.connectedUserMap.keySet().toArray()}">
+				
 					<div class="w3-bar-item w3-button w3-padding w3-row">
 						
 						<div class="w3-container w3-col s3 w3-padding-small">
@@ -128,7 +107,7 @@
 							
 							<span><b>#{username}</b></span>
 							<br/>
-							<pe:timeAgo value="#{chatManager.connectedUsersMap[username]}" styleClass="w3-small"/>
+							<pe:timeAgo value="#{chatManager.connectedUserMap[username].connectedDate}" styleClass="w3-small"/>
 							
 						</div>
 						
@@ -139,11 +118,11 @@
 		</nav>
 		
 		<h:form>
-			<pe:timer timeout="60" singleRun="false" update=":connectedUsersDiv" oncomplete="changeAvatarBackgrounds();"/>
+			<pe:timer timeout="45" singleRun="false" update=":connectedUsersDiv" oncomplete="changeAvatarBackgrounds();"/>
 		</h:form>
 		
 		<!-- Overlay effect when opening sidebar on small screens -->
-		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>    
+		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="closeSidebar()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>    
 
 		<!-- !PAGE CONTENT! -->
 		<div class="w3-main" style="margin-left:270px;margin-top:27px;">
@@ -217,7 +196,7 @@
 			var overlayBg = document.getElementById("myOverlay");
 			
 			// Toggle between showing and hiding the sidebar, and add overlay effect
-			function w3_open() {
+			function openSidebar() {
 			  if (mySidebar.style.display === 'block') {
 			    mySidebar.style.display = 'none';
 			    overlayBg.style.display = "none";
@@ -228,7 +207,7 @@
 			}
 			
 			// Close the sidebar with the close button
-			function w3_close() {
+			function closeSidebar() {
 			  mySidebar.style.display = "none";
 			  overlayBg.style.display = "none";
 			}

@@ -8,11 +8,13 @@ import javax.annotation.Resource;
 import org.primefaces.model.DualListModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.domain.ChatChannel;
-import com.github.chipolaris.bootforum.domain.DisplayManagement;
+import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.jsf.converter.EntityConverter;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
@@ -29,29 +31,32 @@ public class ManageDisplay {
 	@Resource
 	private GenericService genericService;
 	
+	@Resource 
+	private CacheManager cacheManager;
+	
 	private List<Tag> tags;
 	
 	private List<ChatChannel> chatChannels;
 	
-	private DisplayManagement displayManagement;
+	private DisplayOption displayOption;
 	
-	public DisplayManagement getDisplayManagement() {
-		return displayManagement;
+	public DisplayOption getDisplayOption() {
+		return displayOption;
 	}
-	public void setDisplayManagement(DisplayManagement displayManagement) {
-		this.displayManagement = displayManagement;
+	public void setDisplayOption(DisplayOption displayManagement) {
+		this.displayOption = displayManagement;
 	}
 	
 	public void onLoad() {
-		this.displayManagement = genericService.getEntity(DisplayManagement.class, 1L).getDataObject();
+		this.displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
 		this.tags = genericService.getAllEntities(Tag.class).getDataObject();
 		this.chatChannels = genericService.getAllEntities(ChatChannel.class).getDataObject();
 		
 		this.tagConverter = new EntityConverter<>(tags);
 		this.chatChannelConverter = new EntityConverter<>(chatChannels);
 		
-		List<Tag> currentDisplayTags = displayManagement.getDisplayTags();
-		List<ChatChannel> currentDisplayChatChannels = displayManagement.getDisplayChatChannels();
+		List<Tag> currentDisplayTags = displayOption.getDisplayTags();
+		List<ChatChannel> currentDisplayChatChannels = displayOption.getDisplayChatChannels();
 		
 		List<Tag> allTags = new ArrayList<>(tags);
 		allTags.removeAll(currentDisplayTags);
@@ -68,7 +73,7 @@ public class ManageDisplay {
 		logger.info("Updating display management ");
 		
 	    // 
-    	ServiceResponse<DisplayManagement> response = genericService.updateEntity(this.displayManagement);
+    	ServiceResponse<DisplayOption> response = genericService.updateEntity(this.displayOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {
     		JSFUtils.addInfoStringMessage(null, String.format("DisplayManagment updated"));
@@ -81,13 +86,16 @@ public class ManageDisplay {
 	public void editDisplayTags() {
 		logger.info("Updating display tags");
 		
-		this.displayManagement.setDisplayTags(tagDualList.getTarget());
+		this.displayOption.setDisplayTags(tagDualList.getTarget());
 		
 	    // 
-    	ServiceResponse<DisplayManagement> response = genericService.updateEntity(this.displayManagement);
+    	ServiceResponse<DisplayOption> response = genericService.updateEntity(this.displayOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {
     		JSFUtils.addInfoStringMessage(null, String.format("Display Tags updated"));
+    		
+    		// clear cache "DISCCUSIONS_FOR_TAG"
+    		cacheManager.getCache(CachingConfig.DISCCUSIONS_FOR_TAG).clear();
     	}
     	else {
     		JSFUtils.addErrorStringMessage(null, String.format("Unable to update Display Tags"));
@@ -98,10 +106,10 @@ public class ManageDisplay {
 		
 		logger.info("Updating display chat channels");
 		
-		this.displayManagement.setDisplayChatChannels(chatChannelDualList.getTarget());
+		this.displayOption.setDisplayChatChannels(chatChannelDualList.getTarget());
 		
 	    // 
-    	ServiceResponse<DisplayManagement> response = genericService.updateEntity(this.displayManagement);
+    	ServiceResponse<DisplayOption> response = genericService.updateEntity(this.displayOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {
     		JSFUtils.addInfoStringMessage(null, String.format("Display Chat Channels updated"));

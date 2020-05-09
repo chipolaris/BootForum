@@ -45,8 +45,8 @@
 
 		<!-- Top container -->
 		<div class="w3-bar w3-top w3-theme-l3 w3-large w3-bottombar w3-border-green" style="z-index:4">
-		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-		  <a href="#{request.contextPath}"><span class="w3-bar-item w3-right" style="font-weight:bold;">#{msg['application.title']}</span></a>
+		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="openSidebar();"><i class="fa fa-bars"/>  Menu</button>
+		  <a href="#{request.contextPath}"><span class="w3-bar-item w3-right" style="font-weight:bold;">#{msg['application.title']} <i class="fa fa-home"/></span></a>
 		</div>
 		
 		<!-- Sidebar/menu -->
@@ -86,7 +86,7 @@
 		    <h5>Dashboard</h5>
 		  </div>
 		  <div class="w3-bar-block">
-		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
 		    <a href="#{request.contextPath}/secure/index.xhtml" class="w3-bar-item w3-button w3-padding" id="index"><i class="fa fa-dashboard fa-fw"></i>  Overview</a>
 		    <a href="#{request.contextPath}/secure/accountInfo.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw"></i>  Account</a>
 		    <a href="#{request.contextPath}/secure/privateMessages.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope-o fa-fw"></i>  Messages</a>
@@ -99,7 +99,7 @@
 		</nav>
 
 		<!-- Overlay effect when opening sidebar on small screens -->
-		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>    
+		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="closeSidebar()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>    
 
 		<!-- !PAGE CONTENT! -->
 		<div class="w3-main" style="margin-left:230px;margin-top:43px;">
@@ -169,7 +169,7 @@
 			var overlayBg = document.getElementById("myOverlay");
 			
 			// Toggle between showing and hiding the sidebar, and add overlay effect
-			function w3_open() {
+			function openSidebar() {
 			  if (mySidebar.style.display === 'block') {
 			    mySidebar.style.display = 'none';
 			    overlayBg.style.display = "none";
@@ -180,7 +180,7 @@
 			}
 			
 			// Close the sidebar with the close button
-			function w3_close() {
+			function closeSidebar() {
 			  mySidebar.style.display = "none";
 			  overlayBg.style.display = "none";
 			}
