@@ -43,11 +43,18 @@
 
 
 ### <ins>Live Chat<ins>
+  
 ![LiveChat](https://user-images.githubusercontent.com/46733006/81510655-7c5d2f00-92e1-11ea-8260-3c844ff6525c.PNG)
 
 
 ### <ins>Account<ins>
+  
 ![Dashboard](https://user-images.githubusercontent.com/46733006/79707588-012cce00-828b-11ea-91a8-19aa760c44f1.PNG)
+
+
+### <ins>Private Messages<ins>
+  
+![PrivateMessage](https://user-images.githubusercontent.com/46733006/81513384-234bc600-92f6-11ea-81a8-6cbf5b9cc3e9.PNG)
 
 
 
