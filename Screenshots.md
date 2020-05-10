@@ -42,19 +42,25 @@
 
 
 
+### <ins>Live Chat<ins>
+![LiveChat](https://user-images.githubusercontent.com/46733006/81510655-7c5d2f00-92e1-11ea-8260-3c844ff6525c.PNG)
+
+
 ### <ins>Account<ins>
 ![Dashboard](https://user-images.githubusercontent.com/46733006/79707588-012cce00-828b-11ea-91a8-19aa760c44f1.PNG)
 
 
 
 ### <ins>Admin User Management</ins>
-![UserManagement](https://user-images.githubusercontent.com/46733006/79707593-0558eb80-828b-11ea-9d27-9942a3df1c0c.PNG)
+
+![ManageUsers1](https://user-images.githubusercontent.com/46733006/81510656-7c5d2f00-92e1-11ea-825d-d8f62ed152ad.PNG)
 
 
-![UserManagementGrid](https://user-images.githubusercontent.com/46733006/79707597-09850900-828b-11ea-8618-d11e04e54113.PNG)
+![ManageUsers2](https://user-images.githubusercontent.com/46733006/81510657-7c5d2f00-92e1-11ea-8ea1-d89b6fbb4a91.PNG)
 
 
 
-### <ins>UI Theme (customized by each forum member)<ins>
+
+### <ins>UI Theme (customizable by and for each forum member)<ins>
 ![Theme1](https://user-images.githubusercontent.com/46733006/79707605-10138080-828b-11ea-811b-eb073feea9ab.PNG)
 ![Theme2](https://user-images.githubusercontent.com/46733006/79707606-1144ad80-828b-11ea-9ddb-c6f4319d7c62.PNG)
