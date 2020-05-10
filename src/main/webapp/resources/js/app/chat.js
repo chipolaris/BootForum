@@ -5,7 +5,7 @@ function setConnected(connected) {
     $("#disconnect").prop("disabled", !connected);
     
 	// join/leave buttons
-	$('.enterChannel').prop("disabled", !connected);
+	$('.joinChannel').prop("disabled", !connected);
 	$('.leaveChannel').prop("disabled", true);
 }
 
@@ -63,39 +63,77 @@ function showMessage(channelId, messageObj) {
 		showUserImage(channelId, messageObj);
 	}
 	else if(messageObj.type == 'channelMessage') {
-		showChannelMessage(channelId, messageObj);
+		handleChannelMessage(channelId, messageObj);
 	}
     
     // scroll to bottom of chat window with animation, duration 400 miliseconds
     $("#conversationDiv" + channelId).animate({ scrollTop: $('#conversationDiv' + channelId).prop("scrollHeight")}, 400);
 }
 
-function showChannelMessage(channelId, messageObj) {
-	 $("#channelContent" + channelId).append("<tr><td colspan=2 class='w3-large'><span class='w3-text-orange'>" 
-			 + messageObj.message + "</span> <span class='w3-text-blue'> - " 
+function handleChannelMessage(channelId, messageObj) {
+	 
+	$("#channelContent" + channelId).append("<tr><td colspan=2 class='w3-large'><span class='w3-text-orange'>" 
+			 + messageObj.username + ' ' + messageObj.action + "</span> <span class='w3-text-blue'> - " 
 			 + new Date(messageObj.timeMillis).toLocaleTimeString() 
 			 + "</span></td></tr>");
+	 
+	if(messageObj.action == 'left') {
+		$('#user' + channelId + messageObj.username).remove();
+	}
+	else if(messageObj.action == 'entered') {
+		
+		var newUserDiv = "<div class=\'w3-bar-item w3-button w3-row\' id=\'user" + channelId + messageObj.username + "\'>"
+			+ "<div class=\'w3-col s3 w3-padding-small\'>"
+			+ buildAvatarContent30(messageObj)
+			+ "</div><div class=\'w3-col s9 w3-padding-small\'><span class=\'w3-small\'><b>"
+			+ messageObj.username
+			+ "</b></span></div></div>";
+		
+		$('#userList' + channelId).append(newUserDiv);
+	}
 }
 
 function showUserMessage(channelId, messageObj) {
+	
+    $("#channelContent" + channelId).append("<tr><td><p>" + buildAvatarContent36(messageObj)
+    		+ "</p></td><td><p><b>" + messageObj.username + "</b> <span class='w3-text-blue'> - <b>" 
+    		+ new Date(messageObj.timeMillis).toLocaleTimeString() 
+    		+ "</b></span></p><p>" + messageObj.content.replace('&amp;', '&') 
+    		+ "</p></td></tr>");
+}
+
+function buildAvatarContent30(messageObj) {
 	
 	var avatar = "";
 	
 	if(messageObj.avatarExists) {
 		avatar = "<img src='../avatar/" + messageObj.username 
-			+ "' class='chatAvatarImage w3-circle' title='" + messageObj.username + "'/>";
+			+ "' class='chatAvatarImage30 w3-circle' title='" + messageObj.username + "'/>";
 	}
 	else {
-		avatar = "<span class='chatAvatarSpan w3-circle' style='background-color:" 
+		avatar = "<span class='chatAvatarSpan30 w3-circle' style='background-color:" 
 	    	+ stringToColor(messageObj.username) + "' title='" + messageObj.username + "'>"
 	    	+ messageObj.username.substring(0,3) + "</span>";
 	}
 	
-    $("#channelContent" + channelId).append("<tr><td><p>" + avatar
-    		+ "</p></td><td><p><b>" + messageObj.username + "</b> <span class='w3-text-blue'> - <b>" 
-    		+ new Date(messageObj.timeMillis).toLocaleTimeString() 
-    		+ "</b></span></p><p>" + messageObj.content.replace('&amp;', '&') 
-    		+ "</p></td></tr>");
+	return avatar
+}
+
+function buildAvatarContent36(messageObj) {
+	
+	var avatar = "";
+	
+	if(messageObj.avatarExists) {
+		avatar = "<img src='../avatar/" + messageObj.username 
+			+ "' class='chatAvatarImage36 w3-circle' title='" + messageObj.username + "'/>";
+	}
+	else {
+		avatar = "<span class='chatAvatarSpan36 w3-circle' style='background-color:" 
+	    	+ stringToColor(messageObj.username) + "' title='" + messageObj.username + "'>"
+	    	+ messageObj.username.substring(0,3) + "</span>";
+	}
+	
+	return avatar
 }
 
 function showUserImage(channelId, messageObj) {
@@ -138,12 +176,50 @@ function readURL(input) {
 		reader.readAsDataURL(input.files[0]); // convert to base64 string
 	}
 }
+
+function getJoinedUsers(channelId) {
+	
+	$.getJSON(contextPath + "/chat/channelUsers/" + channelId, function(data) {
+		
+		$.each(data, function(index, messageObj){
+			// if user is NOT already exists, append user 
+			if($('#user' + channelId + messageObj.username).length == 0) {
+				$('#userList' + channelId).append(buildChannelUserDiv(channelId, messageObj));
+			}
+		});
+		
+	});
+}
+
+function buildChannelUserDiv(channelId, messageObj) {
+	
+	var channelUserDiv = "<div class=\'w3-bar-item w3-button w3-row\' id=\'user" + channelId + messageObj.username + "\'>"
+		+ "<div class=\'w3-col s3 w3-padding-small\'>"
+		+ buildAvatarContent30(messageObj)
+		+ "</div><div class=\'w3-col s9 w3-padding-small\'><span class=\'w3-small\'><b>"
+		+ messageObj.username
+		+ "</b></span></div></div>";
+	
+	return channelUserDiv
+}
+
+function getConnectedUsers() {
+	
+	console.log('in getConnectedUsers method')
+	
+	$.getJSON(contextPath + "/chat/connectedUsers", function(data) {	
+		console.log(data);
+	});
+}
+
 // keep track of the selectedChannel for image preview and image post
 var selectedChannel = '';
 
+// keep track of channel subscriptions
 var channelSubscriptions = new Map();
 
 $(function () {
+	
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
@@ -152,7 +228,7 @@ $(function () {
     
     $( ".toggleChannelButton" ).click(function(){
     	
-    	// retrieve channelId from the button, note: use lowercase
+    	// retrieve channelId from the button, note: use lowercase dataset.channelid
     	var channelId = this.dataset.channelid;
     	
     	// hide other channels
@@ -162,10 +238,12 @@ $(function () {
     	$('#channel' + channelId).show(400);
     });
     
-    $( ".enterChannel" ).click(function(){
+    $( ".joinChannel" ).click(function(){
     	
-    	// retrieve channelId from the button, note: use lowercase
+    	// retrieve channelId from the button, note: use lowercase dataset.channelid
     	var channelId = this.dataset.channelid;
+    	
+    	getJoinedUsers(channelId);
     	
     	var channelSubscription = stompClient.subscribe("/channel/" + channelId, function (message) {
             showMessage(channelId, JSON.parse(message.body));
@@ -186,7 +264,7 @@ $(function () {
     
     $( ".leaveChannel" ).click(function(){
     	
-    	// retrieve channelId from the button, note: use lowercase
+    	// retrieve channelId from the button, note: use lowercase dataset.channelid
     	var channelId = this.dataset.channelid;
     	
     	var channelSubscription = channelSubscriptions.get("channel" + channelId);
@@ -197,18 +275,30 @@ $(function () {
     	$(this).prop("disabled", true);
     	
     	// enable enter button
-    	$('#enterChannel' + channelId).prop("disabled", false);
+    	$('#joinChannel' + channelId).prop("disabled", false);
     	
     	// disable post message form fieldset
     	$('#fieldSet' + channelId).prop("disabled", true);
     	
     	// clear channel content
     	$("#channelContent" + channelId).html("");
+    	
+    	// clear channel users
+    	$("#userList" + channelId).empty();
+    });
+    
+    $( ".usersChannel" ).click(function() {
+    	
+    	// retrieve channelId from the button, note: use lowercase dataset.channelid
+    	var channelId = this.dataset.channelid;
+    	
+    	// hide/show usersChannel
+    	$('#channelUsersDiv' + channelId).toggle(400);
     });
     
     $( ".postMessage" ).click(function(){
     	
-    	// retrieve channelId from the button, note: use lowercase
+    	// retrieve channelId from the button, note: use lowercase dataset.channelid
     	var channelId = this.dataset.channelid;
     	
     	postMessage(channelId);

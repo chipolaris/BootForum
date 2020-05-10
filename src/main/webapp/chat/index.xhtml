@@ -21,7 +21,7 @@
 	
 		<style type="text/css">
 		
-			.chatAvatarSpan {
+			.chatAvatarSpan36 {
 				display:inline-block;
 				font-size:0.9em;
 				line-height:36px;
@@ -31,9 +31,24 @@
 				color:white;
 			}
 			
-			.chatAvatarImage {
+			.chatAvatarImage36 {
 				height:36px;
 				width:36px;
+			}
+			
+			.chatAvatarSpan30 {
+				display:inline-block;
+				font-size:0.8em;
+				line-height:30px;
+				width:30px;
+				text-align: center;
+				text-transform: uppercase;
+				color:white;
+			}
+			
+			.chatAvatarImage30 {
+				height:30px;
+				width:30px;
 			}
 			
 			/* override the w3-striped to have the first row shaded gray */
@@ -95,15 +110,11 @@
 	            </form>				
 			</div>
 			
-			<c:set var="chatChannelDisplayComponents" value=""/>
-			
 			<!-- 
 				important note: use build time <c:forEach> instead of render time <ui:repeat> to generate dynamic id for each jsf component
 				reference: https://stackoverflow.com/questions/16043218/refer-to-jsf-dynamically-generated-ids-based-on-iteration-index
 			  -->			  
 			<c:forEach items="#{chatPage.displayOption.displayChatChannels}" var="chatChannel">
-			
-				<c:set var="chatChannelDisplayComponents" value="${chatChannelDisplayComponents} :channelUsersDiv${chatChannel.id}" />
 			
 				<div id="channel#{chatChannel.id}" class="w3-border toggleChannelDiv" style="display: none;">
 					
@@ -116,9 +127,12 @@
 						</div>
 						<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
 							<form>
-								<button id="enterChannel#{chatChannel.id}" class="w3-btn enterChannel" type="submit" data-channelid="#{chatChannel.id}">
+								<button id="joinChannel#{chatChannel.id}" class="w3-btn joinChannel" type="submit" data-channelid="#{chatChannel.id}">
 									<b><i class="fa fa-sign-in"/> Join</b>
 								</button>
+		                    	<button id="usersChannel#{chatChannel.id}" class="w3-btn usersChannel" type="submit" data-channelid="#{chatChannel.id}">
+		                    		<b><i class="fa fa-users"/> Users</b>
+		                    	</button>
 		                    	<button id="leaveChannel#{chatChannel.id}" class="w3-btn leaveChannel" type="submit" data-channelid="#{chatChannel.id}">
 		                    		<b><i class="fa fa-sign-out"/> Leave</b>
 		                    	</button>
@@ -143,40 +157,14 @@
 				            </table>
 				        </div>
 				        
-				        <div jsf:id="channelUsersDiv#{chatChannel.id}" class="w3-margin-top w3-margin-right w3-border-right w3-border-left w3-border-bottom"
+				        <div jsf:id="channelUsersDiv#{chatChannel.id}" class="w3-margin-top w3-margin-right w3-border"
 				        	style="width:250px; height: 500px;">
-				        	<div class="w3-container w3-center w3-theme-d2">
-				        		<h6><b>Joined</b></h6>
+				        	<div class="w3-container w3-center w3-theme-d1">
+				        		<h6><b><i class="fa fa-users"/> Joined Users</b></h6>
 				        	</div>
-				        	<div class="w3-bar-block w3-theme-l4" style="overflow: auto;height: 456px;">
 				        	
-				        		
-				        		<ui:repeat var="username" value="#{chatManager.subscribedUserMap['/channel/'.concat(chatChannel.id)].keySet()}">
-
-									<div class="w3-bar-item w3-button w3-row">
-										
-										<div class="w3-col s3 w3-padding-small">
-							        		<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
-												height="30" width="30" title="#{username}" rendered="#{fileHandler.isAvatarExists(username)}"/>
-												
-											<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
-												title="#{username}"
-												style="display:inline-block;font-size:0.8rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white;">
-												#{fn:substring(username, 0, 3)}
-											</span>
-										</div>
-										
-										<div class="w3-col s9 w3-padding-small">
-											
-											<span class="w3-small"><b>#{username}</b></span>
-											
-										</div>
-										
-									</div>									
-				        		
-				        		</ui:repeat>
-			        			
-			        		</div>
+				        	<div id="userList#{chatChannel.id}" class="w3-bar-block w3-theme-light" style="overflow: auto;height: 456px;"/>
+			        		
 				        </div>
 				        
 			        </div>
@@ -204,10 +192,6 @@
 				</div>
 				
 			</c:forEach>
-						
-			<h:form>
-				<pe:timer timeout="25" singleRun="false" update="${chatChannelDisplayComponents}" visible="false" oncomplete="changeAvatarBackgrounds();"/>
-			</h:form>
 			
 			<!-- image preview dialog -->
 			<div id="imagePreviewModal" class="w3-modal">

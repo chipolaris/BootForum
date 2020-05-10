@@ -14,6 +14,7 @@ public class ConnectedUser {
 	private String username;
 	private Date connectedDate;
 	private int sessionCount;
+	private Boolean avatarExists;
 	
 	public String getUsername() {
 		return username;
@@ -37,6 +38,13 @@ public class ConnectedUser {
 	}
 	public void addSessionCount(int value) {
 		this.sessionCount += value;
+	}
+	
+	public Boolean getAvatarExists() {
+		return avatarExists;
+	}
+	public void setAvatarExists(Boolean avatarExists) {
+		this.avatarExists = avatarExists;
 	}
 	
 	@Override

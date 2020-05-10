@@ -17,6 +17,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
+import com.github.chipolaris.bootforum.jsf.bean.FileHandler;
 import com.github.chipolaris.bootforum.messaging.ChannelMessage;
 import com.github.chipolaris.bootforum.messaging.ChatManager;
 import com.github.chipolaris.bootforum.messaging.SystemMessage;
@@ -31,6 +32,9 @@ public class WebSocketEventsListener {
 	
 	@Resource
 	private SimpMessagingTemplate template;
+	
+	@Resource
+	private FileHandler fileHandler;
 	
 	@EventListener
 	private void handleSessionConnectedEvent(SessionConnectedEvent event) {
@@ -91,8 +95,10 @@ public class WebSocketEventsListener {
 		if(addResult) {
 			logger.info(String.format("User: %s subscribes to simpDestination: %s", username, simpDestination));
 			
+			Boolean avatarExists = fileHandler.isAvatarExists(username);
+			
 			this.template.convertAndSend(simpDestination,
-					new ChannelMessage(String.format("User \"%s\" entered", username), System.currentTimeMillis()));
+					new ChannelMessage(username, "entered", System.currentTimeMillis(), avatarExists));
 		}
 		else {
 			logger.info(String.format("Another session from user: %s subscribes to simpDestination: %s", username, simpDestination));
@@ -122,7 +128,7 @@ public class WebSocketEventsListener {
 			logger.info(String.format("User %s unsubscribes from simpDestination: %s", username, simpDestination));
 			
 			this.template.convertAndSend(simpDestination,
-					new ChannelMessage(String.format("User \"%s\" left", username), System.currentTimeMillis()));
+					new ChannelMessage(username, "left", System.currentTimeMillis(), null));
 		}
 		else {
 			logger.info(String.format("A session from user %s unsubscribes to simpDestination: %s", username, simpDestination));
