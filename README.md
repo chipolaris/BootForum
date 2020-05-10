@@ -21,6 +21,12 @@ Full features web based forum/disscussion/bulletin board software implemented us
   * Replies can be viewed as a comment thread.
   * Tagged discussions (by administrator)
 
+* **Live Chat**
+  * Chat live with other connected members
+  * Attach images
+  * HTML Emoji supported
+  * Chat channels are managed (add/edit/delete) by system admin
+
 * **Search**
   * Search for comments (backed by Lucence Index)
   * Search members (by username)
@@ -43,6 +49,7 @@ Full features web based forum/disscussion/bulletin board software implemented us
   * Manage discussions: add tags, moderate (mark active/inactive)
   * Manage tags: create / edit, apply to discussions
   * Manage users: edit (change role, password) / delete / mark active/inactive, etc
+  * Customizable home page display
 
 * **UI**: 
   * Change look and feel based on each user's preferences
