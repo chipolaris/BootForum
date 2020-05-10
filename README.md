@@ -1,4 +1,4 @@
-# BootForum Project
+# BootForum [Java Bulletin Board]
 
 ## Overview
 Full features web based forum/disscussion/bulletin board software implemented using Java, Spring Boot, Eclipselink, Primefaces, and W3.CSS.
@@ -6,7 +6,7 @@ Full features web based forum/disscussion/bulletin board software implemented us
 * Cross-platform supported. All platforms that run Java: Unix/Linux, Windows, or Mac OS.
 * Support all relational databases that provide JDBC connectivity. Tested on Postgresql, H2, MySQL, SQL Server, and Oracle.
 * Responsive web designed using W3.CSS framework to display and function well on all screen sizes (desktop, tablet, or mobile phone)
-* Very _easy_ to run: operate out of the box with minimal configuration. Run-time configuration flexibilty enabled by Spring Boot.
+* _**Very easy**_ to operate: run out of the box with minimal configuration. Run-time configuration flexibilty enabled by Spring Boot.
 
 ###  [**View BootForum Screenshots**](Screenshots.md "Screenshots")
 
