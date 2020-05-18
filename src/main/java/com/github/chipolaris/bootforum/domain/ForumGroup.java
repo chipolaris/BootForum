@@ -15,7 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -44,7 +44,7 @@ public class ForumGroup extends BaseEntity {
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="ForumGroupIdGenerator")
 	private Long id;
 	
-	@Column(name="TITLE", length=255)
+	@Column(name="TITLE", length=100)
 	private String title;
 	
 	// icon to display
@@ -59,7 +59,8 @@ public class ForumGroup extends BaseEntity {
 	 * Note: set cascade to REMOVE to enable automatic removal of associated Forums 
 	 */
 	@OneToMany(cascade=CascadeType.REMOVE, fetch=FetchType.LAZY, mappedBy="forumGroup")
-	@OrderColumn(name="SORT_ORDER") // note: this SORT_ORDER column is in Forum table
+	//@OrderColumn(name="SORT_ORDER") // note: this SORT_ORDER column is in Forum table
+	@OrderBy("sortOrder")
 	private List<Forum> forums; // use List instead of Set to sort
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -70,9 +71,13 @@ public class ForumGroup extends BaseEntity {
 	 * Note: set cascade to REMOVE to enable automatic removal of sub ForumGroups 
 	 */
 	@OneToMany(cascade=CascadeType.REMOVE, fetch=FetchType.LAZY, mappedBy="parent")
-	@OrderColumn(name="SORT_ORDER") // note: this SORT_ORDER column is in ForumGroup table
+	//@OrderColumn(name="SORT_ORDER") // note: this SORT_ORDER column is in ForumGroup table
+	@OrderBy("sortOrder")
 	private List<ForumGroup> subGroups; // use List instead of Set to sort
 	
+	@Column(name="SORT_ORDER")
+	private Integer sortOrder;
+
 	@Override
 	public Long getId() {
 		return id;
@@ -121,5 +126,12 @@ public class ForumGroup extends BaseEntity {
 	}
 	public void setSubGroups(List<ForumGroup> subGroups) {
 		this.subGroups = subGroups;
+	}
+	
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 }

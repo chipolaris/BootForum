@@ -19,6 +19,7 @@ import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.CommentDAO;
 import com.github.chipolaris.bootforum.dao.DiscussionDAO;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
+import com.github.chipolaris.bootforum.dao.StatDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.CommentVote;
 import com.github.chipolaris.bootforum.domain.Discussion;
@@ -42,6 +43,9 @@ public class DiscussionService {
 	
 	@Resource
 	private CommentDAO commentDAO;
+	
+	@Resource
+	private StatDAO statDAO;
 	
 	@Resource
 	private FileService fileService;
@@ -179,30 +183,33 @@ public class DiscussionService {
 	}
 	
 	@Transactional(readOnly = false)
-	public ServiceResponse<Void> assignNewForum(Discussion discussion, Forum forum) {
+	public ServiceResponse<Void> assignNewForum(Discussion discussion, Forum toForum) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
 		
+		Forum fromForum = discussion.getForum(); 
+		discussion.setForum(toForum);
+		genericDAO.merge(discussion);
+		
 		DiscussionStat discussionStat = discussion.getStat();
 		
-		Forum oldForum = discussion.getForum();
-		if(oldForum != null) {
-			oldForum.getDiscussions().remove(discussion);
-			ForumStat oldStat = oldForum.getStat();
-			oldStat.addCommentCount(-discussionStat.getCommentCount());
-			oldStat.addDiscussionCount(-1);
-			genericDAO.merge(oldForum);
+		toForum.getDiscussions().add(discussion);
+		ForumStat toStat = toForum.getStat();
+		toStat.addCommentCount(discussionStat.getCommentCount());
+		toStat.addDiscussionCount(1);
+		toStat.setLastComment(statDAO.latestCommentInfo(toForum));
+		genericDAO.merge(toForum);
+		
+		if(fromForum != null) {
+			fromForum.getDiscussions().remove(discussion);
+			
+			ForumStat fromStat = fromForum.getStat();
+			fromStat.addCommentCount(-discussionStat.getCommentCount());
+			fromStat.addDiscussionCount(-1);
+			fromStat.setLastComment(statDAO.latestCommentInfo(fromForum));
+			
+			genericDAO.merge(fromForum);
 		}
-		
-		ForumStat newStat = forum.getStat();
-		newStat.addCommentCount(discussionStat.getCommentCount());
-		newStat.addDiscussionCount(1);
-		
-		discussion.setForum(forum);
-		forum.getDiscussions().add(discussion);
-		
-		genericDAO.merge(discussion);
-		genericDAO.merge(forum);
 		
 		return response;
 	}

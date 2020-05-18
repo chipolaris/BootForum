@@ -49,7 +49,7 @@
 		</div>
 		
 		<!-- Sidebar/menu -->
-		<nav class="w3-sidebar w3-collapse w3-theme-l4 w3-animate-left" style="z-index:3;width:230px;" id="mySidebar">
+		<nav class="w3-sidebar w3-collapse w3-theme-l4 w3-animate-left" style="z-index:3;width:230px;" id="sideBar">
 		
 		  <div class="w3-center w3-border-bottom w3-border-green w3-padding w3-margin">
 			
@@ -74,7 +74,7 @@
 			<a href="#{request.contextPath}/admin/index.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-institution" title="Home"/> ADMIN HOME</a> 
 			<a href="#{request.contextPath}/admin/userList.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users" title="Manage Users"/> MANAGE USERS</a> 
 			<a href="#{request.contextPath}/admin/discussionManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-comments" title="Manage Discussions"/> MANAGE DISCUSSIONS</a> 
-			<a href="#{request.contextPath}/admin/forumManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-indent" title="Manage Forums"/> MANAGE FORUMS</a>
+			<a href="#{request.contextPath}/admin/forumAdmin.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-indent" title="Manage Forums"/> MANAGE FORUMS</a>
 			<a href="#{request.contextPath}/admin/tagManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tags" title="Manage Tags"/> MANAGE TAGS</a>
 			<a href="#{request.contextPath}/admin/chatChannelManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-commenting" title="Manage Chat Channels"/> MANAGE CHAT</a>
 			<a href="#{request.contextPath}/admin/displayManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-laptop" title="Manage Diplay"/> MANAGE DISPLAY</a>
@@ -86,7 +86,7 @@
 		</nav>
 
 		<!-- Overlay effect when opening sidebar on small screens -->
-		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>    
+		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="pageOverlay"></div>    
 
 		<!-- !PAGE CONTENT! -->
 		<div class="w3-main" style="margin-left:230px;margin-top:43px;">
@@ -126,25 +126,25 @@
  			//<![CDATA[	
 			
 				// Get the Sidebar
-				var mySidebar = document.getElementById("mySidebar");
+				var sideBar = document.getElementById("sideBar");
 				
 				// Get the DIV with overlay effect
-				var overlayBg = document.getElementById("myOverlay");
+				var overlayBg = document.getElementById("pageOverlay");
 				
 				// Toggle between showing and hiding the sidebar, and add overlay effect
 				function w3_open() {
-				  if (mySidebar.style.display === 'block') {
-				    mySidebar.style.display = 'none';
+				  if (sideBar.style.display === 'block') {
+				    sideBar.style.display = 'none';
 				    overlayBg.style.display = "none";
 				  } else {
-				    mySidebar.style.display = 'block';
+				    sideBar.style.display = 'block';
 				    overlayBg.style.display = "block";
 				  }
 				}
 				
 				// Close the sidebar with the close button
 				function w3_close() {
-				  mySidebar.style.display = "none";
+				  sideBar.style.display = "none";
 				  overlayBg.style.display = "none";
 				}
 				

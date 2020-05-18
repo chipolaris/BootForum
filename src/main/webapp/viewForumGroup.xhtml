@@ -79,52 +79,55 @@
 				
 				<h:form>
 				
-					<p:treeTable value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;" styleClass="borderless">
+					<p:treeTable value="#{forumMap.forumRootTreeNode}" var="data" nodeVar="treeNode" style="margin: 0 auto;" styleClass="borderless">
 				        
 				        <p:column headerText="Category/Name" style="text-align:left;" priority="1">
-				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'Root'}">
+				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{treeNode.type eq 'Root'}">
 				        		<i class="fa fa-lg fa-sitemap"/> Forum Home
 				        	</span>
-				        	<h:link outcome="viewForum" rendered="#{forumNode.type eq 'Forum'}">
-								<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{forumNode.bean.iconColor};">
-				        			<i class="fa-lg #{forumNode.bean.icon}"/>
+				        	<h:link outcome="viewForum" rendered="#{treeNode.type eq 'Forum'}">
+								<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{data.iconColor};">
+				        			<i class="fa-lg #{data.icon}"/>
 				        		</span>
-				        		<span class="w3-large">#{forumNode.bean.title}</span>
-				        		<f:param name="id" value="#{forumNode.bean.id}"/>
+				        		<span class="w3-large">#{data.title}</span>
+				        		<f:param name="id" value="#{data.id}"/>
 				        	</h:link>
-				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'ForumGroup' and param['id'] ne forumNode.bean.id}">
-				        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+				        	
+				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}" class="w3-small w3-opacity-min"> #{data.description}</span>
+				        	
+				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{treeNode.type eq 'ForumGroup' and param['id'] ne data.id}">
+				        		<i class="fa fa-lg fa-sitemap"/> #{data.title}
 				        	</span>
-				        	<span class="w3-tag w3-large w3-theme-d5" jsf:rendered="#{forumNode.type eq 'ForumGroup' and param['id'] eq forumNode.bean.id}" id="selectedForum">
-				        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+				        	<span class="w3-tag w3-large w3-theme-d5" jsf:rendered="#{treeNode.type eq 'ForumGroup' and param['id'] eq data.id}" id="selectedForum">
+				        		<i class="fa fa-lg fa-sitemap"/> #{data.title}
 				        	</span>
 				        </p:column>
 				        
 				        <p:column headerText="Discussions" style="text-align:center;width:100px;" priority="3">
-				        	<span jsf:rendered="#{forumNode.type eq 'Forum'}">#{forumMap.getForumStat(forumNode.bean).getDiscussionCount()}<!-- #{forumNode.bean.stat.discussionCount} --></span>
+				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.discussionCount}</span>
 				        </p:column>
 				        
 				        <p:column headerText="Comments" style="text-align:center;width:100px;" priority="4">
-				        	<span jsf:rendered="#{forumNode.type eq 'Forum'}">#{forumMap.getForumStat(forumNode.bean).getCommentCount()}<!-- #{forumNode.bean.stat.commentCount} --></span>
+				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.commentCount}</span>
 				        </p:column>
 
-						<p:column headerText="Last Comment" style="text-align:right;" priority="2">
-							<div jsf:rendered="#{forumNode.type eq 'Forum' and not empty forumNode.bean.stat.lastComment.updateBy}">
-								<pe:timeAgo value="#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateDate()}" titlePattern="MMMMM dd yyyy " /> by
+						<p:column headerText="Last Comment" style="text-align:right;width:200px;" priority="2">
+							<div jsf:rendered="#{treeNode.type eq 'Forum' and not empty data.stat.lastComment.updateBy}">
+								<pe:timeAgo value="#{data.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy " /> by
 								
 								<h:link outcome="memberProfile">
-									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(forumNode.bean.stat.lastComment.updateBy)}" class="w3-circle"
-											id="commentorAvatar" height="36" width="36" style="border:3px;margin-right:15px;" title="#{forumNode.bean.stat.lastComment.updateBy}"/> -->
-									<h:graphicImage value="#{requestContext}/avatar/#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}" class="w3-circle"
-											id="commentorAvatar" height="36" width="36" title="#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}"
-											rendered="#{fileHandler.isAvatarExists(forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy())}"/>
+									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(data.stat.lastComment.updateBy)}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36" style="border:3px;margin-right:15px;" title="#{data.stat.lastComment.updateBy}"/> -->
+									<h:graphicImage value="#{requestContext}/avatar/#{data.stat.lastComment.updateBy}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36" title="#{data.stat.lastComment.updateBy}"
+											rendered="#{fileHandler.isAvatarExists(data.stat.lastComment.updateBy)}"/>
 											
-									<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy())}"
-										title="#{forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy()}"
+									<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(data.stat.lastComment.updateBy)}"
+										title="#{data.stat.lastComment.updateBy}"
 	  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
-	  									#{fn:substring(forumMap.getForumStat(forumNode.bean).getLastComment().getUpdateBy(), 0, 3)}
+	  									#{fn:substring(data.stat.lastComment.updateBy, 0, 3)}
 	  								</span>
-									<f:param name="username" value="#{forumNode.bean.stat.lastComment.updateBy}"/>
+									<f:param name="username" value="#{data.stat.lastComment.updateBy}"/>
 								</h:link>
 							</div>
 				        </p:column>

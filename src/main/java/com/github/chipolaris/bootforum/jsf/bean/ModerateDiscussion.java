@@ -10,13 +10,18 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 import org.springframework.cache.CacheManager;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.CachingConfig;
+import com.github.chipolaris.bootforum.domain.ChatChannel;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Tag;
+import com.github.chipolaris.bootforum.event.ForumUpdateEvent;
+import com.github.chipolaris.bootforum.jsf.converter.EntityConverter;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.DiscussionService;
@@ -24,6 +29,11 @@ import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 import com.github.chipolaris.bootforum.service.StatService;
 
+/**
+ * 
+ * main backing bean for /admin/moderdateDiscussion.xhtml page
+ *
+ */
 @Component
 @Scope("view")
 public class ModerateDiscussion {
@@ -35,10 +45,13 @@ public class ModerateDiscussion {
 	private StatService statService;
 	
 	@Resource
-	private DiscussionService discusionService;
+	private DiscussionService discussionService;
 	
 	@Resource 
 	private CacheManager cacheManager;
+	
+	@Resource
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	private List<Tag> tags;
 	
@@ -91,6 +104,8 @@ public class ModerateDiscussion {
 			Map<String, Object> filters = new HashMap<>();
 			filters.put("disabled", false);
 			this.tags = genericService.getEntities(Tag.class, filters).getDataObject();
+			
+			this.tagConverter = new EntityConverter<>(tags);
 		}
 	}
 	
@@ -110,7 +125,7 @@ public class ModerateDiscussion {
 			JSFUtils.addServiceErrorMessage(response);
 		}
 	}
-	
+		
 	public void updateDiscussion() {
 		
 		ServiceResponse<Discussion> response = genericService.updateEntity(this.discussion);
@@ -124,9 +139,34 @@ public class ModerateDiscussion {
 		}
 	}
 	
+	private Forum toForum;
+	
+	public Forum getToForum() {
+		return toForum;
+	}
+	public void setToForum(Forum toForum) {
+		this.toForum = toForum;
+	}
+	
+	public void assignDiscussionForum() {
+		
+		ServiceResponse<Void> response = discussionService.assignNewForum(this.discussion, toForum);
+		
+		if(response.getAckCode() != AckCodeType.FAILURE) {
+			
+			// publish event
+    		applicationEventPublisher.publishEvent(new ForumUpdateEvent(this, this.toForum));
+			
+			JSFUtils.addInfoStringMessage(null, "Discussion Forum Updated");
+		}
+		else {
+			JSFUtils.addServiceErrorMessage(response);
+		}
+	}
+	
 	public String deleteDiscussion() {
 		
-		ServiceResponse<Void> response = discusionService.deleteDiscussion(this.discussion);
+		ServiceResponse<Void> response = discussionService.deleteDiscussion(this.discussion);
 		
 		if(response.getAckCode() != AckCodeType.FAILURE) {
 			
@@ -162,42 +202,10 @@ public class ModerateDiscussion {
 		this.selectedComment = selectedComment;
 	}
 	
-	/**
-	 * Tag converter
-	 */
-	private Converter<Tag> tagConverter = new Converter<Tag>() {
-		
-		@Override
-		public Tag getAsObject(FacesContext context, UIComponent component, String idStr) {
-			Long id;
-			try {
-				id = new Long(idStr);
-			} 
-			catch (NumberFormatException e) {
-				return null;
-			}
-			
-			// traverse through the collection of tags
-			// and find the object that have the given id
-			for(Tag tag : tags) {
-				if(tag.getId().equals(id)) {
-					return tag;
-				}
-			}
-
-			return null;
-		}
-
-		@Override
-		public String getAsString(FacesContext context, UIComponent component, Tag value) {
-			return value.getId().toString();
-		}
-	};
+	// converters
+	private EntityConverter<Tag> tagConverter;
 	
-	public Converter<Tag> getTagConverter() {
-		return tagConverter;
-	}
-	public void setTagConverter(Converter<Tag> tagConverter) {
-		this.tagConverter = tagConverter;
+	public EntityConverter<Tag> getTagConverter() {
+		return this.tagConverter;
 	}
 }

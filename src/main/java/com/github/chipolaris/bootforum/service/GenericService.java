@@ -128,6 +128,18 @@ public class GenericService {
 		return response;
 	}
 	
+	@Transactional(readOnly=true)
+	public <E> ServiceResponse<List<E>> getEntities(Class<E> entityClass, Map<String, Object> filters,
+			String sortField, boolean descending) {
+		
+		ServiceResponse<List<E>> response = new ServiceResponse<>();
+		
+		response.setDataObject(genericDAO.getEntities(entityClass, filters, 
+				new SortSpec(sortField != null ? sortField : "id", descending == true ? SortSpec.Direction.DESC : SortSpec.Direction.ASC)));
+		
+		return response;
+	}
+	
 	public <E> ServiceResponse<List<E>> getEntities(Class<E> entityClass,
 			Map<String, Object> equalAttrs, int startPosition, int maxResult, String sortField, boolean descending) {
 	
@@ -200,6 +212,16 @@ public class GenericService {
 		
 		ServiceResponse<Long> response = new ServiceResponse<Long>();
 		response.setDataObject(genericDAO.countEntitiesIgnoreCase(entityClass, filters, notEqualFilters));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true) 
+	public <E> ServiceResponse<Number> getMaxNumber(Class<E> entityClass, String targetPath, Map<String, Object> filters) {
+		
+		ServiceResponse<Number> response = new ServiceResponse<>();
+		
+		response.setDataObject(genericDAO.getMaxNumber(entityClass, targetPath, filters));
 		
 		return response;
 	}

@@ -191,30 +191,34 @@
 							Select a Forum below to view Discussions.
 						</div>
 					
-						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
-							<p:treeNode>
+						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="data" nodeVar="forumNode" style="margin: 0 auto;width:100%;">
+							<p:treeNode type="Root">
 								        	
-					        	<span jsf:rendered="#{forumNode.type eq 'Root'}" class="w3-large w3-opacity-min">
-					        		<i class="fa fa-lg fa-sitemap"/> Root
+					        	<span class="w3-large w3-opacity-min">
+					        		<i class="fa fa-lg fa-sitemap"/> Home
 					        	</span>
-					        						        								
-								<h:link rendered="#{forumNode.type eq 'Forum' and forumNode.bean.id ne param['forumId']}">
-									<span class="w3-tag" style="line-height:24px;width:24px;height:24px;border-radius:2px;color:#fff;background-color:##{forumNode.bean.iconColor};">
-					        			<i class="#{forumNode.bean.icon}"/>
+					        </p:treeNode>
+					        
+					        <p:treeNode type="Forum">						        								
+								<h:link rendered="#{data.id ne param['forumId']}">
+									<span class="w3-tag" style="line-height:28px;width:28px;height:28px;border-radius:2px;color:#fff;background-color:##{data.iconColor};">
+					        			<i class="#{data.icon}"/>
 					        		</span>
 					        		<span class="w3-large">
-					        			#{forumNode.bean.title} [#{forumNode.bean.stat.discussionCount} discussions]
+					        			#{data.title} [#{data.stat.discussionCount} discussions]
 					        		</span>
-					        		<f:param name="forumId" value="#{forumNode.bean.id}"/>
+					        		<f:param name="forumId" value="#{data.id}"/>
 				        		</h:link>
 				        		
-				        		<span jsf:rendered="#{forumNode.type eq 'Forum' and forumNode.bean.id eq param['forumId']}"
+				        		<span jsf:rendered="#{data.id eq param['forumId']}"
 				        			class="w3-tag w3-theme-dark w3-large">
-				        			<i class="#{forumNode.bean.icon}"/> #{forumNode.bean.title} [#{forumNode.bean.stat.discussionCount} discussions]
-				        		</span>		        	
-						        	
-						        <span jsf:rendered="#{forumNode.type eq 'ForumGroup'}" class="w3-large w3-opacity-min">
-						        	<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+				        			<i class="#{data.icon}"/> #{data.title} [#{data.stat.discussionCount} discussions]
+				        		</span>
+				        	</p:treeNode> 	
+						    
+						    <p:treeNode type="ForumGroup">    	
+						        <span class="w3-large w3-opacity-min">
+						        	<i class="fa fa-lg fa-sitemap"/> #{data.title}
 						        </span>
 						        
 							</p:treeNode>

@@ -70,7 +70,7 @@
 			   that is currently Firefox-only */
 			* {
 			  scrollbar-width: thin;
-			  scrollbar-color: orange lightgrey;
+			  scrollbar-color: slategrey lightgrey;
 			}
 			
 			/* Works on Chrome/Edge/Safari */
@@ -81,7 +81,7 @@
 			  background: lightgrey;
 			}
 			*::-webkit-scrollbar-thumb {
-			  background-color: orange;
+			  background-color: slategrey;
 			  border-radius: 20px;
 			  border: 3px solid lightgrey;
 			}			
@@ -100,7 +100,7 @@
 			<div class="w3-panel w3-center">
 				<form class="w3-container">
 	                <div>
-	                	<ui:repeat var="chatChannel" value="#{chatPage.displayOption.displayChatChannels}">
+	                	<ui:repeat var="chatChannel" value="#{chatPage.chatChannels}">
 	                    	<button id="toggleChannel#{chatChannel.id}" class="w3-btn toggleChannelButton" type="submit" 
 	                    		data-channelid="#{chatChannel.id}" style="background-color:##{chatChannel.color};color:white;">
 	                    		<i class="#{chatChannel.icon}"/> #{chatChannel.label}
@@ -114,9 +114,9 @@
 				important note: use build time <c:forEach> instead of render time <ui:repeat> to generate dynamic id for each jsf component
 				reference: https://stackoverflow.com/questions/16043218/refer-to-jsf-dynamically-generated-ids-based-on-iteration-index
 			  -->			  
-			<c:forEach items="#{chatPage.displayOption.displayChatChannels}" var="chatChannel">
+			<c:forEach items="#{chatPage.chatChannels}" var="chatChannel">
 			
-				<div id="channel#{chatChannel.id}" class="w3-border toggleChannelDiv" style="display: none;">
+				<div id="channel#{chatChannel.id}" class="w3-card toggleChannelDiv" style="display: none;">
 					
 					<div class="w3-cell-row w3-border-bottom" style="color:##{chatChannel.color};">
 						<div class="w3-cell w3-container">

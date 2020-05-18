@@ -44,9 +44,12 @@ public class Forum extends BaseEntity {
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="ForumIdGenerator")
 	private Long id;
 	
-	@Column(name="TITLE", length=255)
+	@Column(name="TITLE", length=100)
 	private String title;
-	
+
+	@Column(name="description", length=255)
+	private String description;
+
 	// icon to display
 	@Column(name="ICON", length=50)
 	private String icon;
@@ -69,6 +72,9 @@ public class Forum extends BaseEntity {
 	@Column(name="ACTIVE")
 	private boolean active;
 	
+	@Column(name="SORT_ORDER")
+	private Integer sortOrder;
+	
 	@Override
 	public Long getId() {
 		return id;
@@ -82,6 +88,13 @@ public class Forum extends BaseEntity {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public String getIcon() {
@@ -124,5 +137,12 @@ public class Forum extends BaseEntity {
 	}
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 }

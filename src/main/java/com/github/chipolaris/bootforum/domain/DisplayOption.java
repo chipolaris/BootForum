@@ -51,13 +51,6 @@ public class DisplayOption extends BaseEntity {
 	@OrderColumn(name="ORDERED")
 	private List<Tag> displayTags;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinTable(name="DISPLAY_OPT_DSP_CHAT_CHANNEL_T",
-		joinColumns=@JoinColumn(name="DISPLAY_OPTION_ID"),
-		inverseJoinColumns=@JoinColumn(name="CHAT_CHANNEL_ID"))
-	@OrderColumn(name="ORDERED")
-	private List<ChatChannel> displayChatChannels;
-	
 	@Override
 	public Long getId() {
 		return id;
@@ -127,12 +120,5 @@ public class DisplayOption extends BaseEntity {
 	}
 	public void setDisplayTags(List<Tag> displayTags) {
 		this.displayTags = displayTags;
-	}
-	
-	public List<ChatChannel> getDisplayChatChannels() {
-		return displayChatChannels;
-	}
-	public void setDisplayChatChannels(List<ChatChannel> displayChatChannels) {
-		this.displayChatChannels = displayChatChannels;
 	}
 }

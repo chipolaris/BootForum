@@ -36,6 +36,9 @@ public class Tag extends BaseEntity {
 	@Column(name="DISABLED")
 	private boolean disabled;
 	
+	@Column(name="SORT_ORDER")
+	private Integer sortOrder;
+	
 	@Transient
 	private List<Discussion> discussions;
 	
@@ -73,6 +76,13 @@ public class Tag extends BaseEntity {
 	}
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+	
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 	
 	public List<Discussion> getDiscussions() {

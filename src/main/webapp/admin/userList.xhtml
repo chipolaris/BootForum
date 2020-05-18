@@ -144,7 +144,42 @@
 							
 							<p:ajax event="page" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 							
-							<div class="w3-tooltip w3-hover-gray w3-center w3-border w3-round" style="padding: 16px 0px;">
+							<div class="w3-display-container w3-hover-grey w3-center w3-border w3-round" style="padding: 16px 0px;">
+							
+								<h:graphicImage value="#{requestContext}/avatar/#{user.username}" class="w3-circle" 
+									rendered="#{fileHandler.isAvatarExists(user.username)}"
+									id="memberAvatar" height="60" width="60" style="border:3px;" />
+									
+								<span jsf:rendered="#{not fileHandler.isAvatarExists(user.username)}" class="w3-circle avatarSpan"
+									title="#{user.username}"
+  									style="display:inline-block;font-size:1.7rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white;">
+  									#{fn:substring(user.username, 0, 3)}
+  								</span>
+									
+								<p class="w3-small">Username: <b>#{user.username}</b></p>
+								<p class="w3-small">Role: <b>#{user.userRole.label}</b></p>
+								<p class="w3-small">Name: <b>#{user.person.firstName} #{user.person.lastName}</b></p>
+								<p class="w3-small">Email: <b>#{user.person.email}</b></p>
+								<p class="w3-small">Account Status: <b>#{user.accountStatus.label}</b></p>
+		
+								<div class="w3-display-topleft w3-display-hover w3-padding-small">
+								
+									<p:commandButton ajax="true" icon="fa fa-edit" styleClass="w3-button" update=":userEditDiv" process="@this"
+										oncomplete="$('.toggleDiv').toggle();changeAvatarBackgrounds();customizePrimefaceButtons();" 
+										title="Edit user #{user.username}" value="#{msg['userAction.edit']}">
+										<f:setPropertyActionListener value="#{user}" target="#{userList.selectedRecord}"/>
+									</p:commandButton>
+									
+									<p:commandButton ajax="true" icon="fa fa-trash" styleClass="w3-button" value="#{msg['userAction.delete']}" process="@this"
+										oncomplete="PF('deleteUserConfirmation').show();" title="Delete this User" style="margin-left:4px;">
+										<f:setPropertyActionListener value="#{user}" target="#{userList.selectedRecord}" />  
+									</p:commandButton>
+									
+								</div>
+							</div>							
+							
+							
+							<!-- <div class="w3-tooltip w3-hover-gray w3-center w3-border w3-round" style="padding: 16px 0px;">
 							
 								<h:graphicImage value="#{requestContext}/avatar/#{user.username}" class="w3-circle" 
 									rendered="#{fileHandler.isAvatarExists(user.username)}"
@@ -176,7 +211,7 @@
 									</p:commandButton>
 									
 								</span>
-							</div>
+							</div> -->
 						
 						</p:dataGrid>
 					</h:form>

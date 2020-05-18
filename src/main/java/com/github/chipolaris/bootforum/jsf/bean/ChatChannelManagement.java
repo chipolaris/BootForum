@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +17,15 @@ import org.springframework.stereotype.Component;
 import com.github.chipolaris.bootforum.domain.ChatChannel;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
+import com.github.chipolaris.bootforum.service.ChatChannelService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 
+/**
+ * 
+ * Main backing bean for /admin/chatChannelManagement.xhtml page
+ *
+ */
 @Component
 @Scope("view")
 public class ChatChannelManagement {
@@ -25,6 +34,9 @@ public class ChatChannelManagement {
 	
 	@Resource
 	private GenericService genericService;
+	
+	@Resource
+	private ChatChannelService chatChannelService;
 	
 	private List<ChatChannel> chatChannels;
 	private ChatChannel selectedChatChannel;
@@ -53,7 +65,7 @@ public class ChatChannelManagement {
 	
 	@PostConstruct
 	private void postConstruct() {
-		this.chatChannels = genericService.getAllEntities(ChatChannel.class).getDataObject();
+		this.chatChannels = genericService.getEntities(ChatChannel.class, Collections.emptyMap(), "sortOrder", false).getDataObject();
 		this.setNewChatChannel(new ChatChannel());
 	}
 	
@@ -69,7 +81,7 @@ public class ChatChannelManagement {
 			return;
 		}
 		
-    	ServiceResponse<Long> response = genericService.saveEntity(newChatChannel);
+		ServiceResponse<Long> response = chatChannelService.createNewChatChannel(newChatChannel);
     	
     	if(response.getAckCode().equals(AckCodeType.SUCCESS)) {
     		JSFUtils.addInfoStringMessage(null, String.format("ChatChannel %s created", newChatChannel.getLabel()));
@@ -125,5 +137,54 @@ public class ChatChannelManagement {
     	else {
     		JSFUtils.addErrorStringMessage(null, "deleteChatChannel() called on null selectedChatChannel");
     	}
+	}
+	
+	public void chatChannelOrderSubmit() {
+		
+		logger.info("Ordering chatChannels");
+		
+		for(int i = 0; i < chatChannels.size(); i++) {
+			ChatChannel chatChannel = chatChannels.get(i);
+			chatChannel.setSortOrder(i + 1);
+			genericService.updateEntity(chatChannel);
+		}
+		
+		JSFUtils.addInfoStringMessage(null, "ChatChannels (re)ordered");
+	}
+	
+	/**
+	 * ChatChannel converter
+	 */
+	private Converter<ChatChannel> chatChannelConverter = new Converter<ChatChannel>() {
+		
+		@Override
+		public ChatChannel getAsObject(FacesContext context, UIComponent component, String idStr) {
+			Long id;
+			try {
+				id = new Long(idStr);
+			} 
+			catch (NumberFormatException e) {
+				return null;
+			}
+			
+			// traverse through the collection of chatChannels
+			// and find the object that have the given id
+			for(ChatChannel chatChannel : chatChannels) {
+				if(chatChannel.getId().equals(id)) {
+					return chatChannel;
+				}
+			}
+
+			return null;
+		}
+
+		@Override
+		public String getAsString(FacesContext context, UIComponent component, ChatChannel value) {
+			return value.getId().toString();
+		}
+	};
+	
+	public Converter<ChatChannel> getChatChannelConverter() {
+		return chatChannelConverter;
 	}
 }

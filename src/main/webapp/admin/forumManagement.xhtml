@@ -20,14 +20,16 @@
 
 		<script type="text/javascript">
  			//<![CDATA[
- 				
 				$(document).ready(function(){
 					
 					customizePrimefaceButtons();
 				});
 				
 				function customizePrimefaceButtons() {
- 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+					// primefaces buttons, exclude color picker button
+ 					$('.ui-button.ui-widget').not('.ui-colorpicker > .ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0");
+					// primefaces color buttons
+ 					$('.ui-colorpicker > .ui-button.ui-widget').addClass('w3-btn w3-white w3-large');
  				}
 				
 				function toggleDiv(divIdToShow) {
@@ -96,7 +98,7 @@
 
 				<p/>					
 				
-				<div id="editForumGroupDiv" class="toggleDiv" 
+				<div id="editForumGroupDiv" class="toggleDiv w3-animate-bottom" 
 					jsf:rendered="#{not empty forumManagement.forumGroup}" style="display:none">
 					
 					<h3><i class="fa fa-edit"/> Edit Forum Group</h3>
@@ -110,21 +112,21 @@
 							<div class="w3-row-padding" style="margin:0 -16px;"> <!-- responsive -->
 							
 								<div class="w3-col m4 l3">
-									<h:outputText value="#{msg['forumManagement.createForumGroup.form.title']}:"/>
+									<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.title']}:" for="title"/>
 								</div>
 								<div class="w3-col m8 l9">
-					  				<p:inputText value="#{forumManagement.forumGroup.title}" validatorMessage="Forum Group Title is required" style="width:100%;">
-					  					<f:validateLength  minimum="1" maximum="255"/>
+					  				<p:inputText id="title" value="#{forumManagement.forumGroup.title}" validatorMessage="Forum Group Title is required" style="width:100%;">
+					  					<f:validateLength  minimum="1" maximum="100"/>
 					  				</p:inputText>
 					  			</div>
 					  			
 					  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
 					  			
 					  			<div class="w3-col m4 l3">		
-					  				<h:outputText value="#{msg['forumManagement.createForumGroup.form.icon']}:"/>
+					  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.icon']}:" for="icon"/>
 					  			</div>
 					  			<div class="w3-col m8 l9">
-					  				<p:selectOneMenu value="#{forumManagement.forumGroup.icon}" panelStyle="width:250px" style="width:270px;"
+					  				<p:selectOneMenu id="icon" value="#{forumManagement.forumGroup.icon}" panelStyle="width:250px" style="width:270px;"
 					  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 					  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
 					  					
@@ -143,10 +145,10 @@
 					  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
 					  			
 					  			<div class="w3-col m4 l3">	
-					  				<h:outputText value="#{msg['forumManagement.createForumGroup.form.iconColor']}:"/>
+					  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.iconColor']}:" for="color"/>
 					  			</div>
 					  			<div class="w3-col m8 l9">
-					  				<p:colorPicker value="#{forumManagement.forumGroup.iconColor}" mode="inline" />
+					  				<p:colorPicker id="color" value="#{forumManagement.forumGroup.iconColor}"/>
 				  				</div>
 				  			
 				  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -170,7 +172,7 @@
 			
 			</div> <!-- end editForumGroupContentDiv -->
 			
-			<div id="newForumGroupDiv" class="toggleDiv" style="display:none">
+			<div id="newForumGroupDiv" class="toggleDiv w3-animate-bottom" style="display:none">
 			
 				<h3><i class="fa fa-plus"/> #{msg['forumManagement.createForumGroup.dialog.title']}</h3>
 				
@@ -183,21 +185,21 @@
 						<div class="w3-row-padding" style="margin:0 -16px;"> <!-- responsive -->
 						
 							<div class="w3-col m4 l3">
-								<h:outputText value="#{msg['forumManagement.createForumGroup.form.title']}:"/>
+								<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.title']}:" for="title"/>
 							</div>
 							<div class="w3-col m8 l9">
-				  				<p:inputText value="#{forumManagement.newForumGroup.title}" validatorMessage="Forum Group Title is required" style="width:100%;">
-				  					<f:validateLength  minimum="1" maximum="255"/>
+				  				<p:inputText id="title" value="#{forumManagement.newForumGroup.title}" validatorMessage="Forum Group Title is required" style="width:100%;">
+				  					<f:validateLength  minimum="1" maximum="100"/>
 				  				</p:inputText>
 				  			</div>
 				  			
 				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
 				  			
 				  			<div class="w3-col m4 l3">		
-				  				<h:outputText value="#{msg['forumManagement.createForumGroup.form.icon']}:"/>
+				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.icon']}:" for="icon"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:selectOneMenu value="#{forumManagement.newForumGroup.icon}" panelStyle="width:250px" style="width:270px;"
+				  				<p:selectOneMenu id="icon" value="#{forumManagement.newForumGroup.icon}" panelStyle="width:250px" style="width:270px;"
 				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 				  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
 				  					
@@ -216,10 +218,10 @@
 				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
 				  			
 				  			<div class="w3-col m4 l3">	
-				  				<h:outputText value="#{msg['forumManagement.createForumGroup.form.iconColor']}:"/>
+				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.iconColor']}:" for="color"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:colorPicker value="#{forumManagement.newForumGroup.iconColor}" mode="inline" />
+				  				<p:colorPicker id="color" value="#{forumManagement.newForumGroup.iconColor}"/>
 			  				</div>
 			  				
 			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -243,7 +245,7 @@
 				
 			</div> <!-- end newForumGroupDiv -->
 
-			<div id="newForumDiv" class="toggleDiv" style="display:none">
+			<div id="newForumDiv" class="toggleDiv w3-animate-bottom" style="display:none">
 			
 				<h3><i class="fa fa-plus"/> Add Forum</h3>
 					
@@ -256,21 +258,21 @@
 						<div class="w3-row-padding" style="margin:0 -16px;"> <!-- responsive -->
 						
 							<div class="w3-col m4 l3">
-								<h:outputText value="#{msg['forumManagement.createForum.form.title']}:"/>
+								<h:outputLabel value="#{msg['forumManagement.createForum.form.title']}:" for="title"/>
 							</div>
 							<div class="w3-col m8 l9">
-				  				<p:inputText value="#{forumManagement.newForum.title}" validatorMessage="Forum Title is Required" style="width:100%;">
-				  					<f:validateLength  minimum="1" maximum="255"/>
+				  				<p:inputText id="title" value="#{forumManagement.newForum.title}" validatorMessage="Forum Title is Required" style="width:100%;">
+				  					<f:validateLength  minimum="1" maximum="100"/>
 				  				</p:inputText>
 				  			</div>
 				  			
 				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
 				  			
 				  			<div class="w3-col m4 l3">		
-				  				<h:outputText value="#{msg['forumManagement.createForum.form.icon']}:"/>
+				  				<h:outputLabel value="#{msg['forumManagement.createForum.form.icon']}:" for="icon"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:selectOneMenu value="#{forumManagement.newForum.icon}" panelStyle="width:250px" style="width:270px;"
+				  				<p:selectOneMenu id="icon" value="#{forumManagement.newForum.icon}" panelStyle="width:250px" style="width:270px;"
 				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 				  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
 				  					
@@ -289,10 +291,10 @@
 				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
 				  			
 				  			<div class="w3-col m4 l3">	
-				  				<h:outputText value="#{msg['forumManagement.createForum.form.iconColor']}:"/>
+				  				<h:outputLabel value="#{msg['forumManagement.createForum.form.iconColor']}:" for="color"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:colorPicker value="#{forumManagement.newForum.iconColor}" mode="inline" />
+				  				<p:colorPicker id="color" value="#{forumManagement.newForum.iconColor}"/>
 			  				</div>
 			  				
 			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -315,7 +317,7 @@
 			</div> <!-- end newForumDiv -->
 
 			<!-- edit Forum div -->
-			<div jsf:id="editForumDiv" class="toggleDiv" style="display:none">
+			<div jsf:id="editForumDiv" class="toggleDiv w3-animate-bottom" style="display:none">
 			
 				<h3><i class="fa fa-edit"/> Edit Forum</h3>
 					
@@ -328,21 +330,21 @@
 						<div class="w3-row-padding" style="margin:0 -16px;"> <!-- responsive -->
 						
 							<div class="w3-col m4 l3">
-								<h:outputText value="#{msg['forumManagement.createForum.form.title']}:"/>
+								<h:outputLabel value="#{msg['forumManagement.createForum.form.title']}:" for="title"/>
 							</div>
 							<div class="w3-col m8 l9">
-				  				<p:inputText value="#{forumManagement.selectedForum.title}" validatorMessage="Forum Title is required" style="width:100%;">
-				  					<f:validateLength  minimum="1" maximum="255"/>
+				  				<p:inputText id="title" value="#{forumManagement.selectedForum.title}" validatorMessage="Forum Title is required" style="width:100%;">
+				  					<f:validateLength  minimum="1" maximum="100"/>
 				  				</p:inputText>
 				  			</div>
 				  			
 				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
 				  			
 				  			<div class="w3-col m4 l3">		
-				  				<h:outputText value="#{msg['forumManagement.createForum.form.icon']}:"/>
+				  				<h:outputLabel value="#{msg['forumManagement.createForum.form.icon']}:" for="icon"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:selectOneMenu value="#{forumManagement.selectedForum.icon}" panelStyle="width:250px" style="width:270px;"
+				  				<p:selectOneMenu id="icon" value="#{forumManagement.selectedForum.icon}" panelStyle="width:250px" style="width:270px;"
 				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 				  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
 				  					
@@ -361,19 +363,19 @@
 				  			<div class="w3-row w3-section"/> <!-- vertical spacer -->
 				  			
 				  			<div class="w3-col m4 l3">	
-				  				<h:outputText value="#{msg['forumManagement.createForum.form.iconColor']}:"/>
+				  				<h:outputLabel value="#{msg['forumManagement.createForum.form.iconColor']}:" for="color"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:colorPicker value="#{forumManagement.selectedForum.iconColor}" mode="inline" />
+				  				<p:colorPicker id="color" value="#{forumManagement.selectedForum.iconColor}"/>
 			  				</div>
 			  				
 			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
 			  				
 			  				<div class="w3-col m4 l3">	
-				  				<h:outputText value="#{msg['forumManagement.createForum.form.active']}:"/>
+				  				<h:outputLabel value="#{msg['forumManagement.createForum.form.active']}:" for="active"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<h:selectBooleanCheckbox value="#{forumManagement.selectedForum.active}" styleClass="w3-check"/>
+				  				<h:selectBooleanCheckbox id="active" value="#{forumManagement.selectedForum.active}" styleClass="w3-check"/>
 			  				</div>
 			  			
 			  				<p>&#160;</p>
@@ -482,7 +484,8 @@
 							<!-- use w3-display-hover to only show these when the mouse is hovered over -->
 				        	<div class="w3-display-bottommiddle w3-display-hover">
 								<h:form>
-									<p:commandLink ajax="true" oncomplete="toggleDiv('editForumDiv');" update=":editForumDiv" title="Edit this forum">
+									<p:commandLink ajax="true" title="Edit this forum" update=":editForumDiv"
+										oncomplete="toggleDiv('editForumDiv');customizePrimefaceButtons();" >
 						        		<i class="fa fa-edit w3-xlarge w3-text-black"/>
 						        		<f:setPropertyActionListener value="#{forum}" target="#{forumManagement.selectedForum}"/>
 						        	</p:commandLink>
@@ -523,39 +526,43 @@
 					</header>
 					
 					<div class="w3-padding-large">
-						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;" >
-							<p:treeNode>
+						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="data" nodeVar="forumNode" style="margin: 0 auto;width:100%;" >
+							<p:treeNode type="Root">
 							
-								<h:link rendered="#{forumNode.type eq 'Root' and not empty param['forumGroupId']}">				        	
+								<h:link rendered="#{not empty param['forumGroupId']}">				        	
 						        	<span class="w3-large w3-opacity-min">
-						        		<i class="fa fa-lg fa-sitemap"/> Root
+						        		<i class="fa fa-lg fa-sitemap"/> Home
 						        	</span>
 					        	</h:link>
 					        	<span class="w3-tag w3-large w3-theme-d5" title="We are here"
-					        		jsf:rendered="#{forumNode.type eq 'Root' and empty param['forumGroupId']}">
-					        		<i class="fa fa-lg fa-sitemap"/> Root
+					        		jsf:rendered="#{empty param['forumGroupId']}">
+					        		<i class="fa fa-lg fa-sitemap"/> Home
 					        	</span>
-								
-								<span jsf:rendered="#{forumNode.type eq 'Forum'}" class="w3-tag" style="line-height:24px;width:24px;height:24px;border-radius:2px;color:#fff;background-color:##{forumNode.bean.iconColor};">
-				        			<i class="#{forumNode.bean.icon}"/>
-				        		</span>
-				        		<span jsf:rendered="#{forumNode.type eq 'Forum'}">
-				        			<b>#{forumNode.bean.title}</b>
+					        </p:treeNode>
+					        
+					        <p:treeNode type="Forum">
+								<span class="w3-tag" style="line-height:28px;width:28px;height:28px;border-radius:2px;color:#fff;background-color:##{data.iconColor};">
+				        			<i class="#{data.icon}"/>
 				        		</span>
 				        		
-				        		<h:link rendered="#{forumNode.type eq 'ForumGroup' and param['forumGroupId'] ne forumNode.bean.id}">				        	
+				        		<b>#{data.title}</b>
+				        							        
+					        </p:treeNode>
+					        
+							<p:treeNode type="ForumGroup">
+								<h:link rendered="#{param['forumGroupId'] ne data.id}">				        	
 						        	<span class="w3-large w3-opacity-min">
-						        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+						        		<i class="fa fa-lg fa-sitemap"/> #{data.title}
 						        	</span>
-						        	<f:param name="forumGroupId" value="#{forumNode.bean.id}"/>
+						        	<f:param name="forumGroupId" value="#{data.id}"/>
 					        	</h:link>
 					        	
 					        	<span class="w3-tag w3-large w3-theme-d5" title="We are here"
-					        		jsf:rendered="#{forumNode.type eq 'ForumGroup' and param['forumGroupId'] eq forumNode.bean.id}">
-					        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
-					        	</span>							
-								
-							</p:treeNode>
+					        		jsf:rendered="#{param['forumGroupId'] eq data.id}">
+					        		<i class="fa fa-lg fa-sitemap"/> #{data.title}
+					        	</span>	
+							</p:treeNode>								
+							
 						</p:tree>
 					</div>
 					

@@ -190,6 +190,37 @@ public class GenericDAO {
 	
 	/**
 	 * 
+	 * Get the maximum (Number value) of the given entity class's targetPath, also taking in the filters
+	 * Note: this method only works for Number field (specified by the targetPath)
+	 *  
+	 * @param <E>
+	 * @param entityClass
+	 * @param targetPath
+	 * @param filters
+	 * @return
+	 */
+	// https://stackoverflow.com/questions/16348354/how-do-i-write-a-max-query-with-a-where-clause-in-jpa-2-0
+	public <E> Number getMaxNumber(Class<E> entityClass, String targetPath, Map<String, Object> filters) {
+		
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Number> query = builder.createQuery(Number.class);
+		
+		Root<E> root = query.from(entityClass);
+		
+		CriteriaBuilder.Coalesce<Number> coalesceExp = builder.coalesce();
+		coalesceExp.value(builder.max(getPathGeneric(root, targetPath)));
+		coalesceExp.value(0);
+		
+		query.select(coalesceExp);
+		
+		Predicate[] predicates = buildPredicates(builder, root, filters);
+		query.where(predicates);
+		
+		return entityManager.createQuery(query).getSingleResult();
+	}
+	
+	/**
+	 * 
 	 * @param <T>
 	 * @param <R>
 	 * @param targetClass
@@ -383,6 +414,26 @@ public class GenericDAO {
 		return typedQuery.getResultList();
 	}
 
+	public <E> List<E> getEntities(Class<E> entityClass,
+			Map<String, Object> filters, SortSpec sortSpec) {
+		
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<E> query = builder.createQuery(entityClass);
+
+		Root<E> root = query.from(entityClass);
+		query.select(root);
+		
+		Predicate[] predicates = buildPredicates(builder, root, filters);
+		query.where(predicates);
+		
+		query.orderBy(sortSpec.dir == Direction.ASC ?
+				builder.asc(getPathGeneric(root, sortSpec.field)) : builder.desc(getPathGeneric(root, sortSpec.field)));
+		
+    	TypedQuery<E> typedQuery = entityManager.createQuery(query);
+		
+		return typedQuery.getResultList();
+	}
+	
 	/**
 	 * @param entityClass
 	 * @param filters
@@ -993,7 +1044,7 @@ public class GenericDAO {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private <E>Predicate[] buildPredicates(CriteriaBuilder builder, Root<E> root, Map<String, Object> filters) {
+	private <E> Predicate[] buildPredicates(CriteriaBuilder builder, Root<E> root, Map<String, Object> filters) {
 		List<Predicate> predicateList = new ArrayList<>();
 		
 		for (String paramName : filters.keySet()) {

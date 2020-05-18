@@ -154,47 +154,6 @@
 			</h:form>
 
 			<p/> <!-- ////// -->
-			
-			<h:form>
-				
-				<div class="w3-container w3-xlarge w3-border-bottom">
-					Chat Channels display on Chat Page
-				</div>
-				
-				<p/>
-				
-				<div class="w3-row-padding">
-
-					<div class="w3-col w3-rest container">
-
-					    <p:pickList id="chatChannelPickList" value="#{manageDisplay.chatChannelDualList}" var="chatChannel"
-					                itemValue="#{chatChannel}" itemLabel="#{chatChannel.label}" showSourceControls="true"
-					                showTargetControls="true" converter="#{manageDisplay.chatChannelConverter}" responsive="true">
-					 
-					        <f:facet name="sourceCaption">All Chat Channel</f:facet>
-					        <f:facet name="targetCaption">Chat Channels to display</f:facet>
-					 
-					        <p:column style="width:15%">
-					            <i class="#{chatChannel.icon} w3-xlarge" style="color: ##{chatChannel.color}"/>
-					        </p:column>
-					 
-					        <p:column style="width:85%;">
-					            <h:outputText value="#{chatChannel.label}" />
-					        </p:column>
-					    </p:pickList>
-
-					
-					</div>
-				
-				</div>				
-				
-				<p/>
-				
-				<div class="w3-container">
-					<p:commandButton value="Submit" ajax="true" action="#{manageDisplay.editChatChannels}" icon="fa fa-edit"/>
-				</div>
-				
-			</h:form>
  			
  		</div>
 		

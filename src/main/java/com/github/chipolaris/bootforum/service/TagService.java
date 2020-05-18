@@ -25,6 +25,22 @@ public class TagService {
 	@Resource
 	private GenericDAO genericDAO;
 	
+	@Transactional(readOnly = false)
+	public ServiceResponse<Long> createNewTag(Tag newTag) {
+		
+		ServiceResponse<Long> response = new ServiceResponse<>();
+		
+		Integer maxSortOrder = genericDAO.getMaxNumber(Tag.class, "sortOrder", Collections.emptyMap()).intValue();
+		
+		newTag.setSortOrder(maxSortOrder + 1);
+		
+		genericDAO.persist(newTag);
+		
+		response.setDataObject(newTag.getId());
+		
+		return response;
+	}
+	
 	@Transactional(readOnly = true)
 	@Cacheable(value=CachingConfig.ACTIVE_TAGS, key="'tagService.getActiveTags'")
 	public ServiceResponse<List<Tag>> getActiveTags() {
@@ -37,7 +53,7 @@ public class TagService {
 
 		return response;
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Cacheable(value=CachingConfig.DISCCUSIONS_FOR_TAG, key="#tag.id")
 	public ServiceResponse<List<Discussion>> getDiscussionsForTag(Tag tag, int size) {

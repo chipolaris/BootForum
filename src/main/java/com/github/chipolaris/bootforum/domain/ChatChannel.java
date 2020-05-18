@@ -49,6 +49,9 @@ public class ChatChannel extends BaseEntity {
 	
 	@Column(name="DISABLED")
 	private boolean disabled;
+	
+	@Column(name="SORT_ORDER")
+	private Integer sortOrder;
 
 	@Override
 	public Long getId() {
@@ -84,6 +87,13 @@ public class ChatChannel extends BaseEntity {
 	}
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+	
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 }
 

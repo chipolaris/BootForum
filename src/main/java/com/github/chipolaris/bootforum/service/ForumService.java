@@ -81,6 +81,9 @@ public class ForumService {
 		
 		ServiceResponse<ForumGroup> response = new ServiceResponse<>();
 		
+		Integer maxSortOrder = genericDAO.getMaxNumber(ForumGroup.class, "sortOrder", Collections.singletonMap("parent", parent)).intValue();
+		
+		newForumGroup.setSortOrder(maxSortOrder + 1);
 		newForumGroup.setParent(parent);
 		newForumGroup = genericDAO.merge(newForumGroup);
 		response.setDataObject(newForumGroup);
@@ -157,6 +160,9 @@ public class ForumService {
 		
 		ServiceResponse<Forum> response = new ServiceResponse<>();
 		
+		Integer maxSortOrder = genericDAO.getMaxNumber(Forum.class, "sortOrder", Collections.singletonMap("forumGroup", forumGroup)).intValue();
+		
+		newForum.setSortOrder(maxSortOrder + 1);
 		newForum.setActive(true);
     	newForum.setStat(new ForumStat());
     	newForum.setForumGroup(forumGroup);

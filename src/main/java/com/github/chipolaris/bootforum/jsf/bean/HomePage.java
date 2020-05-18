@@ -75,7 +75,8 @@ public class HomePage {
 	
 	public void onLoad() {
 		
-		this.allTags = genericService.getEntities(Tag.class, Collections.singletonMap("disabled", false)).getDataObject();
+		this.allTags = genericService.getEntities(Tag.class, 
+				Collections.singletonMap("disabled", false), "sortOrder", false).getDataObject();
 		
 		this.displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
 		

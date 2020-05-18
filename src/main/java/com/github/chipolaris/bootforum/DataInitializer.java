@@ -144,6 +144,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		Forum forum = new Forum();
 		
 		forum.setTitle("Anouncements");
+		forum.setDescription("Latest news/announcements");
+		forum.setActive(false);
 		forum.setIcon("fa fa-bullhorn");
 		forum.setIconColor("ff7e00"); // Amber (SAE/ECE)
 		

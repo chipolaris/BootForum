@@ -1,5 +1,8 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -7,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.github.chipolaris.bootforum.domain.DisplayOption;
+import com.github.chipolaris.bootforum.domain.ChatChannel;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 @Component
@@ -20,16 +23,16 @@ public class ChatPage {
 	@Resource
 	private GenericService genericService;
 	
-	private DisplayOption displayOption;
+	private List<ChatChannel> chatChannels;
 	
-	public DisplayOption getDisplayOption() {
-		return displayOption;
+	public List<ChatChannel> getChatChannels() {
+		return chatChannels;
 	}
-	public void setDisplayOption(DisplayOption displayOption) {
-		this.displayOption = displayOption;
+	public void setChatChannels(List<ChatChannel> chatChannels) {
+		this.chatChannels = chatChannels;
 	}
-	
+
 	public void onLoad() {
-		this.displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
+		this.chatChannels = genericService.getEntities(ChatChannel.class, Collections.emptyMap(), "sortOrder", false).getDataObject();
 	}
 }

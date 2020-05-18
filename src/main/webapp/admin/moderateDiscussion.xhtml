@@ -117,7 +117,14 @@
 					</div>
 				
 					<div class="w3-large" jsf:id="forumTitleDiv">
-						<b>In Forum '#{moderateDiscussion.discussion.forum.title}'</b> 
+						<span jsf:rendered="#{not empty moderateDiscussion.discussion.forum}">
+							In forum <b>'#{moderateDiscussion.discussion.forum.title}'</b> 
+						</span>
+						
+						<span jsf:rendered="#{empty moderateDiscussion.discussion.forum}">
+							This discussion has no forum
+						</span>
+						
 	 					<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
 	 						<i class="fa fa-sitemap"/> Assign new Forum
 	 					</button><p/>
@@ -383,36 +390,44 @@
 							Select a Forum below to assign to this Discussion
 						</div>
 					
-						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="forumNode" style="margin: 0 auto;width:100%;">
-							<p:treeNode>
+						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="data" nodeVar="forumNode" style="margin: 0 auto;width:100%;">
+						
+							<p:treeNode type="Root">
 							
 					        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'Root'}">
-					        		<i class="fa fa-lg fa-sitemap"/> Root
+					        		<i class="fa fa-lg fa-sitemap"/> Home
 					        	</span>
-					        	
-					        	<p:commandLink rendered="#{forumNode.type eq 'Forum' and forumNode.bean.id ne moderateDiscussion.discussion.forum.id}"
-					        		title="Assign to this Forum" 
-									action="#{moderateDiscussion.updateDiscussion}" update=":messages :forumTitleDiv :forumMapContent"
-		        					oncomplete="$('#forumMapModal').hide();">
-				        			<span class="w3-tag" style="line-height:24px;width:24px;height:24px;border-radius:2px;color:#fff;background-color:##{forumNode.bean.iconColor};">
-					        			<i class="#{forumNode.bean.icon}"/>
-					        		</span>
-					        		<span class="w3-large">
-					        			#{forumNode.bean.title} [#{forumNode.bean.stat.discussionCount} discussions]
-					        		</span>
-				        			<f:setPropertyActionListener value="#{forumNode.bean}" target="#{moderateDiscussion.discussion.forum}"/>
+					        </p:treeNode>
+					        
+					        <p:treeNode type="Forum">
+
+					        	<p:commandLink rendered="#{data.id ne moderateDiscussion.discussion.forum.id}"
+					        		title="Assign to this Forum" action="#{moderateDiscussion.assignDiscussionForum}" 
+									update=":messages :forumTitleDiv :forumMapContent" oncomplete="$('#forumMapModal').hide();" styleClass="w3-large">
+									
+									<span class="w3-tag" style="line-height:28px;width:28px;height:28px;border-radius:2px;color:#fff;background-color:##{data.iconColor};">
+						        		<i class="#{data.icon}"/>
+						        	</span>
+					        		
+					        		#{data.title} [#{data.stat.discussionCount} discussions]
+				        			<f:setPropertyActionListener value="#{data}" target="#{moderateDiscussion.toForum}"/>
 				        		</p:commandLink>
 				        		
-				        		<span jsf:rendered="#{forumNode.type eq 'Forum' and forumNode.bean.id eq moderateDiscussion.discussion.forum.id}"
-				        			class="w3-tag w3-theme-dark w3-large">
-				        			<i class="#{forumNode.bean.icon}"/> #{forumNode.bean.title} [#{forumNode.bean.stat.discussionCount} discussions]
-				        		</span>
-				        		 	
-					        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'ForumGroup'}">
-					        		<i class="fa fa-lg fa-sitemap"/> #{forumNode.bean.title}
+				        		<span jsf:rendered="#{data.id eq moderateDiscussion.discussion.forum.id}" 
+				        			class="w3-tag w3-theme-dark w3-large" title="Current Forum for this discussion">
+				        			<i class="#{data.icon}"/> #{data.title} [#{data.stat.discussionCount} discussions]
+				        		</span>					        	 
+					        	 
+					        </p:treeNode>
+					        					        
+					        <p:treeNode type="ForumGroup">
+
+					        	<span class="w3-large w3-opacity-min">
+					        		<i class="fa fa-lg fa-sitemap"/> #{data.title}
 					        	</span>
-								
-							</p:treeNode>
+					        
+					        </p:treeNode>
+
 						</p:tree>
 					</div>
 					

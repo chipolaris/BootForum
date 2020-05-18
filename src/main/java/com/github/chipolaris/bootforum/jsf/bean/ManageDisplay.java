@@ -56,16 +56,11 @@ public class ManageDisplay {
 		this.chatChannelConverter = new EntityConverter<>(chatChannels);
 		
 		List<Tag> currentDisplayTags = displayOption.getDisplayTags();
-		List<ChatChannel> currentDisplayChatChannels = displayOption.getDisplayChatChannels();
 		
 		List<Tag> allTags = new ArrayList<>(tags);
 		allTags.removeAll(currentDisplayTags);
 		
-		List<ChatChannel> allChatChannels = new ArrayList<>(chatChannels);
-		allChatChannels.removeAll(currentDisplayChatChannels);
-		
 		this.tagDualList = new DualListModel<>(allTags, currentDisplayTags);
-		this.chatChannelDualList = new DualListModel<>(allChatChannels, currentDisplayChatChannels);
 	}
 
 	public void edit() {
@@ -102,26 +97,8 @@ public class ManageDisplay {
     	}
 	}
 	
-	public void editChatChannels() {
-		
-		logger.info("Updating display chat channels");
-		
-		this.displayOption.setDisplayChatChannels(chatChannelDualList.getTarget());
-		
-	    // 
-    	ServiceResponse<DisplayOption> response = genericService.updateEntity(this.displayOption);
-    	
-    	if(response.getAckCode() != AckCodeType.FAILURE) {
-    		JSFUtils.addInfoStringMessage(null, String.format("Display Chat Channels updated"));
-    	}
-    	else {
-    		JSFUtils.addErrorStringMessage(null, String.format("Unable to update Display Chat Channels"));
-    	}
-	}
-	
 	// picklists
 	private DualListModel<Tag> tagDualList;
-	private DualListModel<ChatChannel> chatChannelDualList;
 	
 	public DualListModel<Tag> getTagDualList() {
 		return tagDualList;
@@ -129,13 +106,6 @@ public class ManageDisplay {
 	public void setTagDualList(DualListModel<Tag> tagDualList) {
 		this.tagDualList = tagDualList;
 	}	
-	
-	public DualListModel<ChatChannel> getChatChannelDualList() {
-		return chatChannelDualList;
-	}
-	public void setChatChannelDualList(DualListModel<ChatChannel> chatChannelDualList) {
-		this.chatChannelDualList = chatChannelDualList;
-	}
 	
 	// converters
 	private EntityConverter<Tag> tagConverter;
