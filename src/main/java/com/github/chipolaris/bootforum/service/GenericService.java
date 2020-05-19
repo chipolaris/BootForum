@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.dao.GenericDAO;
+import com.github.chipolaris.bootforum.dao.QuerySpec;
 import com.github.chipolaris.bootforum.dao.SortSpec;
 
 @Service @Transactional
@@ -151,28 +152,6 @@ public class GenericService {
 		return response;
 	}
 	
-	public <E> ServiceResponse<List<E>> getEntitiesIgnoreCase(Class<E> entityClass,
-			Map<String, Object> equalAttrs, int startPosition, int maxResult, String sortField, boolean descending) {
-	
-		ServiceResponse<List<E>> response = new ServiceResponse<List<E>>();
-		
-		response.setDataObject(genericDAO.getEntitiesIgnoreCase(entityClass, equalAttrs, startPosition, maxResult, 
-				new SortSpec(sortField != null ? sortField : "id", descending == true ? SortSpec.Direction.DESC : SortSpec.Direction.ASC)));
-		
-		return response;
-	}
-	
-	public <E> ServiceResponse<List<E>> getEntitiesIgnoreCase(Class<E> entityClass,
-			Map<String, Object> equalAttrs, Map<String, Object> notEqualFilters, int startPosition, int maxResult, String sortField, boolean descending) {
-	
-		ServiceResponse<List<E>> response = new ServiceResponse<List<E>>();
-		
-		response.setDataObject(genericDAO.getEntitiesIgnoreCase(entityClass, equalAttrs, notEqualFilters, startPosition, maxResult, 
-				new SortSpec(sortField != null ? sortField : "id", descending == true ? SortSpec.Direction.DESC : SortSpec.Direction.ASC)));
-		
-		return response;
-	}
-	
 	/**
 	 * Count number of entities of a given type
 	 * 
@@ -198,24 +177,6 @@ public class GenericService {
 		return response;
 	}
 	
-	@Transactional(readOnly=true)
-	public <E> ServiceResponse<Long> countEntitiesIgnoreCase(Class<E> entityClass, Map<String, Object> filters) {
-		
-		ServiceResponse<Long> response = new ServiceResponse<Long>();
-		response.setDataObject(genericDAO.countEntitiesIgnoreCase(entityClass, filters));
-		
-		return response;
-	}
-	
-	@Transactional(readOnly=true)
-	public <E> ServiceResponse<Long> countEntitiesIgnoreCase(Class<E> entityClass, Map<String, Object> filters, Map<String, Object> notEqualFilters) {
-		
-		ServiceResponse<Long> response = new ServiceResponse<Long>();
-		response.setDataObject(genericDAO.countEntitiesIgnoreCase(entityClass, filters, notEqualFilters));
-		
-		return response;
-	}
-	
 	@Transactional(readOnly = true) 
 	public <E> ServiceResponse<Number> getMaxNumber(Class<E> entityClass, String targetPath, Map<String, Object> filters) {
 		
@@ -225,4 +186,26 @@ public class GenericService {
 		
 		return response;
 	}
+	
+	/*
+	 * Methods that use Builder API 
+	 */
+	@Transactional(readOnly=true)
+	public <E> ServiceResponse<Long> countEntities(QuerySpec<E> querySpec) {
+		
+		ServiceResponse<Long> response = new ServiceResponse<Long>();
+		response.setDataObject(genericDAO.countEntities(querySpec));
+		
+		return response;
+	}
+	
+	public <E> ServiceResponse<List<E>> getEntities(QuerySpec<E> querySpec) {
+	
+		ServiceResponse<List<E>> response = new ServiceResponse<List<E>>();
+		
+		response.setDataObject(genericDAO.getEntities(querySpec));
+		
+		return response;
+	}
+	
 }

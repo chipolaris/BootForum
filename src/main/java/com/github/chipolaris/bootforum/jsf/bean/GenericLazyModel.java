@@ -9,6 +9,7 @@ import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.chipolaris.bootforum.dao.QuerySpec;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 public class GenericLazyModel<T> extends LazyDataModel<T> {
@@ -37,9 +38,10 @@ public class GenericLazyModel<T> extends LazyDataModel<T> {
     	
     	Map<String, Object> filters = LazyModelUtil.toObjectMap(filterBy);
     		
-		this.setRowCount(this.genericService.countEntities(type, filters).getDataObject().intValue());
-    	
-		return this.genericService.getEntities(type, filters, first, pageSize, 
-    		sortField, sortOrder == SortOrder.DESCENDING ? true : false).getDataObject();
+		this.setRowCount(this.genericService.countEntities(
+				QuerySpec.builder(type).equalFilters(filters).build()).getDataObject().intValue());
+		
+		return this.genericService.getEntities(QuerySpec.builder(type).equalFilters(filters).startIndex(first).
+				maxResult(pageSize).sortField(sortField).sortDesc(sortOrder == SortOrder.DESCENDING).build()).getDataObject();
     }
 }

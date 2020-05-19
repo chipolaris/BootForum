@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.dao.GenericDAO;
+import com.github.chipolaris.bootforum.dao.QuerySpec;
 import com.github.chipolaris.bootforum.dao.UserDAO;
 import com.github.chipolaris.bootforum.domain.PasswordReset;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
@@ -84,11 +85,11 @@ public class PasswordResetService {
 	 * @return
 	 */
 	private boolean passwordResetExists(String email) {
-
-		Map<String, Object> filter = new HashMap<>();
-		filter.put("email", email);
 		
-		return genericDAO.countEntitiesIgnoreCase(PasswordReset.class, filter) > 0;
+		QuerySpec<PasswordReset> querySpec = 
+				QuerySpec.builder(PasswordReset.class).addEqualFilter("email", email.toLowerCase()).build();
+		
+		return genericDAO.countEntities(querySpec) > 0;
 	}
 
 	/**

@@ -77,59 +77,100 @@
 			<div jsf:id="userListDiv" class="w3-margin-top w3-animate-right toggleDiv">
 			
 				<h:form id="filterForm">
-					<div style="display:flex;flex-wrap:wrap;">
-						
-						<div class="w3-padding-large" style="margin:auto;vertical-align:top;">
-							
-							<h:panelGrid columns="2">
-							
-								<p:outputLabel value="User Role:"/>
-								
-						        <p:selectOneMenu value="#{userList.lazyModel.userRole}">
-						        	<f:selectItems value="#{referenceData.userRoles}" var="role" itemValue="#{role}" itemLabel="#{role.label}"/>
-						        	<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
-						        	<p:ajax event="change" update=":form:userList" 
-						        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
-						        </p:selectOneMenu>
-							</h:panelGrid>
-						</div>
-												
-						<div class="w3-padding-large" style="margin:auto;vertical-align:top;">
-							
-							<h:panelGrid columns="2">
-							
-								<p:outputLabel value="Account Status:"/>
-								
-						        <p:selectOneMenu value="#{userList.lazyModel.accountStatus}">
-						        	<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
-						        	<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
-						        	<p:ajax event="change" update=":form:userList" 
-						        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
-						        </p:selectOneMenu>
-							</h:panelGrid>
-						</div>
-						
-						<div class="w3-padding-large" style="margin:auto;">
-						
-							<h:panelGrid columns="2">
-						
-								<p:inputText id="filterInputText" value="#{userList.searchValue}" placeholder="Enter search value" size="25" maxlength="50"/>
-			
-						        <p:splitButton value="For Username" action="#{userList.search('username')}" update=":form:userList"
-						        	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" style="margin-left:2px;">
-						            <p:menuitem value="For First name" action="#{userList.search('person.firstName')}"
-						            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
-						            <p:menuitem value="For Last name" action="#{userList.search('person.lastName')}"
-						            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
-						            <p:menuitem value="For Email" action="#{userList.search('person.email')}"
-						            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
-						        </p:splitButton>
-						
-							</h:panelGrid>
-						</div>						
-						
-					</div>	
 				
+					<div class="w3-container">
+					
+						<div class="w3-theme-light" style="display:flex;flex-wrap:wrap;">
+							
+							<div class="w3-padding-large" style="margin:auto;vertical-align:top;">
+								
+								<h:panelGrid columns="2">
+								
+									<p:outputLabel value="User Role:"/>
+									
+							        <p:selectOneMenu value="#{userList.lazyModel.userRole}">
+							        	<f:selectItems value="#{referenceData.userRoles}" var="role" itemValue="#{role}" itemLabel="#{role.label}"/>
+							        	<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
+							        	<p:ajax event="change" update=":form:userList" 
+							        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+							        </p:selectOneMenu>
+								</h:panelGrid>
+							</div>
+													
+							<div class="w3-padding-large" style="margin:auto;vertical-align:top;">
+								
+								<h:panelGrid columns="2">
+								
+									<p:outputLabel value="Account Status:"/>
+									
+							        <p:selectOneMenu value="#{userList.lazyModel.accountStatus}">
+							        	<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
+							        	<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
+							        	<p:ajax event="change" update=":form:userList" 
+							        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+							        </p:selectOneMenu>
+								</h:panelGrid>
+							</div>
+							
+							<div class="w3-padding-large" style="margin:auto;">
+							
+								<h:panelGrid columns="2">
+							
+									<p:inputText id="filterInputText" value="#{userList.searchValue}" placeholder="Enter search value" size="25" maxlength="50"/>
+				
+							        <p:splitButton value="For Username" action="#{userList.search('username')}" update=":form:userList"
+							        	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" style="margin-left:2px;">
+							            <p:menuitem value="For First name" action="#{userList.search('person.firstName')}"
+							            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
+							            <p:menuitem value="For Last name" action="#{userList.search('person.lastName')}"
+							            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
+							            <p:menuitem value="For Email" action="#{userList.search('person.email')}"
+							            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
+							        </p:splitButton>
+							
+								</h:panelGrid>
+							</div>						
+	
+							<div class="w3-padding-large" style="margin:auto;vertical-align:top;">
+								
+								<h:panelGrid columns="2">
+								
+									<p:outputLabel value="Sort By:"/>
+									
+							        <p:selectOneMenu value="#{userList.lazyModel.sortField}">
+							        	
+							        	<f:selectItem itemValue="username" itemLabel="Username"/>
+							        	<f:selectItem itemValue="person.firstName" itemLabel="First Name"/>
+							        	<f:selectItem itemValue="person.lastName" itemLabel="Last Name"/>
+							        	<f:selectItem itemValue="person.email" itemLabel="Email"/>
+							        	
+							        	<p:ajax event="change" update=":form:userList" 
+							        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+							        </p:selectOneMenu>
+								</h:panelGrid>
+							</div>
+	
+							<div class="w3-padding-large" style="margin:auto;vertical-align:top;">
+								
+								<h:panelGrid columns="2">
+								
+									<p:outputLabel value="Sort Direction:"/>
+									
+							        <p:selectOneMenu value="#{userList.lazyModel.sortDesc}">
+							        	
+							        	<f:selectItem itemValue="#{false}" itemLabel="Ascending"/>
+							        	<f:selectItem itemValue="#{true}" itemLabel="Descending"/>
+							        	
+							        	<p:ajax event="change" update=":form:userList" 
+							        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+							        </p:selectOneMenu>
+								</h:panelGrid>
+							</div>
+							
+						</div>	
+						
+					</div>
+					
 				</h:form>
 				
 				<div class="w3-container w3-margin-top">
@@ -160,7 +201,7 @@
 								<p class="w3-small">Role: <b>#{user.userRole.label}</b></p>
 								<p class="w3-small">Name: <b>#{user.person.firstName} #{user.person.lastName}</b></p>
 								<p class="w3-small">Email: <b>#{user.person.email}</b></p>
-								<p class="w3-small">Account Status: <b>#{user.accountStatus.label}</b></p>
+								<p class="w3-small">Account Status: <b>#{user.accountStatus}</b></p>
 		
 								<div class="w3-display-topleft w3-display-hover w3-padding-small">
 								

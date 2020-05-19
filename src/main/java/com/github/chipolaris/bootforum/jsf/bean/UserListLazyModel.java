@@ -9,6 +9,7 @@ import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.chipolaris.bootforum.dao.QuerySpec;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
@@ -29,6 +30,8 @@ public class UserListLazyModel extends LazyDataModel<User> {
 	private UserRole userRole = null;
 	private String filterValue = null;
 	private String filterType = null;
+	private String sortField = "username";
+	private boolean sortDesc = false;
 
 	public UserListLazyModel(GenericService genericService, String filterValue, String filterType) {
 		this.filterValue = filterValue;
@@ -55,17 +58,19 @@ public class UserListLazyModel extends LazyDataModel<User> {
     		filters.put(this.filterType, this.filterValue);
     	}
     	
-		this.setRowCount(this.genericService.countEntities(User.class, filters).getDataObject().intValue());
+		this.setRowCount(this.genericService.countEntities(QuerySpec.builder(User.class)
+				.equalFilters(filters).build()).getDataObject().intValue());
     	
-    	return this.genericService.getEntities(User.class, filters, first, pageSize, 
-    			sortField, sortOrder == SortOrder.DESCENDING ? true : false).getDataObject();
-    	
+		QuerySpec<User> querySpec = 
+				QuerySpec.builder(User.class).equalFilters(filters).startIndex(first)
+					.maxResult(pageSize).sortField(this.sortField).sortDesc(this.sortDesc).build();
+		
+    	return this.genericService.getEntities(querySpec).getDataObject();
     }
 
 	public AccountStatus getAccountStatus() {
 		return accountStatus;
 	}
-
 	public void setAccountStatus(AccountStatus accountStatus) {
 		this.accountStatus = accountStatus;
 	}
@@ -73,8 +78,21 @@ public class UserListLazyModel extends LazyDataModel<User> {
 	public UserRole getUserRole() {
 		return userRole;
 	}
-
 	public void setUserRole(UserRole userRole) {
 		this.userRole = userRole;
+	}
+
+	public String getSortField() {
+		return sortField;
+	}
+	public void setSortField(String sortField) {
+		this.sortField = sortField;
+	}
+
+	public boolean isSortDesc() {
+		return sortDesc;
+	}
+	public void setSortDesc(boolean sortDesc) {
+		this.sortDesc = sortDesc;
 	}
 }
