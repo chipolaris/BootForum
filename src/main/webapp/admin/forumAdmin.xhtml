@@ -264,7 +264,7 @@
 
 			<div jsf:id="addForumDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
 				
-				<h4><i class="fa fa-plus"/> Add Forum</h4>
+				<h4><i class="fa fa-plus"/> Add Forum for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
 				
 				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.newForum}">
 
@@ -436,7 +436,7 @@
 		
 			<div jsf:id="addForumGroupDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
 			
-				<h4><i class="fa fa-plus"/> Add Forum Group</h4>
+				<h4><i class="fa fa-plus"/> Add Forum Group for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
 			
 				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.newForumGroup}">
 			

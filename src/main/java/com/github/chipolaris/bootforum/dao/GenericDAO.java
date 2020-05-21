@@ -247,7 +247,7 @@ public class GenericDAO {
 		
 		Root<E> root = query.from(entityClass);
 		
-		query.select(builder.greatest(getPathGeneric(root, targetPath)));
+		query.select(builder.greatest(this.<Date>getPathGeneric(root, targetPath)));
 		
 		Predicate[] predicates = buildPredicates(builder, root, filters);
 		query.where(predicates);
@@ -262,7 +262,7 @@ public class GenericDAO {
 		
 		Root<E> root = query.from(entityClass);
 		
-		query.select(builder.least(getPathGeneric(root, targetPath)));
+		query.select(builder.least(this.<Date>getPathGeneric(root, targetPath)));
 		
 		Predicate[] predicates = buildPredicates(builder, root, filters);
 		query.where(predicates);
@@ -922,7 +922,7 @@ public class GenericDAO {
 		Predicate predicate = null;
 		
 		for(String fieldPath : fieldPaths) {
-			predicate = criteriaBuilder.like(criteriaBuilder.upper(getPathGeneric(root, fieldPath)), "%"+searchText.toLowerCase()+"%");
+			predicate = criteriaBuilder.like(criteriaBuilder.upper(getPathGeneric(root, fieldPath)), "%"+searchText.toUpperCase()+"%");
 			predicateList.add(predicate);
 		}
 		
