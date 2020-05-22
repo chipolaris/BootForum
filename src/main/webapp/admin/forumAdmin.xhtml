@@ -232,6 +232,15 @@
 			  				</div>
 
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
+							
+							<div class="w3-col m4 l3">	
+				  				<h:outputLabel value="#{msg['forumManagement.createForum.form.active']}:" for="active"/>
+				  			</div>
+				  			<div class="w3-col m8 l9">
+				  				<h:selectBooleanCheckbox id="active" value="#{forumAdmin.selectedForum.active}" styleClass="w3-check"/>
+			  				</div>
+			  				
+			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->							
 			  			
 			  				<div class="w3-row">
 				  				<p:commandButton id="editForum" ajax="true" action="#{forumAdmin.editForum}"
@@ -331,6 +340,15 @@
 			  				</div>
 
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
+
+							<div class="w3-col m4 l3">	
+				  				<h:outputLabel value="#{msg['forumManagement.createForum.form.active']}:" for="active"/>
+				  			</div>
+				  			<div class="w3-col m8 l9">
+				  				<h:selectBooleanCheckbox id="active" value="#{forumAdmin.newForum.active}" styleClass="w3-check"/>
+			  				</div>
+			  				
+			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
 			  			
 			  				<div class="w3-row">
 				  				<p:commandButton id="addForum" ajax="true" action="#{forumAdmin.createForum}"

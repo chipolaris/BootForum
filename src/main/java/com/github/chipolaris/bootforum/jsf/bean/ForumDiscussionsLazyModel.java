@@ -47,7 +47,7 @@ public class ForumDiscussionsLazyModel extends LazyDataModel<Discussion> {
     	this.setRowCount(this.genericService.countEntities(Discussion.class, filters).getDataObject().intValue());
     	
     	List<Discussion> discussions = this.genericService.getEntities(Discussion.class, filters, first, pageSize, 
-				sortField, sortOrder == SortOrder.DESCENDING ? true : false).getDataObject();
+				sortField, sortOrder == SortOrder.DESCENDING).getDataObject();
     	
     	return discussions;
     }

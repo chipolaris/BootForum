@@ -41,7 +41,7 @@ public class SwitchTheme {
 		String cookieName = THEME_COLOR_COOKIE;
 		String cookieValue = URLEncoder.encode(themeColor, "UTF-8");
 		Map<String, Object> properties = new HashMap<>();
-		properties.put("maxAge", 31536000);
+		properties.put("maxAge", 31536000); // 1 year
 		properties.put("path", "/");
 		
 		FacesContext.getCurrentInstance().getExternalContext().addResponseCookie(cookieName, cookieValue, properties);
@@ -57,7 +57,7 @@ public class SwitchTheme {
 		String cookieName = THEME_COMPONENT_COOKIE;
 		String cookieValue = URLEncoder.encode(themeComponent, "UTF-8");
 		Map<String, Object> properties = new HashMap<>();
-		properties.put("maxAge", 31536000);
+		properties.put("maxAge", 31536000); // 1 year
 		properties.put("path", "/");
 		
 		FacesContext.getCurrentInstance().getExternalContext().addResponseCookie(cookieName, cookieValue, properties);

@@ -46,8 +46,105 @@
 				<p:autoUpdate/>
 			</p:messages>
 			
-			<h:form>
+			<h:form styleClass="w3-theme-light">
 			
+				<div class="w3-container w3-xlarge w3-border-bottom">
+					Set default application themes
+				</div>
+				
+				<p/>
+			
+				<div class="w3-row-padding">
+					
+					<div class="w3-half w3-container">
+						
+						<p>
+							Current Color Theme is <b>'#{manageDisplay.displayOption.themeColor}'</b>
+						</p>
+					
+						<p>
+							<b>Select a new Color Theme:</b>
+						</p>
+						
+						<p>
+						
+							<!-- Note: #theme_color is defined in the /WEB-INF/tamplate/layout.xhtml file -->
+							<p:selectOneMenu value="#{manageDisplay.displayOption.themeColor}" var="theme" style="width:100%;" >
+								
+								<f:selectItem itemValue="w3-theme-blue" itemLabel="Blue" />
+								<f:selectItem itemValue="w3-theme-blue-grey" itemLabel="Blue-Grey" />
+								<f:selectItem itemValue="w3-theme-brown" itemLabel="Brown" />
+								<f:selectItem itemValue="w3-theme-cyan" itemLabel="Cyan"/>
+								<f:selectItem itemValue="w3-theme-deep-orange" itemLabel="Deep Orange"/>
+								<f:selectItem itemValue="w3-theme-green" itemLabel="Green"/>
+								<f:selectItem itemValue="w3-theme-indigo" itemLabel="Indigo"/>
+								<f:selectItem itemValue="w3-theme-khaki" itemLabel="Khaki"/>
+								<f:selectItem itemValue="w3-theme-light-blue" itemLabel="Light Blue"/>
+								<f:selectItem itemValue="w3-theme-light-green" itemLabel="Light Green"/>
+								<f:selectItem itemValue="w3-theme-pink" itemLabel="Pink"/>
+								<f:selectItem itemValue="w3-theme-red" itemLabel="Red"/>
+								<f:selectItem itemValue="w3-theme-teal" itemLabel="Teal"/>
+								<f:selectItem itemValue="w3-theme-w3schools" itemLabel="W3Schools"/>
+								
+								<p:column style="width:100%">
+									<div class="w3-padding-16 w3-center w3-#{fn:substringAfter(theme, 'w3-theme-')}">#{theme}</div>
+								</p:column>
+								
+								<!-- <p:ajax event="change" update=":outputStylesheetCSS" /> -->
+								
+							</p:selectOneMenu>
+						
+						</p>
+						
+					</div>
+						
+					<div class="w3-half w3-container">
+						
+						<p>
+							Current Component Theme is <b>'#{manageDisplay.displayOption.themeComponent}'</b>
+						</p>
+				
+						<p>
+							<b>Select a new Component Theme:</b>
+						</p>
+					
+						<p>
+						
+							<p:selectOneMenu value="#{manageDisplay.displayOption.themeComponent}" var="theme" style="width:100%;" >
+							
+								<f:selectItem itemValue="nova-light" itemLabel="Nova-Light" />
+								<f:selectItem itemValue="nova-dark" itemLabel="Nova-Dark" />
+								<f:selectItem itemValue="nova-colored" itemLabel="Nova-Colored"/>
+								<f:selectItem itemValue="luna-blue" itemLabel="Luna-Blue"/>
+								<f:selectItem itemValue="luna-amber" itemLabel="Luna-Amber"/>
+								<f:selectItem itemValue="luna-green" itemLabel="Luna-Green"/>
+								<f:selectItem itemValue="luna-pink" itemLabel="Luna-Pink"/>
+								<f:selectItem itemValue="omega" itemLabel="Omega"/>
+							
+								<p:column style="width:100%">
+									#{theme}
+								</p:column>
+						
+							</p:selectOneMenu>
+					
+						</p>
+							
+					</div>
+						
+				</div>
+				
+				<div class="w3-container w3-padding">
+					<p:commandButton value=" Save" icon="fa fa-save" ajax="true" action="#{manageDisplay.edit}"/>
+				</div>
+			
+			</h:form>
+			
+			<p/>	
+			
+			<h:form>
+				
+				<p/>
+
 				<div class="w3-container w3-xlarge w3-border-bottom">
 					Discussions display on Home Page
 				</div>
@@ -57,34 +154,33 @@
 				<div class="w3-row-padding">
 				
 					<div class="w3-half container">
-						<h6>Show Most Views Discussions</h6>
-						<!-- <p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{manageDisplay.displayOption.showMostViewsDiscussions}"/> -->
+						<h6><b>Show Most Views Discussions</b></h6>
 						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostViewsDiscussions}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-half container">
-						<h6>Number of Most Views Discussions</h6>
+						<h6><b>Number of Most Views Discussions</b></h6>
 						<h:inputText value="#{manageDisplay.displayOption.numMostViewsDiscussions}" styleClass="w3-input w3-border"/>	
 					</div>
 
 					<div class="w3-half container">
-						<h6>Show Most Comments Discussions</h6>
+						<h6><b>Show Most Comments Discussions</b></h6>
 						<!-- <p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{manageDisplay.displayOption.showMostViewsDiscussions}"/> -->
 						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostCommentsDiscussions}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-half container">
-						<h6>Number of Most Comments Discussions</h6>
+						<h6><b>Number of Most Comments Discussions</b></h6>
 						<h:inputText value="#{manageDisplay.displayOption.numMostCommentsDiscussions}" styleClass="w3-input w3-border"/>	
 					</div>
 					
 					<div class="w3-half container">
-						<h6>Show Most Recent Discussions</h6>
+						<h6><b>Show Most Recent Discussions</b></h6>
 						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostRecentDiscussions}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-half container">
-						<h6>Number of Most Recent Discussions</h6>
+						<h6><b>Number of Most Recent Discussions</b></h6>
 						<h:inputText value="#{manageDisplay.displayOption.numMostRecentDiscussions}" styleClass="w3-input w3-border"/>	
 					</div>
 					
@@ -92,15 +188,15 @@
 				
 				<p/>
 				
-				<div class="w3-container">
-					<p:commandButton value="Submit" ajax="true" action="#{manageDisplay.edit}" icon="fa fa-edit"/>
+				<div class="w3-container w3-padding">
+					<p:commandButton value=" Save" ajax="true" action="#{manageDisplay.edit}" icon="fa fa-save"/>
 				</div>
 				
 			</h:form>
 			
 			<p/> <!-- ////// -->
 			
-			<h:form>
+			<h:form styleClass="w3-theme-light w3-padding-top w3-padding-bottom">
 				
 				<div class="w3-container w3-xlarge w3-border-bottom">
 					Tags display on Home Page
@@ -111,12 +207,12 @@
 				<div class="w3-row-padding">
 
 					<div class="w3-col w3-half w3-container">
-						<h6>Show Discussions per tags</h6>
+						<h6><b>Show Discussions per tags</b></h6>
 						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showDiscussionsForTag}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-col w3-half w3-container">
-						<h6>Number of Discussions per Tag</h6>
+						<h6><b>Number of Discussions per Tag</b></h6>
 						<h:inputText value="#{manageDisplay.displayOption.numDiscussionsPerTag}" styleClass="w3-input w3-border"/>
 					</div>
 					
@@ -147,13 +243,11 @@
 				
 				<p/>
 				
-				<div class="w3-container">
-					<p:commandButton value="Submit" ajax="true" action="#{manageDisplay.editDisplayTags}" icon="fa fa-edit"/>
+				<div class="w3-container w3-padding">
+					<p:commandButton value=" Save" ajax="true" action="#{manageDisplay.editDisplayTags}" icon="fa fa-save"/>
 				</div>
 				
 			</h:form>
-
-			<p/> <!-- ////// -->
  			
  		</div>
 		

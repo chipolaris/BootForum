@@ -100,6 +100,9 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 			displayOption.setId(1L);
 			
 			// default values
+			displayOption.setThemeColor("w3-theme-light-blue");
+			displayOption.setThemeComponent("nova-light");
+			
 			displayOption.setShowMostCommentsDiscussions(true);
 			displayOption.setNumMostCommentsDiscussions(5);
 			

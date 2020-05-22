@@ -38,7 +38,7 @@ public class TagDiscussionsLazyModel extends LazyDataModel<Discussion> {
     	logger.debug("first is " + first + ", pageSize is " + pageSize);
     	
     	List<Discussion> discussions = this.tagService.getDiscussionsForTag(this.tag, first, pageSize, sortField,
-    			sortOrder == SortOrder.DESCENDING ? true : false).getDataObject();
+    			sortOrder == SortOrder.DESCENDING).getDataObject();
     	
     	return discussions;
     }

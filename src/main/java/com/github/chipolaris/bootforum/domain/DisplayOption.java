@@ -20,6 +20,12 @@ public class DisplayOption extends BaseEntity {
 	@Id
 	private Long id;
 	
+	@Column(name="THEME_COLOR")
+	private String themeColor;
+	
+	@Column(name="THEME_COMPONENT")
+	private String themeComponent;
+	
 	@Column(name = "SHOW_MOST_VIEWS_DIS")
 	private boolean showMostViewsDiscussions;
 	
@@ -57,6 +63,20 @@ public class DisplayOption extends BaseEntity {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getThemeColor() {
+		return themeColor;
+	}
+	public void setThemeColor(String themeColor) {
+		this.themeColor = themeColor;
+	}
+	
+	public String getThemeComponent() {
+		return themeComponent;
+	}
+	public void setThemeComponent(String themeComponent) {
+		this.themeComponent = themeComponent;
 	}
 	
 	public boolean isShowMostViewsDiscussions() {

@@ -17,7 +17,9 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
+import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.StatService;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
 
@@ -27,6 +29,9 @@ public class SystemInfo {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(SystemInfo.class);
+	
+	@Resource
+	private GenericService genericService;
 	
 	@Resource
 	private SystemInfoService systemInfoService;
@@ -102,6 +107,11 @@ public class SystemInfo {
 	public Boolean isUserLoggedOn(String username) {
 		
 		return systemInfoService.isUserLoggedOn(username).getDataObject();
+	}
+	
+	public DisplayOption getDisplayOption() {
+		
+		return genericService.getEntity(DisplayOption.class, 1L).getDataObject();
 	}
 
 	/**

@@ -123,10 +123,12 @@ public class WebConfig implements ServletContextInitializer {
 
 		// Default theme to 'nova-light', (other themes: admin, adamantium, nova-light,
 		// nova-dark, nova-blue, nova-amber, lunar-blue, lunar-green)
-		// Note that the value is set through an expression that read cookie name
+		// Note that the value is set through an expression that read cookie name (execute at runtime)
 		// 'theme.component', if the cookie does not exist, use default
 		servletContext.setInitParameter("primefaces.THEME",
-				"#{empty cookie['theme.component'].value ? 'nova-light' : cookie['theme.component'].value}");
+				"#{empty cookie['theme.component'].value ?"
+			  + " (empty systemInfo.displayOption.themeComponent ? 'nova-light' : systemInfo.displayOption.themeComponent)"
+			  + " : cookie['theme.component'].value}");
 		servletContext.setInitParameter("primefaces.UPLOADER", "commons"); // native/commons/auto
 		servletContext.setInitParameter("primefaces.FONT_AWESOME", "true");
 

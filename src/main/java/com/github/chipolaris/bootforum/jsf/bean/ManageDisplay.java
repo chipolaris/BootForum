@@ -65,16 +65,16 @@ public class ManageDisplay {
 
 	public void edit() {
 		
-		logger.info("Updating display management ");
+		logger.info("Updating display options ");
 		
 	    // 
     	ServiceResponse<DisplayOption> response = genericService.updateEntity(this.displayOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {
-    		JSFUtils.addInfoStringMessage(null, String.format("DisplayManagment updated"));
+    		JSFUtils.addInfoStringMessage(null, String.format("Display Options updated"));
     	}
     	else {
-    		JSFUtils.addErrorStringMessage(null, String.format("Unable to update Display Management"));
+    		JSFUtils.addErrorStringMessage(null, String.format("Unable to update Display Options"));
     	}
 	}
 	

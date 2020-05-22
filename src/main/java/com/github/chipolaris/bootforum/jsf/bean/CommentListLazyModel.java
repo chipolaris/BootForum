@@ -42,7 +42,7 @@ public class CommentListLazyModel extends LazyDataModel<Comment> {
     	this.setRowCount(this.genericService.countEntities(Comment.class, filters).getDataObject().intValue());
     	
     	List<Comment> comments = this.genericService.getEntities(Comment.class, filters, first, pageSize, 
-				sortField, sortOrder == SortOrder.DESCENDING ? true : false).getDataObject();
+				sortField, sortOrder == SortOrder.DESCENDING).getDataObject();
     	
     	return comments;
     }

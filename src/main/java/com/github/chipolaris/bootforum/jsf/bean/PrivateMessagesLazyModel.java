@@ -52,7 +52,7 @@ public class PrivateMessagesLazyModel extends LazyDataModel<PrivateMessage> {
     	this.setRowCount(this.genericService.countEntities(PrivateMessage.class, filters).getDataObject().intValue());
     	
     	List<PrivateMessage> privateMessages = this.genericService.getEntities(PrivateMessage.class, filters, first, pageSize, 
-				sortField, sortOrder == SortOrder.DESCENDING ? true : false).getDataObject();
+				sortField, sortOrder == SortOrder.DESCENDING).getDataObject();
     	
     	return privateMessages;
     }
