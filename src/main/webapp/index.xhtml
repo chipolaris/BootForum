@@ -231,6 +231,9 @@
 				    				<p>
 				    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> Remember Me
 				    				</p>
+				    				<p>
+				    					No account? <a href="#" onclick="$('.w3-modal').hide();$('#registerModal').show();return false;">Register</a>
+				    				</p>
 			    				</div>
 			    			</form>
 							
@@ -279,7 +282,7 @@
 								Latest Comment:
 								<h:link outcome="commentThread"> 
 									<b>#{systemInfo.statistics.lastComment.updateBy}</b>
-									<f:param name="id" value="#{systemInfo.statistics.lastComment.id}"/>
+									<f:param name="id" value="#{systemInfo.statistics.lastComment.commentId}"/>
 								</h:link>
 								- <pe:timeAgo value="#{systemInfo.statistics.lastComment.updateDate}" styleClass="w3-small"/>
 							</p>
