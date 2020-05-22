@@ -4,8 +4,9 @@
 Full features web based forum/disscussion/bulletin board software implemented using Java, Spring Boot, Eclipselink, Primefaces, and W3.CSS.
 
 * Cross-platform supported. All platforms that run Java: Unix/Linux, Windows, or Mac OS.
-* Support all relational databases that provide JDBC connectivity. Tested on Postgresql, H2, MySQL, SQL Server, and Oracle.
-* Responsive web designed using W3.CSS framework to display and function well on all screen sizes (desktop, tablet, or mobile phone)
+* Pre-bundled with embedded H2 database but will work with all relational databases that provide JDBC connectivity. Tested on Postgresql, H2, MySQL, SQL Server, and Oracle.
+* Pre-bundled with Tomcat 9. No need to install a separate Web container. Also can be run in a dedicated servlet container if desired (Tomcat/Jetty, etc)
+* Responsive design using W3.CSS framework to display and function well on all screen sizes (desktop, tablet, or mobile phone)
 * _**Very easy**_ to operate: run out of the box with minimal configuration. Run-time configuration flexibilty enabled by Spring Boot.
 
 ###  [**View BootForum Screenshots**](Screenshots.md "Screenshots")
@@ -30,7 +31,7 @@ Full features web based forum/disscussion/bulletin board software implemented us
   * Chat channels are managed (add/edit/delete) by system admin
 
 * **Search**
-  * Search for comments (backed by Lucence Index)
+  * Search comments by keywords (backed by Lucence Index)
   * Search members (by username)
 
 * **Members**
@@ -38,7 +39,7 @@ Full features web based forum/disscussion/bulletin board software implemented us
   * User reputation
 
 * **Forums**:
-  * Unlimited nested forum groups / sub-groups (categories/subcategories)
+  * Flexible forum structures. Unlimited nested forum groups / sub-groups (categories/subcategories)
 
 * **User Profile**:
   * User managed profile: account info, avatar ...
