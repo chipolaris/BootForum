@@ -2,7 +2,7 @@
 
 ## Overview
 BootForum can be run as a standalone Java application or as an embedded web application inside a Servlet container such as Apache Tomcat. 
-First, download the [WAR file](https://github.com/chipolaris/BootForum/releases/download/v0.0.1/BootForum-0.0.1-SNAPSHOT.war "Latest Release") or [build the **BootForum.war**](Building.md). Also make sure JDK 8 or later is installed
+First, download the [WAR file](https://github.com/chipolaris/BootForum/releases/download/v.0.01/BootForum-0.0.1-SNAPSHOT.war "Latest Release") or [build the **BootForum.war**](Building.md). Also make sure JDK 8 or later is installed
 
 ## Run as standalone Java application
 BootForum can be run as a standalone Java application by using the **java -jar** on command line:
