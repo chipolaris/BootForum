@@ -11,7 +11,7 @@ Full features web based forum/disscussion/bulletin board software implemented us
 
 ###  [**View BootForum Screenshots**](Screenshots.md "Screenshots")
 
-### [**Live Demo**](http://www.softwareprincipals.com:8080/BootForum "BootForum Demo")
+### [**Live Demo**](http://softunify.com:8080/BootForum "BootForum Demo")
 
 ### Main Features:
 
