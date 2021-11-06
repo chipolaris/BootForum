@@ -9,7 +9,8 @@
 	template="/WEB-INF/template/layout_public.xhtml">
 	
 	<ui:define name="title">
-		Welcome to #{msg['application.title']}
+		<!-- Welcome to #{msg['application.title']} -->
+		#{msg['welcome.to.forum']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -22,7 +23,7 @@
 		<div class="w3-panel w3-card-4 w3-white">
 			
 			<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 0 -16px;">
- 				<h2>Welcome to #{msg['application.title']}</h2>
+ 				<h2>#{msg['welcome.to.forum']}</h2>
  			</div>
 			
 			<div class="w3-large w3-margin-top">
@@ -34,10 +35,10 @@
 			<div class="w3-row">
 			
 				<div class="w3-col l9 m12 s12 w3-container">
-					<div class="w3-container" jsf:rendered="#{not empty homePage.mostRecentDiscussions}">
+					<div class="w3-container" style="padding:0;" jsf:rendered="#{not empty homePage.mostRecentDiscussions}">
 						<div class="w3-xlarge" 
 							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-							<i class="fa fa-clock-o"/> Most Recent Discussions
+							<i class="fa fa-clock-o"/> #{msg['most.recent.discussions']}
 						</div>
 						<p:repeat var="discussion" value="#{homePage.mostRecentDiscussions}">
 							<p>
@@ -60,18 +61,18 @@
 							</p>
 						</p:repeat>
 						<h:link outcome="listDiscussions">
-							More ...
+							#{msg['view.more']} ...
 							<f:param name="sort" value="createDate"/>
 						</h:link>
 					</div>
 					
 					<p/>
 					
-					<div class="w3-container" jsf:rendered="#{not empty homePage.mostViewsDiscussions}">
+					<div class="w3-container" style="padding:0;" jsf:rendered="#{not empty homePage.mostViewsDiscussions}">
 					
 						<div class="w3-xlarge" 
 							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-							<i class="fa fa-eye"/> Most Views Discussions
+							<i class="fa fa-eye"/> #{msg['most.views.discussions']}
 						</div>
 					
 						<p:repeat var="discussion" value="#{homePage.mostViewsDiscussions}">
@@ -80,8 +81,8 @@
 									<f:param name="id" value="#{discussion.id}"/>
 									<b>#{discussion.title}</b>
 								</h:link>
-								<b>(#{discussion.stat.viewCount} views)</b>
-								started by
+								<b>(#{discussion.stat.viewCount} #{msg['views']})</b>
+								#{msg['started.by']}
 								<h:link outcome="memberProfile">
 									<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
 									<f:param name="username" value="#{discussion.createBy}"/>
@@ -97,14 +98,14 @@
 						</p:repeat>
 						
 						<h:link outcome="listDiscussions">
-							More ...
+							#{msg['view.more']} ...
 							<f:param name="sort" value="stat.viewCount"/>
 						</h:link>
 					</div>
 					
 					<p/>
 					
-					<div class="w3-container" jsf:rendered="#{not empty homePage.mostCommentsDiscussions}">
+					<div class="w3-container" style="padding:0;" jsf:rendered="#{not empty homePage.mostCommentsDiscussions}">
 					
 						<div class="w3-xlarge" 
 							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
@@ -134,7 +135,7 @@
 						</p:repeat>
 						
 						<h:link outcome="listDiscussions">
-							More ...
+							#{msg['view.more']} ...
 							<f:param name="sort" value="stat.commentCount"/>
 						</h:link>
 					</div>
@@ -143,7 +144,7 @@
 					
 					<p:repeat var="tag" value="#{homePage.displayTags}">
 						<div jsf:rendered="#{not empty tag.discussions}">
-							<div class="w3-container">
+							<div class="w3-container" style="padding:0;">
 								<div class="w3-xlarge" 
 									style="border-bottom-style:solid; border-width: 2px; border-color:##{tag.color}; color:##{tag.color}">
 									<i class="fa #{tag.icon}"/> #{tag.label}
@@ -154,7 +155,7 @@
 											<f:param name="id" value="#{discussion.id}"/>
 											<b>#{discussion.title}</b>
 										</h:link>
-										started by
+										#{msg['started.by']}
 										<h:link outcome="memberProfile">
 											<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
 											<f:param name="username" value="#{discussion.createBy}"/>
@@ -164,7 +165,7 @@
 								</p:repeat>
 								
 								<h:link outcome="viewTag">
-									More #{tag.label}...
+									#{msg['view.more']} #{tag.label}...
 									<f:param name="id" value="#{tag.id}"/>
 								</h:link>
 							</div>
@@ -182,12 +183,12 @@
 					<div class="w3-card">
 						<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
 							<header class="w3-container w3-theme-l1 w3-center">
-						  		<h4>Welcome <b>#{userSession.user.username}</b></h4>
+						  		<h4>#{msg['welcome']} <b>#{userSession.user.username}</b></h4>
 							</header>
 							<div class="w3-container">
 								<p>
 									<h:link outcome="/secure/index">
-										<i class="fa fa-gear fa-fw"/> My Account
+										<i class="fa fa-gear fa-fw"/> #{msg['my.account']}
 									</h:link>
 								</p>
 								<p>
@@ -213,7 +214,7 @@
 						<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
 							
 							<header class="w3-container w3-theme-l1 w3-center">
-						  		<h4>Login</h4>
+						  		<h4>#{msg['login']}</h4>
 							</header>
 			    			
 			    			<form action="#{request.contextPath}/login" method="post" class="w3-container">
@@ -229,10 +230,10 @@
 				    					<input type="submit" value="&#xf090; Login" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
 				    				</p>
 				    				<p>
-				    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> Remember Me
+				    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> #{msg['remember.me']}
 				    				</p>
 				    				<p>
-				    					No account? <a href="#" onclick="$('.w3-modal').hide();$('#registerModal').show();return false;">Register</a>
+				    					#{msg['no.account']}? <a href="#" onclick="$('.w3-modal').hide();$('#registerModal').show();return false;">#{msg['register']}</a>
 				    				</p>
 			    				</div>
 			    			</form>
@@ -244,7 +245,7 @@
 					
 					<div class="w3-card">
 						<header class="w3-container w3-theme-l1 w3-center">
-						  <h4>Discussion Tags</h4>
+						  <h4>#{msg['discussion.tags']}</h4>
 						</header>
 						
 						<div class="w3-container w3-padding-small">
@@ -262,24 +263,24 @@
 					
 					<div class="w3-card">
 						<header class="w3-container w3-theme-l1 w3-center">
-						  <h4>Forum Info</h4>
+						  <h4>#{msg['forum.info']}</h4>
 						</header>
 						
 						<div class="w3-container w3-small">
 							<p>
-								Forums: <b>#{systemInfo.statistics.forumCount}</b>
+								#{msg['forums']}: <b>#{systemInfo.statistics.forumCount}</b>
 							</p>
 							
 							<p>
-								Discussions: <b>#{systemInfo.statistics.discussionCount}</b>
+								#{msg['discussions']}: <b>#{systemInfo.statistics.discussionCount}</b>
 							</p>
 						
 							<p>
-								Comments: <b>#{systemInfo.statistics.commentCount}</b>
+								#{msg['comments']}: <b>#{systemInfo.statistics.commentCount}</b>
 							</p>							
 						
 							<p>
-								Latest Comment:
+								#{msg['latest.comments']}:
 								<h:link outcome="commentThread"> 
 									<b>#{systemInfo.statistics.lastComment.updateBy}</b>
 									<f:param name="id" value="#{systemInfo.statistics.lastComment.commentId}"/>
@@ -288,11 +289,11 @@
 							</p>
 							
 							<p>
-								Members: <b>#{systemInfo.statistics.userCount}</b>
+								#{msg['members']}: <b>#{systemInfo.statistics.userCount}</b>
 							</p>
 						
 							<p>
-								Latest Member:
+								#{msg['latest.member']}:
 								<h:link outcome="memberProfile"> 
 									<b>#{systemInfo.statistics.lastRegisteredUser}</b>
 									<f:param name="username" value="#{systemInfo.statistics.lastRegisteredUser}"/>
@@ -301,11 +302,11 @@
 							</p>
 						
 							<p>
-								Logged on Members: <b>#{fn:length(systemInfo.loggedOnUsers)}</b>
+								#{msg['logged.on.members']}: <b>#{fn:length(systemInfo.loggedOnUsers)}</b>
 							</p>
 							
 							<p>
-								Anonymous Users: <b>#{systemInfo.sessionCount - fn:length(systemInfo.loggedOnUsers)}</b>
+								#{msg['anonymous.users']}: <b>#{systemInfo.sessionCount - fn:length(systemInfo.loggedOnUsers)}</b>
 							</p>
 						</div>
 

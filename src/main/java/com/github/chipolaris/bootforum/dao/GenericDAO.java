@@ -1016,18 +1016,12 @@ public class GenericDAO {
 		
 		String[] paths = pathExpression.split("\\."); 
 		if(paths.length > 1) {
-			String lastPathEntry = paths[paths.length - 1]; // last entry
-			Join<?,?> join = null;
-			for(int i = 0; i < paths.length - 1; i++) {
-				if(join == null) {
-					join = root.join(paths[i]);
-				}
-				else {
-					join = join.join(paths[i]);
-				}
+			Join<?,?> join = root.join(paths[0], JoinType.LEFT);
+			for(int i = 1; i < paths.length - 1; i++) {
+				join = join.join(paths[i], JoinType.LEFT);
 			}
 			
-			return join.<E>get(lastPathEntry);
+			return join.<E>get(paths[paths.length - 1]); // return last path entry
 		}
 		
 		return root.<E>get(pathExpression);

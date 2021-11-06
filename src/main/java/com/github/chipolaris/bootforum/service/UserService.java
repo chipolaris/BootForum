@@ -112,6 +112,7 @@ public class UserService {
 		return messages;
 	}
 	
+	@Transactional(readOnly=false)
 	public ServiceResponse<Void> deleteUser(User user) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
@@ -120,6 +121,7 @@ public class UserService {
 		
 		return response;
 	}
+	
 	@Transactional(readOnly=true)
 	public ServiceResponse<Boolean> checkUsernameExist(String username) {
 		
