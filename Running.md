@@ -21,6 +21,45 @@ By default, BootForum looks for the **application.properties** file in the follo
 ## Run as a web application inside a Servlet Container
 **BootForum** can also be run as a regular web application by placing the **BootForum.war** inside the **\<Servet-Container>/webapps** folder. **Apache Tomcat 9** or later is recommended. When run in a Servlet Container or Java EE Application Server, BootForum can be configured to use server's JNDI Datasource definition or JDBC connection values in **application.properties** file
 
-## Initialization
+## Run in Docker
+**BootForum** is also provided as a Docker-Hub's image in: **ch3nguyen/bootforum**  
+Use the included **[docker-compose.yml](./docker-compose.yml)** to run in your local Docker container  
+
+
+	version: '2'
+	
+	services:
+	  app:
+	    image: 'ch3nguyen/bootforum:latest'
+	    container_name: app
+	    depends_on:
+	      db:
+	        condition: service_healthy 
+	    links:
+	      - db 
+	    environment:
+	      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/BootForum
+	      - SPRING_DATASOURCE_USERNAME=BootForum
+	      - SPRING_DATASOURCE_PASSWORD=secret
+	    ports:
+	      - 8080:8080
+	    volumes:
+	      - ./bootforum/files:/tmp/BootForum/files
+	  db:
+	    container_name: postgres
+	    image: 'postgres:13.1-alpine'
+	    volumes:
+	      - ./postgresql/data:/var/lib/postgresql/data
+	    environment:
+	      - POSTGRES_USER=BootForum
+	      - POSTGRES_PASSWORD=secret
+	    healthcheck:
+	      test: ["CMD-SHELL", "pg_isready -U BootForum"]
+	      interval: 5s
+	      timeout: 5s
+	      retries: 5
+
+
+## Data Initialization
 * The first time **BootForum** starts, it creates an administrator account with username **admin** and password **secret**. The password should be changed immediately after login into the app.
 * After login as an administrator, access the "Administration" area and create Forum or Forum Group. After which, discussions can be started by any authenticated user.

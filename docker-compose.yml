@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  app:
+    image: 'ch3nguyen/bootforum:latest'
+    container_name: app
+    depends_on:
+      db:
+        condition: service_healthy 
+    links:
+      - db 
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/BootForum
+      - SPRING_DATASOURCE_USERNAME=BootForum
+      - SPRING_DATASOURCE_PASSWORD=secret
+    ports:
+      - 8080:8080
+    volumes:
+      - ./bootforum/files:/tmp/BootForum/files
+  db:
+    container_name: postgres
+    image: 'postgres:13.1-alpine'
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=BootForum
+      - POSTGRES_PASSWORD=secret
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U BootForum"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

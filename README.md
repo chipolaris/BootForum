@@ -9,6 +9,14 @@ Full features web based forum/disscussion/bulletin board software implemented us
 * Responsive design using W3.CSS framework to display and function well on all screen sizes (desktop, tablet, or mobile phone)
 * _**Very easy**_ to operate: run out of the box with minimal configuration. Run-time configuration flexibilty enabled by Spring Boot.
 
+### Note (11/06/2021):
+Currently, this application only work with **Java 8** (and possibly **9**, and **10**). It does not work with **Java 11** or later versions.  
+When run with Java 11 in standalone mode, i.e,: **java -jar BootForum-0.0.1-SNAPSHOT.war**  
+We would get **java.lang.IllegalStateException: Could not find backup for factory javax.faces.context.FacesContextFactory.**  
+
+**TODO**: update to work with **Java 11** - possibly by updating to later version of Spring Boot (with later version than Tomcat 9)
+* Another option is to use the Dockerized distribution (which include Postgresql database)
+
 ###  [**View BootForum Screenshots**](Screenshots.md "Screenshots")
 
 ### [**Live Demo**](http://softunify.com:8080/BootForum "BootForum Demo")
