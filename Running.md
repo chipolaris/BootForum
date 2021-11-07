@@ -23,7 +23,7 @@ By default, BootForum looks for the **application.properties** file in the follo
 
 ## Run in Docker
 **BootForum** is also provided as a Docker-Hub's image in: **ch3nguyen/bootforum**  
-Use the included **[docker-compose.yml](./docker-compose.yml)** to run in your local Docker container  
+Use the included **[docker-compose.yml](./docker-compose.yml)** to run in your local Docker container. It bundles a Postgres instance as a back end DB for your convenience  
 
 
 	version: '2'
