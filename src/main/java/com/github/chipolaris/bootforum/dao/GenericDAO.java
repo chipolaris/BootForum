@@ -306,7 +306,7 @@ public class GenericDAO {
 			query.where(predicates);
 		}
 		
-		if(querySpec.getSortField() != null) {
+		if(querySpec.getSortField() != null && !querySpec.getSortField().isEmpty()) {
 			query.orderBy(Boolean.TRUE.equals(querySpec.getSortDesc()) ?
 				builder.desc(getPathGeneric(root, querySpec.getSortField())) : 
 				builder.asc(getPathGeneric(root, querySpec.getSortField()))
