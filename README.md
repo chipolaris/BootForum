@@ -9,14 +9,6 @@ Full features web based forum/disscussion/bulletin board software implemented us
 * Responsive design using W3.CSS framework to display and function well on all screen sizes (desktop, tablet, or mobile phone)
 * _**Very easy**_ to operate: run out of the box with minimal configuration. Run-time configuration flexibilty enabled by Spring Boot.
 
-### Note (11/06/2021):
-Currently, this application only work with **Java 8** (and possibly **9**, and **10**). It does not work with **Java 11** or later versions.  
-When run with Java 11 in standalone mode, i.e,: **java -jar BootForum-0.0.1-SNAPSHOT.war**  
-We would get **java.lang.IllegalStateException: Could not find backup for factory javax.faces.context.FacesContextFactory.**  
-
-**TODO**: update to work with **Java 11** - possibly by updating to later version of Spring Boot (with later version than Tomcat 9)
-* Another option is to use the Dockerized distribution (which include Postgresql database)
-
 ###  [**View BootForum Screenshots**](Screenshots.md "Screenshots")
 
 ### [**Live Demo**](http://softunify.com:8080/BootForum "BootForum Demo")
@@ -66,7 +58,7 @@ We would get **java.lang.IllegalStateException: Could not find backup for factor
   * Change look and feel based on each user's preferences
   
 ### Prerequisites to Run
-**Java 8**
+**Java 11**
 A relational database. **BootForum** has been tested with **Postgresql**, **H2**, **MySQL**, **SQL Server**, **Oracle**.
 
 ### Try BootForum
@@ -74,6 +66,15 @@ Head to [**Running Instructions**](Running.md "Running Instructions") to downloa
 
 ### Recommended Environment for Development
 For developers, the followings are recommended
-* **JDK 8** or later
+* **JDK 11** or later
 * **Maven 3** or later
 * IDE: recommend tools with Spring deveopment plugin such as Eclipse based **Spring Tool Suite**
+
+### Note
+
+#### 11/06/2021:
+* Runtime Docker image is provided in Docker-Hub's with image id **ch3nguyen/bootforum**
+ 
+#### 12/12/2021:
+Project is updated from JDK version 8 to 11.
+* Another option is to use the Dockerized distribution (which include Postgresql database)

@@ -141,21 +141,6 @@ public class WebConfig implements ServletContextInitializer {
 				"/WEB-INF/functions.taglib.xml;/WEB-INF/springsecurity.taglib.xml;/WEB-INF/bootforum.taglib.xml");
 
 		/*
-		 * Note: there is a unexplained behavior of the app when deployed on Tomcat in
-		 * the AESWEB02-MAN server: The app fails to start and have the following output
-		 * on Tomcat output console:
-		 *
-		 * javax.faces.FactoryFinderInstance.copyInjectionProviderFromFacesContext
-		 * Unable to obtain InjectionProvider from init time FacesContext. Does this
-		 * container implement the Mojarra Injection SPI?
-		 *
-		 * The following line is to address that error (not required when running on
-		 * local Windows environment)
-		 */
-		// servletContext.setInitParameter("com.sun.faces.forceLoadConfiguration",
-		// "true");
-
-		/*
 		 * Session cookie path is explicitly set so this app won't interfere with other
 		 * apps deployed in the same container (Tomcat, etc)
 		 */

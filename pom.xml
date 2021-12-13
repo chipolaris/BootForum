@@ -16,7 +16,7 @@
 	<description>BootForum - Forum Software using Java and Spring Boot</description>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<lucene.version>8.0.0</lucene.version>
 		<velocity.version>2.1</velocity.version>
 		<primefaces.version>8.0</primefaces.version>
