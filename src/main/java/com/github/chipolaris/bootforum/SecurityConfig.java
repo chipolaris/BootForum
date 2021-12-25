@@ -2,20 +2,16 @@ package com.github.chipolaris.bootforum;
 
 import javax.annotation.Resource;
 
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
@@ -28,10 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${RememberMe.requestParameter}")
 	private String rememberMeRequestParameter;
 	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
-	}
+	@Resource
+	private PasswordEncoder passwordEncoder;
 	
 	/*
 	 * note: AppUserDetailsService implements UserDetailService. 
@@ -42,13 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * 		otherwise, would get bean-not-of-type error: 
 	 * 			http://stackoverflow.com/questions/6586727/spring-error-beannotofrequiredtypeexception
 	 */
-    @Resource(name="appUserDetailsService")
-    private UserDetailsService userDetailService;
+	
+	@Resource(name = "appUserDetailsService")
+	private UserDetailsService userDetailService;
     
     @Resource
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     	
-        auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder);
     }
     
     @Override

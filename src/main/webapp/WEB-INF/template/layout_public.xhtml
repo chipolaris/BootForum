@@ -158,47 +158,47 @@
 					</a>
 					
 					<a href="#{request.contextPath}" class="w3-bar-item w3-theme-gradient-l1">
-						<img src="#{resource['images/logo.png']}" alt="Home" style="height: 44px;" title="Home"/>
+						<img src="#{resource['images/logo.png']}" alt="Home" style="height: 44px;" title="#{msg['home']}"/>
 					</a>
 					
 					<!-- medium screen top menu items -->
 					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
-						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="Forums">
+						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['forums']}">
 						<i class="fa fa-comments"/>
 					</a>
 					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
-						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="Users">
+						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['members']}">
 						<i class="fa fa-users"/>
 					</a>
 					
 					<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
 						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white"
-							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="Register" onclick="document.getElementById('registerModal').style.display='block'">
+							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['register']}" onclick="document.getElementById('registerModal').style.display='block'">
 							<i class="fa fa-clipboard"/>
 						</a>					
 						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white"
-							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="Login" onclick="document.getElementById('loginModal').style.display='block'">
+							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['login']}" onclick="document.getElementById('loginModal').style.display='block'">
 							<i class="fa fa-sign-in"/>
 						</a>
 					</sec:authorize>
 					
 					<!-- large screen top menu items -->
 					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
-						<i class="fa fa-comments fa-lg"/><br/><span class="w3-medium">Forums</span>
+						<i class="fa fa-comments fa-lg"/><br/><span class="w3-medium">#{msg['forums']}</span>
 					</a>
 					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
-						<i class="fa fa-users fa-lg"/><br/><span class="w3-medium">Members</span>
+						<i class="fa fa-users fa-lg"/><br/><span class="w3-medium">#{msg['members']}</span>
 					</a>
 					
 					<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
 					
 						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white"
 							onclick="document.getElementById('registerModal').style.display='block'">
-							<i class="fa fa-clipboard fa-lg"/><br/><span class="w3-medium">Register</span>
+							<i class="fa fa-clipboard fa-lg"/><br/><span class="w3-medium">#{msg['register']}</span>
 						</a>					
 						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white" 
 							onclick="document.getElementById('loginModal').style.display='block'">
-							<i class="fa fa-sign-in fa-lg"/><br/><span class="w3-medium">Login</span>
+							<i class="fa fa-sign-in fa-lg"/><br/><span class="w3-medium">#{msg['login']}</span>
 						</a>
 					
 					</sec:authorize>
@@ -220,8 +220,8 @@
 							
 							</button>
 							<div class="w3-dropdown-content w3-bar-block w3-card-4">
-								<a href="#{request.contextPath}/secure/index.xhtml" class="w3-bar-item w3-button"><i class="fa fa-gear fa-fw"/> My Account</a>
-								<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button"><i class="fa fa-sign-out fa-fw"/> Logout</a>
+								<a href="#{request.contextPath}/secure/index.xhtml" class="w3-bar-item w3-button"><i class="fa fa-gear fa-fw"/> #{msg['my.account']}</a>
+								<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button"><i class="fa fa-sign-out fa-fw"/> #{msg['logout']}</a>
 							</div>
 						</div>
 						
@@ -229,7 +229,7 @@
 					
 					<!-- search icon button, show on small screens -->
 					<a class="w3-bar-item w3-button w3-border-left w3-hover-text-white w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" 
-						onclick="openNav('searchSmall')" style="font-size:28px;padding-top:9px;padding-bottom: 9px;" title="Search">
+						onclick="openNav('searchSmall')" style="font-size:28px;padding-top:9px;padding-bottom: 9px;" title="#{msg['search']}">
 						<i class="fa fa-search"/>
 					</a>
 					
@@ -237,7 +237,7 @@
 					<div class="w3-dropdown-click w3-bar-item w3-right w3-hover-none w3-hide-small" style="margin-top:2px;"> <!-- try the margin-top to vertically align the search div to middle -->
 						
 						<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
-						<input type="text" value="#{null}" placeholder="Search Forum.." style="font-family:Open Sans, FontAwesome" autocomplete="off"
+						<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="font-family:Open Sans, FontAwesome" autocomplete="off"
 							class="w3-input w3-border w3-round searchInput searchInputExpand" id="keywords" 
 							onkeyup="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv');document.getElementById('keywordsSmall').value = this.value;" 
 							onfocus="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv', false)" 
@@ -252,7 +252,7 @@
 							<div jsf:id="searchSuggestionResultDiv">
 								<p:dataList value="#{searchSuggestion.comments}" var="comment" rendered="#{not empty searchSuggestion.comments}">
 									<f:facet name="header">
-							            Comments:
+							            #{msg['comments']}:
 							        </f:facet>
 							        <h:outputLink value="commentThread.xhtml">
 										<span>#{comment.id}: #{comment.title}</span>
@@ -261,7 +261,7 @@
 								</p:dataList>
 								<p:dataList value="#{searchSuggestion.usernames}" var="username" rendered="#{not empty searchSuggestion.usernames}">
 									<f:facet name="header">
-							            Users:
+							            #{msg['members']}:
 							        </f:facet>
 							        
 							        <h:outputLink value="memberProfile.xhtml">
@@ -297,14 +297,14 @@
 		    	
 		    		<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"
 						onclick="document.getElementById('registerModal').style.display='block'">
-						<i class="fa fa-clipboard fa-lg"/><br/>Register
+						<i class="fa fa-clipboard fa-lg"/><br/>#{msg['register']}
 					</a>					
 					<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right" 
 						onclick="document.getElementById('loginModal').style.display='block'">
-						<i class="fa fa-sign-in fa-lg"/><br/>Login
+						<i class="fa fa-sign-in fa-lg"/><br/>#{msg['login']}
 					</a>
 		    	
-		    		<!-- <a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right" onclick="document.getElementById('loginModal').style.display='block'"><i class="fa fa-sign-in fa-lg"/><br/>Login</a>
+		    		<!-- <a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right" onclick="document.getElementById('loginModal').style.display='block'"><i class="fa fa-sign-in fa-lg"/><br/>#{msg['login']}</a>
 		    		<a href="#{request.contextPath}/register.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="fa fa-clipboard fa-lg"/><br/>Register</a> -->
 		    	</sec:authorize>
 		  	</div>
@@ -315,7 +315,7 @@
 				<div class="w3-dropdown-click w3-bar-item w3-hover-none w3-block">
 					
 					<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
-					<input type="text" value="#{null}" placeholder="Search Forum.." style="width:100%; font-family:Open Sans, FontAwesome" autocomplete="off"
+					<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="width:100%; font-family:Open Sans, FontAwesome" autocomplete="off"
 						class="w3-input w3-border w3-round searchInput" id="keywordsSmall"
 						onkeyup="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall'); document.getElementById('keywords').value = this.value;" 
 						onfocus="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall', false)" 
@@ -324,13 +324,13 @@
 					<div jsf:id="searchSuggestionDivSmall" class="w3-dropdown-content w3-bar-block w3-border w3-card" style="width:100%;margin-top: 5px;">
 					
 						<a href="#{request.contextPath}/searchComment.xhtml?keywords=" class="w3-bar-item w3-button" id="searchCommentLinkSmall">
-							Search comment for <span id="searchValueSmall" style="font-weight: bold"></span>
+							#{msg['search.comment.for']} <span id="searchValueSmall" style="font-weight: bold"></span>
 						</a>
 					
 						<div jsf:id="searchSuggestionResultDivSmall">
 							<p:dataList value="#{searchSuggestion.comments}" var="comment" rendered="#{not empty searchSuggestion.comments}">
 								<f:facet name="header">
-						            Comments:
+						            #{msg['comments']}:
 						        </f:facet>
 								#{comment.id}: #{comment.title}
 							</p:dataList>
@@ -479,8 +479,8 @@
 				    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey w3-center">
 				      
 				      <span>
-				      	Already registered?
-				      	<a href="#" onclick="$('.w3-modal').hide();$('#loginModal').show();return false;">Login</a>
+				      	#{msg['already.registered']}?
+				      	<a href="#" onclick="$('.w3-modal').hide();$('#loginModal').show();return false;">#{msg['login']}</a>
 				      </span>
 				      
 				    </div>
@@ -708,7 +708,7 @@
 			
 			<!-- bottom copyright -->
 			<div class="w3-section"> 
-				&#169; <a href="http://www.SoftwarePrincipals.com">SoftwarePrincipals.com 2019</a>. 
+				&#169; <a href="http://www.SoftUnify.com">SoftUnify.com 2021</a>. 
 				Powered by <a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a>, 
 				<a href="https://spring.io/projects/spring-boot">Spring Boot</a>, <a href="http://www.eclipse.org/eclipselink/">EclipseLink</a>, 
 				<a href="https://www.primefaces.org">Primefaces</a>, and <a href="https://www.w3schools.com/w3css/default.asp">W3.CSS</a> 
