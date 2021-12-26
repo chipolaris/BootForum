@@ -67,12 +67,12 @@
 				<div class="w3-hide-small">
 					<p:breadCrumb>
 						<p:menuitem value="Home" url="#{request.contextPath}/" />
-   						<p:menuitem value="Forums Index" url="#{request.requestURI}?#{request.queryString}" />
+   						<p:menuitem value="#{msg['forums.index']}" url="#{request.requestURI}?#{request.queryString}" />
 					</p:breadCrumb>
 				</div>
 				
 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2>Forums Index</h2>
+ 					<h2>#{msg['forums.index']}</h2>
  				</div>
 				
 				<p/>
@@ -81,9 +81,9 @@
 				
 					<p:treeTable value="#{forumMap.forumRootTreeNode}" var="data" nodeVar="treeNode" style="margin: 0 auto;" styleClass="borderless">
 				        
-				        <p:column headerText="Category/Name" style="text-align:left;" priority="1">
+				        <p:column headerText="#{msg['category/name']}" style="text-align:left;" priority="1">
 				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{treeNode.type eq 'Root'}">
-				        		<i class="fa fa-lg fa-sitemap"/> Forum Home
+				        		<i class="fa fa-lg fa-sitemap"/> #{msg['forum.home']}
 				        	</span>
 				        	<h:link outcome="viewForum" rendered="#{treeNode.type eq 'Forum'}">
 								<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{data.iconColor};">
@@ -103,15 +103,15 @@
 				        	</span>
 				        </p:column>
 				        
-				        <p:column headerText="Discussions" style="text-align:center;width:100px;" priority="3">
+				        <p:column headerText="#{msg['discussions']}" style="text-align:center;width:100px;" priority="3">
 				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.discussionCount}</span>
 				        </p:column>
 				        
-				        <p:column headerText="Comments" style="text-align:center;width:100px;" priority="4">
+				        <p:column headerText="#{msg['comments']}" style="text-align:center;width:100px;" priority="4">
 				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.commentCount}</span>
 				        </p:column>
 
-						<p:column headerText="Last Comment" style="text-align:right;width:200px;" priority="2">
+						<p:column headerText="#{msg['latest.comments']}" style="text-align:right;width:200px;" priority="2">
 							<div jsf:rendered="#{treeNode.type eq 'Forum' and not empty data.stat.lastComment.updateBy}">
 								<pe:timeAgo value="#{data.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy " /> by
 								

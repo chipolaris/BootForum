@@ -46,7 +46,7 @@
 									<f:param name="id" value="#{discussion.id}"/>
 									<b>#{discussion.title}</b>
 								</h:link>
-								started by
+								#{msg['started.by']} 
 								<h:link outcome="memberProfile">
 									<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
 									<f:param name="username" value="#{discussion.createBy}"/>
@@ -109,7 +109,7 @@
 					
 						<div class="w3-xlarge" 
 							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-							<i class="fa fa-comment-o"/> Most Comments Discussions
+							<i class="fa fa-comment-o"/> #{msg['most.comments.discussions']}
 						</div>
 					
 						<p:repeat var="discussion" value="#{homePage.mostCommentsDiscussions}">
@@ -118,8 +118,8 @@
 									<f:param name="id" value="#{discussion.id}"/>
 									<b>#{discussion.title}</b>
 								</h:link>
-								<b>(#{discussion.stat.commentCount} comments)</b>
-								started by
+								<b>(#{discussion.stat.commentCount} #{msg['comments']})</b>
+								#{msg['started.by']} 
 								<h:link outcome="memberProfile">
 									<span style="margin-left:5px;" title="View '#{discussion.createBy}' profile"><b>#{discussion.createBy}</b></span>
 									<f:param name="username" value="#{discussion.createBy}"/>
@@ -221,13 +221,13 @@
 			    			
 			    				<div class="w3-section w3-center">
 				    				<p>
-				    					<input type="text" name="username" placeholder="&#xf007; Enter Username" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+				    					<input type="text" name="username" placeholder="&#xf007; #{msg['enter.username']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
 				    				</p>
 				    				<p>
-				    					<input type="password" name="password" placeholder="&#xf084; Enter Password" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+				    					<input type="password" name="password" placeholder="&#xf084; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
 				    				</p>
 				    				<p>
-				    					<input type="submit" value="&#xf090; Login" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
+				    					<input type="submit" value="&#xf090; #{msg['login']}" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
 				    				</p>
 				    				<p>
 				    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> #{msg['remember.me']}
