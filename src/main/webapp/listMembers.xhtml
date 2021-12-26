@@ -73,7 +73,7 @@
 				<div>
 					<p:breadCrumb class="w3-hide-small">
 						<p:menuitem value="Home" url="#{request.contextPath}/" />
-   						<p:menuitem value="List Members" url="#{request.requestURI}" />
+   						<p:menuitem value="#{msg['list.members']}" url="#{request.requestURI}" />
 					</p:breadCrumb>
 				</div>
 				
@@ -88,7 +88,7 @@
 					<p:dataTable var="user" value="#{listMembers.genericLazyModel}" style="margin: 0 auto;" styleClass="borderless"
 						widgetVar="membersTableVar" rowIndexVar="rowIndex" paginator="true" filterEvent="enter"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} members"
+						currentPageReportTemplate="#{msg['showing']} {startRecord}-{endRecord} #{msg['of']} {totalRecords} #{msg['members']}"
 						rows="10" rowsPerPageTemplate="10,20,50" lazy="true" id="membersTable" draggableColumns="true">
 						
 						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
@@ -98,7 +98,7 @@
 						<p:column sortBy="#{user.username}" filterBy="#{user.username}">
 						
 							<f:facet name="header">
-								<h:outputText value="Username" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['username']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<span>
@@ -131,7 +131,7 @@
 						
 						<p:column sortBy="#{user.stat.discussionCount}" style="text-align:center;">
 							<f:facet name="header">
-								<h:outputText value="Discussions Created" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['discussions.started']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<span><b>#{user.stat.discussionCount}</b></span>
@@ -140,7 +140,7 @@
 
 						<p:column sortBy="#{user.stat.commentCount}" style="text-align:center;">
 							<f:facet name="header">
-								<h:outputText value="Comments" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['comments']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<span><b>#{user.stat.commentCount}</b></span>
@@ -149,7 +149,7 @@
 
 						<p:column style="text-align:center;">
 							<f:facet name="header">
-								<h:outputText value="Last Comment" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['latest.comments']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<span jsf:rendered="#{not empty user.stat.lastComment}"><pe:timeAgo value="#{user.stat.lastComment.updateDate}"/></span>
@@ -158,7 +158,7 @@
 
 						<p:column sortBy="#{user.createDate}" style="text-align:right;">
 							<f:facet name="header">
-								<h:outputText value="Joined" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['joined.date']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<h:outputText value="#{user.createDate}">
