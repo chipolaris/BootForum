@@ -129,8 +129,8 @@
  					
  					<p>
 	 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">
-							Comments: <b>#{viewDiscussion.discussion.stat.commentCount}</b>,
-							Views: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
+							#{msg['comments']}: <b>#{viewDiscussion.discussion.stat.commentCount}</b>,
+							#{msg['views']}: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
 							&#160;&#160;<i class="fa fa-chevron-right rotate" id="discussionInfoToggleIcon"/>
 						</span>
 				    </p>
@@ -223,7 +223,7 @@
 					
 					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
 						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
-						<i class="fa fa-comment-o"/> Add new Comment
+						<i class="fa fa-comment-o"/> #{msg['add.new.comment']}
 					</h:link>
 					
 					<span jsf:rendered="#{viewDiscussion.discussion.closed}" class="w3-tag w3-red"><b>Discussion is closed</b></span>
@@ -251,8 +251,12 @@
 						<div class="w3-container" style="padding:0;">
 						
 				        	<div class="w3-right-align">
-				        		<h:outputText value="#{comment.createDate} "/>
-				        		<h:outputText value="[#{rowIndex + 1}]" style="font-weight:bold;"/>
+				        		
+				        		<h:outputText value="#{comment.createDate}">
+									<f:convertDateTime pattern="MMMM dd, yyyy"/>
+								</h:outputText>				        		
+				        		
+				        		<h:outputText value=" [#{rowIndex + 1}]" style="font-weight:bold;"/>
 				        	</div>
 
 							<table>
@@ -357,7 +361,7 @@
 									
 									<p/>
 									
-									<p:fieldset legend="Thumbnails" rendered="#{not empty comment.thumbnails}" toggleable="true" collapsed="true" style="margin-bottom:10px;">
+									<p:fieldset legend="#{msg['images']}" rendered="#{not empty comment.thumbnails}" toggleable="true" collapsed="false" style="margin-bottom:10px;">
 										<bf:slideshow value="#{comment.thumbnails}" var="thumbnail" maxWidth="800px;" id="slideshow">
 										
 											<!-- <h:graphicImage value="data:#{thumbnail.contentType};base64,#{fileHandler.getCommentThumbnailBase64(thumbnail)}"/> -->
@@ -366,7 +370,7 @@
 										</bf:slideshow>
 									</p:fieldset>
 																	
-									<p:fieldset legend="Attachments" rendered="#{not empty comment.attachments}" toggleable="true" collapsed="true" style="margin-bottom:10px;">
+									<p:fieldset legend="#{msg['attachments']}" rendered="#{not empty comment.attachments}" toggleable="true" collapsed="false" style="margin-bottom:10px;">
 										
 							    		<div class="w3-row" style="padding:0">
 					
@@ -404,13 +408,13 @@
 								
 								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light">
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-reply"/> Reply
+									<i class="fa fa-reply"/> #{msg['reply']}
 								</h:link>
 								
 								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;">
 									<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
-									<i class="fa fa-quote-left"/> Quote
+									<i class="fa fa-quote-left"/> #{msg['quote']}
 								</h:link>
 					        	
 					        	<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
@@ -471,7 +475,7 @@
 				        <f:facet name="footer">
 				        	<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border" rendered="#{! viewDiscussion.discussion.closed}" >
 								<f:param name="discussionId" value="#{viewDiscussion.id}"/>
-								<i class="fa fa-comment-o"/> Add new Comment
+								<i class="fa fa-comment-o"/> #{msg['add.new.comment']}
 							</h:link>
 				            <h:outputText value="This discussion is closed" rendered="#{viewDiscussion.discussion.closed}" style="font-size:16pt; color:red;"/>
 				        </f:facet>

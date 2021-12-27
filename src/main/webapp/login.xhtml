@@ -56,16 +56,16 @@
 					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 98vw;">
 					
 						<header class="w3-container w3-padding-16 w3-theme-dark w3-center">
-							<span class="w3-xlarge"><i class="fa fa-lock"/> Login to <h:outputLink value="#{request.contextPath}" style="color:inherit">#{msg['application.title']}</h:outputLink></span>
+							<span class="w3-xlarge"><i class="fa fa-lock"/> #{msg['login.to']} <h:outputLink value="#{request.contextPath}" style="color:inherit">#{msg['application.title']}</h:outputLink></span>
 						</header>
 
 						<div class="w3-center w3-pale-green" jsf:rendered="#{param.logout_success != null}" 
 							style="line-height: 50px;">
-							<span class="w3-large">Successfully logged out</span>
+							<span class="w3-large">#{msg['successfully.logged.out']}</span>
 						</div>
 						<div class="w3-center w3-pale-red" jsf:rendered="#{param.login_error != null and SPRING_SECURITY_LAST_EXCEPTION != null}"
 							 style="line-height: 50px;">
-							<span class="w3-large">#{SPRING_SECURITY_LAST_EXCEPTION.message}. Please try again.</span>
+							<span class="w3-large">#{msg['login.failed.please.try.again']}.</span>
 						</div>
 					
 						<div class="w3-center w3-section w3-text-theme">
@@ -75,23 +75,23 @@
 		    			<form action="#{request.contextPath}/login" method="post" class="w3-container">
 		    				<div class="w3-section w3-center">
 			    				<p>
-			    					<input type="text" name="username" placeholder="&#xf007; Enter Username" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+			    					<input type="text" name="username" placeholder="&#xf007; #{msg['enter.username']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
 			    				</p>
 			    				<p>
-			    					<input type="password" name="password" placeholder="&#xf084; Enter Password" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+			    					<input type="password" name="password" placeholder="&#xf084; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
 			    				</p>
 			    				<p>
-			    					<input type="submit" value="&#xf090; Login" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
+			    					<input type="submit" value="&#xf090; #{msg['login']}" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
 			    				</p>
 			    				<p>
-			    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> Remember Me
+			    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> #{msg['remember.me']}
 			    				</p>
 		    				</div>
 		    			</form>
 					
 					    <div class="w3-container w3-border-top w3-padding-16 w3-theme-light">
-					      	<span class="w3-left">No account? <a href="#" onclick="toggleMiddleDivs('registerDiv'); return false;">Register</a></span>
-					      	<span class="w3-right">Forgot Password? <a href="#" onclick="toggleMiddleDivs('passwordResetDiv'); return false;">Reset</a></span>
+					      	<span class="w3-left">#{msg['no.account']}? <a href="#" onclick="toggleMiddleDivs('registerDiv'); return false;">#{msg['register']}</a></span>
+					      	<span class="w3-right">#{msg['forgot.password?']} <a href="#" onclick="toggleMiddleDivs('passwordResetDiv'); return false;">#{msg['reset']}</a></span>
 					    </div>
 			
 			 		</div>
@@ -182,7 +182,7 @@
 					
 					
 						<header class="w3-container w3-padding w3-theme-dark w3-center">
-							<span class="w3-xlarge"><i class="fa fa-undo"/> Reset Your Password</span>
+							<span class="w3-xlarge"><i class="fa fa-undo"/> #{msg['reset.your.password']}</span>
 						</header>
 	
 						<div class="w3-center w3-section w3-text-theme">
@@ -209,17 +209,17 @@
 	
 							<div jsf:rendered="#{not publicBackingBean.passwordResetEmailSent}" class="w3-section w3-center">
 								
-								<h5>Enter email to get password reset link.</h5>
+								<h5>#{msg['enter.email.to.get.password.reset.link']}.</h5>
 								
 								<p>
-									<p:inputText id="passwordResetEmail" value="#{publicBackingBean.passwordResetEmail}" placeholder="@ Enter email" styleClass="w3-input w3-margin-top" title="Email"
+									<p:inputText id="passwordResetEmail" value="#{publicBackingBean.passwordResetEmail}" placeholder="@#{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="Email"
 										style="font-family:Open Sans, FontAwesome;text-align:center;"
 										onblur="validPasswordResetEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 									</p:inputText>
 									<h:message for="passwordResetEmail" id="passwordResetEmailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 								</p>
 								<p>
-									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf1d8; Submit" 
+									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf1d8; #{msg['submit']}" 
 										onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" style="font-family:Open Sans, FontAwesome;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
 								</p>
 							</div>
@@ -227,8 +227,8 @@
 						</h:form>
 						
 						<div class="w3-container w3-border-top w3-padding-16 w3-theme-light">
-					      	<span class="w3-left"><a href="#" onclick="toggleMiddleDivs('loginDiv'); return false;">Login</a></span>
-					      	<span class="w3-right"><a href="#{request.contextPath}">#{msg['application.title']} Home</a></span>
+					      	<span class="w3-left"><a href="#" onclick="toggleMiddleDivs('loginDiv'); return false;">#{msg['login']}</a></span>
+					      	<span class="w3-right"><a href="#{request.contextPath}">#{msg['application.title']} #{msg['home']}</a></span>
 					    </div>
 					</div>
 				</div>					

@@ -36,7 +36,7 @@
 	  <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
 
 		<header class="w3-container w3-padding-16 w3-theme-dark">
-			<span class="w3-xlarge"><i class="fa fa-key"/> Login to #{msg['application.title']}</span>
+			<span class="w3-xlarge"><i class="fa fa-key"/> #{msg['login.to']} #{msg['application.title']}</span>
 		</header>
 		
 	    <div class="w3-center">
@@ -49,13 +49,13 @@
 			<div class="w3-section">
 			
 				<i class="fa fa-user"/> <b>User Name</b>
-				<p:inputText type="text" id="username" placeholder="Enter Username" class="w3-margin-bottom" style="width:100%;" required="true"/>
+				<p:inputText type="text" id="username" placeholder="#{msg['enter.username']}" class="w3-margin-bottom" style="width:100%;" required="true"/>
 				
 				<i class="fa fa-unlock"/> <b>Password</b>
-				<p:inputText type="password" id="password" placeholder="Enter Password" style="width:100%;" required="true"/>
+				<p:inputText type="password" id="password" placeholder="#{msg['enter.password']}" style="width:100%;" required="true"/>
 				
 				<!-- <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Login</button>
-          		<input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me -->
+          		<input class="w3-check w3-margin-top" type="checkbox" checked="checked"> #{msg['remember.me']} -->
           		
           		<p:commandButton ajax="false" value="Login" icon="fa fa-sign-in" styleClass="w3-block w3-section" action="#{loginBean.doLogin}"/>
           		
