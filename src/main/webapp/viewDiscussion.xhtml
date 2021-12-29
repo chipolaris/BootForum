@@ -145,7 +145,7 @@
 				<div class="w3-card w3-center w3-container w3-padding w3-margin-bottom" id="discussionInfo" style="display:none">
 					
 					<span class="w3-tag w3-theme-light">
-						Started by<br/>
+						#{msg['started.by']}<br/>
 						<h:link outcome="memberProfile"> 
 
 			        		<h:graphicImage value="#{requestContext}/avatar/#{viewDiscussion.discussion.createBy}" class="w3-circle"
@@ -161,7 +161,7 @@
 						<pe:timeAgo value="#{viewDiscussion.discussion.createDate}" titlePattern="MMM dd, yyyy"/>
 					</span>
 					<span class="w3-tag w3-theme-light">
-						Last comment<br/>
+						#{msg['latest.comment']}<br/>
 						<h:link outcome="memberProfile"> 
 
 			        		<h:graphicImage value="#{requestContext}/avatar/#{viewDiscussion.discussion.stat.lastComment.updateBy}" class="w3-circle"
@@ -420,7 +420,7 @@
 					        	<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
 					        		rendered="#{userSession.user.username eq comment.createBy}" >
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-pencil-square-o"/> Edit
+									<i class="fa fa-pencil-square-o"/> #{msg['edit']}
 								</h:link>	
 					        	
 					        	<!-- right side: like buttons -->
@@ -491,31 +491,31 @@
 					<p:outputPanel id="userStatOutputPanel" style="text-align:center;">
 						<p:panelGrid columns="2" rendered="#{not empty userStatManager.userStat}">
 							<f:facet name="header">
-								<h5>User <b>#{userStatManager.username}</b></h5>
+								<h5>#{msg['member']}: <b>#{userStatManager.username}</b></h5>
 							</f:facet>
 							<f:facet name="footer">
 								<h:outputLink value="memberProfile.xhtml">
-									<center><h6>View full profile</h6></center>
+									<center><h6>#{msg['view.full.profile']}</h6></center>
 									<f:param name="username" value="#{userStatManager.username}"/>
 								</h:outputLink>   
 							</f:facet>
 	
-			                <h:outputText value="Joined: " />
+			                <h:outputText value="#{msg['joined.date']}: " />
 			                <pe:timeAgo value="#{userStatManager.userStat.createDate}"/>
 			 
-			                <h:outputText value="Discussions Started: " />
+			                <h:outputText value="#{msg['discussions.started']}: " />
 			                <h:outputText value="#{userStatManager.userStat.discussionCount}" />
 			 
-			                <h:outputText value="Comments: " />
+			                <h:outputText value="#{msg['comments']}: " />
 			                <h:outputText value="#{userStatManager.userStat.commentCount}"/>
 			             
-			             	<h:outputText value="Reputation: " />
+			             	<h:outputText value="#{msg['reputation']}: " />
 			                <h:outputText value="#{userStatManager.userStat.reputation}"/>
 			             
-			                <h:outputText value="Last Login: " />
+			                <h:outputText value="#{msg['last.login']}: " />
 			                <pe:timeAgo value="#{userStatManager.userStat.lastLogin}"/>
 
-							<h:outputText value="Last Comment: " />
+							<h:outputText value="#{msg['latest.comment']}: " />
 							<pe:timeAgo value="#{userStatManager.userStat.lastComment.createDate}"/>
 			                			                						
 						</p:panelGrid>

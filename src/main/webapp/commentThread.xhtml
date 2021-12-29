@@ -12,7 +12,7 @@
     template="/WEB-INF/template/layout_public.xhtml">
 	
 	<ui:define name="title">
-		Comment Thread
+		#{msg['comment.thread']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -48,7 +48,7 @@
   				<div id="commentThreads" class="w3-container">
   					
   					<h:link outcome="viewDiscussion">
-  						<center><h4>In Discussion <b>#{commentThread.comment.discussion.title}</b></h4></center>
+  						<center><h4>#{msg['in.discussion']} <b>#{commentThread.comment.discussion.title}</b></h4></center>
   						<f:param name="id" value="#{commentThread.comment.discussion.id}"/>
   					</h:link>
   						
@@ -74,7 +74,7 @@
 											<f:param name="username" value="#{comment.createBy}"/>
 										</h:link>								
 										
-										<b>Posted <pe:timeAgo value="#{comment.createDate}"/></b>
+										<b>#{msg['posted']} <pe:timeAgo value="#{comment.createDate}"/></b>
 																				
 			 						</p>
 			 						
@@ -90,7 +90,7 @@
 								  		
 							  			<p:commandLink update=":thumbnailAttachmentsContent" oncomplete="$('#thumbnailAttachmentModal').show();">
 							  				<f:setPropertyActionListener value="#{comment}" target="#{commentThread.selectedComment}"/>
-							  				<b>[ <i class="fa fa-paperclip"/> View Thumbnails/Attachments ]</b>
+							  				<b>[ <i class="fa fa-paperclip"/> #{msg['view.images.attachments']} ]</b>
 							  			</p:commandLink>
 								  		
 								  	</p>
@@ -113,12 +113,12 @@
 					<span onclick="$('#thumbnailAttachmentModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="fa fa-paperclip"/> Comment's thumbnails/attachments</span>
+						<span class="w3-xlarge"><i class="fa fa-paperclip"/> #{msg['images.attachments']}</span>
 					</header>
 					
 					<p/>
 
-					<p:fieldset legend="Thumbnails" rendered="#{not empty commentThread.selectedComment.thumbnails}" 
+					<p:fieldset legend="#{msg['images']}" rendered="#{not empty commentThread.selectedComment.thumbnails}" 
 						toggleable="true" collapsed="false" styleClass="w3-margin">
 						<bf:slideshow value="#{commentThread.selectedComment.thumbnails}" var="thumbnail" maxWidth="800px;" id="slideshow">
 						
@@ -127,7 +127,7 @@
 						</bf:slideshow>
 					</p:fieldset>
 													
-					<p:fieldset legend="Attachments" rendered="#{not empty commentThread.selectedComment.attachments}" 
+					<p:fieldset legend="#{['attachments']}" rendered="#{not empty commentThread.selectedComment.attachments}" 
 						toggleable="true" collapsed="false" styleClass="w3-margin">
 						
 			    		<div class="w3-row">

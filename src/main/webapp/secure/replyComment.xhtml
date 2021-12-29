@@ -11,7 +11,7 @@
     template="/WEB-INF/template/layout_public.xhtml">
 
 	<ui:define name="title">
-		Reply to comment '#{replyComment.comment.title}' in discussion '#{replyComment.comment.discussion.title}'
+		#{msg['reply.to.comment']} '#{replyComment.comment.title}' #{msg['in.discussion']} '#{replyComment.comment.discussion.title}'
 	</ui:define>
 
 	<ui:define name="content">	
@@ -61,25 +61,25 @@
 				</div>
  				
  				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2 jsf:rendered="#{not empty replyComment.comment.title}">Reply to comment '#{replyComment.comment.title}'</h2>
- 					<h2 jsf:rendered="#{empty replyComment.comment.title}">Add comment to discussion '#{replyComment.reply.discussion.title}'</h2>
+ 					<h2 jsf:rendered="#{not empty replyComment.comment.title}">#{msg['reply.to.comment']} '#{replyComment.comment.title}'</h2>
+ 					<h2 jsf:rendered="#{empty replyComment.comment.title}">#{msg['add.comment.to.discussion']} '#{replyComment.reply.discussion.title}'</h2>
  				</div>
  								
-				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-comment"/> Comment</button> <!-- accordion button  -->
+				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-comment"/> #{msg['comment']}</button> <!-- accordion button  -->
 			
 				<div id="commentPanel" class="w3-container w3-animate-right w3-hide w3-show">
 					
 					<h:form id="replyForm">
 				
 						<p/>
-						<b>Reply Title</b>
+						<b>#{msg['reply.title']}</b>
 						<p/>
 						
 						<p:inputText value="#{replyComment.reply.title}" style="width:100%;" maxlength="255">
 							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
 						</p:inputText>
 						<p/>
-						<b>Comment</b>
+						<b>#{msg['comment']}</b>
 						<p/>
 						
 						<!-- 
@@ -103,18 +103,18 @@
 					
 				</div>
 				
-				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-image"/> Thumbnails</button> <!-- accordion button  -->
+				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-image"/> #{msg['images']}</button> <!-- accordion button  -->
 					
 				<div jsf:id="thumbnailPanel" class="w3-container w3-animate-right w3-hide w3-hide">
 					<h:form>
 
 						<p>
-				      		<b>Current Thumbnails:</b>
+				      		<b>#{msg['current.images']}:</b>
 						</p>
 						
 						<h6>
-							(Limit #{applicationProperties['Comment.thumbnail.maxPerComment']} thumbnails per comment,
-							 #{applicationProperties['Comment.thumbnail.maxPerComment'] - fn:length(replyComment.commentThumbnailManagement.uploadedFileList)} left)
+							(#{msg['limit']} #{applicationProperties['Comment.thumbnail.maxPerComment']} #{msg['images.per.comment']},
+							 #{applicationProperties['Comment.thumbnail.maxPerComment'] - fn:length(replyComment.commentThumbnailManagement.uploadedFileList)} #{msg['left']})
 						</h6>
 
 
@@ -152,7 +152,7 @@
 						
 						<p:fileUpload listener="#{replyComment.commentThumbnailManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');"
 		        			update=":thumbnailPanel" auto="true" sizeLimit="#{applicationProperties['Comment.thumbnail.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
-		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(replyComment.commentThumbnailManagement.uploadedFileList)}"/>
+		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(replyComment.commentThumbnailManagement.uploadedFileList)}" label="#{msg['choose']}"/>
           				
           				<p/>
           					
@@ -160,19 +160,19 @@
 					
 				</div>
 				
-				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-paperclip"/> Attachments</button> <!-- accordion button  -->
+				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-paperclip"/> #{msg['attachments']}</button> <!-- accordion button  -->
 					
 				<div jsf:id="attachmentPanel" class="w3-container w3-animate-right w3-hide w3-hide">
 				      
 			      	<h:form>
 			      
 			      		<p>
-				      		<b>Current Attachments:</b>
+				      		<b>#{msg['current.attachments']}:</b>
 						</p>
 						
 						<h6>
-							(Limit #{applicationProperties['Comment.attachment.maxPerComment']} attachments per comment,
-							#{applicationProperties['Comment.attachment.maxPerComment'] - fn:length(replyComment.commentAttachmentManagement.uploadedFileList)} left)
+							(#{msg['limit']} #{applicationProperties['Comment.attachment.maxPerComment']} #{msg['attachments.per.comment']},
+							#{applicationProperties['Comment.attachment.maxPerComment'] - fn:length(replyComment.commentAttachmentManagement.uploadedFileList)} #{msg['left']})
 						</h6>
 
 						<div class="w3-row" style="padding:0">										
@@ -209,7 +209,7 @@
 						
 						<p:fileUpload listener="#{replyComment.commentAttachmentManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');"
 			        			update=":attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Comment.attachment.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
-			        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(replyComment.commentAttachmentManagement.uploadedFileList)}"/>
+			        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(replyComment.commentAttachmentManagement.uploadedFileList)}" label="#{msg['choose']}"/>
 		          		
 		          		<p/>
 				
@@ -228,7 +228,7 @@
 						 -->
 						 
 						 <!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['generic.form.submit']}" type="button" icon="fa fa-check-square" onclick="submitReplyForm();" styleClass="w3-btn w3-theme-dark w3-border-0"/>
+						<p:commandButton value="#{msg['submit']}" type="button" icon="fa fa-check-square" onclick="submitReplyForm();" styleClass="w3-btn w3-theme-dark w3-border-0"/>
 					
 					</h:form>
 					

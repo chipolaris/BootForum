@@ -46,13 +46,13 @@
 				<div>
 					<p:breadCrumb class="w3-hide-small">
 						<p:menuitem value="Home" url="#{request.contextPath}/" />
-						<p:menuitem value="Members" url="#{request.contextPath}/listMembers.xhtml" />
-   						<p:menuitem value="Member Profile: &lt;b&gt;#{memberProfile.username}&lt;/b&gt;" url="#{request.requestURI}?#{request.queryString}" escape="false"/>
+						<p:menuitem value="#{msg['members']}" url="#{request.contextPath}/listMembers.xhtml" />
+   						<p:menuitem value="#{msg['member.profile']}: &lt;b&gt;#{memberProfile.username}&lt;/b&gt;" url="#{request.requestURI}?#{request.queryString}" escape="false"/>
 					</p:breadCrumb>
 				</div>
 				
 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2>Member Profile</h2>
+ 					<h2>#{msg['member.profile']}</h2>
  				</div>
  				
  				<div class="w3-panel w3-center">
@@ -71,35 +71,35 @@
 					</div>
  					
  					<div class="w3-section">
- 						Username: <b>#{memberProfile.user.username}</b>
+ 						#{msg['username']}: <b>#{memberProfile.user.username}</b>
  					</div>
  					
  					<div class="w3-section">
- 						Join: <b><pe:timeAgo value="#{memberProfile.user.createDate}"/></b>
+ 						#{msg['joined.date']}: <b><pe:timeAgo value="#{memberProfile.user.createDate}"/></b>
  					</div>
  					
  					<div class="w3-section">
- 						Discussion Started: <b>#{memberProfile.user.stat.discussionCount}</b>
+ 						#{msg['discussions.started']}: <b>#{memberProfile.user.stat.discussionCount}</b>
  					</div>
  					
  					<div class="w3-section">
- 						Comments: <b>#{memberProfile.user.stat.commentCount}</b>
+ 						#{msg['comments']}: <b>#{memberProfile.user.stat.commentCount}</b>
  					</div>
  
  					<div class="w3-section">
- 						Uploaded Comment Thumbnails: <b>#{memberProfile.user.stat.commentThumbnailCount}</b>
+ 						#{msg['uploaded.images']}: <b>#{memberProfile.user.stat.commentThumbnailCount}</b>
  					</div>
  					
  					<div class="w3-section">
- 						Uploaded Comment Attachments: <b>#{memberProfile.user.stat.commentAttachmentCount}</b>
+ 						#{msg['uploaded.attachments']}: <b>#{memberProfile.user.stat.commentAttachmentCount}</b>
  					</div>
  										
  					<div class="w3-section">
- 						Reputation: <b>#{memberProfile.user.stat.reputation}</b>
+ 						#{msg['reputation']}: <b>#{memberProfile.user.stat.reputation}</b>
  					</div>			
  
 					<div class="w3-section">
- 						Last Login: <b><pe:timeAgo value="#{memberProfile.user.stat.lastLogin}"/></b>
+ 						#{msg['last.login']}: <b><pe:timeAgo value="#{memberProfile.user.stat.lastLogin}"/></b>
  					</div>
  					
  					<!-- if logged in, show the send private message link -->
@@ -116,7 +116,7 @@
  				</div>
  				
  				<div class="w3-border-top">
- 					<h4>Recent Comments:</h4>
+ 					<h4>#{msg['recent.comments']}:</h4>
  				</div>
  				
  				<div id="latestComments" class="w3-container">
@@ -124,9 +124,9 @@
  						
 						<div class="w3-panel w3-round-large w3-padding w3-theme-l5">
 							<p>
-								<b>Posted <pe:timeAgo value="#{comment.createDate}"/>:&#160;</b>
+								<b>#{msg['posted']} <pe:timeAgo value="#{comment.createDate}"/>:&#160;</b>
 								<h:outputLink value="commentThread.xhtml?id=#{comment.id}"><span><b>'#{comment.title}'</b></span></h:outputLink>
-								in discussion <h:outputLink value="viewDiscussion.xhtml?id=#{comment.discussion.id}"><span class="w3-large">#{comment.discussion.title}</span></h:outputLink>
+								#{msg['in.discussion']} <h:outputLink value="viewDiscussion.xhtml?id=#{comment.discussion.id}"><span class="w3-large">#{comment.discussion.title}</span></h:outputLink>
 	 						</p>
 							
 							<p>
