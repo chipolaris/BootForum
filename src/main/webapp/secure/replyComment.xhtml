@@ -75,27 +75,31 @@
 						<b>#{msg['reply.title']}</b>
 						<p/>
 						
-						<p:inputText value="#{replyComment.reply.title}" style="width:100%;" maxlength="255">
-							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+						<p:inputText id="commentTitle" value="#{replyComment.reply.title}" style="width:100%;" maxlength="255" 
+							required="true" requiredMessage="#{msg['comment.title.required']}">
+							
 						</p:inputText>
+						<h:message id="titleError" for="commentTitle" styleClass="w3-pale-red"/>
+												
 						<p/>
-						<b>#{msg['comment']}</b>
+						<b>#{msg['content']}</b>
 						<p/>
-						
+												
 						<!-- 
 							Note (10/22/2019): Primefaces textEditor component (based on Quill JS text editor) has 
 							issues with the quoting feature where it add multi-lines.
 							Therefore, use PrimefacesExtension's ckEditor for now
 						-->
-						<pe:ckEditor value="#{replyComment.reply.content}" skin="moono-lisa" width="100%"
+						<pe:ckEditor id="content" value="#{replyComment.reply.content}" skin="moono-lisa" width="100%" required="true"
 							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
 										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
 										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
-										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]">
-							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" requiredMessage="#{msg['comment.message.required']}">
 						</pe:ckEditor>
 						
-						<p:remoteCommand name="submitReplyForm" action="#{replyComment.submit}"/>
+						<h:message id="contentError" for="content" styleClass="w3-pale-red"/>
+												
+						<p:remoteCommand name="submitReplyForm" action="#{replyComment.submit}" update=":replyForm:titleError :replyForm:contentError"/>
 							
 						<p/>							
 					

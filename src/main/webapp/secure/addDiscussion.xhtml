@@ -81,9 +81,12 @@
 						<b>Discussion Title</b>
 						<p/>
 						
-						<p:inputText value="#{addDiscussion.discussion.title}" style="width:100%;" maxlength="255">
-							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+						<p:inputText id="discussionTitle" value="#{addDiscussion.discussion.title}" style="width:100%;" maxlength="255" 
+							required="true" requiredMessage="#{msg['discussion.title.required']}">
+							
 						</p:inputText>
+						<h:message id="titleError" for="discussionTitle" styleClass="w3-pale-red"/>
+						
 						<p/>
 						<b>Comment</b>
 						<p/>
@@ -93,15 +96,16 @@
 							issues with the quoting feature where it add multi-lines.
 							Therefore, use PrimefacesExtension's ckEditor for now
 						-->
-						<pe:ckEditor value="#{addDiscussion.comment.content}" skin="moono-lisa" width="100%"
+						<pe:ckEditor id="content" value="#{addDiscussion.comment.content}" skin="moono-lisa" width="100%" required="true"
 							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
 										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
 										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
-										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]">
-							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" requiredMessage="#{msg['discussion.message.required']}">
+							
 						</pe:ckEditor>
+						<h:message id="contentError" for="content" styleClass="w3-pale-red"/>
 						
-						<p:remoteCommand name="submitDiscussionForm" action="#{addDiscussion.submit}"/>
+						<p:remoteCommand name="submitDiscussionForm" action="#{addDiscussion.submit}" update=":discussionForm:titleError :discussionForm:contentError"/>
 							
 						<p/>							
 					
