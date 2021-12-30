@@ -9,7 +9,7 @@
     template="/WEB-INF/template/layout_public.xhtml">
 	
 	<ui:define name="title">
-		List Discussions
+		#{msg['list.discussions']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -44,35 +44,35 @@
 				<div class="w3-hide-small">
 					<p:breadCrumb>
 						<p:menuitem value="Home" url="#{request.contextPath}/" />
-   						<p:menuitem value="List Discussions" url="#{request.requestURI}?#{request.queryString}" />
+   						<p:menuitem value="#{msg['list.discussions']}" url="#{request.requestURI}?#{request.queryString}" />
 					</p:breadCrumb>
 				</div>
 
 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2>List Discussions</h2>
+ 					<h2>#{msg['list.discussions']}</h2>
  				</div>
 				
 				<div jsf:id="paginationDiv">
-					<b>Sort By:</b>
+					<b>#{msg['sort.by']}:</b>
 					
 					<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{empty listDiscussions.sort or listDiscussions.sort eq 'createDate'}">
-						<span class="w3-tag w3-round w3-large #{empty listDiscussions.sort or listDiscussions.sort eq 'createDate' ? 'w3-white w3-border' : 'w3-theme-d1'}">Date Started <i class="fa fa-clock-o"/></span>
+						<span class="w3-tag w3-round w3-large #{empty listDiscussions.sort or listDiscussions.sort eq 'createDate' ? 'w3-white w3-border' : 'w3-theme-d1'}">#{msg['date.started']} <i class="fa fa-clock-o"/></span>
 						<f:setPropertyActionListener value="createDate" target="#{listDiscussions.sort}"/>
 					</p:commandLink>
 					
 					<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{listDiscussions.sort eq 'stat.commentCount'}">
-						<span class="w3-tag w3-round w3-large #{listDiscussions.sort eq 'stat.commentCount' ? 'w3-white w3-border' : 'w3-theme-d1'}">Comment Count <i class="fa fa-comment-o"/></span>
+						<span class="w3-tag w3-round w3-large #{listDiscussions.sort eq 'stat.commentCount' ? 'w3-white w3-border' : 'w3-theme-d1'}">#{msg['comment.count']} <i class="fa fa-comment-o"/></span>
 						<f:setPropertyActionListener value="stat.commentCount" target="#{listDiscussions.sort}"/>
 					</p:commandLink>
 					
 					<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{listDiscussions.sort eq 'stat.viewCount'}">
-						<span class="w3-tag w3-round w3-large #{listDiscussions.sort eq 'stat.viewCount' ? 'w3-white w3-border' : 'w3-theme-d1'}">View Count <i class="fa fa-eye"/></span>
+						<span class="w3-tag w3-round w3-large #{listDiscussions.sort eq 'stat.viewCount' ? 'w3-white w3-border' : 'w3-theme-d1'}">#{msg['view.count']} <i class="fa fa-eye"/></span>
 						<f:setPropertyActionListener value="stat.viewCount" target="#{listDiscussions.sort}"/>
 					</p:commandLink>
 					
 					&#160;&#160; <!-- add some white spaces for separation -->
 					
-					<b>Sort Order:</b>
+					<b>#{msg['sort.order']}:</b>
 
 					<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{listDiscussions.order eq 'asc'}">
 						<span class="w3-tag w3-round w3-large #{listDiscussions.order eq 'asc' ? 'w3-white w3-border' : 'w3-theme-d3'}"><i class="fa fa-arrow-up"/></span>
@@ -86,7 +86,7 @@
 					
 					&#160;&#160; <!-- add some white spaces for separation -->
 					
-					<b>Page Size:</b>
+					<b>#{msg['page.size']}:</b>
 					
 					<ui:repeat var="pageSize" value="#{[10, 20, 50]}">
 						<p:commandLink ajax="true" action="#{listDiscussions.onLoad}" update=":form :paginationDiv" disabled="#{listDiscussions.pageSize eq pageSize}">
@@ -105,13 +105,13 @@
 						rowIndexVar="rowIndex" chunkSize="#{listDiscussions.pageSize}"> 
 												
 						<f:facet name="loader">
-							<input type="button" value="Show More &#xf078;" class="w3-btn w3-theme-l1" style="font-family:Open Sans, FontAwesome;"/>
+							<input type="button" value="#{msg['view.more']} &#xf078;" class="w3-btn w3-theme-l1" style="font-family:Open Sans, FontAwesome;"/>
 						</f:facet>
 						
 						<p>
 							<h:outputLink value="viewDiscussion.xhtml?id=#{discussion.id}"><b>#{discussion.title}</b></h:outputLink>
-							<b>(#{discussion.stat.commentCount} comments, #{discussion.stat.viewCount} views)</b>
-							created by
+							<b>(#{discussion.stat.commentCount} #{msg['comments']}, #{discussion.stat.viewCount} #{msg['views']})</b>
+							#{msg['created.by']}
 							<h:link outcome="memberProfile"> 
 								<b>#{discussion.createBy}</b>
 								<f:param name="username" value="#{discussion.createBy}"/>
@@ -123,7 +123,7 @@
 									<f:param name="id" value="#{tag.id}"/>
 								</h:link>
 							</p:repeat>
-							[in forum 
+							[#{msg['in.forum']} 
 							<h:outputLink value="viewForum.xhtml">
 								<b>#{discussion.forum.title}</b>
 								<f:param name="id" value="#{discussion.forum.id}"/>

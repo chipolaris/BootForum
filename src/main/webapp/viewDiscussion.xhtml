@@ -325,17 +325,17 @@
 									</div>
 					        		
 					        		<div class="w3-opacity">
-					        			By #{comment.replyTo.createBy} on #{comment.replyTo.createDate}. Last edited on #{comment.replyTo.updateDate}
+					        			#{msg['By']} #{comment.replyTo.createBy} #{msg['on']} #{comment.replyTo.createDate}. #{msg['last.edited.on']} #{comment.replyTo.updateDate}
 					        		</div>
 					        		
 					        		<p/>
 					        		
 					        		<a onclick="$('#replyTo_#{rowIndex}_Div').hide();" style="cursor:pointer;font-size: large;">
-					        			[ <i class="fa fa-caret-up" title="Collapse"/> Collapse ]
+					        			[ <i class="fa fa-caret-up" title="Collapse"/> #{msg['collapse']} ]
 					        		</a>
 					        		
 					        		<h:link outcome="commentThread">
-								    	<b>[View this comment thread]</b>
+								    	<b>[#{msg['view.this.comment.thread']}]</b>
 								    	<f:param name="id" value="#{comment.id}"/>
 								    </h:link>
 					        		
@@ -427,13 +427,13 @@
 					        	<p:outputLabel value="#{comment.commentVote.voteDownCount}"
 				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-l2 w3-right w3-round" id="voteDownScore"/>
 				        			
-				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="Dislike" action="#{voteManager.voteDown(comment)}" process="@this" 
+				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="#{msg['dislike']}" action="#{voteManager.voteDown(comment)}" process="@this" 
 				        			update="growl voteDownScore" styleClass="w3-right"><i class="fa fa-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
 					        	
 				        		<p:outputLabel value="#{comment.commentVote.voteUpCount}" 
 				        			style="margin: 0px 15px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d2 w3-right w3-round" id="voteUpScore"/>					        	
 					        							    
-				        		<p:commandLink title="Like" action="#{voteManager.voteUp(comment)}" process="@this" 
+				        		<p:commandLink title="#{msg['like']}" action="#{voteManager.voteUp(comment)}" process="@this" 
 				        			update="growl voteUpScore" styleClass="w3-right"><i class="fa fa-thumbs-up fa-2x w3-opacity"/></p:commandLink>
 						    </div>
 
@@ -458,13 +458,13 @@
 								</h:link>
 					        	
 					        	<!-- right side: like buttons -->
-				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="Dislike" action="#{voteManager.voteDown(comment)}" process="@this" 
+				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="#{msg['dislike']}" action="#{voteManager.voteDown(comment)}" process="@this" 
 				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="fa fa-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
 					        	
 				        		<p:outputLabel value="#{comment.commentVote.voteUpCount - comment.commentVote.voteDownCount}" id="voteScoreMobile" 
 				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d1 w3-right w3-round"/>					        	
 					        							    
-				        		<p:commandLink title="Like" action="#{voteManager.voteUp(comment)}" process="@this" 
+				        		<p:commandLink title="#{msg['like']}" action="#{voteManager.voteUp(comment)}" process="@this" 
 				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="fa fa-thumbs-up fa-2x w3-opacity"/></p:commandLink>
 						    </div>
 				        					        					        

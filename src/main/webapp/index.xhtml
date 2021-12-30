@@ -193,21 +193,21 @@
 								</p>
 								<p>
 									<h:link outcome="/secure/privateMessages">
-										<i class="fa fa-envelope-o fa-fw"></i> My Messages
+										<i class="fa fa-envelope-o fa-fw"></i> #{msg['my.private.messages']}
 									</h:link>
 								</p>
 								<p>
 									<h:link outcome="/secure/switchTheme">
-										<i class="fa fa-paint-brush fa-fw"></i> UI Theme/Color
+										<i class="fa fa-paint-brush fa-fw"></i> #{msg['ui.theme.color']}
 									</h:link>
 								</p>
 								<p>
 									<h:link outcome="/chat/index">
-										<i class="fa fa-commenting fa-fw"></i> Chat Rooms
+										<i class="fa fa-commenting fa-fw"></i> #{msg['chat.rooms']}
 									</h:link>
 								</p>								
 								<p>
-									<a href="#{request.contextPath}/logout"><i class="fa fa-sign-out fa-fw"/> Logout</a>
+									<a href="#{request.contextPath}/logout"><i class="fa fa-sign-out fa-fw"/> #{msg['logout']}</a>
 								</p>
 							</div>
 						</sec:authorize>
