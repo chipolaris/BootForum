@@ -3,6 +3,7 @@ package com.github.chipolaris.bootforum.jsf.bean;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,8 +114,10 @@ public class ReplyComment {
 				this.reply.setReplyTo(this.comment);
 				this.reply.setDiscussion(this.comment.getDiscussion());
 				
-				if(quote != null && quote) {
-					reply.setTitle("Re: " + comment.getTitle());
+				if(Boolean.TRUE.equals(quote)) {
+					if(!StringUtils.startsWith(comment.getTitle(), "Re: ")) {
+						reply.setTitle("Re: " + comment.getTitle());
+					}
 					reply.setContent(String.format("<blockquote>%s said:%s</blockquote><br/>", comment.getCreateBy(), comment.getContent()));
 				}
 				

@@ -76,14 +76,17 @@
 					<h:form id="editForm">
 				
 						<p/>
-						<b>Comment Title</b>
+						<b>#{msg['title']}</b>
 						<p/>
 						
-						<p:inputText value="#{editComment.comment.title}" style="width:100%;" maxlength="255">
-							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+						<p:inputText id="title" value="#{editComment.comment.title}" styleClass="w3-input" maxlength="255" 
+							required="true" requiredMessage="#{msg['comment.title.required']}">
+							
 						</p:inputText>
+						<h:message id="titleError" for="title" styleClass="w3-pale-red"/>
+						
 						<p/>
-						<b>Comment</b>
+						<b>#{msg['content']}</b>
 						<p/>
 						
 						<!-- 
@@ -91,17 +94,25 @@
 							issues with the quoting feature where it add multi-lines.
 							Therefore, use PrimefacesExtension's ckEditor for now
 						-->
-						<pe:ckEditor value="#{editComment.comment.content}" skin="moono-lisa" width="100%"
+						<pe:ckEditor id="content" value="#{editComment.comment.content}" skin="moono-lisa" width="100%"  required="true"
 							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
 										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
 										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
-										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]">
-							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" requiredMessage="#{msg['comment.message.required']}">
 						</pe:ckEditor>
+						<h:message id="contentError" for="content" styleClass="w3-pale-red"/>
 						
 						<p/>
 						
-						<p:commandButton value="#{msg['generic.form.submit']}" ajax="true" icon="fa fa-check-square" action="#{editComment.submit}"/>
+						<p:commandButton value="#{msg['save.and.continue']}" ajax="true" icon="fa fa-check" 
+							action="#{editComment.submit(true)}" styleClass="w3-btn w3-border w3-theme-dark w3-border-0" update="titleError contentError"/>
+						
+						<p:commandButton value="#{msg['save.and.go.to.discussion']}" ajax="true" icon="fa fa-check" 
+							action="#{editComment.submit(false)}" styleClass="w3-btn w3-theme-dark w3-border-0"/>
+
+						<p:linkButton outcome="/viewDiscussion" value="#{msg['cancel']}" icon="fa fa-close" styleClass="w3-btn w3-theme-dark w3-border-0">
+							<f:param name="id" value="#{editComment.comment.discussion.id}"/>
+						</p:linkButton>
 							
 						<p/>
 					

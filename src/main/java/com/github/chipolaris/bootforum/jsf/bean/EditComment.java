@@ -96,7 +96,7 @@ public class EditComment {
 		}
 	}
 	
-	public void submit() {
+	public String submit(boolean isContinue) {
 		
 		logger.info("Edit comment (id): " + comment.getId());
 		
@@ -105,10 +105,17 @@ public class EditComment {
 		
 		if(serviceResponse.getAckCode() == AckCodeType.FAILURE) {
 			JSFUtils.addServiceErrorMessage(null, serviceResponse);
+			return null;
 		}
 		else {
 			JSFUtils.addInfoStringMessage(null, "Comment updated");
 			this.comment = serviceResponse.getDataObject();
+			
+			if(isContinue) {
+				return null;
+			}
+			
+			return "/viewDiscussion?faces-redirect=true&id=" + this.comment.getDiscussion().getId(); 
 		}
 	}
 	
