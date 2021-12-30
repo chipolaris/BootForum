@@ -66,10 +66,10 @@
 				</div>
  				
  				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2 jsf:rendered="#{not empty editComment.comment.title}">Edit comment '#{editComment.comment.title}'</h2>
+ 					<h2 jsf:rendered="#{not empty editComment.comment.title}">#{msg['edit.comment']} '#{editComment.comment.title}'</h2>
  				</div>
  								
-				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-comment"/> Comment</button> <!-- accordion button  -->
+				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-comment"/> #{msg['comment']}</button> <!-- accordion button  -->
 			
 				<div id="commentPanel" class="w3-container w3-animate-right w3-hide w3-show">
 					
@@ -120,18 +120,18 @@
 					
 				</div>
 				
-				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-image"/> Thumbnails</button> <!-- accordion button  -->
+				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-image"/> #{msg['images']}</button> <!-- accordion button  -->
 					
 				<div jsf:id="thumbnailPanel" class="w3-container w3-animate-right w3-hide w3-hide">
 					<h:form>
 
 						<p>
-				      		<b>Current Thumbnails:</b>
+				      		<b>#{msg['current.images']}:</b>
 						</p>
 						
 						<h6>
-							(Limit #{applicationProperties['Comment.thumbnail.maxPerComment']} thumbnails per comment,
-							 #{applicationProperties['Comment.thumbnail.maxPerComment'] - fn:length(editComment.comment.thumbnails)} left)
+							(#{msg['limit']} #{applicationProperties['Comment.thumbnail.maxPerComment']} #{msg['images.per.comment']},
+							 #{applicationProperties['Comment.thumbnail.maxPerComment'] - fn:length(editComment.comment.thumbnails)} #{msg['images.per.comment']})
 						</h6>
 
 
@@ -169,7 +169,7 @@
 						
 						<p:fileUpload listener="#{editComment.uploadThumbnail}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();"
 		        			update=":thumbnailPanel" auto="true" sizeLimit="#{applicationProperties['Comment.thumbnail.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
-		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(editComment.comment.thumbnails)}"/>
+		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(editComment.comment.thumbnails)}" label="#{msg['choose']}"/>
           				
           				<p/>
           					
@@ -177,19 +177,19 @@
 					
 				</div>
 				
-				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-paperclip"/> Attachments</button> <!-- accordion button  -->
+				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-paperclip"/> #{msg['attachments']}</button> <!-- accordion button  -->
 					
 				<div jsf:id="attachmentPanel" class="w3-container w3-animate-right w3-hide w3-hide">
 				      
 			      	<h:form>
 			      
 			      		<p>
-				      		<b>Current Attachments:</b>
+				      		<b>#{msg['current.attachments']}:</b>
 						</p>
 						
 						<h6>
-							(Limit #{applicationProperties['Comment.attachment.maxPerComment']} attachments per comment,
-							#{applicationProperties['Comment.attachment.maxPerComment'] - fn:length(editComment.comment.attachments)} left)
+							(#{msg['limit']} #{applicationProperties['Comment.attachment.maxPerComment']} #{msg['attachments.per.comment']},
+							#{applicationProperties['Comment.attachment.maxPerComment'] - fn:length(editComment.comment.attachments)} #{msg['left']})
 						</h6>
 
 						<div class="w3-row" style="padding:0">										
@@ -226,7 +226,7 @@
 						
 						<p:fileUpload listener="#{editComment.uploadAttachment}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();"
 		        			update=":attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Comment.attachment.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
-		        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(editComment.comment.attachments)}"/>
+		        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(editComment.comment.attachments)}" label="#{msg['choose']}"/>
 		          		
 		          		<p/>
 				
