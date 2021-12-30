@@ -106,7 +106,7 @@
 					<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
 						<div class="w3-section">								
 							<h:link outcome="/secure/privateMessages">
-								<span><i class="fa fa-paper-plane"/> Send private message to <b>#{memberProfile.user.username}</b></span>
+								<span><i class="fa fa-paper-plane"/> #{msg['send.private.message.to']} <b>#{memberProfile.user.username}</b></span>
 								<f:param name="viewTab" value="newTab"/>
 								<f:param name="to" value="#{memberProfile.user.username}"/>
 							</h:link>
