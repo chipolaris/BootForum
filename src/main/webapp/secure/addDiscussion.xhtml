@@ -238,13 +238,9 @@
 						 -->
 						 
 						 <!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['generic.form.submit']}" type="button" icon="fa fa-check" onclick="submitDiscussionForm();" 
-							styleClass="w3-btn w3-theme-dark w3-border-0"/>
+						<p:commandButton value="#{msg['generic.form.submit']}" type="button" icon="fa fa-check" onclick="submitDiscussionForm();" />
+						<p:button onclick="javascript:history.go(-1);return;" value="#{msg['cancel']}" icon="fa fa-close"/>
 						
-						<p:linkButton outcome="/viewForum" value="#{msg['cancel']}" icon="fa fa-close" styleClass="w3-btn w3-theme-dark w3-border-0">
-							<f:param name="id" value="#{addDiscussion.discussion.forum.id}"/>
-						</p:linkButton>
-					
 					</h:form>
 					
 				</h:panelGroup>					
