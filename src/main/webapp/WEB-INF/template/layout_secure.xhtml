@@ -69,9 +69,11 @@
 		    	
 		    <div class="w3-col s9 w3-bar">
 		      <div class="w3-center"><strong>#{empty userSession.user.person.firstName and empty userSession.user.person.lastName ? userSession.user.username : userSession.user.person.firstName += ' ' += userSession.user.person.lastName}</strong></div>
-		      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
-		      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
-		      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+		      
+		      <h:link outcome="index" styleClass="w3-bar-item w3-button"><i class="fa fa-dashboard"/></h:link>
+		      <h:link outcome="privateMessages" styleClass="w3-bar-item w3-button"><i class="fa fa-envelope"/></h:link>
+		      <h:link outcome="accountInfo" styleClass="w3-bar-item w3-button"><i class="fa fa-user"/></h:link>
+		     
 		    </div>
 		    
 		    <sec:authorize url="/admin">
@@ -83,7 +85,7 @@
 		  </div>
 		  <hr/>
 		  <div class="w3-container">
-		    <h5>Dashboard</h5>
+		    <h5><b>Dashboard</b></h5>
 		  </div>
 		  <div class="w3-bar-block">
 		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>

@@ -75,7 +75,7 @@
 						<b>#{msg['reply.title']}</b>
 						<p/>
 						
-						<p:inputText id="title" value="#{replyComment.comment.title}" style="width:100%;" maxlength="255" 
+						<p:inputText id="title" value="#{replyComment.reply.title}" style="width:100%;" maxlength="255" 
 							required="true" requiredMessage="#{msg['comment.title.required']}">
 							
 						</p:inputText>
@@ -90,7 +90,7 @@
 							issues with the quoting feature where it add multi-lines.
 							Therefore, use PrimefacesExtension's ckEditor for now
 						-->
-						<pe:ckEditor id="content" value="#{replyComment.comment.content}" skin="moono-lisa" width="100%" required="true"
+						<pe:ckEditor id="content" value="#{replyComment.reply.content}" skin="moono-lisa" width="100%" required="true"
 							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
 										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
 										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
@@ -230,10 +230,8 @@
 						 -->
 						 
 						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['submit']}" type="button" icon="fa fa-check" onclick="submitReplyForm();" styleClass="w3-btn w3-theme-dark w3-border-0"/>
-						<p:linkButton outcome="/viewDiscussion" value="#{msg['cancel']}" icon="fa fa-close" styleClass="w3-btn w3-theme-dark w3-border-0">
-							<f:param name="id" value="#{replyComment.comment.discussion.id}"/>
-						</p:linkButton>
+						<p:commandButton value="#{msg['submit']}" type="button" icon="fa fa-check" onclick="submitReplyForm();"/>
+						<p:button onclick="javascript:history.back();return;" value="#{msg['cancel']}" icon="fa fa-close"/>
 					</h:form>
 					
 				</h:panelGroup>					
