@@ -5,59 +5,99 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 
 /**
  * Utility class to sends email.
  */
-@Service
 public class EmailSender {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmailSender.class);
 	
 	private JavaMailSenderImpl javaMailSender;
-
-	@Value("${Email.smtp.host}")
-	private String host;
-
-	@Value("${Email.smtp.port}")
-	private Integer port;
 	
-	@Value("${Email.smtp.username}")
-	private String username;
+	public static Builder builder() {
+		return new Builder();
+	}
 	
-	@Value("${Email.smtp.password}")
-	private String password;
-	
-	@PostConstruct
-	public void init() {
+	public static class Builder {
 		
-		/* 
-		 * instantiate and initialize javaMailSender with properties that
-		 * taken from the config properties
-		 */
-		javaMailSender = new JavaMailSenderImpl();
-		javaMailSender.setHost(this.host);
-		javaMailSender.setPort(this.port);
-		javaMailSender.setUsername(this.username);
-		javaMailSender.setPassword(this.password);
+		private Builder() {
+			this.emailSender = new EmailSender();
+		}
 		
-		Properties javaMailProperties = new Properties();
-		javaMailProperties.put("mail.smtp.auth", true);
-		javaMailProperties.put("mail.smtp.starttls.enable", true);
-		javaMailSender.setJavaMailProperties(javaMailProperties);
+		private EmailSender emailSender;
+		
+		private String host;
+
+		private Integer port;
+		
+		private String username;
+		
+		private String password;
+		
+		private Boolean authentication;
+		
+		private Boolean tlsEnable;
+		
+		public Builder host(String host) {
+			this.host = host;
+			return this;
+		}
+		
+		public Builder port(Integer port) {
+			this.port = port;
+			return this;
+		}
+		
+		public Builder username(String username) {
+			this.username = username;
+			return this;
+		}
+		
+		public Builder password(String password) {
+			this.password = password;
+			return this;
+		}
+		
+		public Builder authentication(Boolean authentication) {
+			this.authentication = authentication;
+			return this;
+		}
+		
+		public Builder tlsEnable(Boolean tlsEnable) {
+			this.tlsEnable = tlsEnable;
+			return this;
+		}
+		
+		public EmailSender build() {
+			
+			/* 
+			 * instantiate and initialize javaMailSender with properties that
+			 * taken from the config properties
+			 */
+			emailSender.javaMailSender = new JavaMailSenderImpl();
+			emailSender.javaMailSender.setHost(this.host);
+			emailSender.javaMailSender.setPort(this.port);
+			emailSender.javaMailSender.setUsername(this.username);
+			emailSender.javaMailSender.setPassword(this.password);
+			
+			Properties javaMailProperties = new Properties();
+			javaMailProperties.put("mail.smtp.auth", this.authentication);
+			javaMailProperties.put("mail.smtp.starttls.enable", this.tlsEnable);
+			emailSender.javaMailSender.setJavaMailProperties(javaMailProperties);
+			
+			return emailSender;
+		}
 	}
 	
 	/**

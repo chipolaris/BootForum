@@ -3,8 +3,9 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:p="http://primefaces.org/ui"
-    template="/WEB-INF/template/layout.xhtml">
+    template="/WEB-INF/template/layout_public.xhtml">
     
     <ui:define name="title">
 		Email Confirmation
@@ -14,13 +15,25 @@
 
 		<!-- set request parameter values from URL to backing bean -->
 		<f:metadata>
-			<f:viewParam name="key" value="#{emailConfirmation.key}" required="true" requiredMessage="Valid key is required" />
+			<f:viewParam name="id" value="#{emailConfirmation.key}" required="true" requiredMessage="Valid key is required" />
 			<f:viewAction action="#{emailConfirmation.onLoad}"/>
 		</f:metadata>
 		
 		<p:messages id="messages" showDetail="true" showSummary="false">
 			<p:autoUpdate/>
 		</p:messages>
+		
+		<div jsf:rendered="#{emailConfirmation.success}" class="w3-container w3-round">
+			<h4>#{msg['email.confirmed']}</h4>
+			<a href="login.xhtml">Click here to login</a>	
+		</div>
+		
+		<div jsf:rendered="#{not emailConfirmation.success}" class="w3-red w3-container w3-round">
+			<h4>#{msg['unable.to.create.account']}</h4>
+			<ul jsfc="ui:repeat" var="message" value="#{emailConfirmation.errors}" style="list-style-position: inside; padding-left: 0;">
+				<li>#{message}</li>
+			</ul>
+		</div>
  	
  	</ui:define>   
 </ui:composition>

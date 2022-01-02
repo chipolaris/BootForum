@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="/WEB-INF/template/layout_admin.xhtml">
+
+	<ui:define name="title">
+		#{msg['email.management']}
+	</ui:define>
+	
+	<ui:define name="content">
+
+		<style type="text/css">
+			
+		</style>
+		
+		<!-- load data-->
+		<f:metadata>
+			<f:viewAction action="#{manageEmail.onLoad}"/>
+		</f:metadata>
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
+			
+			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
+ 				<h2>#{msg['email.configuration']}</h2>
+ 			</div>
+ 			
+ 			<p:messages id="messages" showDetail="true" closable="true">
+				<p:autoUpdate/>
+			</p:messages>
+			
+			<h:form id="form" styleClass="w3-theme-light">
+				<div class="w3-container w3-xlarge w3-border-bottom">
+					Email Configuration
+				</div>
+				
+				<div class="w3-row-padding">
+				
+					<div class="w3-half container">
+						<p/>
+						<p:outputLabel for="host" value="Host" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpHost"/>
+						<p:overlayPanel for="helpHost" style="width:240px" styleClass="w3-black">
+							Host name for SMTP server.<br/>Example: <b>smtp.gmail.com</b>
+						</p:overlayPanel>
+						<p/>
+						<p:inputText id="host" value="#{manageEmail.emailOption.host}" styleClass="w3-input" maxlength="80" 
+							required="true" requiredMessage="#{msg['email.host.required']}"/>
+						<h:message id="hostError" for="host" styleClass="w3-pale-red">
+							<p:autoUpdate/>
+						</h:message>
+					</div>					
+
+					<div class="w3-half container">
+						<p/>
+						<div class="w3-quarter container">
+							
+							<p:outputLabel for="port" value="Port" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/> 
+							&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpPort"/>
+							<p:overlayPanel for="helpPort" style="width:240px" styleClass="w3-black">
+								Port number for SMTP server.<br/>Example: <b>587</b>
+							</p:overlayPanel>
+							
+							<p/>
+							<p:inputText id="port" value="#{manageEmail.emailOption.port}" styleClass="w3-input" required="true" requiredMessage="#{msg['email.port.required']}">
+								<p:keyFilter mask="num" />
+								<f:validateLongRange minimum="1" maximum="65535"></f:validateLongRange>
+							</p:inputText>
+							<br/>
+							<h:message id="portError" for="port" styleClass="w3-pale-red">
+								<p:autoUpdate/>
+							</h:message>
+						</div>
+
+						<div class="w3-half container w3-right-align">
+							<p:outputLabel for="authentication" value="Authentication" styleClass="w3-medium" style="font-weight:bold;"/>
+							&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpAuthentication"/>
+							<p:overlayPanel for="helpAuthentication" style="width:240px" styleClass="w3-black">
+								Whether email server uses authentication
+							</p:overlayPanel>
+							<p/>
+							<p:selectBooleanCheckbox id="authentication" value="#{manageEmail.emailOption.authentication}"/>
+						</div>
+	
+						<div class="w3-quarter container w3-right-align">
+							<p:outputLabel for="tls" value="TLS" styleClass="w3-medium" style="font-weight:bold;"/>
+							&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpTLS"/>
+							<p:overlayPanel for="helpTLS" style="width:240px" styleClass="w3-black">
+								Whether email server uses TLS
+							</p:overlayPanel>
+							<p/>
+							<p:selectBooleanCheckbox id="tls" value="#{manageEmail.emailOption.tlsEnable}"/>
+						</div>
+					</div>
+														
+					<div class="w3-half container">
+						
+						<p:outputLabel for="username" value="Username" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpUsername"/>
+						<p:overlayPanel for="helpUsername" style="width:240px" styleClass="w3-black">
+							Username to login SMTP server
+						</p:overlayPanel>
+						<p/>
+						<p:inputText id="username" value="#{manageEmail.emailOption.username}" styleClass="w3-input" maxlength="80" 
+							required="true" requiredMessage="#{msg['email.username.required']}"/>
+						<h:message id="usernameError" for="username" styleClass="w3-pale-red">
+							<p:autoUpdate/>
+						</h:message>
+					</div>
+					
+					<div class="w3-half container">
+						<p:outputLabel for="username" value="Password" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpPassword"/>
+						<p:overlayPanel for="helpPassword" style="width:240px" styleClass="w3-black">
+							Password to login SMTP server
+						</p:overlayPanel>
+						<p/>
+						<p:password id="password" value="#{manageEmail.emailOption.password}" styleClass="w3-input" maxlength="80" 
+							required="true" requiredMessage="#{msg['email.password.required']}" redisplay="true"/>
+						<h:message id="passwordError" for="password" styleClass="w3-pale-red">
+							<p:autoUpdate/>
+						</h:message>
+					</div>
+
+					<div class="w3-threequarter container w3-margin-top">
+						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
+						<p:commandButton value="#{msg['submit']}" type="button" icon="fa fa-check" onclick="submitForm();"
+							styleClass="w3-btn w3-theme-dark w3-border-0" />
+					</div>
+					
+				</div>
+				
+				<p:remoteCommand name="submitForm" action="#{manageEmail.edit}"/>
+				
+			</h:form>		
+		
+ 		</div>
+		
+	</ui:define>
+	
+</ui:composition>

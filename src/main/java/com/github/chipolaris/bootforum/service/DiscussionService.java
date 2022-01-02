@@ -144,7 +144,7 @@ public class DiscussionService {
 		/*
 		 * add a hook to transaction callback to remove files if transaction success (committed)
 		 */
-		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
 			@Override
 			public void afterCompletion(int status) {
 				if(status == TransactionSynchronization.STATUS_COMMITTED) {

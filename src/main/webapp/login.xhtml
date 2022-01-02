@@ -129,9 +129,17 @@
 							</div>
 							
 							<div jsf:rendered="#{publicBackingBean.registrationSuccess}" class="w3-green w3-section w3-round w3-center">
-								<h4>Your account has been created</h4>
-								<a href="#" onclick="toggleMiddleDivs('loginDiv');return false;">Click here to login</a>
-							</div>
+							
+								<div jsf:rendered="#{publicBackingBean.emailSent}">
+									<h4>Email has been sent to #{publicBackingBean.user.person.email}</h4>
+									<h5>Please find the email and activate your account</h5>
+								</div>
+								<div jsf:rendered="#{not publicBackingBean.emailSent}">
+									<h4>Your account has been created</h4>
+									<a href="#" onclick="toggleMiddleDivs('loginDiv');return false;">Click here to login</a>
+								</div>
+																
+							</div>						
 						
 							<div jsf:rendered="#{!publicBackingBean.registrationSuccess}" class="w3-section w3-center">
 								<p>

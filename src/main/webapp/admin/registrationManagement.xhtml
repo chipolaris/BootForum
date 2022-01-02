@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="/WEB-INF/template/layout_admin.xhtml">
+
+	<ui:define name="title">
+		#{msg['registration.management']}
+	</ui:define>
+	
+	<ui:define name="content">
+
+		<style type="text/css">
+			
+		</style>
+		
+		<!-- load data-->
+		<f:metadata>
+			<f:viewAction action="#{manageRegistration.onLoad}"/>
+		</f:metadata>
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
+			
+			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
+ 				<h2>#{msg['user.registration.management']}</h2>
+ 			</div>
+ 			
+ 			<p:messages id="messages" showDetail="true" closable="true">
+				<p:autoUpdate/>
+			</p:messages>
+			
+			<h:form id="form" styleClass="w3-theme-light">
+				<div class="w3-container w3-xlarge w3-border-bottom">
+					User Registration Option
+				</div>
+				
+				<div class="w3-row-padding">
+					<p/>
+					<div>
+						<h:selectBooleanCheckbox id="enableCaptcha" value="#{manageRegistration.registrationOption.enableCaptcha}" 
+							styleClass="w3-check"/>&nbsp;&nbsp;					
+						<p:outputLabel for="enableCaptcha" value="Enable Captcha on registration page" styleClass="w3-medium" style="font-weight:bold;"/>
+						
+					</div>
+									
+					<div class="w3-margin-top">
+						<h:selectBooleanCheckbox id="enableEmailConfirm" value="#{manageRegistration.registrationOption.enableEmailConfirm}" 
+							styleClass="w3-check" onchange="updateRegistrationEmailInputs();"/>&nbsp;&nbsp;
+						<p:outputLabel for="enableEmailConfirm" value="Enable Email Confirm" styleClass="w3-medium" style="font-weight:bold;"/>
+					</div>
+					
+					<div class="w3-margin-top w3-padding">
+						<p/>
+						<p:outputLabel for="registrationEmailSubject" value="Registration Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpRegistrationEmailSubject"/>
+						<p:overlayPanel for="helpRegistrationEmailSubject" style="width:240px" styleClass="w3-black">
+							<h5>Example:</h5>
+							<hr/> 
+							Confirm account registration at <b>BootForum</b>
+						</p:overlayPanel>
+						<p/>
+						<p:inputText id="registrationEmailSubject" value="#{manageRegistration.registrationOption.registrationEmailSubject}" styleClass="w3-input" maxlength="200" 
+							readonly="#{manageRegistration.registrationOption.enableEmailConfirm ? 'false' : 'true'}"/>
+						<h:message id="registrationEmailSubjectError" for="registrationEmailSubject" styleClass="w3-pale-red">
+							<p:autoUpdate/>
+						</h:message>
+					</div>
+					
+					<div jsf:id="registrationEmailTemplateDiv" class="w3-margin-top w3-padding">
+
+						<p:outputLabel for="registrationEmailTemplate" value="Registration Email Template" styleClass="w3-medium" 
+							style="font-weight:bold;" indicateRequired="false"/>
+						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpRegistrationEmailTemplate"/>
+						<p/>
+						<p:overlayPanel for="helpRegistrationEmailTemplate" style="width:350px" styleClass="w3-black">
+							<h5>Sample email to send when user register for account:</h5>
+							<hr/>
+							<b>Hi #username</b>,
+							<p>
+							This email <b>#email</b> has been used for account registration on BootForum.
+							</p>
+							<p>
+							If that wasn't your intention, kindly ignore this email. 
+							Otherwise, please lick on this link #confirm-url to activate your account.
+							</p>
+							<p>
+							Regards,
+							</p>
+							<hr/>
+							<p>
+							<b>Note:</b> #username, #email, and #confirm-url
+							will be replaced by the system on the actual email
+							</p>
+						</p:overlayPanel>
+
+						<pe:ckEditor id="registrationEmailTemplate" value="#{manageRegistration.registrationOption.registrationEmailTemplate}" skin="moono-lisa" width="100%"
+							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
+										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
+										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" 
+										readonly="#{manageRegistration.registrationOption.enableEmailConfirm ? 'false' : 'true'}">
+						</pe:ckEditor>
+						<h:message id="registrationEmailTemplateError" for="registrationEmailTemplate" styleClass="w3-pale-red">
+							<p:autoUpdate/>
+						</h:message>							
+						
+					</div>
+					
+					<div class="w3-margin-top w3-padding">
+						<p/>
+						<p:outputLabel for="passwordResetEmailSubject" value="Password Reset Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpPasswordResetEmailSubject"/>
+						<p:overlayPanel for="helpPasswordResetEmailSubject" style="width:240px" styleClass="w3-black">
+							<h5>Example:</h5>
+							<hr/> 
+							Password reset requested at <b>BootForum</b>
+						</p:overlayPanel>
+						<p/>
+						<p:inputText id="passwordResetEmailSubject" value="#{manageRegistration.registrationOption.passwordResetEmailSubject}" 
+							required="true" styleClass="w3-input" maxlength="200" />
+						<h:message id="passwordResetEmailSubjectError" for="passwordResetEmailSubject" styleClass="w3-pale-red">
+							<p:autoUpdate/>
+						</h:message>
+					</div>					
+
+					<div jsf:id="passwordResetEmailTemplateDiv" class="w3-margin-top w3-padding">
+
+						<p:outputLabel for="passwordResetEmailTemplate" value="Password Reset Email Template" styleClass="w3-medium" 
+							style="font-weight:bold;" indicateRequired="false"/>
+						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpPasswordResetEmailTemplate"/>
+						<p/>
+						<p:overlayPanel for="helpPasswordResetEmailTemplate" style="width:350px" styleClass="w3-black">
+							<h5>Sample email to send when user requests password reset:</h5>
+							<hr/>
+							<b>Hi #username</b>,
+							<p>
+							Here is the #reset-link to reset your password in <b>BootForum</b>
+							</p>
+							<p> 
+							If you didn't request this, kindly ignore this email.
+							</p>
+							<p>
+							Regards,
+							</p>
+							<hr/>
+							<p>
+							<b>Note:</b> #username and #reset-link will be replaced by the actual values on the email
+							</p>
+						</p:overlayPanel>
+
+						<pe:ckEditor id="passwordResetEmailTemplate" value="#{manageRegistration.registrationOption.passwordResetEmailTemplate}" skin="moono-lisa" width="100%" required="true"
+							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
+										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
+										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" requiredMessage="Password Reset Email Template is required">
+						</pe:ckEditor>
+						<h:message id="passwordResetEmailTemplateError" for="passwordResetEmailTemplate" styleClass="w3-pale-red">
+							<p:autoUpdate/>
+						</h:message>							
+						
+					</div>
+
+					<div class="w3-margin-top w3-padding">
+						
+						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
+						<p:commandButton value="#{msg['submit']}" type="button" icon="fa fa-check" onclick="submitForm();"
+							styleClass="w3-btn w3-theme-dark w3-border-0" />
+					</div>
+				
+					<p:remoteCommand name="submitForm" action="#{manageRegistration.edit}"/>
+					
+				</div>
+				
+			</h:form>
+		
+ 		</div>
+		
+		<script type="text/javascript">
+ 			//<![CDATA[
+ 				
+ 				/* 
+ 				 * how to disable/enable CKEditor:
+ 				 * https://stackoverflow.com/questions/6457071/how-to-disable-ckeditor-with-jquery
+ 				 */
+ 				function updateRegistrationEmailInputs() {
+ 					/* note: for JQuery, need the double backsplashes '\\' to escape the colon ':' in the element id */
+ 				    if($('#form\\:enableEmailConfirm').is(':checked')) {
+ 				    	$('#form\\:registrationEmailSubject').prop('readonly', false);
+ 						CKEDITOR.instances['form:registrationEmailTemplate'].setReadOnly(false);
+ 					}
+ 					else {
+ 						$('#form\\:registrationEmailSubject').prop('readonly', true);
+ 						CKEDITOR.instances['form:registrationEmailTemplate'].setReadOnly(true);
+ 					}
+ 				} 				
+ 				
+			//]]>	
+		</script>		
+		
+	</ui:define>
+	
+</ui:composition>

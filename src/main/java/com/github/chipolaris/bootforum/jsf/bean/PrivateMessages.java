@@ -96,7 +96,7 @@ public class PrivateMessages {
 		
 		this.uploadedFileManager = new UploadedFileManager(this.maxAttachmentsPerMessage);
 		
-		if(!StringUtils.isBlank(to)) {
+		if(!StringUtils.isEmpty(to)) {
 			toUsers = Arrays.asList(to);
 		}
 	}

@@ -14,9 +14,11 @@ import org.springframework.stereotype.Component;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.DisplayOption;
+import com.github.chipolaris.bootforum.domain.EmailOption;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.Preferences;
+import com.github.chipolaris.bootforum.domain.RegistrationOption;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
@@ -32,6 +34,13 @@ import com.github.chipolaris.bootforum.service.UserService;
 
 @Component
 public class DataInitializer implements ApplicationListener<ContextRefreshedEvent> {
+
+	private static final String REGISTRATION_EMAIL_TEMPLATE = 
+			"<p>Thank you <b>&lt;username&gt;</b> for registration with &lt;app-name&gt;</p>"
+		  + "<p>Please confirm your email with the link below</p>" 
+		  + "<p>&lt;confirm-link&gt;</p>"
+		  + "<p>If you did not register for &lt;app-name&gt;, please disregard this and no action is necessary</p>"
+		  + "<p>The &lt;app-name&gt; team</p>";
 
 	private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 	
@@ -61,6 +70,16 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		
 		logger.info("Checking application initial data...");
 		
+		createAdminUser();
+		
+		createDisplayOption();
+		createEmailOption();
+		createRegistrationOption();
+		
+		systemInfoService.refreshStatistics();
+	}
+
+	private void createAdminUser() {
 		// create admin user if not already exist in the system
 		User adminUser = userService.getSystemAdminUser().getDataObject();
 		
@@ -69,7 +88,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		}
 		else {
 			logger.info("System Admin user does not exist, creating....");
-			adminUser = createAdminUser();
+			adminUser = createAdminUserObject();
 			ServiceResponse<Void> response = userService.addUser(adminUser);
 			
 			if(response.getAckCode() != AckCodeType.SUCCESS) {
@@ -84,17 +103,41 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 				createWelcomeDiscussion(announcementsForum, adminUser);
 			}
 		}
-		
-		createDisplayOption();
-		
-		systemInfoService.refreshStatistics();
 	}
-
+	
+	private User createAdminUserObject() {
+		User admin = new User();
+		
+		admin.setUsername("admin");
+		admin.setPassword("secret");
+		admin.setUserRole(UserRole.ADMIN);
+		admin.setAccountStatus(AccountStatus.ACTIVE);
+		
+		Person person = new Person();
+		admin.setPerson(person);
+		
+		person.setFirstName("System");
+		person.setLastName("Admin");
+		person.setEmail("admin@updateme.net");
+		
+		admin.setPreferences(new Preferences());
+		admin.setStat(new UserStat());
+		
+		// Security Challenges
+		
+		return admin;
+	}
+	
 	private void createDisplayOption() {
 		
 		DisplayOption displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
 		
-		if(displayOption == null) {
+		if(displayOption != null) {
+			logger.info("Display Option's already initialized");
+		}
+		else {
+			
+			logger.info("Display Option is NOT initialized. Creating..");
 			
 			displayOption = new DisplayOption();
 			displayOption.setId(1L);
@@ -118,28 +161,51 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 			genericService.saveEntity(displayOption);
 		}
 	}
+	
+	private void createEmailOption() {
 
-	private User createAdminUser() {
-		User admin = new User();
+		EmailOption emailOption = genericService.getEntity(EmailOption.class, 1L).getDataObject();
 		
-		admin.setUsername("admin");
-		admin.setPassword("secret");
-		admin.setUserRole(UserRole.ADMIN);
-		admin.setAccountStatus(AccountStatus.ACTIVE);
+		if(emailOption != null) {
+			logger.info("Email Option's already initialized");
+		}
+		else {
+			
+			logger.info("Email Option is NOT initialized. Creating..");
+			
+			emailOption = new EmailOption();
+			emailOption.setId(1L);
+			
+			emailOption.setCreateBy("system");
+			emailOption.setHost("to-be-update");
+			emailOption.setPort(0);
+			emailOption.setUsername("to-be-update");
+			emailOption.setPassword("to-be-update");
+			emailOption.setTlsEnable(true);
+			
+			genericService.saveEntity(emailOption);
+		}
+	}
+	
+	private void createRegistrationOption() {
 		
-		Person person = new Person();
-		admin.setPerson(person);
+		RegistrationOption registrationOption = genericService.getEntity(RegistrationOption.class, 1L).getDataObject();
 		
-		person.setFirstName("System");
-		person.setLastName("Admin");
-		person.setEmail("admin@updateme.net");
-		
-		admin.setPreferences(new Preferences());
-		admin.setStat(new UserStat());
-		
-		// Security Challenges
-		
-		return admin;
+		if(registrationOption != null) {
+			logger.info("Registration Option's already initialized");
+		}
+		else {
+			
+			logger.info("Registration Option is NOT initialized. Creating..");
+			
+			registrationOption = new RegistrationOption();
+			registrationOption.setId(1L);
+			
+			registrationOption.setEnableEmailConfirm(false);
+			registrationOption.setRegistrationEmailTemplate(REGISTRATION_EMAIL_TEMPLATE);
+			
+			genericService.saveEntity(registrationOption);
+		}
 	}
 	
 	private Forum createAnouncementsForum(User user) {

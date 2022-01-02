@@ -9,16 +9,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.github.chipolaris.bootforum.domain.PasswordReset;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.Preferences;
+import com.github.chipolaris.bootforum.domain.Registration;
+import com.github.chipolaris.bootforum.domain.RegistrationOption;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
-import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
+import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.PasswordResetService;
+import com.github.chipolaris.bootforum.service.RegistrationService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 import com.github.chipolaris.bootforum.service.UserService;
 
@@ -29,7 +31,13 @@ public class PublicBackingBean {
 	private static final Logger logger = LoggerFactory.getLogger(PublicBackingBean.class);
 	
 	@Resource
+	private GenericService genericService;
+	
+	@Resource
 	private UserService userService;
+	
+	@Resource
+	private RegistrationService registrationService;
 	
 	@Resource
 	private PasswordResetService passwordResetService;
@@ -48,7 +56,7 @@ public class PublicBackingBean {
 		this.setUser(user);
 	}
 	
-	private User user;	
+	private User user;
 	
 	public User getUser() {
 		return user;
@@ -59,25 +67,62 @@ public class PublicBackingBean {
 	
 	public void register() {
 		
-		logger.info(String.format("User Registration for user '%s'", user.getUsername()));
+		logger.info(String.format("Registration for user '%s'", user.getUsername()));
 		
-		ServiceResponse<Void> serviceResponse = userService.addUser(user);
+		RegistrationOption registrationOption = genericService.getEntity(RegistrationOption.class, 1L).getDataObject();
 		
-		if(serviceResponse.getAckCode() == AckCodeType.SUCCESS) {
+		if(registrationOption.getEnableEmailConfirm()) {
 			
-			this.registrationSuccess = true;
-			initializeUser();
+			Registration registration = createRegistration();
+			ServiceResponse<Void> serviceResponse = registrationService.addRegistration(registration);
+			
+			if(serviceResponse.getAckCode() == AckCodeType.SUCCESS) {
+				this.registrationSuccess = true;
+				this.emailSent = true;
+			}
+			else {
+				this.registrationMessages = serviceResponse.getMessages();
+				this.registrationSuccess = false;
+			}
 		}
 		else {
+			ServiceResponse<Void> serviceResponse = userService.addUser(user);
 			
-			this.registrationMessages = serviceResponse.getMessages();
-			this.registrationSuccess = false;
+			if(serviceResponse.getAckCode() == AckCodeType.SUCCESS) {
+				
+				this.registrationSuccess = true;
+				initializeUser();
+			}
+			else {
+				
+				this.registrationMessages = serviceResponse.getMessages();
+				this.registrationSuccess = false;
+			}
 		}
 	}
-	
+
+	private Registration createRegistration() {
+
+		Registration registration = new Registration();
+		
+		registration.setUsername(user.getUsername());
+		registration.setPassword(user.getPassword());
+		registration.setEmail(user.getPerson().getEmail());
+		
+		return registration;
+	}
+
+	private boolean emailSent = false;
 	private boolean registrationSuccess;
 	private List<String> registrationMessages;
 
+	public boolean isEmailSent() {
+		return emailSent;
+	}
+	public void setEmailSent(boolean emailSent) {
+		this.emailSent = emailSent;
+	}
+	
 	public boolean isRegistrationSuccess() {
 		return registrationSuccess;
 	}

@@ -43,8 +43,8 @@ public class ManageDisplay {
 	public DisplayOption getDisplayOption() {
 		return displayOption;
 	}
-	public void setDisplayOption(DisplayOption displayManagement) {
-		this.displayOption = displayManagement;
+	public void setDisplayOption(DisplayOption displayOption) {
+		this.displayOption = displayOption;
 	}
 	
 	public void onLoad() {

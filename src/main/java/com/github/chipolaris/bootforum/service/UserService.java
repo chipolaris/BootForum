@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,10 +20,7 @@ import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
 import com.github.chipolaris.bootforum.event.UserRegistrationEvent;
-import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
-import com.github.chipolaris.bootforum.util.EmailSender;
 import com.github.chipolaris.bootforum.util.Validators;
-import com.github.chipolaris.bootforum.util.VelocityTemplateUtil;
 
 @Service @Transactional
 public class UserService {
@@ -40,13 +36,7 @@ public class UserService {
 	
 	@Resource
 	private UserDAO userDAO;
-	
-	@Resource
-	private EmailSender emailSender;
-	
-	@Value("${Email.fromEmailAddress}")
-	private String fromEmailAddress;
-		
+
 	/**
 	 * 
 	 * @param user
@@ -63,8 +53,6 @@ public class UserService {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			userDAO.createUser(user);
 			
-			// TODO: send email
-			
 			// publish new user registration event so listeners get invoked
 			applicationEventPublisher.publishEvent(new UserRegistrationEvent(this, user));
 		}
@@ -74,17 +62,6 @@ public class UserService {
 		}
 				
 		return response;
-	}
-	
-	private void emailConfirmation(User user) throws Exception {
-		
-		Map<String, String> paramsMap = new HashMap<>();
-		paramsMap.put("baseUrl", JSFUtils.getBaseURL());
-		paramsMap.put("email", user.getPerson().getEmail());
-		paramsMap.put("username", user.getUsername());
-		
-		emailSender.sendEmail(fromEmailAddress, user.getPerson().getEmail(), "Confirm Registration", 
-				VelocityTemplateUtil.build("email_templates/", paramsMap), true);
 	}
 	
 	private List<String> validateUser(User user) {

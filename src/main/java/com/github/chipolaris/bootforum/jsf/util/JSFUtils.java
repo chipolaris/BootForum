@@ -1,6 +1,8 @@
 package com.github.chipolaris.bootforum.jsf.util;
 
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -12,6 +14,20 @@ import com.github.chipolaris.bootforum.service.ServiceResponse;
 
 public class JSFUtils {
 
+	public static ResourceBundle getMessageBundle() {
+		
+		Locale locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+		
+		if(locale == null) {
+			locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+		}
+		
+		/* note: ResourceBundle.messages' matches <base-name> in faces-config.xml */
+		ResourceBundle bundle = ResourceBundle.getBundle("ResourceBundle.messages", locale);
+		
+		return bundle;
+	}
+	
 	/**
 	 * get base URL of the application
 	 * @return
