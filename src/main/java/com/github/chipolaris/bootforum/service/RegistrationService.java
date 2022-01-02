@@ -54,7 +54,7 @@ public class RegistrationService {
 		
 		ServiceResponse<Void> response = new ServiceResponse<Void>();
 		
-		Registration registration = genericDAO.getEntity(Registration.class, Collections.singletonMap("key", key));
+		Registration registration = genericDAO.getEntity(Registration.class, Collections.singletonMap("registrationKey", key));
 		
 		if(registration != null) {
 		
