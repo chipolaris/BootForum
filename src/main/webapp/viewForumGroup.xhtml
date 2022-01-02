@@ -113,7 +113,7 @@
 
 						<p:column headerText="#{msg['latest.comments']}" style="text-align:right;width:200px;" priority="2">
 							<div jsf:rendered="#{treeNode.type eq 'Forum' and not empty data.stat.lastComment.updateBy}">
-								<pe:timeAgo value="#{data.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy " /> by
+								<pe:timeAgo value="#{data.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy " /> #{msg['by']}
 								
 								<h:link outcome="memberProfile">
 									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(data.stat.lastComment.updateBy)}" class="w3-circle"

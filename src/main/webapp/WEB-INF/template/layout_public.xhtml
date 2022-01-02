@@ -364,7 +364,7 @@
 			<div id="loginModal" class="w3-modal">
 			  <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="width:450px;max-width:98vw;">
 		
-				<span onclick="$('#loginModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+				<span onclick="$('#loginModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="#{msg['close']}">&#215;</span>
 		
 				<header class="w3-container w3-padding w3-theme-dark w3-center">
 					<span class="w3-xlarge"><i class="fa fa-lock"/> #{msg['login.to']} #{msg['application.title']}</span>
@@ -415,7 +415,7 @@
 			<div id="registerModal" class="w3-modal">
 				<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="width:450px;max-width:98vw;">
 		
-					<span onclick="$('#registerModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+					<span onclick="$('#registerModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="#{msg['close']}">&#215;</span>
 			
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
 						<span class="w3-xlarge"><i class="fa fa-clipboard"/> #{msg['register']}</span>
@@ -433,7 +433,7 @@
 						</div>
 					
 						<div jsf:rendered="#{!publicBackingBean.registrationSuccess and not empty publicBackingBean.registrationMessages}" class="w3-red w3-container w3-round">
-							<h4>Unable to create account</h4>
+							<h4>#{msg['unable.to.create.account']}</h4>
 							<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.registrationMessages}" style="list-style-position: inside; padding-left: 0;">
 								<li>#{message}</li>
 							</ul>
@@ -442,28 +442,28 @@
 					
 						<div jsf:rendered="#{!publicBackingBean.registrationSuccess}" class="w3-section w3-center">
 							<p>
-								<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xf2c0; #{msg['pick.a.username']}" styleClass="w3-input" title="Username"
+								<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xf2c0; #{msg['pick.a.username']}" styleClass="w3-input" title="#{msg['username']}"
 									style="font-family:Open Sans, FontAwesome;text-align:center;"
 									onblur="validateRegisterUsername();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:inputText>
 								<h:message for="username" id="usernameMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
-								<p:inputText id="email" value="#{publicBackingBean.user.person.email}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="Email"
+								<p:inputText id="email" value="#{publicBackingBean.user.person.email}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="#{msg['email']}"
 									style="font-family:Open Sans, FontAwesome;text-align:center;"
 									onblur="validEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:inputText>
 								<h:message for="email" id="emailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
-								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; #{msg['choose.a.password']}" styleClass="w3-input w3-margin-top" title="Password" 
+								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; #{msg['choose.a.password']}" styleClass="w3-input w3-margin-top" title="#{msg['password']}" 
 									style="font-family:Open Sans, FontAwesome;text-align:center;"
 									onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
 								<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
-								<p:password id="confirmPassword" placeholder="&#xf00c; #{msg['confirm.password']}" styleClass="w3-input" title="Confirm Password" 
+								<p:password id="confirmPassword" placeholder="&#xf00c; #{msg['confirm.password']}" styleClass="w3-input" title="#{msg['confirm.password']}" 
 									style="font-family:Open Sans, FontAwesome;text-align:center;" 
 									onblur="validateConfirmPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
@@ -492,7 +492,7 @@
 			<div id="passwordResetModal" class="w3-modal">
 				<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="width:450px;max-width:98vw;">
 
-					<span onclick="$('#passwordResetModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+					<span onclick="$('#passwordResetModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="#{msg['close']}">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
 						<span class="w3-xlarge"><i class="fa fa-undo"/> #{msg['reset.your.password']} </span>
@@ -513,7 +513,7 @@
 						</div>
 						
 						<div jsf:rendered="#{!publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-red w3-section w3-round">
-							<h4>Unable to complete request:</h4>
+							<h4>#{msg['unable.to.complete.request']}:</h4>
 							<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.passwordResetMessages}" style="list-style-position: inside; padding-left: 0;">
 								<li>#{message}</li>
 							</ul>
@@ -524,7 +524,7 @@
 							<h5>#{msg['enter.email.to.get.password.reset.link']}</h5>
 							
 							<p>
-								<p:inputText id="passwordResetEmail" value="#{publicBackingBean.passwordResetEmail}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="Email"
+								<p:inputText id="passwordResetEmail" value="#{publicBackingBean.passwordResetEmail}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="#{msg['email']}"
 									style="font-family:Open Sans, FontAwesome;text-align:center;"
 									onblur="validPasswordResetEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:inputText>
@@ -575,12 +575,12 @@
 					if(username.length < 5) {
 						validUsername = false;
 						usernameEl.className += " w3-border-orange";
-						usernameEl.title = "Username must be at least 5 characters"
+						usernameEl.title = "#{msg['username.must.be.at.least.5.characters']}"
 					}
 					else {
 						validUsername = true;
 						usernameEl.className += " w3-border-light-green";
-						usernameEl.title = "Username"
+						usernameEl.title = "#{msg['username']}"
 					}
 				}
 				
@@ -601,12 +601,12 @@
 					if(!emailRegex.test(String(email).toLowerCase())) {
 						isValid = false;
 						emailEl.className += " w3-border-orange";
-						emailEl.title = "Invalid email format"
+						emailEl.title = "#{msg['invalid.email.format']}"
 					}
 					else {
 						isValid = true;
 						emailEl.className += " w3-border-light-green";
-						emailEl.title = "Email"
+						emailEl.title = "#{msg['email']}"
 					}
 					
 					return isValid;
@@ -623,12 +623,12 @@
 					if(password.length < 5) {
 						validPassword = false;
 						passwordEl.className += " w3-border-orange";
-						passwordEl.title = "Password length is less than 5"
+						passwordEl.title = "#{msg['password.length.is.less.than.5']}"
 					}
 					else {
 						validPassword = true;
 						passwordEl.className += " w3-border-light-green";
-						passwordEl.title = "Password"
+						passwordEl.title = "#{msg['password']}"
 					}
 				}
 				
@@ -646,17 +646,17 @@
 					if(password != confirmPassword) {
 						validConfirmPassword = false;
 						confirmPasswordEl.className += " w3-border-orange";
-						confirmPasswordEl.title="Confirm Password does not match Password"
+						confirmPasswordEl.title="#{msg['confirm.password.does.not.match.password']}"
 					}
 					else if(confirmPassword.length < 5) {
 						validConfirmPassword = false;
 						confirmPasswordEl.className += " w3-border-orange";
-						confirmPasswordEl.title="Password is too short"
+						confirmPasswordEl.title="#{msg['password.is.too.short']}"
 					}
 					else {
 						validConfirmPassword = true;
 						confirmPasswordEl.className += " w3-border-light-green";
-						confirmPasswordEl.title="Confirm Password"
+						confirmPasswordEl.title="#{msg['confirm.password']}"
 					}
 				}
 				
