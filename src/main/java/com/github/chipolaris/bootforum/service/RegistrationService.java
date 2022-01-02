@@ -107,7 +107,7 @@ public class RegistrationService {
 		
 		if(errorMessages.isEmpty()) {
 			
-			registration.setKey(UUID.randomUUID().toString());
+			registration.setRegistrationKey(UUID.randomUUID().toString());
 			registration.setPassword(passwordEncoder.encode(registration.getPassword()));
 			genericDAO.persist(registration);
 			
@@ -154,7 +154,7 @@ public class RegistrationService {
 				.replaceAll("#email", registration.getEmail())
 				.replaceAll("#confirm-url",
 						"<a href=\""
-						+ JSFUtils.getBaseURL() + "emailConfirmation.xhtml?id=" + registration.getKey()
+						+ JSFUtils.getBaseURL() + "emailConfirmation.xhtml?key=" + registration.getRegistrationKey()
 						+ "\">" + this.applicationName + "</a>");
 	}
 

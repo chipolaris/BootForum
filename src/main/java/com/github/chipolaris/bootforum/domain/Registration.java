@@ -38,8 +38,8 @@ public class Registration extends BaseEntity {
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="RegistrationIdGenerator")
 	private Long id;
 	
-	@Column(name="KEY", length=80)
-	private String key;
+	@Column(name="REGISTRATION_KEY", length=80)
+	private String registrationKey;
 	
 	@Column(name="USERNAME", length=30)
 	private String username;
@@ -58,12 +58,12 @@ public class Registration extends BaseEntity {
 		this.id = id;
 	}
 
-	public String getKey() {
-		return key;
+	public String getRegistrationKey() {
+		return registrationKey;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public void setRegistrationKey(String registrationKey) {
+		this.registrationKey = registrationKey;
 	}
 
 	public String getUsername() {

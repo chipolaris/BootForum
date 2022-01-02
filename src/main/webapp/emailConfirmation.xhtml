@@ -15,7 +15,7 @@
 
 		<!-- set request parameter values from URL to backing bean -->
 		<f:metadata>
-			<f:viewParam name="id" value="#{emailConfirmation.key}" required="true" requiredMessage="Valid key is required" />
+			<f:viewParam name="key" value="#{emailConfirmation.key}" required="true" requiredMessage="Valid key is required" />
 			<f:viewAction action="#{emailConfirmation.onLoad}"/>
 		</f:metadata>
 		
