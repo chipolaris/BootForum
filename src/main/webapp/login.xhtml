@@ -7,10 +7,17 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:jsf="http://xmlns.jcp.org/jsf"
-	xmlns:ui="http://java.sun.com/jsf/facelets"> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"> 
 	
     <h:head>
         <f:facet name="first">
+        
+        	<!-- if user access this page while already logged in, redirect to the homepage -->
+        	<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+        		<meta http-equiv="refresh" content="0; url=index.xhtml"/>
+        	</sec:authorize>
+        
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
