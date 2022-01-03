@@ -80,7 +80,7 @@
 						<div class="w3-half container w3-right-align">
 							<p:outputLabel for="authentication" value="Authentication" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpAuthentication"/>
-							<p:overlayPanel for="helpAuthentication" style="width:240px" styleClass="w3-black">
+							<p:overlayPanel for="helpAuthentication" style="width:240px" styleClass="w3-black w3-left-align">
 								Whether email server uses authentication
 							</p:overlayPanel>
 							<p/>
@@ -90,7 +90,7 @@
 						<div class="w3-quarter container w3-right-align">
 							<p:outputLabel for="tls" value="TLS" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpTLS"/>
-							<p:overlayPanel for="helpTLS" style="width:240px" styleClass="w3-black">
+							<p:overlayPanel for="helpTLS" style="width:240px" styleClass="w3-black w3-left-align">
 								Whether email server uses TLS
 							</p:overlayPanel>
 							<p/>
@@ -129,13 +129,81 @@
 
 					<div class="w3-threequarter container w3-margin-top">
 						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['submit']}" type="button" icon="fa fa-check" onclick="submitForm();"
-							styleClass="w3-btn w3-theme-dark w3-border-0" />
-					</div>
+						<p:commandButton value="#{msg['save']}" type="button" icon="fa fa-check" onclick="submitForm();"
+							styleClass="w3-btn w3-theme-dark w3-border-0"/>
+						
+						<span class="w3-margin-left" onclick="PF('testPanel').toggle();"
+							style="cursor:pointer;color:purple;text-decoration:underline;font-weight:bold;">
+							Test Configuration
+						</span>
+						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpTestConfiguration"/>
+						<p:overlayPanel for="helpTestConfiguration" style="width:240px" styleClass="w3-black w3-left-align">
+							Click to test the configuration
+						</p:overlayPanel>
+					</div>                	
 					
 				</div>
 				
-				<p:remoteCommand name="submitForm" action="#{manageEmail.edit}"/>
+				<p:remoteCommand name="submitForm" action="#{manageEmail.save}"/>
+
+				<p/>
+				
+				<div class="w3-row-padding">
+					<div class="w3-rest container">
+					
+			    	<p:panel header="Test" toggleable="true" toggleSpeed="500" collapsed="true"
+              			closeSpeed="500" widgetVar="testPanel">
+              			
+						<div jsf:id="testResultDiv" class="w3-card w3-container">
+							
+							<h4><b>Test Result:</b></h4>
+							<h4 jsf:rendered="#{manageEmail.testRan and manageEmail.testSuccess}" class="w3-green"> Test Email Sent</h4>
+							<h4 jsf:rendered="#{manageEmail.testRan and not manageEmail.testSuccess}" class="w3-red"> Failed</h4>
+						</div>
+						
+						<p/>
+						
+						<div class="w3-row-padding container">
+							
+							<p:outputLabel for="testToEmail" value="Test To Email" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							<br/>
+							<p:inputText id="testToEmail" value="#{manageEmail.testToEmail}" styleClass="w3-input"
+								maxlength="80" required="true" requiredMessage="Must specify 'Test To Email'"/>
+							<h:message id="testToEmailError" for="testToEmail" styleClass="w3-pale-red">
+								<p:autoUpdate/>
+							</h:message>
+							
+							<p/>
+							<p:outputLabel for="testEmailSubject" value="Test Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							<br/>
+							<p:inputText id="testEmailSubject" value="#{manageEmail.testEmailSubject}" styleClass="w3-input"
+								maxlength="100" required="true" requiredMessage="Must specify 'Test Email Subject'"/>
+							<h:message id="testEmailSubjectError" for="testEmailSubject" styleClass="w3-pale-red">
+								<p:autoUpdate/>
+							</h:message>
+							
+							<p/>
+							<p:outputLabel for="testEmailContent" value="Test Email Content" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							<br/>								
+							<pe:ckEditor id="testEmailContent" value="#{manageEmail.testEmailContent}" skin="moono-lisa" width="100%" required="true"
+								toolbar="[['Bold', 'Italic', 'Underline', 'Strike', '-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor']]" 
+										requiredMessage="Test email content is required">
+							</pe:ckEditor>
+							<h:message id="testEmailContentError" for="testEmailContent" styleClass="w3-pale-red">
+								<p:autoUpdate/>
+							</h:message>			
+							
+							<p/>
+							<p:commandButton value="Test" action="#{manageEmail.testEmailConfiguration}" ajax="true" icon="fa fa-plug" update="testResultDiv"
+								styleClass="w3-btn w3-theme-dark w3-border-0"/>				
+							
+						</div>
+              			
+              		</p:panel>
+              		
+              		
+              		</div>
+				</div>
 				
 			</h:form>		
 		
