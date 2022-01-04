@@ -15,13 +15,26 @@
 	
 	<ui:define name="content">
 
-		<style type="text/css">
+		<style type="text/css">	
+			 
+			 /* borderless datatable: https://stackoverflow.com/questions/18880208/remove-all-borders-on-a-specific-datatable */
+			
+			.ui-datatable.borderless thead th,
+			.ui-datatable.borderless tbody,
+			.ui-datatable.borderless tbody tr,
+			.ui-datatable.borderless tbody td {
+			    border-style: none;
+			}
+			
+			body .ui-paginator {
+				 border-style: none;
+			}
 			
 		</style>
 		
 		<!-- load data-->
 		<f:metadata>
-			<f:viewAction action="#{manageRegistration.onLoad}"/>
+			<f:viewAction action="#{registrationManagement.onLoad}"/>
 		</f:metadata>
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
@@ -42,14 +55,14 @@
 				<div class="w3-row-padding">
 					<p/>
 					<div>
-						<h:selectBooleanCheckbox id="enableCaptcha" value="#{manageRegistration.registrationOption.enableCaptcha}" 
+						<h:selectBooleanCheckbox id="enableCaptcha" value="#{registrationManagement.registrationOption.enableCaptcha}" 
 							styleClass="w3-check"/>&nbsp;&nbsp;					
 						<p:outputLabel for="enableCaptcha" value="Enable Captcha on registration page" styleClass="w3-medium" style="font-weight:bold;"/>
 						
 					</div>
 									
 					<div class="w3-margin-top">
-						<h:selectBooleanCheckbox id="enableEmailConfirm" value="#{manageRegistration.registrationOption.enableEmailConfirm}" 
+						<h:selectBooleanCheckbox id="enableEmailConfirm" value="#{registrationManagement.registrationOption.enableEmailConfirm}" 
 							styleClass="w3-check" onchange="updateRegistrationEmailInputs();"/>&nbsp;&nbsp;
 						<p:outputLabel for="enableEmailConfirm" value="Enable Email Confirm" styleClass="w3-medium" style="font-weight:bold;"/>
 					</div>
@@ -64,8 +77,8 @@
 							Confirm account registration at <b>BootForum</b>
 						</p:overlayPanel>
 						<p/>
-						<p:inputText id="registrationEmailSubject" value="#{manageRegistration.registrationOption.registrationEmailSubject}" styleClass="w3-input" maxlength="200" 
-							readonly="#{manageRegistration.registrationOption.enableEmailConfirm ? 'false' : 'true'}"/>
+						<p:inputText id="registrationEmailSubject" value="#{registrationManagement.registrationOption.registrationEmailSubject}" styleClass="w3-input" maxlength="200" 
+							readonly="#{registrationManagement.registrationOption.enableEmailConfirm ? 'false' : 'true'}"/>
 						<h:message id="registrationEmailSubjectError" for="registrationEmailSubject" styleClass="w3-pale-red">
 							<p:autoUpdate/>
 						</h:message>
@@ -98,12 +111,12 @@
 							</p>
 						</p:overlayPanel>
 
-						<pe:ckEditor id="registrationEmailTemplate" value="#{manageRegistration.registrationOption.registrationEmailTemplate}" skin="moono-lisa" width="100%"
+						<pe:ckEditor id="registrationEmailTemplate" value="#{registrationManagement.registrationOption.registrationEmailTemplate}" skin="moono-lisa" width="100%"
 							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
 										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
 										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
 										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" 
-										readonly="#{manageRegistration.registrationOption.enableEmailConfirm ? 'false' : 'true'}">
+										readonly="#{registrationManagement.registrationOption.enableEmailConfirm ? 'false' : 'true'}">
 						</pe:ckEditor>
 						<h:message id="registrationEmailTemplateError" for="registrationEmailTemplate" styleClass="w3-pale-red">
 							<p:autoUpdate/>
@@ -121,7 +134,7 @@
 							Password reset requested at <b>BootForum</b>
 						</p:overlayPanel>
 						<p/>
-						<p:inputText id="passwordResetEmailSubject" value="#{manageRegistration.registrationOption.passwordResetEmailSubject}" 
+						<p:inputText id="passwordResetEmailSubject" value="#{registrationManagement.registrationOption.passwordResetEmailSubject}" 
 							required="true" styleClass="w3-input" maxlength="200" />
 						<h:message id="passwordResetEmailSubjectError" for="passwordResetEmailSubject" styleClass="w3-pale-red">
 							<p:autoUpdate/>
@@ -153,7 +166,7 @@
 							</p>
 						</p:overlayPanel>
 
-						<pe:ckEditor id="passwordResetEmailTemplate" value="#{manageRegistration.registrationOption.passwordResetEmailTemplate}" skin="moono-lisa" width="100%" required="true"
+						<pe:ckEditor id="passwordResetEmailTemplate" value="#{registrationManagement.registrationOption.passwordResetEmailTemplate}" skin="moono-lisa" width="100%" required="true"
 							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
 										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
 										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
@@ -172,16 +185,112 @@
 							styleClass="w3-btn w3-theme-dark w3-border-0" />
 					</div>
 				
-					<p:remoteCommand name="submitForm" action="#{manageRegistration.edit}"/>
+					<p:remoteCommand name="submitForm" action="#{registrationManagement.edit}"/>
 					
 				</div>
 				
 			</h:form>
-		
+
+			<p/>
+
+			<h:form id="registrationForm" styleClass="w3-theme-light">
+				<div class="w3-container w3-xlarge w3-border-bottom">
+					User Registrations
+				</div>
+				
+				<p:dataTable var="registration" value="#{registrationManagement.lazyModel}" style="margin: 0 auto;" styleClass="borderless"
+					widgetVar="registrationTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} registrations"
+					rows="10" lazy="true" id="registrationTable" draggableColumns="true">
+				
+					<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+
+					<p:column sortBy="#{registration.email}" style="text-align:left;width:33%;" priority="1">
+						<f:facet name="header">
+							<h:outputText value="Email" style="font-weight:bold;"/>
+						</f:facet>
+						
+						<b>#{registration.email}</b>
+						
+					</p:column>
+
+					<p:column sortBy="#{registration.username}" style="text-align:left;width:33%;" priority="2">
+						<f:facet name="header">
+							<h:outputText value="Username" style="font-weight:bold;"/>
+						</f:facet>
+						
+						<b>#{registration.username}</b>
+						
+					</p:column>
+					
+					<p:column sortBy="#{registration.registrationKey}" style="text-align:left;width:33%;" priority="3">
+						<f:facet name="header">
+							<h:outputText value="Registration Key" style="font-weight:bold;"/>
+						</f:facet>
+						
+						<b>#{registration.registrationKey}</b>
+						
+					</p:column>
+					
+					<p:column exportable="false" style="vertical-align:middle;width:50px;text-align:center;">
+					
+						<f:facet name="header">
+							<h:outputText value="Delete" style="font-weight:bold;"/>
+						</f:facet>
+						
+						<p:commandButton oncomplete="PF('confirmDeleteDialogVar').show()" icon="fa fa-times" title="Delete">
+							<f:setPropertyActionListener value="#{registration}" target="#{registrationManagement.deleteRecord}" />
+						</p:commandButton>
+						
+					</p:column>
+
+				</p:dataTable>
+				
+			</h:form>
+
+			<p:confirmDialog message="Are you sure?" width="300" global="true"
+				showEffect="explode" hideEffect="explode" header="Confirm"
+				severity="alert" widgetVar="confirmDeleteDialogVar">
+				<h:form id="deleteForm">
+					<p:commandButton value="Yes" icon="fa fa-check"
+						update=":registrationForm:registrationTable"
+						action="#{registrationManagement.delete}"
+						oncomplete="PF('confirmDeleteDialogVar').hide()" />
+						
+					<p:commandButton value="Cancel"
+						onclick="PF('confirmDeleteDialogVar').hide();return false;"
+						type="button" icon="fa fa-times" style="margin-left:5px;" />
+				</h:form>
+			</p:confirmDialog>
+	
  		</div>
 		
 		<script type="text/javascript">
  			//<![CDATA[
+
+  				$(document).ready(function(){
+					customizeDatatableStyle();
+				});
+				
+				function customizeDatatableStyle() {
+					/* set datatable header's background color */
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+					
+					/* set datatable paginator button color */
+					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
+						function(el) {
+							el.className += ' w3-button';
+							
+							if(el.className.indexOf('ui-state-active') >= 0) {
+								el.className += ' w3-theme-dark';	
+							}
+							else {
+								el.className += ' w3-white';
+							}
+						}
+					);
+				}				
  				
  				/* 
  				 * how to disable/enable CKEditor:

@@ -132,13 +132,13 @@
 						<p:commandButton value="#{msg['save']}" type="button" icon="fa fa-check" onclick="submitForm();"
 							styleClass="w3-btn w3-theme-dark w3-border-0"/>
 						
-						<span class="w3-margin-left" onclick="PF('testPanel').toggle();"
-							style="cursor:pointer;color:purple;text-decoration:underline;font-weight:bold;">
+						<span class="w3-margin-left" onclick="$('#form\\:testConfigurationDiv').toggle();"
+							style="cursor:pointer;color:purple;font-weight:bold;">
 							Test Configuration
 						</span>
 						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpTestConfiguration"/>
 						<p:overlayPanel for="helpTestConfiguration" style="width:240px" styleClass="w3-black w3-left-align">
-							Click to test the configuration
+							Send a test email to validate the configuration
 						</p:overlayPanel>
 					</div>                	
 					
@@ -148,13 +148,21 @@
 
 				<p/>
 				
-				<div class="w3-row-padding">
-					<div class="w3-rest container">
+				<div jsf:id="testConfigurationDiv" class="w3-container w3-border-top w3-animate-top">
 					
-			    	<p:panel header="Test" toggleable="true" toggleSpeed="500" collapsed="true"
-              			closeSpeed="500" widgetVar="testPanel">
-              			
-						<div jsf:id="testResultDiv" class="w3-card w3-container">
+					<div class="w3-panel w3-border w3-round w3-display-container">
+					
+						<span onclick="$('#form\\:testConfigurationDiv').hide();" class="w3-button w3-display-topright w3-grey w3-theme-dark">X</span>
+						
+						<br/><br/>
+						
+						<div class="w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-margin-top">
+							<p>
+							Enter the input fields below to test email configuration. If configuration are OK, an email will be sent to the "To Email".
+							</p>
+						</div>
+						
+						<div jsf:id="testResultDiv" class="w3-card w3-container w3-margin-top">
 							
 							<h4><b>Test Result:</b></h4>
 							<h4 jsf:rendered="#{manageEmail.testRan and manageEmail.testSuccess}" class="w3-green"> Test Email Sent</h4>
@@ -165,16 +173,16 @@
 						
 						<div class="w3-row-padding container">
 							
-							<p:outputLabel for="testToEmail" value="Test To Email" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							<p:outputLabel for="testToEmail" value="To Email" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 							<br/>
 							<p:inputText id="testToEmail" value="#{manageEmail.testToEmail}" styleClass="w3-input"
-								maxlength="80" required="true" requiredMessage="Must specify 'Test To Email'"/>
+								maxlength="80" required="true" requiredMessage="Must specify 'To Email'"/>
 							<h:message id="testToEmailError" for="testToEmail" styleClass="w3-pale-red">
 								<p:autoUpdate/>
 							</h:message>
 							
 							<p/>
-							<p:outputLabel for="testEmailSubject" value="Test Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							<p:outputLabel for="testEmailSubject" value="Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 							<br/>
 							<p:inputText id="testEmailSubject" value="#{manageEmail.testEmailSubject}" styleClass="w3-input"
 								maxlength="100" required="true" requiredMessage="Must specify 'Test Email Subject'"/>
@@ -183,32 +191,58 @@
 							</h:message>
 							
 							<p/>
-							<p:outputLabel for="testEmailContent" value="Test Email Content" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-							<br/>								
-							<pe:ckEditor id="testEmailContent" value="#{manageEmail.testEmailContent}" skin="moono-lisa" width="100%" required="true"
+							<p:outputLabel for="testEmailContent" value="Email Content" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							<br/>
+							
+							<!-- 
+								Design decision: use pe:ckEditor or p:textEditor?
+								
+									Both will have issue loading in a <div> element that is initially have 'display:none'
+									So must start without the 'display:none', then use $(document).ready(){ } callback to hide the <div>
+									
+										ckEditor has issue 
+							 -->	 
+							 					
+							<!-- <pe:ckEditor id="testEmailContent" value="#{manageEmail.testEmailContent}" skin="moono-lisa" width="100%" required="true"
 								toolbar="[['Bold', 'Italic', 'Underline', 'Strike', '-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor']]" 
 										requiredMessage="Test email content is required">
-							</pe:ckEditor>
+							</pe:ckEditor> -->
+							
+							<!-- 
+								javax.faces.FacesException: TextEditor component is marked secure='true' but the HTML Sanitizer was not found on the classpath. 
+									Either add the HTML sanitizer to the classpath per the documentation or mark secure='false' if you would like to use the component
+									without the sanitizer.
+							 -->
+							<p:textEditor id="testEmailContent" value="#{manageEmail.testEmailContent}" widgetVar="testEmailContentVar" 
+								height="250" secure="false" required="true" requiredMessage="Test email content is required"/>
 							<h:message id="testEmailContentError" for="testEmailContent" styleClass="w3-pale-red">
 								<p:autoUpdate/>
-							</h:message>			
+							</h:message>
 							
 							<p/>
-							<p:commandButton value="Test" action="#{manageEmail.testEmailConfiguration}" ajax="true" icon="fa fa-plug" update="testResultDiv"
+							<p:commandButton value="Send Test Email" action="#{manageEmail.testEmailConfiguration}" ajax="true" icon="fa fa-plug" update="testResultDiv"
 								styleClass="w3-btn w3-theme-dark w3-border-0"/>				
-							
+							<p/>
 						</div>
-              			
-              		</p:panel>
-              		
-              		
-              		</div>
+						
+					</div>
+					
 				</div>
 				
 			</h:form>		
 		
  		</div>
-		
+ 		
+		<script>
+			//<![CDATA[//------
+			
+			/* hide the testConfigurationDiv after the page loaded */
+			$(document).ready(function() {
+				$('#form\\:testConfigurationDiv').toggle();
+			});	
+			//]]>
+		</script>
+				
 	</ui:define>
 	
 </ui:composition>
