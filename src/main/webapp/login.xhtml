@@ -8,48 +8,16 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:jsf="http://xmlns.jcp.org/jsf"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:sec="http://www.springframework.org/security/tags"> 
+	xmlns:sec="http://www.springframework.org/security/tags"
+    template="/WEB-INF/template/layout_login.xhtml">
+    
+    <ui:define name="title">
+		#{msg['application.title']} - #{msg['login']}
+	</ui:define>
 	
-    <h:head>
-        <f:facet name="first">
-        
-        	<!-- if user access this page while already logged in, redirect to the homepage -->
-        	<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-        		<meta http-equiv="refresh" content="0; url=index.xhtml"/>
-        	</sec:authorize>
-        
-            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-            <meta name="apple-mobile-web-app-capable" content="yes" />
-        </f:facet>
-        <title><ui:insert name="title">#{msg['application.title']} - #{msg['login']}</ui:insert></title>
-        
-        <!-- *Note: favicon generated and setup instruction taken from https://favicon.io/favicon-generator/ -->
- 		<link rel="apple-touch-icon" sizes="180x180" href="#{request.contextPath}/favicon_io/apple-touch-icon.png"/>
-		<link rel="icon" type="image/png" sizes="32x32" href="#{request.contextPath}/favicon_io/favicon-32x32.png"/>
-		<link rel="icon" type="image/png" sizes="16x16" href="#{request.contextPath}/favicon_io/favicon-16x16.png"/>
-		<link rel="manifest" href="#{request.contextPath}/favicon_io/site.webmanifest"/>       
-        
-        <h:outputStylesheet library="css" name="w3.css"/>
-        
-        <!-- 
-        	color themes, read from cookie name 'theme-color', if empty, set to default value 'w3-theme-light-blue' 
-        -->
-        <c:set var = "theme_color" value = "#{cookie['theme.color'].value}"/>
-        <c:if test = "#{empty theme_color}">
-        	<c:set var = "theme_color" value = "w3-theme-light-blue"/>
-      	</c:if>      	
-        <h:outputStylesheet library="css" name="w3-theme/#{theme_color}.css"/>
-        
-        <style>
-        
-			html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 
-		</style>
-    </h:head>
 	
-	<h:body class="w3-theme-light" style="margin:0px;">
+	<ui:define name="content">
 	
 		<!-- <ui:include src="/WEB-INF/template/navbar_login.xhtml"/> -->
 	
@@ -401,6 +369,6 @@
 			//]]>
 		</script>
 	
-	</h:body>
+	</ui:define>
 	
 </ui:composition>
