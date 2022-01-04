@@ -239,7 +239,7 @@
 							<h:outputText value="Delete" style="font-weight:bold;"/>
 						</f:facet>
 						
-						<p:commandButton oncomplete="PF('confirmDeleteDialogVar').show()" icon="fa fa-times" title="Delete">
+						<p:commandButton oncomplete="PF('confirmDeleteDialogVar').show()" icon="fa fa-times" title="Delete" styleClass="w3-btn w3-theme-dark w3-border-0">
 							<f:setPropertyActionListener value="#{registration}" target="#{registrationManagement.deleteRecord}" />
 						</p:commandButton>
 						
