@@ -9,7 +9,7 @@
     template="/WEB-INF/template/layout_public.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} - Search Comment
+		#{msg['application.title']} - #{msg['search.comments']}
 	</ui:define>
 
 	<ui:define name="content">
@@ -81,7 +81,7 @@
 			<div class="w3-hide-small w3-margin-top">
 				<p:breadCrumb>
 					<p:menuitem value="Home" url="#{request.contextPath}/" />
-  						<p:menuitem value="Search Comments" url="#{request.requestURI}" />
+  						<p:menuitem value="#{msg['search.comments']}" url="#{request.requestURI}" />
 				</p:breadCrumb>
 			</div>
 		
@@ -94,7 +94,7 @@
 			<div jsf:id="searchFormDiv" >
 				
 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2>Search Comments</h2>
+ 					<h2>#{msg['search.comments']}</h2>
  				</div>
 			
 				<h:form id="searchForm">
@@ -109,7 +109,7 @@
 							<!-- Note: since this search page is AJAX submitted/refreshed, make sure to clear the resultTable, so the display between
 								searches is displayed properly: use the paginator.setPage(0) on the onclick event
 								ref: https://stackoverflow.com/questions/18441847/primefaces-datatable-reset-pagination -->
-							<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xf002; Search"
+							<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xf002; #{msg['search']}"
 								style="font-family:Open Sans, FontAwesome;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
 								onclick="PF('searchResultDatatable').getPaginator().setPage(0);" update=":searchResultDiv"
 								oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();changeAvatarBackgrounds();"/>
@@ -127,7 +127,7 @@
 					<hr style="border: 1px dashed; opacity: 0.25"/>
 					
 					<!-- note: paginator position can be top/bottom/both (default) -->
-					<p:dataTable value="#{searchComment.commentSearchLazyModel}" var="comment" id="results" 
+					<p:dataTable value="#{searchComment.commentSearchLazyModel}" var="comment" id="results" emptyMessage="#{msg['no.records.found']}"
 							widgetVar="searchResultDatatable" style="margin: 0 auto;" styleClass="borderless"
 					        paginator="true" rows="#{applicationProperties['Lucene.search.pageSize']}" lazy="true" paginatorPosition="both"
 					        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
@@ -137,7 +137,7 @@
 						<p:ajax event="page" oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();changeAvatarBackgrounds();"/>
 
 					  	<f:facet name="header">
-	           				 <h4 class="w3-opacity-min">Found #{searchComment.commentSearchLazyModel.rowCount} comments for '#{searchComment.keywords}'</h4>
+	           				 <h4 class="w3-opacity-min">#{msg['found']} #{searchComment.commentSearchLazyModel.rowCount} #{msg['comments.for']} '#{searchComment.keywords}'</h4>
 	        			</f:facet>
 	 
 	 					<p:column width="50px;">
@@ -156,7 +156,7 @@
 	
 						<p:column style="text-align:left">
 							<f:facet name="header">
-								<h:outputText value="Comment"/>
+								<h:outputText value="#{msg['comment']}"/>
 							</f:facet>
 				            <p:commandLink id="viewCommentLink" title="View Comment" style="text-decoration:none;color: #0084B4;"
 				            	oncomplete="PF('commentDialogVar').show();
@@ -173,7 +173,7 @@
 	
 	 					<p:column style="text-align:left">
 							<f:facet name="header">
-								<h:outputText value="Discussion"/>
+								<h:outputText value="#{msg['discussion']}"/>
 							</f:facet>
 							<h:outputLink value="viewDiscussion.xhtml" style="text-decoration:none;color: #0084B4;">
 								<h:outputText value="#{comment.discussion.title}"/>
@@ -183,7 +183,7 @@
 						
 						<p:column style="text-align:right;">
 							<f:facet name="header">
-								<h:outputText value="Posted On"/>
+								<h:outputText value="#{msg['posted.on']}"/>
 							</f:facet>
 							<h:outputText value="#{comment.createDate}"/>					
 						</p:column>
@@ -199,7 +199,7 @@
 			</div>
 
 			<h:form id="commentDialogForm">
-			    <p:dialog header="#{searchComment.selectedComment.createBy} posted on #{searchComment.selectedComment.createDate}" 
+			    <p:dialog header="#{searchComment.selectedComment.createBy} #{msg['posted.on']} #{searchComment.selectedComment.createDate}" 
 			    	widgetVar="commentDialogVar" width="900" resizable="false" id="commentDialog" position="center" 
 			        showEffect="scale" hideEffect="slide" modal="true">
 			        

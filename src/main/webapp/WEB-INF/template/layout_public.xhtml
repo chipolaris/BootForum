@@ -514,8 +514,8 @@
 					<h:form styleClass="w3-container" id="passwordResetForm">
 						
 						<div jsf:rendered="#{publicBackingBean.passwordResetEmailSent}" class="w3-green w3-section w3-round w3-center">
-							<h4>Password reset email sent</h4>
-							<h6>Please check email for password reset instruction</h6>
+							<h4>#{msg['password.reset.email.sent']}</h4>
+							<h6>#{msg['please.check.email.for.password.reset.instruction']}</h6>
 						</div>
 						
 						<div jsf:rendered="#{!publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-red w3-section w3-round">
