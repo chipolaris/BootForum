@@ -46,10 +46,17 @@ public class TagDiscussionsLazyModel extends LazyDataModel<Discussion> {
 		
 		logger.debug("first is " + first + ", pageSize is " + pageSize);
 		
-		SortMeta sortMeta = sortBy.entrySet().stream().findFirst().get().getValue();
-    	
-    	List<Discussion> discussions = this.tagService.getDiscussionsForTag(this.tag, first, pageSize, sortMeta.getField(),
-    			sortMeta.getOrder().isDescending()).getDataObject();
+		String sortField = null;
+		Boolean sortDescending = null;
+		
+		if(!sortBy.isEmpty()) {
+			SortMeta sortMeta = sortBy.entrySet().stream().findFirst().get().getValue();
+			sortField = sortMeta.getField();
+			sortDescending = sortMeta.getOrder().isAscending();
+		}
+		
+    	List<Discussion> discussions = this.tagService.getDiscussionsForTag(this.tag, first, pageSize, sortField,
+    			sortDescending).getDataObject();
     	
     	return discussions;
 	}

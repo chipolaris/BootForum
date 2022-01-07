@@ -55,7 +55,7 @@
 			
 			<div jsf:id="newTagDiv" class="toggleDiv w3-animate-bottom" style="display: none;border-bottom: 2px solid gray;">
 			
-				<h3><i class="fa fa-plus"/> Add New Tag</h3>
+				<h3><i class="pi pi-plus"/> Add New Tag</h3>
 				
 				<div class="w3-panel w3-border w3-round w3-display-container">
 					<span onclick="$('#newTagDiv').hide();" class="w3-button w3-display-topright">X</span>
@@ -121,9 +121,9 @@
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
 							
 							<div class="w3-row">
-								<p:commandButton value="Submit" ajax="true" action="#{tagManagement.createTag}" update=":listTagsDiv :tagOrderContent" 
-									oncomplete="$('#newTagDiv').hide();customizePrimefaceButtons();" icon="fa fa-check"/>
-								<p:commandButton value="Cancel" type="button" icon="fa fa-close" style="margin-left:5px;" onclick="$('#newTagDiv').hide()"/>
+								<p:commandButton value="#{msg['save']}" ajax="true" action="#{tagManagement.createTag}" update=":listTagsDiv :tagOrderContent" 
+									oncomplete="$('#newTagDiv').hide();customizePrimefaceButtons();" icon="pi pi-check"/>
+								<p:commandButton value="Cancel" type="button" icon="pi pi-times" style="margin-left:5px;" onclick="$('#newTagDiv').hide()"/>
 							</div>
 							
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -137,7 +137,7 @@
 			<div jsf:id="editTagDiv" class="toggleDiv w3-animate-bottom" style="display: none;border-bottom: 2px solid gray;">
 				<div jsf:rendered="#{not empty tagManagement.selectedTag}">
 				
-					<h3><i class="fa fa-edit"/> Edit Tag '#{tagManagement.selectedTag.label}'</h3>
+					<h3><i class="pi pi-pencil"/> Edit Tag '#{tagManagement.selectedTag.label}'</h3>
 					<div class="w3-panel w3-border w3-round w3-display-container">
 						<span onclick="$('#editTagDiv').hide();" class="w3-button w3-display-topright">X</span>
 						<h:form>
@@ -200,8 +200,8 @@
 																
 								<div class="w3-row">
 									<p:commandButton value="Submit" ajax="true" action="#{tagManagement.editTag}" update=":listTagsDiv :tagOrderContent" 
-										icon="fa fa-plus" oncomplete="$('#editTagDiv').hide();customizePrimefaceButtons();"/>
-									<p:commandButton type="button" value="Cancel" icon="fa fa-close" style="margin-left:5px;" onclick="$('#editTagDiv').hide()"/>
+										icon="pi pi-plus" oncomplete="$('#editTagDiv').hide();customizePrimefaceButtons();"/>
+									<p:commandButton type="button" value="Cancel" icon="pi pi-times" style="margin-left:5px;" onclick="$('#editTagDiv').hide()"/>
 								</div>
 							
 								<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -218,10 +218,10 @@
 				<h3>Tag List</h3>
 				
 				<button onclick="toggleDiv('newTagDiv');return;" class="w3-button w3-left-align w3-border">
-					<i class="fa fa-plus"/> Add New Tag
+					<i class="pi pi-plus"/> Add New Tag
 				</button>
 				<button onclick="$('#tagOrderModal').show();return;" class="w3-button w3-left-align w3-border" style="margin-left:5px;">
-					<i class="fa fa-sort"/> Order Tags
+					<i class="pi pi-sort"/> Order Tags
 				</button>
 				<p/>
 				
@@ -234,7 +234,7 @@
 					<div class="w3-col l3 m6 s12" style="padding: 8px;position:relative">
 					    <div class="w3-display-container w3-padding-16 w3-hover-grey" style="color:white;background-color: ##{tag.color}">
 							<span jsf:rendered="#{tag.disabled}" class="w3-display-topright" style="color:lightgrey;">
-					        	<i class="fa fa-ban w3-xxlarge" title="Disabled"/>
+					        	<i class="pi pi-ban w3-xxlarge" title="Disabled"/>
 					        </span>
 					        <div class="w3-center">
 					        	<i class="#{tag.icon} w3-xxxlarge"></i>
@@ -247,13 +247,13 @@
 					        	
 					        	<p:commandLink ajax="true" oncomplete="toggleDiv('editTagDiv');document.getElementById('editTagDiv').scrollIntoView();customizePrimefaceButtons();" 
 					        		update=":editTagDiv" title="Edit this tag">
-					        		<i class="fa fa-edit w3-xlarge w3-text-black"/>
+					        		<i class="pi pi-pencil w3-xlarge w3-text-black"/>
 					        		<f:setPropertyActionListener value="#{tag}" target="#{tagManagement.selectedTag}"/>
 					        	</p:commandLink>
 					        	<p:commandLink action="#{tagManagement.deleteTag}" update=":listTagsDiv :tagOrderContent"  oncomplete="window.scrollTo(0,0);" 
 					        		title="Delete this Tag" style="margin-left:5px;">
-					        		<i class="fa fa-trash w3-xlarge w3-text-black"/>
-					        		<p:confirm header="Confirm Delete" message="Delete Tag?" icon="fa fa-exclamation-triangle"/>
+					        		<i class="pi pi-trash w3-xlarge w3-text-black"/>
+					        		<p:confirm header="Confirm Delete" message="Delete Tag?" icon="pi pi-exclamation-triangle"/>
 					        		<f:setPropertyActionListener value="#{tag}" target="#{tagManagement.selectedTag}"/>
 					        	</p:commandLink>
 					        </div>
@@ -272,7 +272,7 @@
     				<span onclick="$('#tagOrderModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="fa fa-sitemap"/> Order Tags</span>
+						<span class="w3-xlarge"><i class="pi pi-sort w3-xlarge"/> Order Tags</span>
 					</header>
 					
 					<p/>
@@ -295,7 +295,7 @@
 							
 							<p/>
 							
-							<p:commandButton ajax="true" value="Submit" icon="fa fa-check" action="#{tagManagement.tagOrderSubmit}" 
+							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{tagManagement.tagOrderSubmit}" 
 								update=":listTagsDiv" oncomplete="$('#tagOrderModal').hide();" />
 							
 						</h:form>
@@ -310,8 +310,8 @@
 			
 			<!-- global confirm dialog -->
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
-        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
     		</p:confirmDialog>
 			
 		</div>
