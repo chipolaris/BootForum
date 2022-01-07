@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
+import org.primefaces.model.SortMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,20 +26,31 @@ public class TagDiscussionsLazyModel extends LazyDataModel<Discussion> {
 	
 	private Tag tag;
 	
+	private int count;
+	
 	public TagDiscussionsLazyModel(TagService tagService, Tag tag) {
 		this.tagService = tagService;
 		this.tag = tag;
-		this.setRowCount(this.tagService.countDiscussionsForTag(this.tag).getDataObject().intValue());
+		
+		this.count = tagService.countDiscussionsForTag(this.tag).getDataObject().intValue();
 	}
-	
-    @Override
-    public List<Discussion> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
+
+	@Override
+	public int count(Map<String, FilterMeta> filterBy) {
+		return count;
+	}
+
+	@Override
+	public List<Discussion> load(int first, int pageSize, Map<String, SortMeta> sortBy,
+			Map<String, FilterMeta> filterBy) {
+		
+		logger.debug("first is " + first + ", pageSize is " + pageSize);
+		
+		SortMeta sortMeta = sortBy.entrySet().stream().findFirst().get().getValue();
     	
-    	logger.debug("first is " + first + ", pageSize is " + pageSize);
-    	
-    	List<Discussion> discussions = this.tagService.getDiscussionsForTag(this.tag, first, pageSize, sortField,
-    			sortOrder == SortOrder.DESCENDING).getDataObject();
+    	List<Discussion> discussions = this.tagService.getDiscussionsForTag(this.tag, first, pageSize, sortMeta.getField(),
+    			sortMeta.getOrder().isDescending()).getDataObject();
     	
     	return discussions;
-    }
+	}
 }

@@ -5,10 +5,12 @@ import java.util.Map;
 
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
+import org.primefaces.model.SortMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.chipolaris.bootforum.dao.QueryFilterMeta;
+import com.github.chipolaris.bootforum.dao.QueryMeta;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.service.GenericService;
@@ -30,25 +32,27 @@ public class ForumDiscussionsLazyModel extends LazyDataModel<Discussion> {
 		this.genericService = genericService;
 		this.forum = forum;
 	}
-	
-    @Override
-    public List<Discussion> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,FilterMeta> filterBy) {
-    	
-    	logger.debug("first is " + first + ", pageSize is " + pageSize);
-    	
-    	/* 
-    	 * Note: filters could be null, e.g., if dataTable declared in the UI facelet does not include filter, or 
-    	 * the load call come from dataList component
-    	 */
-    	Map<String, Object> filters = LazyModelUtil.toObjectMap(filterBy);
-    	
-    	filters.put("forum", this.forum);
-    	
-    	this.setRowCount(this.genericService.countEntities(Discussion.class, filters).getDataObject().intValue());
-    	
-    	List<Discussion> discussions = this.genericService.getEntities(Discussion.class, filters, first, pageSize, 
-				sortField, sortOrder == SortOrder.DESCENDING).getDataObject();
-    	
-    	return discussions;
-    }
+
+	@Override
+	public int count(Map<String, FilterMeta> filterBy) {
+		
+		QueryMeta.Builder<Discussion> builder = LazyModelUtil.queryBuilder(Discussion.class, filterBy);
+		
+		builder.filterMeta("forum", this.forum, QueryFilterMeta.MatchMode.EQUALS);
+		
+		return this.genericService.countEntities2(builder.build()).getDataObject().intValue();
+	}
+
+	@Override
+	public List<Discussion> load(int first, int pageSize, Map<String, SortMeta> sortBy,
+			Map<String, FilterMeta> filterBy) {
+		
+		logger.debug("first is " + first + ", pageSize is " + pageSize);
+		
+		QueryMeta.Builder<Discussion> builder = LazyModelUtil.queryBuilder(Discussion.class, sortBy, filterBy);
+		
+		builder.filterMeta("forum", this.forum, QueryFilterMeta.MatchMode.EQUALS);
+		
+		return this.genericService.getEntities2(builder.startIndex(first).maxResult(pageSize).build()).getDataObject();
+	}
 }

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.dao.GenericDAO;
+import com.github.chipolaris.bootforum.dao.GenericQuery;
+import com.github.chipolaris.bootforum.dao.QueryMeta;
 import com.github.chipolaris.bootforum.dao.QuerySpec;
 import com.github.chipolaris.bootforum.dao.SortSpec;
 
@@ -18,6 +20,9 @@ public class GenericService {
 
 	@Resource
 	private GenericDAO genericDAO;
+	
+	@Resource 
+	private GenericQuery genericQuery;
 	
 	/**
 	 * Save new instance of the given entity
@@ -208,4 +213,22 @@ public class GenericService {
 		return response;
 	}
 	
+	@Transactional(readOnly=true)
+	public <E> ServiceResponse<Long> countEntities2(QueryMeta<E> queryMeta) {
+		
+		ServiceResponse<Long> response = new ServiceResponse<Long>();
+		response.setDataObject(genericQuery.countEntities(queryMeta));
+		
+		return response;
+	}
+	
+	
+	public <E> ServiceResponse<List<E>> getEntities2(QueryMeta<E> queryMeta) {
+		
+		ServiceResponse<List<E>> response = new ServiceResponse<List<E>>();
+		
+		response.setDataObject(genericQuery.getEntities(queryMeta));
+		
+		return response;
+	}
 }

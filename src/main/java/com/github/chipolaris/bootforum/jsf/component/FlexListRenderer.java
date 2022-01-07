@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum.jsf.component;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.faces.render.Renderer;
 
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
 
 import com.github.chipolaris.bootforum.util.VelocityTemplateUtil;
 
@@ -42,7 +44,7 @@ public class FlexListRenderer extends Renderer {
 		String firstIndexStr = requestParameters.get(this.cssClientId + "_first");
 		
 		if(firstIndexStr != null && !firstIndexStr.isEmpty()) {
-			flexList.setFirst(new Integer(firstIndexStr));
+			flexList.setFirst(Integer.valueOf(firstIndexStr));
 			flexList.setPaginationRequest(true);
 		}
 		
@@ -122,14 +124,15 @@ public class FlexListRenderer extends Renderer {
 			String[] fields = flexList.getFilterFields().split(", ");
 			
 			for(String field : fields) {
-				filters.put(field, new FilterMeta(field, flexList.getFilterValue()));
+				filters.put(field, FilterMeta.builder().field(field).filterValue(flexList.getFilterValue()).build());
 			}
 		}
 		
 		/*
 		 * important: call lazyDataModel.load first, then call lazyDataModel.getRowCount
 		 */
-		List<?> dataList = lazyDataModel.load(flexList.getFirst(), Integer.parseInt(flexList.getPageSize()), null, null, filters);
+		List<?> dataList = lazyDataModel.load(flexList.getFirst(), Integer.parseInt(flexList.getPageSize()), 
+				Collections.singletonMap("", SortMeta.builder().build()), filters);
 		int rowCount = lazyDataModel.getRowCount();
 		
 		flexList.setCurrentDataList(dataList);
@@ -288,9 +291,8 @@ public class FlexListRenderer extends Renderer {
 			requestMap.put(varName, value);
 			
 			// super.encodeChildren(context, flexList);
-			
-			
-	        Iterator j = flexList.getChildren( ).iterator( );
+						
+	        Iterator<?> j = flexList.getChildren( ).iterator( );
 
 	        while (j.hasNext( )) {
 
@@ -333,7 +335,7 @@ public class FlexListRenderer extends Renderer {
 
             } else {
 
-                Iterator i = component.getChildren( ).iterator( );
+                Iterator<?> i = component.getChildren( ).iterator( );
 
                 while (i.hasNext( )) {
 

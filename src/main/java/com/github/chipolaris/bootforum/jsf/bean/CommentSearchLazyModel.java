@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
+import org.primefaces.model.SortMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,16 +76,24 @@ public class CommentSearchLazyModel extends LazyDataModel<Comment> {
 		this.indexService = indexService;
 		// this.searchCommentResult = new SearchCommentResult();
 	}
-
+	
 	@Override
-	public List<Comment> load(int first, int pageSize, String sortField,
-			SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
+	public int count(Map<String, FilterMeta> filterBy) {
+		// return 0 here because we don't want to execute another Lucene search
+		// 	for the count. The setRowCount in the load() method below will take care of this
+		// see https://github.com/primefaces/primefaces/issues/1921
+		return 0;
+	}
+	
+	@Override
+	public List<Comment> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
 		
 		logger.info("first is " + first + ", pageSize is " + pageSize);
 		
 		SearchCommentResult searchCommentResult = indexService.searchCommentByKeywords(
-			keywords, searchTitle, searchContent, first, pageSize).getDataObject();
+				keywords, searchTitle, searchContent, first, pageSize).getDataObject();
 		
+		// see https://github.com/primefaces/primefaces/issues/1921
 		this.setRowCount(searchCommentResult.getTotalHits().intValue());
 		
 		return searchCommentResult.getComments();

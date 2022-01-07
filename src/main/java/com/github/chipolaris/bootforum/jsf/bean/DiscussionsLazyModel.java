@@ -1,16 +1,17 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
+import org.primefaces.model.SortMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.chipolaris.bootforum.dao.QueryMeta;
+import com.github.chipolaris.bootforum.dao.QuerySortMeta.SortOrder;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.service.GenericService;
 
@@ -31,6 +32,8 @@ public class DiscussionsLazyModel extends LazyDataModel<Discussion> {
 	
 	private boolean sortDesc = true;
 	
+	private int count;
+	
 	public DiscussionsLazyModel(GenericService genericService, String sort, String order) {
 		this.genericService = genericService;
 		
@@ -43,17 +46,22 @@ public class DiscussionsLazyModel extends LazyDataModel<Discussion> {
 			this.sortDesc = false;
     	}
 		
-		this.setRowCount(this.genericService.countEntities(Discussion.class).getDataObject().intValue());
+		this.count = this.genericService.countEntities(Discussion.class).getDataObject().intValue();
 	}
-	
-    @Override
-    public List<Discussion> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,FilterMeta> filterBy) {
-    	
-    	logger.debug("first is " + first + ", pageSize is " + pageSize);
-    	
-    	List<Discussion> discussions = this.genericService.getEntities(Discussion.class, new HashMap<>(), first, pageSize, 
-				this.sortField, this.sortDesc).getDataObject();
-    	
-    	return discussions;
-    }
+
+	@Override
+	public int count(Map<String, FilterMeta> filterBy) {
+		return count;
+	}
+
+	@Override
+	public List<Discussion> load(int first, int pageSize, Map<String, SortMeta> sortBy,
+			Map<String, FilterMeta> filterBy) {
+
+		QueryMeta.Builder<Discussion> builder = LazyModelUtil.queryBuilder(Discussion.class, filterBy);
+		builder.sortMeta(this.sortField, this.sortDesc ? SortOrder.DESCENDING : SortOrder.ASCENDING, false);
+		
+		return this.genericService.getEntities2(builder
+				.startIndex(first).maxResult(pageSize).build()).getDataObject();
+	}
 }

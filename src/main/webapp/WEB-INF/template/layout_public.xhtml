@@ -164,7 +164,7 @@
 					<!-- medium screen top menu items -->
 					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
 						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['forums']}">
-						<i class="fa fa-comments"/>
+						<i class="pi pi-comments"/>
 					</a>
 					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
 						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['members']}">
@@ -174,31 +174,31 @@
 					<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
 						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white"
 							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['register']}" onclick="document.getElementById('registerModal').style.display='block'">
-							<i class="fa fa-clipboard"/>
+							<i class="pi pi-book"/>
 						</a>					
 						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white"
 							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['login']}" onclick="document.getElementById('loginModal').style.display='block'">
-							<i class="fa fa-sign-in"/>
+							<i class="pi pi-sign-in"/>
 						</a>
 					</sec:authorize>
 					
 					<!-- large screen top menu items -->
 					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
-						<i class="fa fa-comments fa-lg"/><br/><span class="w3-medium">#{msg['forums']}</span>
+						<i class="pi pi-comments w3-xlarge"/><br/><span class="w3-medium">#{msg['forums']}</span>
 					</a>
 					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
-						<i class="fa fa-users fa-lg"/><br/><span class="w3-medium">#{msg['members']}</span>
+						<i class="pi pi-users w3-xlarge"/><br/><span class="w3-medium">#{msg['members']}</span>
 					</a>
 					
 					<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
 					
 						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white"
 							onclick="document.getElementById('registerModal').style.display='block'">
-							<i class="fa fa-clipboard fa-lg"/><br/><span class="w3-medium">#{msg['register']}</span>
+							<i class="pi pi-book w3-xlarge"/><br/><span class="w3-medium">#{msg['register']}</span>
 						</a>					
 						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white" 
 							onclick="document.getElementById('loginModal').style.display='block'">
-							<i class="fa fa-sign-in fa-lg"/><br/><span class="w3-medium">#{msg['login']}</span>
+							<i class="pi pi-sign-in w3-xlarge"/><br/><span class="w3-medium">#{msg['login']}</span>
 						</a>
 					
 					</sec:authorize>
@@ -418,11 +418,11 @@
 					<span onclick="$('#registerModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="#{msg['close']}">&#215;</span>
 			
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="fa fa-clipboard"/> #{msg['register']}</span>
+						<span class="w3-xlarge"><i class="pi pi-book w3-xlarge"/> #{msg['register']}</span>
 					</header>
 					
 					<div class="w3-center w3-section w3-text-theme">
-			      		<i class="fa fa-id-card-o" style="font-size: 100pt;"/>
+			      		<i class="pi pi-id-card" style="font-size: 100pt;"/>
 			    	</div>
 							
 					<h:form styleClass="w3-container" id="registerForm">
@@ -462,15 +462,15 @@
 								<h:message for="email" id="emailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
-								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; #{msg['choose.a.password']}" styleClass="w3-input w3-margin-top" title="#{msg['password']}" 
-									style="font-family:Open Sans, FontAwesome;text-align:center;"
+								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; #{msg['choose.a.password']}" styleClass="w3-input" title="#{msg['password']}" 
+									style="font-family:Open Sans, FontAwesome;text-align:center;width:100%;" toggleMask="true"
 									onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
 								<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
 								<p:password id="confirmPassword" placeholder="&#xf00c; #{msg['confirm.password']}" styleClass="w3-input" title="#{msg['confirm.password']}" 
-									style="font-family:Open Sans, FontAwesome;text-align:center;" 
+									style="font-family:Open Sans, FontAwesome;text-align:center;" toggleMask="true"
 									onblur="validateConfirmPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
 								<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>

@@ -109,8 +109,14 @@
 						</p>
 					
 						<p>
+							<p:selectOneMenu id="themeSelectMenu" value="#{switchTheme.themeComponent}" panelStyle="width:300px;" style="width:400px;">
+						         <p:ajax process="@this" oncomplete="PrimeFaces.changeTheme($('#frmTheme\\:themeSelectMenu_label').text());"/>
+						         <f:selectItem itemValue="saga" itemLabel="Saga" />
+								 <f:selectItem itemValue="vela" itemLabel="Vela" />
+								 <f:selectItem itemValue="arya" itemLabel="Arya"/>
+						    </p:selectOneMenu>
 						
-							<p:selectOneMenu value="#{manageDisplay.displayOption.themeComponent}" var="theme" style="width:100%;" >
+							<!-- <p:selectOneMenu value="#{manageDisplay.displayOption.themeComponent}" var="theme" style="width:100%;" >
 							
 								<f:selectItem itemValue="nova-light" itemLabel="Nova-Light" />
 								<f:selectItem itemValue="nova-dark" itemLabel="Nova-Dark" />
@@ -125,7 +131,7 @@
 									#{theme}
 								</p:column>
 						
-							</p:selectOneMenu>
+							</p:selectOneMenu> -->
 					
 						</p>
 							

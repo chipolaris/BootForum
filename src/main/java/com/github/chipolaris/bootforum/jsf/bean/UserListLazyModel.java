@@ -5,11 +5,12 @@ import java.util.Map;
 
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
+import org.primefaces.model.SortMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.chipolaris.bootforum.dao.QuerySpec;
+import com.github.chipolaris.bootforum.dao.QueryFilterMeta;
+import com.github.chipolaris.bootforum.dao.QueryMeta;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
@@ -40,33 +41,47 @@ public class UserListLazyModel extends LazyDataModel<User> {
 	}
 	
 	@Override
-    public List<User> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
-    	
-    	logger.debug("first is " + first + ", pageSize is " + pageSize);
-    	
-    	Map<String, Object> filters = LazyModelUtil.toObjectMap(filterBy);
-    	
-    	if(this.accountStatus != null) {
-    		filters.put("accountStatus", this.accountStatus);
-    	}
-    	
-    	if(this.userRole != null) {
-    		filters.put("userRole", this.userRole);
-    	}
-    	
-    	if(filterValue != null && !filterValue.isEmpty()) {
-    		filters.put(this.filterType, this.filterValue);
-    	}
-    	
-		this.setRowCount(this.genericService.countEntities(QuerySpec.builder(User.class)
-				.equalFilters(filters).build()).getDataObject().intValue());
-    	
-		QuerySpec<User> querySpec = 
-				QuerySpec.builder(User.class).equalFilters(filters).startIndex(first)
-					.maxResult(pageSize).sortField(this.sortField).sortDesc(this.sortDesc).build();
+	public int count(Map<String, FilterMeta> filterBy) {
 		
-    	return this.genericService.getEntities(querySpec).getDataObject();
-    }
+		QueryMeta.Builder<User> builder = LazyModelUtil.queryBuilder(User.class, filterBy);
+		
+		if(this.accountStatus != null) {	
+			builder.filterMeta("accountStatus", this.accountStatus, QueryFilterMeta.MatchMode.EQUALS);
+		}
+		
+		if(this.userRole != null) {
+			builder.filterMeta("userRole", this.userRole, QueryFilterMeta.MatchMode.EQUALS);
+		}
+		
+		if(filterValue != null && !filterValue.isEmpty()) {
+    		builder.filterMeta(this.filterType, this.filterValue, QueryFilterMeta.MatchMode.EQUALS);
+    	}
+		
+		return this.genericService.countEntities2(builder.build()).getDataObject().intValue();
+	}
+
+	@Override
+	public List<User> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+		
+		logger.debug("first is " + first + ", pageSize is " + pageSize);
+		
+		QueryMeta.Builder<User> builder = LazyModelUtil.queryBuilder(User.class, filterBy);
+		
+		if(this.accountStatus != null) {	
+			builder.filterMeta("accountStatus", this.accountStatus, QueryFilterMeta.MatchMode.EQUALS);
+		}
+		
+		if(this.userRole != null) {
+			builder.filterMeta("userRole", this.userRole, QueryFilterMeta.MatchMode.EQUALS);
+		}
+		
+		if(filterValue != null && !filterValue.isEmpty()) {
+    		builder.filterMeta(this.filterType, this.filterValue, QueryFilterMeta.MatchMode.EQUALS);
+    	}
+		
+		return this.genericService.getEntities2(LazyModelUtil.queryBuilder(User.class, sortBy, filterBy).startIndex(first).
+				maxResult(pageSize).build()).getDataObject();
+	}
 
 	public AccountStatus getAccountStatus() {
 		return accountStatus;

@@ -19,8 +19,8 @@
 		<java.version>11</java.version>
 		<lucene.version>8.0.0</lucene.version>
 		<velocity.version>2.1</velocity.version>
-		<primefaces.version>8.0</primefaces.version>
-		<primefaces-extensions.version>8.0</primefaces-extensions.version>
+		<primefaces.version>11.0.0</primefaces.version>
+		<primefaces-extensions.version>11.0.0</primefaces-extensions.version>
 		<eclipselink.version>2.7.5</eclipselink.version>
 	</properties>
 

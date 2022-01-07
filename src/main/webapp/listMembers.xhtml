@@ -85,7 +85,7 @@
 				
 				<h:form>
 				
-					<p:dataTable var="user" value="#{listMembers.genericLazyModel}" style="margin: 0 auto;" styleClass="borderless"
+					<p:dataTable var="user" value="#{listMembers.genericLazyModel}" style="margin: 0 auto;" stripedRows="true" showGridlines="false"
 						widgetVar="membersTableVar" rowIndexVar="rowIndex" paginator="true" filterEvent="enter"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						currentPageReportTemplate="#{msg['showing']} {startRecord}-{endRecord} #{msg['of']} {totalRecords} #{msg['members']}"

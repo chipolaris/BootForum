@@ -5,11 +5,10 @@ import java.util.Map;
 
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
+import org.primefaces.model.SortMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.chipolaris.bootforum.dao.QuerySpec;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 public class GenericLazyModel<T> extends LazyDataModel<T> {
@@ -19,7 +18,8 @@ public class GenericLazyModel<T> extends LazyDataModel<T> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final Logger logger;// = LoggerFactory.getLogger(type); 
+	@SuppressWarnings("unused")
+	private final Logger logger;
 	
 	private GenericService genericService;
 	
@@ -30,18 +30,18 @@ public class GenericLazyModel<T> extends LazyDataModel<T> {
 		this.type = type;
 		this.logger = LoggerFactory.getLogger(this.getClass());
 	}
-	
+
 	@Override
-    public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filterBy) {
-    	
-    	logger.debug("first is " + first + ", pageSize is " + pageSize);
-    	
-    	Map<String, Object> filters = LazyModelUtil.toObjectMap(filterBy);
-    		
-		this.setRowCount(this.genericService.countEntities(
-				QuerySpec.builder(type).equalFilters(filters).build()).getDataObject().intValue());
+	public int count(Map<String, FilterMeta> filterBy) {
 		
-		return this.genericService.getEntities(QuerySpec.builder(type).equalFilters(filters).startIndex(first).
-				maxResult(pageSize).sortField(sortField).sortDesc(sortOrder == SortOrder.DESCENDING).build()).getDataObject();
-    }
+		return this.genericService.countEntities2(LazyModelUtil.queryBuilder(type, filterBy)
+				.build()).getDataObject().intValue();
+	}
+
+	@Override
+	public List<T> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+		
+		return this.genericService.getEntities2(LazyModelUtil.queryBuilder(type, sortBy, filterBy).startIndex(first).
+				maxResult(pageSize).build()).getDataObject();
+	}
 }

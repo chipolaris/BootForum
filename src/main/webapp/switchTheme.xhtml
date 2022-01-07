@@ -88,7 +88,7 @@
 					</div>
 						
 					<div class="w3-half w3-container">
-						<h:form>
+						<h:form id="frmTheme">
 						
 							<p>
 								Current Component Theme is <b>#{not empty switchTheme.themeComponent ? switchTheme.themeComponent : cookie['theme.component'].value}</b>
@@ -99,7 +99,13 @@
 							</p>
 						
 							<p>
-							
+								<p:selectOneMenu id="themeSelectMenu" value="#{switchTheme.themeComponent}" panelStyle="width:300px;" style="width:400px;">
+							         <p:ajax process="@this" oncomplete="PrimeFaces.changeTheme($('#frmTheme\\:themeSelectMenu_label').text());"/>
+							         <f:selectItem itemValue="saga" itemLabel="Saga" />
+									 <f:selectItem itemValue="vela" itemLabel="Vela" />
+									 <f:selectItem itemValue="arya" itemLabel="Arya"/>
+							    </p:selectOneMenu>
+							<!-- 
 								<p:themeSwitcher value="#{switchTheme.themeComponent}" var="theme" panelStyle="width:300px;" style="width:400px;" >
 		
 									<f:selectItem itemValue="nova-light" itemLabel="Nova-Light" />
@@ -116,7 +122,7 @@
 									</p:column>
 									
 								</p:themeSwitcher>
-						
+						 -->
 							</p>
 							
 							<p:commandButton value=" Save" icon="fa fa-save" ajax="false" action="#{switchTheme.submitThemeComponent}"/>
