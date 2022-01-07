@@ -6,19 +6,19 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 @FacesConverter(forClass=String.class)
-public class StringConverter implements Converter {
+public class StringConverter implements Converter<String> {
 
 	@Override
-	public Object getAsObject(FacesContext context, UIComponent component,
+	public String getAsObject(FacesContext context, UIComponent component,
 			String value) {
-		return value.trim();
+		
+		return value != null ? value.trim() : null;
 	}
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
+			String value) {
 		
-		return ((String)value).trim();
+		return value != null ? ((String)value).trim() : null;
 	}
-
 }

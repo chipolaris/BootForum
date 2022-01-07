@@ -177,7 +177,7 @@
 				
 					<h:form id="form">
 					
-					    <p:dataView var="user" value="#{userList.lazyModel}" columns="3" layout="grid" lazy="true"
+					    <p:dataGrid var="user" value="#{userList.lazyModel}" columns="3" layout="grid" lazy="true"
 					        rows="15" paginator="true" id="userList"
 					        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					        currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} users" emptyMessage="No user found"

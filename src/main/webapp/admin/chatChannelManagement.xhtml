@@ -83,7 +83,7 @@
 							<div class="w3-col m8 l9">
 								<p:selectOneMenu id="icon" value="#{chatChannelManagement.newChatChannel.icon}" panelStyle="width:250px" style="width:270px;"
 				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
-				  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
+				  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 				  					
 					  				<p:column style="width:10%">
 					  					<i class="#{f} fa-2x"/>
@@ -162,7 +162,7 @@
 								<div class="w3-col m8 l9">
 									<p:selectOneMenu id="icon" value="#{chatChannelManagement.selectedChatChannel.icon}" panelStyle="width:250px" style="width:270px;"
 					  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
-					  					<f:selectItems value="#{fontAwesomes.list}" var="font" itemLabel="#{font}" itemValue="fa fa-#{font}"/>
+					  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 					  					
 						  				<p:column style="width:10%">
 						  					<i class="#{f} fa-2x"/>
@@ -247,12 +247,12 @@
 					        	<p:commandLink ajax="true" update=":editChatChannelDiv"
 					        		 oncomplete="toggleDiv('editChatChannelDiv');document.getElementById('editChatChannelDiv').scrollIntoView();customizePrimefaceButtons();" 
 					        		title="Edit this chat channel">
-					        		<i class="fa fa-edit w3-xlarge w3-text-black"/>
+					        		<i class="pi pi-pencil w3-xlarge w3-text-black"/>
 					        		<f:setPropertyActionListener value="#{chatChannel}" target="#{chatChannelManagement.selectedChatChannel}"/>
 					        	</p:commandLink>
 					        	<p:commandLink action="#{chatChannelManagement.deleteChatChannel}" update=":listChatChannelsDiv"  oncomplete="window.scrollTo(0,0);" 
 					        		title="Delete this Chat Channel" style="margin-left:5px;">
-					        		<i class="fa fa-trash w3-xlarge w3-text-black"/>
+					        		<i class="pi pi-trash w3-xlarge w3-text-black"/>
 					        		<p:confirm header="Confirm Delete" message="Delete Chat Channel?" icon="fa fa-exclamation-triangle"/>
 					        		<f:setPropertyActionListener value="#{chatChannel}" target="#{chatChannelManagement.selectedChatChannel}"/>
 					        	</p:commandLink>

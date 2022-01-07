@@ -83,9 +83,9 @@
 				        
 				        <p:column headerText="#{msg['category/name']}" style="text-align:left;" priority="1">
 				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{treeNode.type eq 'Root'}">
-				        		<i class="fa fa-lg fa-sitemap"/> #{msg['forum.home']}
+				        		<i class="pi pi-sitemap w3-xlarge"/> #{msg['forum.home']}
 				        	</span>
-				        	<h:link outcome="viewForum" rendered="#{treeNode.type eq 'Forum'}">
+				        	<h:link outcome="viewForum" rendered="#{treeNode.type eq 'Forum'}" style="text-decoration:none;">
 								<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{data.iconColor};">
 				        			<i class="fa-lg #{data.icon}"/>
 				        		</span>
@@ -96,10 +96,10 @@
 				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}" class="w3-small w3-opacity-min"> #{data.description}</span>
 				        	
 				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{treeNode.type eq 'ForumGroup' and param['id'] ne data.id}">
-				        		<i class="fa fa-lg fa-sitemap"/> #{data.title}
+				        		<i class="pi pi-sitemap w3-xlarge"/> #{data.title}
 				        	</span>
 				        	<span class="w3-tag w3-large w3-theme-d5" jsf:rendered="#{treeNode.type eq 'ForumGroup' and param['id'] eq data.id}" id="selectedForum">
-				        		<i class="fa fa-lg fa-sitemap"/> #{data.title}
+				        		<i class="pi pi-sitemap w3-xlarge"/> #{data.title}
 				        	</span>
 				        </p:column>
 				        
