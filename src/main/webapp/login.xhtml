@@ -56,7 +56,7 @@
 			    					<input type="password" name="password" placeholder="&#xf084; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
 			    				</p>
 			    				<p>
-			    					<input type="submit" value="&#xf090; #{msg['login']}" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
+			    					<button type="submit" class="w3-input w3-btn w3-theme-dark w3-round"><i class="pi pi-sign-in"/> #{msg['login']}</button>
 			    				</p>
 			    				<p>
 			    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> #{msg['remember.me']}
@@ -126,14 +126,14 @@
 								</p>
 								<p>
 									<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; #{msg['choose.a.password']}" styleClass="w3-input w3-margin-top" title="#{msg['password']}" 
-										style="font-family:Open Sans, FontAwesome;text-align:center;"
+										style="font-family:Open Sans, FontAwesome;text-align:center;" toggleMask="true"
 										onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 									</p:password>
 									<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 								</p>
 								<p>
 									<p:password id="confirmPassword" placeholder="&#xf00c; #{msg['confirm.password']}" styleClass="w3-input" title="#{msg['confirm.password']}" 
-										style="font-family:Open Sans, FontAwesome;text-align:center;" 
+										style="font-family:Open Sans, FontAwesome;text-align:center;" toggleMask="true"
 										onblur="validateConfirmPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 									</p:password>
 									<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>

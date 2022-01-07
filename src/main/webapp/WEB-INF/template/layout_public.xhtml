@@ -66,6 +66,11 @@
 			
 			input[type=text].searchInputExpand:focus {
 			  width: 400px;
+			}
+			
+			/* primefaces p:password tag toggleMask="true" will add a span, so make the span full width */
+			span.ui-password {
+				display:block;
 			}			
 
 		</style>
@@ -154,7 +159,7 @@
 					<!-- ellipsis icon button to show on small screen -->
 					<a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-hover-text-white w3-border-left w3-right" href="javascript:void(0);" onclick="openNav('navSmall')" 
 						style="font-size:28px;padding-top:9px;padding-bottom: 9px;">
-						<i class="fa fa-ellipsis-v"/>
+						<i class="pi pi-ellipsis-v w3-xlarge"/>
 					</a>
 					
 					<a href="#{request.contextPath}" class="w3-bar-item w3-theme-gradient-l1">
@@ -168,7 +173,7 @@
 					</a>
 					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
 						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['members']}">
-						<i class="fa fa-users"/>
+						<i class="pi pi-users"/>
 					</a>
 					
 					<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
@@ -367,7 +372,7 @@
 				<span onclick="$('#loginModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="#{msg['close']}">&#215;</span>
 		
 				<header class="w3-container w3-padding w3-theme-dark w3-center">
-					<span class="w3-xlarge"><i class="fa fa-lock"/> #{msg['login.to']} #{msg['application.title']}</span>
+					<span class="w3-xlarge"><i class="pi pi-lock w3-large"/> #{msg['login.to']} #{msg['application.title']}</span>
 				</header>
 				
 				<div class="w3-center w3-pale-red" jsf:rendered="#{param.login_error != null and SPRING_SECURITY_LAST_EXCEPTION != null}"
@@ -376,7 +381,7 @@
 				</div>
 				
 			    <div class="w3-center w3-section w3-text-theme">
-			      	<i class="fa fa-user-circle-o" style="font-size: 100pt;"/>
+			      	<i class="pi pi-user" style="font-size: 100pt;"/>
 			    </div>
 			    
     			<form action="#{request.contextPath}/login" method="post" class="w3-container">
@@ -388,7 +393,7 @@
 	    					<input type="password" name="password" placeholder="&#xf084; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
 	    				</p>
 	    				<p>
-	    					<input type="submit" value="&#xf090; #{msg['login']}" class="w3-input w3-btn w3-theme-dark w3-round" style="font-family:Open Sans, FontAwesome;"/>
+	    					<button type="submit" class="w3-input w3-btn w3-theme-dark w3-round"><i class="pi pi-sign-in"/> #{msg['login']}</button>
 	    				</p>
 	    				<p>
 	    					<input type="checkbox" name="#{applicationProperties['RememberMe.requestParameter']}" id="#{applicationProperties['RememberMe.requestParameter']}" class="w3-check"/> #{msg['remember.me']}
@@ -463,7 +468,7 @@
 							</p>
 							<p>
 								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; #{msg['choose.a.password']}" styleClass="w3-input" title="#{msg['password']}" 
-									style="font-family:Open Sans, FontAwesome;text-align:center;width:100%;" toggleMask="true"
+									style="font-family:Open Sans, FontAwesome;text-align:center;" toggleMask="true"
 									onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
 								<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
