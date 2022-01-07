@@ -60,4 +60,9 @@ public class TagDiscussionsLazyModel extends LazyDataModel<Discussion> {
     	
     	return discussions;
 	}
+	
+	// discussionCount is used by the UI
+	public Integer getDiscussionCount() {
+		return this.count;
+	}
 }
