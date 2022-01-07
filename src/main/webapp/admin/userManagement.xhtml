@@ -62,7 +62,7 @@
 			<div class="w3-panel w3-theme-d5 w3-center w3-round">
  				<h2>#{msg['userManagement.page.title']}</h2>
  				<h:link outcome="userList" styleClass="w3-button w3-border">
- 					<i class="fa fa-list"/>
+ 					<i class="pi pi-th-large"/>
  					View as Grid
  				</h:link><p/>
  			</div>
@@ -90,7 +90,7 @@
 							<!-- the following outputText is for Excel export sheet's name -->
 							<h:outputText value="Data" style="display:none" />
 		
-							<p:commandButton value="&#160;Export as Excel" ajax="false" icon="fa fa-table">
+							<p:commandButton value="&#160;Export as Excel" ajax="false" icon="pi file-excel">
 		
 								<p:dataExporter type="xls" target="userTable"
 									fileName="UserData" />
@@ -180,7 +180,7 @@
 						
 						<p:commandButton update=":editModal" 
 							oncomplete="$('#editModal').toggle();customizePrimefaceButtons();changeAvatarBackgrounds();" 
-							icon="fa fa-edit" title="Edit">
+							icon="pi pi-pencil" title="Edit">
 							<f:setPropertyActionListener value="#{user}" target="#{userManagement.selectedRecord}" />
 						</p:commandButton>
 						
@@ -283,11 +283,11 @@
 				  		<div class="w3-section">
 				            <p:commandButton id="updateUser" ajax="true" action="#{userManagement.update}"
 				            	oncomplete="$('#editModal').toggle();customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" value="Save"
-				            	update=":form:userTable" icon="fa fa-save"/>
+				            	update=":form:userTable" icon="pi pi-save"/>
 					  		
 					  		<p:commandButton value="Cancel"
 								onclick="$('#editModal').toggle();"
-								type="button" icon="fa fa-times" style="margin-left:5px;" />
+								type="button" icon="pi pi-times" style="margin-left:5px;" />
 				  		</div>
 			  		</h:form>
 		      
@@ -300,13 +300,13 @@
 			showEffect="explode" hideEffect="explode" header="Confirm"
 			severity="alert" widgetVar="confirmDeleteDialogVar">
 			<h:form id="deleteForm">
-				<p:commandButton value="Yes" icon="fa fa-check"
+				<p:commandButton value="Yes" icon="pi pi-check"
 					update=":form:userTable"
 					action="#{userManagement.delete}"
 					oncomplete="PF('confirmDeleteDialogVar').hide()" />
 				<p:commandButton value="Cancel"
 					onclick="PF('confirmDeleteDialogVar').hide();return false;"
-					type="button" icon="fa fa-times" style="margin-left:5px;" />
+					type="button" icon="pi pi-times" style="margin-left:5px;" />
 			</h:form>
 		</p:confirmDialog>
 

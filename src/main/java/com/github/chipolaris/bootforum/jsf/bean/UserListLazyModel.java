@@ -79,8 +79,7 @@ public class UserListLazyModel extends LazyDataModel<User> {
     		builder.filterMeta(this.filterType, this.filterValue, QueryFilterMeta.MatchMode.EQUALS);
     	}
 		
-		return this.genericService.getEntities2(LazyModelUtil.queryBuilder(User.class, sortBy, filterBy).startIndex(first).
-				maxResult(pageSize).build()).getDataObject();
+		return this.genericService.getEntities2(builder.startIndex(first).maxResult(pageSize).build()).getDataObject();
 	}
 
 	public AccountStatus getAccountStatus() {
