@@ -75,10 +75,10 @@
 			<div class="w3-panel w3-round w3-theme-d5 w3-center">
  				<h2>#{msg['discussionManagement.page.title']}</h2>
  				<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
- 					<i class="fa fa-sitemap"/> Filter Discussions by Forum
+ 					<i class="pi pi-sitemap"/> Filter Discussions by Forum
  				</button>
  				<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
- 					<i class="fa fa-comments"/> Discussions with no associated Forum
+ 					<i class="pi pi-comments"/> Discussions with no associated Forum
  					<f:param name="forumId" value="0"/>
  				</h:link>
  				<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
@@ -182,7 +182,7 @@
     				<span onclick="$('#forumMapModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="fa fa-sitemap"/> Forum Map</span>
+						<span class="w3-xlarge"><i class="pi pi-sitemap"/> Forum Map</span>
 					</header>
 					
 					<div class="w3-padding-large">
@@ -195,7 +195,7 @@
 							<p:treeNode type="Root">
 								        	
 					        	<span class="w3-large w3-opacity-min">
-					        		<i class="fa fa-lg fa-sitemap"/> Home
+					        		<i class="pi pi-sitemap w3-large"/> Home
 					        	</span>
 					        </p:treeNode>
 					        
@@ -218,7 +218,7 @@
 						    
 						    <p:treeNode type="ForumGroup">    	
 						        <span class="w3-large w3-opacity-min">
-						        	<i class="fa fa-lg fa-sitemap"/> #{data.title}
+						        	<i class="pi pi-sitemap w3-large"/> #{data.title}
 						        </span>
 						        
 							</p:treeNode>

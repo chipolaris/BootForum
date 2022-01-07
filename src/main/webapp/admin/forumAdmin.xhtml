@@ -80,7 +80,7 @@
 	   		<div jsf:id="forumMapDiv" class="w3-border w3-round">
 				
 				<header class="w3-container w3-theme-d2 w3-center w3-xlarge">
-					<h3><i class="fa fa-sitemap"/> Forum Map</h3>
+					<h3><i class="pi pi-sitemap w3-xlarge"/> Forum Map</h3>
 				</header>
 				
 				<div style="resize: vertical;height: 400px; overflow: auto;">
@@ -92,11 +92,11 @@
 							<p:treeNode type="Root">
 																	        	
 					        	<span class="w3-large w3-opacity-min">
-					        		<i class="fa fa-lg fa-sitemap"/> Home 
+					        		<i class="pi pi-sitemap w3-xlarge"/> Home 
 					        		
 					        		<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
 					        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
-					        			[Reorder children <i class="fa fa-sort"/>]
+					        			[Reorder children <i class="pi pi-sort"/>]
 					        			<f:setPropertyActionListener value="#{null}" target="#{forumAdmin.selectedOrderForumGroup}"/>
 					        		</p:commandLink>
 					        	</span>
@@ -121,7 +121,7 @@
 				        		<p:commandLink update=":addForumDiv" action="#{forumAdmin.createEmptyForum}"
 				        			oncomplete="toggleDiv('addForumDiv');customizePrimefaceButtons()">
 						        	<span class="w3-text-orange">
-						        		<i class="fa fa-lg fa-plus"/> Add Forum
+						        		<i class="pi pi-plus w3-large"/> Add Forum
 						        	</span>
 						        	
 						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
@@ -132,14 +132,14 @@
 				        	<p:treeNode type="ForumGroup">
 				        		<p:commandLink update=":editForumGroupDiv" oncomplete="toggleDiv('editForumGroupDiv');customizePrimefaceButtons()">				        	
 						        	<span class="w3-large w3-opacity-min">
-						        		<i class="fa fa-lg fa-sitemap"/> #{data.title}
+						        		<i class="pi pi-sitemap w3-xlarge"/> #{data.title}
 						        	</span>
 						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
 					        	</p:commandLink>
 					        	
 								<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
 				        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
-				        			[Reorder children <i class="fa fa-sort"/>]
+				        			[Reorder children <i class="pi pi-sort"/>]
 				        			<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedOrderForumGroup}"/>
 				        		</p:commandLink>			        	
 					        	
@@ -149,7 +149,7 @@
 					        	<p:commandLink update=":addForumGroupDiv" action="#{forumAdmin.createEmptyForumGroup}" 
 					        		oncomplete="toggleDiv('addForumGroupDiv');customizePrimefaceButtons()">
 						        	<span class="w3-text-orange">
-						        		<i class="fa fa-lg fa-plus"/> Add Forum Group
+						        		<i class="pi pi-plus w3-large"/> Add Forum Group
 						        	</span>
 						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
 					        	</p:commandLink>
@@ -165,7 +165,7 @@
 	   		
 			<div jsf:id="editForumDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
 				
-				<h4><i class="fa fa-edit"/> Edit Forum</h4>
+				<h4><i class="pi pi-pencil"/> Edit Forum</h4>
 				
 				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.selectedForum}">
 				
@@ -245,15 +245,15 @@
 			  				<div class="w3-row">
 				  				<p:commandButton id="editForum" ajax="true" action="#{forumAdmin.editForum}"
 					            	value="#{msg['userAction.save']}" update=":messages :forumMapForm:forumMapTree"
-					            	oncomplete="$('.toggleDiv').hide();" icon="fa fa-save"/>
+					            	oncomplete="$('.toggleDiv').hide();" icon="pi pi-save"/>
 					            <p:commandButton type="button" onclick="$('.toggleDiv').hide();" 
-					            	value="#{msg['userAction.cancel']}" icon="fa fa-close" style="margin-left:5px;"/>
+					            	value="#{msg['userAction.cancel']}" icon="pi pi-times" style="margin-left:5px;"/>
 
-								<p:commandButton value="Delete" icon="fa fa-trash" title="Delete this Forum" style="margin-left:5px;"
+								<p:commandButton value="Delete" icon="pi pi-trash" title="Delete this Forum" style="margin-left:5px;"
 									action="#{forumAdmin.deleteForum}" update=":messages :forumMapForm:forumMapTree"
 		        					oncomplete="$('.toggleDiv').hide();">
 				        			
-				        			<p:confirm header="Confirm Delete" message="Delete Forum '#{forumAdmin.selectedForum.title}'?" icon="fa fa-exclamation-triangle"/>
+				        			<p:confirm header="Confirm Delete" message="Delete Forum '#{forumAdmin.selectedForum.title}'?" icon="pi pi-exclamation-triangle"/>
 				        			
 				        		</p:commandButton>
 
@@ -273,7 +273,7 @@
 
 			<div jsf:id="addForumDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
 				
-				<h4><i class="fa fa-plus"/> Add Forum for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
+				<h4><i class="pi pi-plus"/> Add Forum for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
 				
 				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.newForum}">
 
@@ -353,9 +353,9 @@
 			  				<div class="w3-row">
 				  				<p:commandButton id="addForum" ajax="true" action="#{forumAdmin.createForum}"
 					            	value="#{msg['userAction.save']}" update=":messages :forumMapForm:forumMapTree"
-					            	oncomplete="$('.toggleDiv').hide();" icon="fa fa-save"/>
+					            	oncomplete="$('.toggleDiv').hide();" icon="pi pi-save"/>
 					            <p:commandButton type="button" onclick="$('.toggleDiv').hide();" 
-					            	value="#{msg['userAction.cancel']}" icon="fa fa-close" style="margin-left:5px;"/>
+					            	value="#{msg['userAction.cancel']}" icon="pi pi-times" style="margin-left:5px;"/>
 			  				</div>
 			  				
 			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -372,7 +372,7 @@
 	   		
 			<div jsf:id="editForumGroupDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
 				
-				<h4><i class="fa fa-edit"/> Edit Forum Group</h4>
+				<h4><i class="pi pi-pencil"/> Edit Forum Group</h4>
 				
 				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.selectedForumGroup}">
 				
@@ -429,15 +429,15 @@
 			  				<div class="w3-row">
 				  				<p:commandButton id="editForumGroup" ajax="true" action="#{forumAdmin.editForumGroup}"
 					            	value="#{msg['userAction.save']}" update=":messages :forumMapForm:forumMapTree"
-					            	oncomplete="$('.toggleDiv').hide();" icon="fa fa-save"/>
+					            	oncomplete="$('.toggleDiv').hide();" icon="pi pi-save"/>
 					            <p:commandButton type="button" onclick="$('.toggleDiv').hide();" 
-					            	value="#{msg['userAction.cancel']}" icon="fa fa-close" style="margin-left:5px;"/>
+					            	value="#{msg['userAction.cancel']}" icon="pi pi-times" style="margin-left:5px;"/>
 
-								<p:commandButton value="Delete" icon="fa fa-trash" title="Delete this Forum Group" style="margin-left:5px;"
+								<p:commandButton value="Delete" icon="pi pi-trash" title="Delete this Forum Group" style="margin-left:5px;"
 									action="#{forumAdmin.deleteForumGroup}" update=":messages :forumMapForm:forumMapTree"
 		        					oncomplete="$('.toggleDiv').hide();">
 				        			
-				        			<p:confirm header="Confirm Delete" message="Delete Forum Group '#{forumAdmin.selectedForumGroup.title}' and associated sub Forum Groups?" icon="fa fa-exclamation-triangle"/>
+				        			<p:confirm header="Confirm Delete" message="Delete Forum Group '#{forumAdmin.selectedForumGroup.title}' and associated sub Forum Groups?" icon="pi pi-exclamation-triangle"/>
 				        			
 				        		</p:commandButton>
 
@@ -454,7 +454,7 @@
 		
 			<div jsf:id="addForumGroupDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
 			
-				<h4><i class="fa fa-plus"/> Add Forum Group for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
+				<h4><i class="pi pi-plus"/> Add Forum Group for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
 			
 				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.newForumGroup}">
 			
@@ -511,11 +511,11 @@
 			  				<div class="w3-row">
 	
 				  				<p:commandButton id="createForumGroup" ajax="true" action="#{forumManagement.createForumGroup}"
-					            	value="Submit" update=":messages :forumMapForm:forumMapTree"
-					            	oncomplete="$('.toggleDiv').hide();" icon="fa fa-plus"/>
+					            	value="#{msg['save']}" update=":messages :forumMapForm:forumMapTree"
+					            	oncomplete="$('.toggleDiv').hide();" icon="pi pi-plus"/>
 					            	
 					            <p:commandButton type="button" onclick="$('.toggleDiv').hide();" value="Cancel"
-	            					icon="fa fa-close" style="margin-left:5px;"/>
+	            					icon="pi pi-times" style="margin-left:5px;"/>
 		            			
 			  				</div>
 			  				
@@ -535,7 +535,7 @@
    				<span onclick="$('#orderModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 	
 				<header class="w3-container w3-padding w3-theme-dark w3-center">
-					<span class="w3-xlarge"><i class="fa fa-sitemap"/> Order Forum Group '#{forumAdmin.selectedOrderForumGroup.title}' Children</span>
+					<span class="w3-xlarge"><i class="pi pi-sitemap"/> Order Forum Group '#{forumAdmin.selectedOrderForumGroup.title}' Children</span>
 				</header>
 				
 				<p/>
@@ -562,7 +562,7 @@
 						
 						<p/>
 						
-						<p:commandButton ajax="true" value="Submit" icon="fa fa-check" action="#{forumAdmin.forumOrderSubmit}" 
+						<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{forumAdmin.forumOrderSubmit}" 
 							update=":forumMapForm:forumMapTree :orderMessages"/>
 						
 					</h:form>
@@ -593,7 +593,7 @@
 						
 						<p/>
 						
-						<p:commandButton ajax="true" value="Submit" icon="fa fa-check" action="#{forumAdmin.forumGroupOrderSubmit}" 
+						<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{forumAdmin.forumGroupOrderSubmit}" 
 							update=":forumMapForm:forumMapTree :orderMessages"/>
 						
 					</h:form>
@@ -608,8 +608,8 @@
 		
 		<!-- global confirm dialog -->
 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
-       		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-       		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+       		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+       		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
    		</p:confirmDialog>		
 		
 	</ui:define>

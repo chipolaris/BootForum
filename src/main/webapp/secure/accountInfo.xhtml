@@ -12,7 +12,7 @@
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<b><i class="fa fa-user"></i> Account Information</b>
+		<b><i class="pi pi-user"></i> Account Information</b>
 	</ui:define>
 
 	<ui:define name="content">
@@ -38,7 +38,7 @@
 			</p:messages>
 		</div>
 
-		<button onclick="toggle('accountInfoPanel');" class="w3-button w3-block w3-left-align w3-theme-d3 w3-border w3-round"><i class="fa fa-user"/> Personal Information</button>
+		<button onclick="toggle('accountInfoPanel');" class="w3-button w3-block w3-left-align w3-theme-d3 w3-border w3-round"><i class="pi pi-user"/> Personal Information</button>
 
 		<div id="accountInfoPanel" class="w3-container w3-animate-right w3-hide w3-show">
 			<div class="w3-panel w3-border">
@@ -73,7 +73,7 @@
 					
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<p:commandButton ajax="true" value="&#160;&#160;Save" icon="fa fa-save"
+							<p:commandButton ajax="true" value="&#160;&#160;Save" icon="pi pi-save"
 								action="#{accountInfo.updatePersonalInfo}" />
 						</div>
 						
@@ -83,7 +83,7 @@
 			</div>
 		</div>
 		
-		<button onclick="toggle('avatarPanel');" class="w3-button w3-block w3-left-align w3-theme-d3 w3-border w3-round"><i class="fa fa-picture-o"/> Avatar</button>
+		<button onclick="toggle('avatarPanel');" class="w3-button w3-block w3-left-align w3-theme-d3 w3-border w3-round"><i class="pi pi-image"/> Avatar</button>
 		
 		<div id="avatarPanel" class="w3-container w3-animate-right w3-hide">
 			<div class="w3-panel w3-border">
@@ -117,7 +117,7 @@
 						<p:commandButton id="deleteAvatarButton" value=" Delete Avatar"
 							rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"
 							actionListener="#{fileHandler.deleteAvatar(userSession.user.username)}"
-							icon="fa fa-trash" update="viewAvatarPanel" ajax="true" />
+							icon="pi pi-trash" update="viewAvatarPanel" ajax="true" />
 							
 					</div>
 					
@@ -153,32 +153,7 @@
 			</div>
 		</div>
 
-		<!-- <button onclick="toggle('signaturePanel');" class="w3-button w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-pencil"/> Signature</button>
-		
-		<div id="signaturePanel" class="w3-container w3-animate-right w3-hide">
-			<div class="w3-panel w3-border">
-		
-				<h:form>
-					<div class="w3-row-padding w3-section">
-					
-		    		 	<span style="font-size:-1;"> (*Note: Signature is appended at the end of all posted comments, must be 100 characters or less)</span>
-			          	
-			          	<p/>
-						
-						<p:textEditor widgetVar="signatureEditor" value="#{accountInfo.user.signature}" height="150"/>
-						
-					</div>
-					
-					<div class="w3-row-padding w3-section">
-						<p:commandButton ajax="true" value="&#160;&#160;Save" icon="fa fa-save" action="#{accountInfo.updateSignature}" />	
-					</div>
-				</h:form>
-			</div>
-			
-		</div> -->
-
-
-		<button onclick="toggle('passwordPanel');" class="w3-btn w3-block w3-left-align w3-theme-d3 w3-border w3-round"><i class="fa fa-key"/> Change Password</button>
+		<button onclick="toggle('passwordPanel');" class="w3-btn w3-block w3-left-align w3-theme-d3 w3-border w3-round"><i class="pi pi-key"/> Change Password</button>
 
 		<div id="passwordPanel" class="w3-container w3-animate-right w3-hide">
 			<div class="w3-panel w3-border">
@@ -200,7 +175,7 @@
 							<b>Current Password:</b>
 						</div>
 						<div class="w3-col s12 m8 l10">
-							<p:password value="#{accountInfo.currentPassword}"
+							<p:password value="#{accountInfo.currentPassword}" toggleMask="true"
 								label="Current Password" feedback="false" size="35"/>
 						</div>
 					</div>
@@ -210,7 +185,7 @@
 							<b>New Password:</b>
 						</div>
 						<div class="w3-col s12 m8 l10">
-							<p:password id="newPassword" value="#{accountInfo.newPassword}"
+							<p:password id="newPassword" value="#{accountInfo.newPassword}" toggleMask="true"
 								inline="true" label="New Password" feedback="true" match="confirmNewPassword" size="35"/>
 						</div>
 					</div>
@@ -220,14 +195,14 @@
 							<b>Confirm New Password:</b>
 						</div>
 						<div class="w3-col s12 m8 l10">
-							<p:password id="confirmNewPassword" value="#{accountInfo.confirmNewPassword}"
+							<p:password id="confirmNewPassword" value="#{accountInfo.confirmNewPassword}" toggleMask="true"
 								label="Confirm New Password" feedback="false" size="35"/>
 						</div>
 					</div>
 					
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<p:commandButton ajax="true" value="&#160;&#160;Save" icon="fa fa-save" action="#{accountInfo.updatePassword}" />
+							<p:commandButton ajax="true" value="&#160;&#160;Save" icon="pi pi-save" action="#{accountInfo.updatePassword}" />
 						</div>
 						
 					</div>

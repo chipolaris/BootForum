@@ -70,7 +70,7 @@
 					<div class="w3-margin-top w3-padding">
 						<p/>
 						<p:outputLabel for="registrationEmailSubject" value="Registration Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpRegistrationEmailSubject"/>
+						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailSubject"/>
 						<p:overlayPanel for="helpRegistrationEmailSubject" style="width:240px" styleClass="w3-black">
 							<h5>Example:</h5>
 							<hr/> 
@@ -88,7 +88,7 @@
 
 						<p:outputLabel for="registrationEmailTemplate" value="Registration Email Template" styleClass="w3-medium" 
 							style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpRegistrationEmailTemplate"/>
+						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailTemplate"/>
 						<p/>
 						<p:overlayPanel for="helpRegistrationEmailTemplate" style="width:350px" styleClass="w3-black">
 							<h5>Sample email to send when user register for account:</h5>
@@ -127,7 +127,7 @@
 					<div class="w3-margin-top w3-padding">
 						<p/>
 						<p:outputLabel for="passwordResetEmailSubject" value="Password Reset Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpPasswordResetEmailSubject"/>
+						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailSubject"/>
 						<p:overlayPanel for="helpPasswordResetEmailSubject" style="width:240px" styleClass="w3-black">
 							<h5>Example:</h5>
 							<hr/> 
@@ -145,7 +145,7 @@
 
 						<p:outputLabel for="passwordResetEmailTemplate" value="Password Reset Email Template" styleClass="w3-medium" 
 							style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpPasswordResetEmailTemplate"/>
+						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailTemplate"/>
 						<p/>
 						<p:overlayPanel for="helpPasswordResetEmailTemplate" style="width:350px" styleClass="w3-black">
 							<h5>Sample email to send when user requests password reset:</h5>
@@ -181,7 +181,7 @@
 					<div class="w3-margin-top w3-padding">
 						
 						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['submit']}" type="button" icon="fa fa-check" onclick="submitForm();"
+						<p:commandButton value="#{msg['save']}" type="button" icon="pi pi-check" onclick="submitForm();"
 							styleClass="w3-btn w3-theme-dark w3-border-0" />
 					</div>
 				
@@ -239,7 +239,7 @@
 							<h:outputText value="Delete" style="font-weight:bold;"/>
 						</f:facet>
 						
-						<p:commandButton oncomplete="PF('confirmDeleteDialogVar').show()" icon="fa fa-times" title="Delete" styleClass="w3-btn w3-theme-dark w3-border-0">
+						<p:commandButton oncomplete="PF('confirmDeleteDialogVar').show()" icon="pi pi-times" title="Delete" styleClass="w3-btn w3-theme-dark w3-border-0">
 							<f:setPropertyActionListener value="#{registration}" target="#{registrationManagement.deleteRecord}" />
 						</p:commandButton>
 						
@@ -253,14 +253,14 @@
 				showEffect="explode" hideEffect="explode" header="Confirm"
 				severity="alert" widgetVar="confirmDeleteDialogVar">
 				<h:form id="deleteForm">
-					<p:commandButton value="Yes" icon="fa fa-check"
+					<p:commandButton value="Yes" icon="pi pi-check"
 						update=":registrationForm:registrationTable"
 						action="#{registrationManagement.delete}"
 						oncomplete="PF('confirmDeleteDialogVar').hide()" />
 						
 					<p:commandButton value="Cancel"
 						onclick="PF('confirmDeleteDialogVar').hide();return false;"
-						type="button" icon="fa fa-times" style="margin-left:5px;" />
+						type="button" icon="pi pi-times" style="margin-left:5px;" />
 				</h:form>
 			</p:confirmDialog>
 	

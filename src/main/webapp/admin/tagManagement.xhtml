@@ -87,7 +87,7 @@
 				  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 				  					
 					  				<p:column style="width:10%">
-					  					<i class="#{f} fa-2x"/>
+					  					<i class="#{f} w3-large"/>
 					  				</p:column>
 					  				
 					  				<p:column>
@@ -166,7 +166,7 @@
 					  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 					  					
 						  				<p:column style="width:10%">
-						  					<i class="#{f} fa-2x"/>
+						  					<i class="#{f} w3-large"/>
 						  				</p:column>
 						  				
 						  				<p:column>
@@ -199,7 +199,7 @@
 								<div class="w3-row w3-section"/> <!-- vertical spacer -->
 																
 								<div class="w3-row">
-									<p:commandButton value="Submit" ajax="true" action="#{tagManagement.editTag}" update=":listTagsDiv :tagOrderContent" 
+									<p:commandButton value="#{msg['save']}" ajax="true" action="#{tagManagement.editTag}" update=":listTagsDiv :tagOrderContent" 
 										icon="pi pi-plus" oncomplete="$('#editTagDiv').hide();customizePrimefaceButtons();"/>
 									<p:commandButton type="button" value="Cancel" icon="pi pi-times" style="margin-left:5px;" onclick="$('#editTagDiv').hide()"/>
 								</div>
@@ -233,8 +233,8 @@
 				
 					<div class="w3-col l3 m6 s12" style="padding: 8px;position:relative">
 					    <div class="w3-display-container w3-padding-16 w3-hover-grey" style="color:white;background-color: ##{tag.color}">
-							<span jsf:rendered="#{tag.disabled}" class="w3-display-topright" style="color:lightgrey;">
-					        	<i class="pi pi-ban w3-xxlarge" title="Disabled"/>
+							<span jsf:rendered="#{tag.disabled}" class="w3-display-topright w3-margin" style="color:red;">
+					        	<i class="pi pi-ban w3-xlarge" title="Disabled"/>
 					        </span>
 					        <div class="w3-center">
 					        	<i class="#{tag.icon} w3-xxxlarge"></i>

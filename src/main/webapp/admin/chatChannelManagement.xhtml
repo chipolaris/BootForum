@@ -55,7 +55,7 @@
 			
 			<div jsf:id="newChatChannelDiv" class="toggleDiv w3-animate-bottom" style="display: none;border-bottom: 2px solid gray;">
 			
-				<h3><i class="fa fa-plus"/> Add New Chat Channel</h3>
+				<h3><i class="pi pi-plus"/> Add New Chat Channel</h3>
 				
 				<div class="w3-panel w3-border w3-round w3-display-container">
 					<span onclick="$('#newChatChannelDiv').hide();" class="w3-button w3-display-topright">X</span>
@@ -86,7 +86,7 @@
 				  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 				  					
 					  				<p:column style="width:10%">
-					  					<i class="#{f} fa-2x"/>
+					  					<i class="#{f} w3-large"/>
 					  				</p:column>
 					  				
 					  				<p:column>
@@ -119,9 +119,9 @@
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
 							
 							<div class="w3-row">
-								<p:commandButton value="Submit" ajax="true" action="#{chatChannelManagement.createChatChannel}" update=":listChatChannelsDiv :chatChannelOrderContent" 
-									icon="fa fa-plus" oncomplete="$('#newChatChannelDiv').hide();customizePrimefaceButtons();"/>
-								<p:commandButton type="button" value="Cancel" icon="fa fa-close" style="margin-left:5px;" onclick="$('#newChatChannelDiv').hide()"/>
+								<p:commandButton value="#{msg['save']}" ajax="true" action="#{chatChannelManagement.createChatChannel}" update=":listChatChannelsDiv :chatChannelOrderContent" 
+									icon="pi pi-plus" oncomplete="$('#newChatChannelDiv').hide();customizePrimefaceButtons();"/>
+								<p:commandButton type="button" value="Cancel" icon="pi pi-times" style="margin-left:5px;" onclick="$('#newChatChannelDiv').hide()"/>
 							</div>
 							
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -135,7 +135,7 @@
 			<div jsf:id="editChatChannelDiv" class="toggleDiv w3-animate-bottom" style="display: none;border-bottom: 2px solid gray;">
 				<div jsf:rendered="#{not empty chatChannelManagement.selectedChatChannel}">
 				
-					<h3><i class="fa fa-edit"/> Edit Chat Channel '#{chatChannelManagement.selectedChatChannel.label}'</h3>
+					<h3><i class="pi pi-pencil"/> Edit Chat Channel '#{chatChannelManagement.selectedChatChannel.label}'</h3>
 					<div class="w3-panel w3-border w3-round w3-display-container">
 						<span onclick="$('#editChatChannelDiv').hide();" class="w3-button w3-display-topright">X</span>
 						
@@ -165,7 +165,7 @@
 					  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 					  					
 						  				<p:column style="width:10%">
-						  					<i class="#{f} fa-2x"/>
+						  					<i class="#{f} w3-large"/>
 						  				</p:column>
 						  				
 						  				<p:column>
@@ -199,8 +199,8 @@
 								
 								<div class="w3-row">
 									<p:commandButton value="Submit" ajax="true" action="#{chatChannelManagement.editChatChannel}" update=":listChatChannelsDiv :chatChannelOrderContent" 
-										icon="fa fa-check" oncomplete="$('#editChatChannelDiv').hide();customizePrimefaceButtons();"/>
-									<p:commandButton type="button" value="Cancel" icon="fa fa-close" style="margin-left:5px;" onclick="$('#editChatChannelDiv').hide()"/>
+										icon="pi pi-check" oncomplete="$('#editChatChannelDiv').hide();customizePrimefaceButtons();"/>
+									<p:commandButton type="button" value="Cancel" icon="pi pi-times" style="margin-left:5px;" onclick="$('#editChatChannelDiv').hide()"/>
 								</div>
 								
 								<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -218,10 +218,10 @@
 				<h3>Chat Channel List</h3>
 				
 				<button onclick="toggleDiv('newChatChannelDiv');return;" class="w3-button w3-left-align w3-border">
-					<i class="fa fa-plus"/> Add New Chat Channel
+					<i class="pi pi-plus"/> Add New Chat Channel
 				</button>
 				<button onclick="$('#chatChannelOrderModal').show();return;" class="w3-button w3-left-align w3-border" style="margin-left:5px;">
-					<i class="fa fa-sort"/> Order Chat Channels
+					<i class="pi pi-sort"/> Order Chat Channels
 				</button>
 				<p/>
 			</div>	
@@ -232,8 +232,8 @@
 				
 					<div class="w3-col l3 m6 s12" style="padding: 8px;position:relative">
 					    <div class="w3-display-container w3-padding-16 w3-hover-grey" style="color:white;background-color: ##{chatChannel.color}">
-							<span jsf:rendered="#{chatChannel.disabled}" class="w3-display-topright" style="color:lightgrey;">
-					        	<i class="fa fa-ban w3-xxlarge" title="Disabled"/>
+							<span jsf:rendered="#{chatChannel.disabled}" class="w3-display-topright w3-margin" style="color:red;">
+					        	<i class="pi pi-ban w3-xlarge" title="Disabled"/>
 					        </span>
 					        <div class="w3-center">
 					        	<i class="#{chatChannel.icon} w3-xxxlarge"></i>
@@ -253,7 +253,7 @@
 					        	<p:commandLink action="#{chatChannelManagement.deleteChatChannel}" update=":listChatChannelsDiv"  oncomplete="window.scrollTo(0,0);" 
 					        		title="Delete this Chat Channel" style="margin-left:5px;">
 					        		<i class="pi pi-trash w3-xlarge w3-text-black"/>
-					        		<p:confirm header="Confirm Delete" message="Delete Chat Channel?" icon="fa fa-exclamation-triangle"/>
+					        		<p:confirm header="Confirm Delete" message="Delete Chat Channel?" icon="pi pi-exclamation-triangle"/>
 					        		<f:setPropertyActionListener value="#{chatChannel}" target="#{chatChannelManagement.selectedChatChannel}"/>
 					        	</p:commandLink>
 					        </div>
@@ -273,7 +273,7 @@
     				<span onclick="$('#chatChannelOrderModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="fa fa-sitemap"/> Order Chat Channel</span>
+						<span class="w3-xlarge"><i class="pi pi-sort w3-xlarge"/> Order Chat Channel</span>
 					</header>
 					
 					<p/>
@@ -296,7 +296,7 @@
 							
 							<p/>
 							
-							<p:commandButton ajax="true" value="Submit" icon="fa fa-check" action="#{chatChannelManagement.chatChannelOrderSubmit}" 
+							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{chatChannelManagement.chatChannelOrderSubmit}" 
 								update=":listChatChannelsDiv" oncomplete="$('#chatChannelOrderModal').hide();" />
 							
 						</h:form>
@@ -311,8 +311,8 @@
 			
 			<!-- global confirm dialog -->
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
-        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
     		</p:confirmDialog>
 			
 		</div>

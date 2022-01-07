@@ -41,22 +41,22 @@
 			<div class="w3-panel w3-display-container">
 			
 				<div class="w3-panel w3-border w3-round w3-padding">
-					<i class="fa fa-info-circle fa-2x w3-opacity"/>
+					<i class="pi pi-info-circle w3-large w3-opacity"/>
 					<span>Note: use this utility to quickly populate data (with randomly generated data) to test forum features</span>
 				</div>
 
 				<div class="w3-bar">
 					<button class="w3-bar-item w3-button tab-button" onclick="openTab('tab', 'users', 'tab-button', 'usersButton')" id="usersButton">
-						<i class="fa fa-users"/> <b>Users</b>
+						<i class="pi pi-users"/> <b>Users</b>
 					</button>
 					<button class="w3-bar-item w3-button tab-button" onclick="openTab('tab', 'discussion', 'tab-button', 'discussionButton')" id="discussionButton">
-						<i class="fa fa-comments"/> <b>Discussion</b>
+						<i class="pi pi-comments"/> <b>Discussion</b>
 					</button>
 					<button class="w3-bar-item w3-button tab-button" onclick="openTab('tab', 'forumData', 'tab-button', 'forumDataButton')" id="forumDataButton">
-						<i class="fa fa-comments"/> <b>Forum Data</b>
+						<i class="pi pi-comments"/> <b>Forum Data</b>
 					</button>
 					<button class="w3-bar-item w3-button tab-button" onclick="openTab('tab', 'privateMessages', 'tab-button', 'privateMessagesButton')" id="privateMessagesButton">
-						<i class="fa fa-envelope"/> <b>Private Messages</b>
+						<i class="pi pi-envelope"/> <b>Private Messages</b>
 					</button>
 				</div>
 				
@@ -70,7 +70,7 @@
 							</div>
 							
 							<div class="w3-col" style="margin:10px 0px;">
-								<p:commandButton ajax="true" value="Create Users" icon="fa fa-play" 
+								<p:commandButton ajax="true" value="Create Users" icon="pi pi-cog" 
 									action="#{simulateData.createRandomUsers}" update=":discussionForm :forumDataForm"/>
 							</div>
 						</div>
@@ -133,11 +133,11 @@
 							<div class="w3-col" style="padding: 0px 5px; margin:10px 0px;">
 								
 								<!-- submit button to show on small screen -->
-								<p:commandButton ajax="true" value="Simulate Discussion" icon="fa fa-play" 
+								<p:commandButton ajax="true" value="Simulate Discussion" icon="pi pi-cog" 
 									styleClass="w3-block w3-hide-large w3-hide-medium" action="#{simulateData.simulateDiscussion}"/>
 								
 								<!-- submit button to show on large and medium screen -->	
-								<p:commandButton ajax="true" value="Simulate Discussion" icon="fa fa-play" 
+								<p:commandButton ajax="true" value="Simulate Discussion" icon="pi pi-cog" 
 									styleClass="w3-hide-small" action="#{simulateData.simulateDiscussion}"/>
 								
 							</div>
@@ -205,11 +205,11 @@
 							<div class="w3-col" style="padding: 0px 5px; margin:10px 0px;">
 								
 								<!-- submit button to show on small screen -->
-								<p:commandButton ajax="true" value="Simulate Forum Data" icon="fa fa-play" 
+								<p:commandButton ajax="true" value="Simulate Forum Data" icon="pi pi-cog" 
 									styleClass="w3-block w3-hide-large w3-hide-medium" action="#{simulateData.simulateForumData}"/>
 								
 								<!-- submit button to show on large and medium screen -->	
-								<p:commandButton ajax="true" value="Simulate Forum Data" icon="fa fa-play" 
+								<p:commandButton ajax="true" value="Simulate Forum Data" icon="pi pi-cog" 
 									styleClass="w3-hide-small" action="#{simulateData.simulateForumData}"/>
 								
 							</div>
@@ -260,11 +260,11 @@
 							<div class="w3-col" style="padding: 0px 5px; margin:10px 0px;">
 								
 								<!-- submit button to show on small screen -->
-								<p:commandButton ajax="true" value="Simulate Private Messages" icon="fa fa-play" 
+								<p:commandButton ajax="true" value="Simulate Private Messages" icon="pi pi-cog" 
 									styleClass="w3-block w3-hide-large w3-hide-medium" action="#{simulateData.simulatePrivateMessages}"/>
 								
 								<!-- submit button to show on large and medium screen -->	
-								<p:commandButton ajax="true" value="Simulate Private Messages" icon="fa fa-play" 
+								<p:commandButton ajax="true" value="Simulate Private Messages" icon="pi pi-cog" 
 									styleClass="w3-hide-small" action="#{simulateData.simulatePrivateMessages}"/>
 								
 							</div>

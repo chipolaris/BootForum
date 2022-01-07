@@ -44,7 +44,7 @@
 					<div class="w3-half container">
 						<p/>
 						<p:outputLabel for="host" value="Host" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpHost"/>
+						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpHost"/>
 						<p:overlayPanel for="helpHost" style="width:240px" styleClass="w3-black">
 							Host name for SMTP server.<br/>Example: <b>smtp.gmail.com</b>
 						</p:overlayPanel>
@@ -61,7 +61,7 @@
 						<div class="w3-quarter container">
 							
 							<p:outputLabel for="port" value="Port" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/> 
-							&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpPort"/>
+							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPort"/>
 							<p:overlayPanel for="helpPort" style="width:240px" styleClass="w3-black">
 								Port number for SMTP server.<br/>Example: <b>587</b>
 							</p:overlayPanel>
@@ -79,7 +79,7 @@
 
 						<div class="w3-half container w3-right-align">
 							<p:outputLabel for="authentication" value="Authentication" styleClass="w3-medium" style="font-weight:bold;"/>
-							&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpAuthentication"/>
+							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpAuthentication"/>
 							<p:overlayPanel for="helpAuthentication" style="width:240px" styleClass="w3-black w3-left-align">
 								Whether email server uses authentication
 							</p:overlayPanel>
@@ -89,7 +89,7 @@
 	
 						<div class="w3-quarter container w3-right-align">
 							<p:outputLabel for="tls" value="TLS" styleClass="w3-medium" style="font-weight:bold;"/>
-							&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpTLS"/>
+							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpTLS"/>
 							<p:overlayPanel for="helpTLS" style="width:240px" styleClass="w3-black w3-left-align">
 								Whether email server uses TLS
 							</p:overlayPanel>
@@ -101,7 +101,7 @@
 					<div class="w3-half container">
 						
 						<p:outputLabel for="username" value="Username" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpUsername"/>
+						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpUsername"/>
 						<p:overlayPanel for="helpUsername" style="width:240px" styleClass="w3-black">
 							Username to login SMTP server
 						</p:overlayPanel>
@@ -115,7 +115,7 @@
 					
 					<div class="w3-half container">
 						<p:outputLabel for="username" value="Password" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpPassword"/>
+						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPassword"/>
 						<p:overlayPanel for="helpPassword" style="width:240px" styleClass="w3-black">
 							Password to login SMTP server
 						</p:overlayPanel>
@@ -129,14 +129,14 @@
 
 					<div class="w3-threequarter container w3-margin-top">
 						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['save']}" type="button" icon="fa fa-check" onclick="submitForm();"
+						<p:commandButton value="#{msg['save']}" type="button" icon="pi pi-check" onclick="submitForm();"
 							styleClass="w3-btn w3-theme-dark w3-border-0"/>
 						
 						<span class="w3-margin-left" onclick="$('#form\\:testConfigurationDiv').toggle();"
 							style="cursor:pointer;color:purple;font-weight:bold;">
 							Test Configuration
 						</span>
-						&nbsp;<i class="fa fa-lg fa-question-circle" jsf:id="helpTestConfiguration"/>
+						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpTestConfiguration"/>
 						<p:overlayPanel for="helpTestConfiguration" style="width:240px" styleClass="w3-black w3-left-align">
 							Send a test email to validate the configuration
 						</p:overlayPanel>
@@ -220,7 +220,7 @@
 							</h:message>
 							
 							<p/>
-							<p:commandButton value="Send Test Email" action="#{manageEmail.testEmailConfiguration}" ajax="true" icon="fa fa-plug" update="testResultDiv"
+							<p:commandButton value="Send Test Email" action="#{manageEmail.testEmailConfiguration}" ajax="true" icon="pi pi-send" update="testResultDiv"
 								styleClass="w3-btn w3-theme-dark w3-border-0"/>				
 							<p/>
 						</div>

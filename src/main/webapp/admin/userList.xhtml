@@ -323,7 +323,7 @@
 				  				<h:panelGrid columns="2" cellspacing="10" columnClasses="panelGridCol1 panelGridCol2">	
 					  				<h:outputLabel value="Password:" for="inplacePassword"/>
 					  				<p:inplace id="inplacePassword" editor="true">
-					  					<p:password id="newPassword" value="#{userList.newPassword}" feedback="false"/>
+					  					<p:password id="newPassword" value="#{userList.newPassword}" feedback="false" toggleMask="true"/>
 					  					<p:ajax event="save" listener="#{userList.update}"/>
 					  					<f:facet name="output"><b class="w3-text-deep-orange">Click to change</b></f:facet>
 					  				</p:inplace>
