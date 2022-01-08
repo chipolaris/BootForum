@@ -126,7 +126,7 @@
 						</span>
 						
 	 					<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
-	 						<i class="fa fa-sitemap"/> Assign new Forum
+	 						<i class="pi pi-sitemap"/> Move to new Forum
 	 					</button><p/>
 					</div>
 					
@@ -135,17 +135,17 @@
 						<h:outputLabel id="discussionStatusLabel" for="discussionCloseButton" value="This discussion is #{moderateDiscussion.discussion.closed ? 'CLOSED' : 'OPEN'} "
 							style="font-weight:bold;color:#{moderateDiscussion.discussion.closed ? 'Tomato' : 'LimeGreen'};"/>
 						<p:selectBooleanButton id="discussionCloseButton" value="#{moderateDiscussion.discussion.closed}" title="click to change"
-							onLabel="Click to open" offLabel="Click to close" onIcon="fa fa-check" offIcon="fa fa-ban">
+							onLabel="Click to open" offLabel="Click to close" onIcon="pi pi-check" offIcon="pi pi-ban">
 	            			<p:ajax update=":messages discussionStatusLabel" listener="#{moderateDiscussion.updateDiscussion}" />
 	        			</p:selectBooleanButton>
 	        			
 						<h:outputLabel id="discussionImportantLabel" for="discussionImportantButton" value="Mark as important" style="font-weight:bold;margin:0px 5px 0px 25px;"/>
 						<p:selectBooleanButton id="discussionImportantButton" value="#{moderateDiscussion.discussion.closed}" title="click to change"
-							onLabel="Yes" offLabel="No" onIcon="fa fa-check" offIcon="fa fa-close">
+							onLabel="Yes" offLabel="No" onIcon="pi pi-check" offIcon="pi pi-times">
 	            			<p:ajax update=":messages" listener="#{moderateDiscussion.updateDiscussion}" />
 	        			</p:selectBooleanButton>
 	        			
-	        			<p:commandButton type="button" value=" Delete this Discussion" icon="fa fa-exclamation-triangle"
+	        			<p:commandButton type="button" value=" Delete this Discussion" icon="pi pi-exclamation-triangle"
 	        				onclick="PF('deleteDiscussionConfirmation').show();" styleClass="w3-red w3-border-red" style="margin-left:25px;"/>
 					</h:form>
 					
@@ -159,7 +159,7 @@
 	                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px" converter="#{moderateDiscussion.tagConverter}">
 					            <f:selectItems value="#{moderateDiscussion.tags}" var="tag" itemLabel="#{tag.label}" itemValue="#{tag}"/>
 					        </p:selectCheckboxMenu>
-					        <p:commandButton ajax="true" value="&#160;Apply" action="#{moderateDiscussion.updateDiscussionTag}" update=":messages" icon="fa fa-check"
+					        <p:commandButton ajax="true" value="&#160;Apply" action="#{moderateDiscussion.updateDiscussionTag}" update=":messages" icon="pi pi-check"
 					         	styleClass="w3-theme-dark w3-border-0" style="margin-top:-5px;"/>
 				        </h:panelGrid>
 				        
@@ -212,7 +212,7 @@
 				  								</span>
 												
 												<!-- TODO: show icon for user based on group(s) user is in. For now, hard code to fa-user -->
-												<span class="w3-display-topright w3-badge w3-theme-dark" title="user"><i class="fa fa-user fa-lg"/></span>
+												<span class="w3-display-topright w3-badge w3-theme-dark" title="user"><i class="pi pi-user w3-large"/></span>
 											
 											</div>
 										
@@ -225,7 +225,7 @@
 									    
 									    <p:commandLink rendered="#{not empty comment.replyTo}" 
 									    	onclick="document.getElementById('replyTo_#{rowIndex}_Div').style.display='block'; return false;">
-									    	<i class="fa fa-share"/>
+									    	<i class="pi pi-reply"/>
 									    	<span>@#{comment.replyTo.createBy}: </span>
 									    	<h:outputText value=" #{comment.replyTo.title}" style="font-weight:bold;font-style:italic;" />
 									        
@@ -320,7 +320,7 @@
 					       		style="font-weight:bold;color:#{comment.hidden ? 'Tomato' : 'LimeGreen'};"/>
 					        
 							<p:selectBooleanButton id="commentHideButton" value="#{comment.hidden}" title="click to toggle"
-								onLabel="Click to show" offLabel="Click to hide" onIcon="fa fa-check" offIcon="fa fa-ban" style="width:150px;">
+								onLabel="Click to show" offLabel="Click to hide" onIcon="pi pi-check" offIcon="pi pi-ban" style="width:150px;">
 			            		<p:ajax update=":messages commentStatusText" listener="#{moderateDiscussion.updateComment(comment)}" process="@this"/>
 			        		</p:selectBooleanButton>					        	
 					    </div>
@@ -368,10 +368,10 @@
 			<p:confirmDialog message="Delete Discussion and related Comments?" showEffect="fade" hideEffect="fade"  
 		        header="Confirm" severity="alert" widgetVar="deleteDiscussionConfirmation">
 		  		<h:form>
-			        <p:commandButton value="Yes" icon="fa fa-exclamation" styleClass="w3-red w3-border-red"
+			        <p:commandButton value="Yes" icon="pi pi-exclamation-triangle" styleClass="w3-red w3-border-red"
 			        	action="#{moderateDiscussion.deleteDiscussion}"	oncomplete="PF('deleteDiscussionConfirmation').hide()"/>  
 			        <p:commandButton value="Cancel" oncomplete="PF('deleteDiscussionConfirmation').hide();"
-			        	icon="fa fa-close" style="margin-left:5px;" styleClass="w3-green w3-border-green">
+			        	icon="pi pi-times" style="margin-left:5px;" styleClass="w3-green w3-border-green">
 			        </p:commandButton>  
 		  		</h:form>
 		    </p:confirmDialog>			
@@ -381,7 +381,7 @@
     				<span onclick="$('#forumMapModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="fa fa-sitemap"/> Forum Map</span>
+						<span class="w3-xlarge"><i class="pi pi-sitemap"/> Forum Map</span>
 					</header>
 					
 					<div class="w3-padding-large">
@@ -395,7 +395,7 @@
 							<p:treeNode type="Root">
 							
 					        	<span class="w3-large w3-opacity-min" jsf:rendered="#{forumNode.type eq 'Root'}">
-					        		<i class="fa fa-lg fa-sitemap"/> Home
+					        		<i class="pi pi-sitemap w3-large"/> Home
 					        	</span>
 					        </p:treeNode>
 					        
@@ -423,7 +423,7 @@
 					        <p:treeNode type="ForumGroup">
 
 					        	<span class="w3-large w3-opacity-min">
-					        		<i class="fa fa-lg fa-sitemap"/> #{data.title}
+					        		<i class="pi pi-sitemap w3-large"/> #{data.title}
 					        	</span>
 					        
 					        </p:treeNode>

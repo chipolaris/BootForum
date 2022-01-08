@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -60,7 +59,7 @@ public class DiscussionStat extends BaseEntity {
 		if(firstUsers != null) {
 			for(String user : firstUsers.split(",")) {
 				String[] nameAndCount = user.split(":");
-				firstUsersMap.put(nameAndCount[0], new Integer(nameAndCount[1]));
+				firstUsersMap.put(nameAndCount[0], Integer.valueOf(nameAndCount[1]));
 			}
 		}
 	}
