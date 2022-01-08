@@ -36,7 +36,8 @@
         
         <style>
         
-			html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+			html, body, h1, h2, h3, h4, h5 { font-family: "Open Sans", sans-serif }
+			a { text-decoration: none }
 			
 		</style>
     </h:head>
@@ -45,8 +46,10 @@
 
 		<!-- Top container -->
 		<div class="w3-bar w3-top w3-theme-l3 w3-large w3-bottombar w3-border-green" style="z-index:4">
-		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="openSidebar();"><i class="fa fa-bars"/>  Menu</button>
-		  <a href="#{request.contextPath}"><span class="w3-bar-item w3-right" style="font-weight:bold;">#{msg['application.title']} <i class="fa fa-home"/></span></a>
+			<button class="w3-bar-item w3-button w3-hide-large" onclick="openSidebar();"><i class="pi pi-bars"/></button>
+			<h:link outcome="/index" styleClass="w3-bar-item w3-hover-green" title="Forum Home"><b><i class="pi pi-home"/> #{msg['application.title']}</b></h:link>
+			<!-- Note: for Logout link below, use h:outputLink instead of h:link because logout url is /logout (not /logout.xhtml) -->
+			<h:outputLink value="#{request.contextPath}/logout" styleClass="w3-bar-item w3-right w3-hover-orange"><i class="pi pi-sign-out"/> Logout</h:outputLink>
 		</div>
 		
 		<!-- Sidebar/menu -->
@@ -56,8 +59,7 @@
 		    <div class="w3-col s3">
 				
 				<h:graphicImage value="#{requestContext}/avatar/#{userSession.user.username}" class="w3-circle"
-					id="commentorAvatar" height="48" width="48" style="border:3px;float:left;" 
-					title="click to view #{userSession.user.username} profile"
+					id="commentorAvatar" height="48" width="48" style="border:3px;float:left;"
 					rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"/>
 				
 				<span jsf:rendered="#{!fileHandler.isAvatarExists(userSession.user.username)}" class="w3-circle avatarSpan"
@@ -68,35 +70,27 @@
 		    </div>	
 		    	
 		    <div class="w3-col s9 w3-bar">
-		      <div class="w3-center"><strong>#{empty userSession.user.person.firstName and empty userSession.user.person.lastName ? userSession.user.username : userSession.user.person.firstName += ' ' += userSession.user.person.lastName}</strong></div>
-		      
-		      <h:link outcome="index" styleClass="w3-bar-item w3-button"><i class="fa fa-dashboard"/></h:link>
-		      <h:link outcome="privateMessages" styleClass="w3-bar-item w3-button"><i class="fa fa-envelope"/></h:link>
-		      <h:link outcome="accountInfo" styleClass="w3-bar-item w3-button"><i class="fa fa-user"/></h:link>
-		     
+		      <div class="w3-center"><strong>#{empty userSession.user.person.firstName and empty userSession.user.person.lastName ? 'Username: ' + userSession.user.username : userSession.user.person.firstName += ' ' += userSession.user.person.lastName}</strong></div>
+		      <div class="w3-center">Role: #{userSession.user.userRole.label}</div>
 		    </div>
 		    
 		    <sec:authorize url="/admin">
-		    	<div class="w3-center w3-large">
-	  				<a href="#{request.contextPath}/admin/index.xhtml" class="w3-button w3-border"><i class="fa fa-institution fa-fw"></i>  Administration</a>
+		    	<div class="w3-col s12 w3-center w3-large w3-margin-top">
+		    		<h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-theme-d4"><i class="pi pi-briefcase"/> Administration</h:link>
 	  			</div>
 	  		</sec:authorize>
 		    
 		  </div>
 		  <hr/>
-		  <div class="w3-container">
-		    <h5><b>Dashboard</b></h5>
-		  </div>
 		  <div class="w3-bar-block">
-		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-		    <a href="#{request.contextPath}/secure/index.xhtml" class="w3-bar-item w3-button w3-padding" id="index"><i class="fa fa-dashboard fa-fw"></i>  Overview</a>
-		    <a href="#{request.contextPath}/secure/accountInfo.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw"></i>  Account</a>
-		    <a href="#{request.contextPath}/secure/privateMessages.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope-o fa-fw"></i>  Messages</a>
-		    <a href="#{request.contextPath}/secure/signaturePreference.xhtml" class="w3-bar-item w3-button w3-padding"><span class="fa-stack" style="font-size:0.63em;"><i class="fa fa-sticky-note-o fa-stack-2x"/><i class="fa fa-pencil fa-stack-1x"/></span>  Signature</a>
-		    <a href="#{request.contextPath}/secure/switchTheme.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-paint-brush fa-fw"></i>  UI Theme</a>
-		    <a href="#{request.contextPath}/chat/index.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-commenting fa-fw"/>  Chat Rooms</a>
-	  		<a href="#{request.contextPath}/index.xhtml" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home fa-fw"/>  Forum Home</a>
-		    <a href="#{request.contextPath}/logout" class="w3-bar-item w3-button w3-padding"><i class="fa fa-sign-out fa-fw"/>  Logout</a><br/><br/>
+		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="close menu"><i class="pi pi-times"></i>  Close Menu</a>
+		    
+		    <h:link outcome="/secure/index" styleClass="w3-bar-item w3-button w3-padding"><b>Dashboard</b></h:link>
+		    <h:link outcome="/secure/accountInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-user"/> Account</h:link>
+		    <h:link outcome="/secure/privateMessages" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope"/> Messages</h:link>
+		  	<h:link outcome="/secure/signaturePreference" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-pencil"/> Signature</h:link>
+		  	<h:link outcome="/secure/switchTheme" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-palette"/> UI Themes</h:link>
+		  	<h:link outcome="/chat/index" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments"/> Chat Rooms</h:link>
 		  </div>
 		</nav>
 

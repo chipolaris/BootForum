@@ -13,7 +13,7 @@
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<b><span class="fa-stack"><i class="fa fa-sticky-note-o fa-stack-2x"/><i class="fa fa-pencil fa-stack-1x"/></span> Signature Preference</b>
+		<b><i class="pi pi-pencil"/> Signature Preference</b>
 	</ui:define>
 
 	<ui:define name="content">
@@ -65,7 +65,7 @@
 				</div>
 				
 				<div class="w3-row w3-section">
-					<p:commandButton ajax="true" value="&#160;&#160;Save" icon="fa fa-save" action="#{signaturePreference.save}" />	
+					<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-save" action="#{signaturePreference.save}" />	
 				</div>
 			</h:form>
 			

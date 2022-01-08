@@ -21,7 +21,7 @@
 		<velocity.version>2.1</velocity.version>
 		<primefaces.version>11.0.0</primefaces.version>
 		<primefaces-extensions.version>11.0.0</primefaces-extensions.version>
-		<eclipselink.version>2.7.5</eclipselink.version>
+		<eclipselink.version>2.7.10</eclipselink.version>
 	</properties>
 
 	<dependencies>

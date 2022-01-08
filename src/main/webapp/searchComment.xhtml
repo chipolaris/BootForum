@@ -158,7 +158,7 @@
 							<f:facet name="header">
 								<h:outputText value="#{msg['comment']}"/>
 							</f:facet>
-				            <p:commandLink id="viewCommentLink" title="View Comment" style="text-decoration:none;color: #0084B4;"
+				            <p:commandLink id="viewCommentLink" title="View Comment" style="color: #0084B4;"
 				            	oncomplete="PF('commentDialogVar').show();
 				            		$('#commentDialogForm\\:searchCommentText').mark($('#searchForm\\:keywords').val());
 				            		$('#searchCommentTitle').mark($('#searchForm\\:keywords').val());" 
@@ -175,7 +175,7 @@
 							<f:facet name="header">
 								<h:outputText value="#{msg['discussion']}"/>
 							</f:facet>
-							<h:outputLink value="viewDiscussion.xhtml" style="text-decoration:none;color: #0084B4;">
+							<h:outputLink value="viewDiscussion.xhtml" style="color: #0084B4;">
 								<h:outputText value="#{comment.discussion.title}"/>
 								<f:param name="id" value="#{comment.discussion.id}" />
 							</h:outputLink>

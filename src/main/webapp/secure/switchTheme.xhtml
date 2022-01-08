@@ -13,7 +13,7 @@
 	</ui:define>
 
 	<ui:define name="pageTitle">
-		<b><i class="fa fa-paint-brush"></i> Choose UI Theme</b>
+		<b><i class="pi pi-palette"></i> Choose UI Theme</b>
 	</ui:define>
 
 	<ui:define name="content">
@@ -52,7 +52,6 @@
 					
 						<p>
 							<b>Select a new Color Theme:</b>
-						
 						</p>
 						
 						<p>
@@ -85,7 +84,7 @@
 						
 						</p>
 						
-						<p:commandButton value=" Save" icon="fa fa-save" ajax="false" action="#{switchTheme.submitThemeColor}"/>
+						<p:commandButton value="#{msg['save']}" icon="pi pi-save" ajax="false" action="#{switchTheme.submitThemeColor}"/>
 					</h:form>
 				</div>
 					
@@ -107,27 +106,11 @@
 						         <f:selectItem itemValue="saga" itemLabel="Saga" />
 								 <f:selectItem itemValue="vela" itemLabel="Vela" />
 								 <f:selectItem itemValue="arya" itemLabel="Arya"/>
-						    </p:selectOneMenu>					
-							<!-- <p:themeSwitcher value="#{switchTheme.themeComponent}" var="theme" panelStyle="width:94%" style="width:100%" >
-	
-								<f:selectItem itemValue="nova-light" itemLabel="Nova-Light" />
-								<f:selectItem itemValue="nova-dark" itemLabel="Nova-Dark" />
-								<f:selectItem itemValue="nova-colored" itemLabel="Nova-Colored"/>
-								<f:selectItem itemValue="luna-blue" itemLabel="Luna-Blue"/>
-								<f:selectItem itemValue="luna-amber" itemLabel="Luna-Amber"/>
-								<f:selectItem itemValue="luna-green" itemLabel="Luna-Green"/>
-								<f:selectItem itemValue="luna-pink" itemLabel="Luna-Pink"/>
-								<f:selectItem itemValue="omega" itemLabel="Omega"/>
-							
-								<p:column style="width:100%">
-									#{theme}
-								</p:column>
-								
-							</p:themeSwitcher> -->
+						    </p:selectOneMenu>
 					
 						</p>
 						
-						<p:commandButton value=" Save" icon="fa fa-save" ajax="false" action="#{switchTheme.submitThemeComponent}"/>
+						<p:commandButton value="#{msg['save']}" icon="pi pi-save" ajax="false" action="#{switchTheme.submitThemeComponent}"/>
 				
 					</h:form>	
 				</div>
@@ -137,7 +120,7 @@
 			
 			<p/>
 			
-			<h2>Preview <i class="fa fa-eye"/></h2>
+			<h2>Preview <i class="pi pi-eye"/></h2>
 			
 			<div class="w3-panel w3-topbar w3-bottombar">
 				
@@ -178,11 +161,8 @@
 							</p:accordionPanel>	
 							
 							<p/>
-			
 							
-						</div>
-					
-						
+						</div>						
 					
 						<div class="w3-col l6 m12 s12 w3-padding">
 							<p>

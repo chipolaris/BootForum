@@ -35,7 +35,8 @@
         
         <style>
         
-			html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+			html, body, h1, h2, h3, h4, h5 { font-family: "Open Sans", sans-serif }
+			a { text-decoration: none }
 			
 		</style>
     </h:head>
@@ -44,8 +45,10 @@
 
 		<!-- Top container -->
 		<div class="w3-bar w3-top w3-theme-l3 w3-large w3-bottombar w3-border-deep-orange" style="z-index:4">
-		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="pi pi-bars"></i>  Menu</button>
-		  <a href="#{request.contextPath}"><span class="w3-bar-item w3-right" style="font-weight:bold;">#{msg['application.title']}</span></a>
+			<button class="w3-bar-item w3-button w3-hide-large" onclick="openSidebar();"><i class="pi pi-bars"/></button>
+			<h:link outcome="/index" styleClass="w3-bar-item w3-hover-green" title="Forum Home"><b><i class="pi pi-home"/> #{msg['application.title']}</b></h:link>
+			<!-- Note: for Logout link below, use h:outputLink instead of h:link because logout url is /logout (not /logout.xhtml) -->
+			<h:outputLink value="#{request.contextPath}/logout" styleClass="w3-bar-item w3-right w3-hover-orange"><i class="pi pi-sign-out"/> Logout</h:outputLink>
 		</div>
 		
 		<!-- Sidebar/menu -->
@@ -72,18 +75,16 @@
 		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="pi pi-times"></i>  Close Menu</a>
 		    
 			<a href="#{request.contextPath}/admin/index.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-briefcase" title="Home"/> ADMIN HOME</a> 
-			<a href="#{request.contextPath}/admin/userList.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="Manage Users"/> MANAGE USERS</a> 
-			<a href="#{request.contextPath}/admin/discussionManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Discussions"/> MANAGE DISCUSSIONS</a> 
-			<a href="#{request.contextPath}/admin/forumAdmin.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-align-right" title="Manage Forums"/> MANAGE FORUMS</a>
-			<a href="#{request.contextPath}/admin/tagManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-tags" title="Manage Tags"/> MANAGE TAGS</a>
-			<a href="#{request.contextPath}/admin/chatChannelManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Chat Channels"/> MANAGE CHAT</a>
-			<a href="#{request.contextPath}/admin/displayManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="Manage Diplay"/> DISPLAY CONFIG</a>
-			<a href="#{request.contextPath}/admin/emailManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="Manage Email Option"/> EMAIL CONFIG</a>
-			<a href="#{request.contextPath}/admin/registrationManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-book" title="Manage Registration"/> MANAGE REGISTRATION</a>
-			<a href="#{request.contextPath}/admin/systemInfo.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-cog" title="Manage System"/> SYSTEM INFO</a>
-			<a href="#{request.contextPath}/index.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-home" title="Home"/> FORUM HOME</a>
-			<a href="#{request.contextPath}/admin/simulateData.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-play" title="Create Simulation Data"/> SIMULATE DATA</a>
-			<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button w3-padding"><i class="pi pi-sign-out" title="Logout"/> LOGOUT</a>
+			<a href="#{request.contextPath}/admin/userList.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="Manage Users"/> <b>Manage Users</b></a> 
+			<a href="#{request.contextPath}/admin/discussionManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Discussions"/> <b>Manage Discussions</b></a> 
+			<a href="#{request.contextPath}/admin/forumAdmin.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-align-right" title="Manage Forums"/> <b>Manage Forums</b></a>
+			<a href="#{request.contextPath}/admin/tagManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-tags" title="Manage Tags"/> <b>Manage Tags</b></a>
+			<a href="#{request.contextPath}/admin/chatChannelManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Chat Channels"/> <b>Manage Chat</b></a>
+			<a href="#{request.contextPath}/admin/displayManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="Manage Diplay"/> <b>Display Configuration</b></a>
+			<a href="#{request.contextPath}/admin/emailManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="Manage Email Option"/> <b>Email Configuration</b></a>
+			<a href="#{request.contextPath}/admin/registrationManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-book" title="Manage Registration"/><b> Manage Registration</b></a>
+			<a href="#{request.contextPath}/admin/systemInfo.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-cog" title="Manage System"/> <b>System Information</b></a>
+			<a href="#{request.contextPath}/admin/simulateData.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-play" title="Create Simulation Data"/> <b>Simulate Data</b></a>
 		  </div>
 		</nav>
 

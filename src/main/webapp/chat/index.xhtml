@@ -14,7 +14,7 @@
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<b><i class="fa fa-commenting"/> Live Chat</b>
+		<b><i class="pi pi-comments"/> Live Chat</b>
 	</ui:define>
 
 	<ui:define name="content">
@@ -128,13 +128,13 @@
 						<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
 							<form>
 								<button id="joinChannel#{chatChannel.id}" class="w3-btn joinChannel" type="submit" data-channelid="#{chatChannel.id}">
-									<b><i class="fa fa-sign-in"/> Join</b>
+									<b><i class="pi pi-sign-in"/> Join</b>
 								</button>
 		                    	<button id="usersChannel#{chatChannel.id}" class="w3-btn usersChannel" type="submit" data-channelid="#{chatChannel.id}">
-		                    		<b><i class="fa fa-users"/> Users</b>
+		                    		<b><i class="pi pi-users"/> Users</b>
 		                    	</button>
 		                    	<button id="leaveChannel#{chatChannel.id}" class="w3-btn leaveChannel" type="submit" data-channelid="#{chatChannel.id}">
-		                    		<b><i class="fa fa-sign-out"/> Leave</b>
+		                    		<b><i class="pi pi-sign-out"/> Leave</b>
 		                    	</button>
 		                    </form>
 						</div>
@@ -160,7 +160,7 @@
 				        <div jsf:id="channelUsersDiv#{chatChannel.id}" class="w3-margin-top w3-margin-right w3-border"
 				        	style="width:250px; height: 500px;">
 				        	<div class="w3-container w3-center w3-theme-d1">
-				        		<h6><b><i class="fa fa-users"/> Joined Users</b></h6>
+				        		<h6><b><i class="pi pi-users"/> Joined Users</b></h6>
 				        	</div>
 				        	
 				        	<div id="userList#{chatChannel.id}" class="w3-bar-block w3-theme-light" style="overflow: auto;height: 456px;"/>
@@ -176,15 +176,15 @@
 		                		autoResize="false" id="messageText#{chatChannel.id}" style="overflow-x: hidden;" styleClass="w3-input" placeholder="Type your message.."/>
 		                	
 			                <button id="postMessage#{chatChannel.id}" class="w3-btn w3-theme-dark postMessage" data-channelid="#{chatChannel.id}" type="submit" style="margin-top: 5px;">
-			                	<i class="fa fa-lg fa-paper-plane"/> Post
+			                	<i class="pi pi-send w3-large"/> Post
 			                </button>
 			                <button id="emojiInput#{chatChannel.id}" class="w3-btn w3-theme-dark emojiInput" data-channelid="#{chatChannel.id}" type="submit"
 			                	 title="Emoji" style="margin-top: 5px;">
-			                	<i class="fa fa-lg fa-smile-o"/>
+			                	<i class="pi pi-moon w3-large"/>
 			                </button>
 			                <label>
 			                	<input type="file" id="imageInput#{chatChannel.id}" class="imageInput" data-channelid="#{chatChannel.id}" style="display:none;" accept='image/*'/>
-			                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Image"><i class="fa fa-lg fa-picture-o"/></span>
+			                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Image"><i class="pi pi-image w3-large"/></span>
 			                </label>
 		                </fieldset>
 		            </form>
@@ -213,13 +213,13 @@
 							
 							<form class="w3-container">
 								<button id="postImageButton" class="w3-btn w3-theme-dark" type="submit">
-		                			<i class="fa fa-paper-plane"/> Post
+		                			<i class="pi pi-send"/> Post
 		                		</button>
 		                		<button id="selectAnotherImage" class="w3-btn w3-theme-dark" type="submit" onclick="$('#imageInput' + selectedChannel).trigger('click');">
-		                			<i class="fa fa-picture-o"/> Select Another
+		                			<i class="pi pi-image"/> Select Another
 		                		</button>
 		                		<span class="w3-btn w3-theme-dark" onclick="$('#imagePreviewModal').hide();">
-		                			<i class="fa fa-close"/> Cancel
+		                			<i class="pi pi-times"/> Cancel
 		                		</span>
 							</form>
 						</div>
@@ -235,7 +235,7 @@
 				<div class="w3-modal-content w3-card-4" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
 				
 					<header class="w3-container w3-light-blue">
-						<h5>Emojis <i class="fa fa-smile-o"/></h5>
+						<h5>Emojis <i class="pi pi-times"/></h5>
 						<span onclick="$('#emojiModal').hide();" class="w3-button w3-display-topright w3-large">&#215;</span>
 					</header>
 					
@@ -247,7 +247,7 @@
 						
 						<p>
 							<span class="w3-btn w3-theme-dark" onclick="$('#emojiModal').hide();">
-		                		<i class="fa fa-close"/> Close
+		                		<i class="pi pi-times"/> Close
 		                	</span>
 						</p>
 					</div>
@@ -272,7 +272,7 @@
 						
 						<p>
 							<span class="w3-btn w3-theme-dark" onclick="$('#alertModal').hide();">
-			                	<i class="fa fa-check"/> OK
+			                	<i class="pi pi-check"/> OK
 			                </span>
 						</p>
 					</div>

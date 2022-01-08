@@ -85,7 +85,7 @@
 				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{treeNode.type eq 'Root'}">
 				        		<i class="pi pi-sitemap w3-xlarge"/> #{msg['forum.home']}
 				        	</span>
-				        	<h:link outcome="viewForum" rendered="#{treeNode.type eq 'Forum'}" style="text-decoration:none;">
+				        	<h:link outcome="viewForum" rendered="#{treeNode.type eq 'Forum'}">
 								<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{data.iconColor};">
 				        			<i class="fa-lg #{data.icon}"/>
 				        		</span>

@@ -52,8 +52,8 @@
 
 		<!-- Top container -->
 		<div class="w3-bar w3-top w3-theme-l3 w3-large w3-bottombar w3-border-orange" style="z-index:4">
-		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="openSidebar();"><i class="fa fa-bars"/></button>
-		  <a href="#{request.contextPath}"><span class="w3-bar-item w3-right" style="font-weight:bold;">#{msg['application.title']} <i class="fa fa-home"/></span></a>
+		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="openSidebar();"><i class="pi pi-bars"/></button>
+		  <a href="#{request.contextPath}"><span class="w3-bar-item w3-right" style="font-weight:bold;">#{msg['application.title']} <i class="pi pi-home"/></span></a>
 		</div>
 		
 		<!-- Sidebar/menu -->
@@ -83,14 +83,14 @@
 				<p/>
 				
 				<form class="w3-small">
-					<button id="connect" class="w3-btn" type="submit"><i class="fa fa-plug"/> Connect</button>
-					<button id="disconnect" class="w3-btn" type="submit"><i class="fa fa-power-off"/> Disconnect</button>
+					<button id="connect" class="w3-btn" type="submit"><i class="pi pi-sitemap"/> Connect</button>
+					<button id="disconnect" class="w3-btn" type="submit"><i class="pi pi-power-off"/> Disconnect</button>
 				</form>
 							
 		    </div>
 			
 			<div class="w3-container w3-center w3-large w3-padding w3-theme-d3">
-		    	<h6><b>CONNECTED USERS <i class="fa fa-plug"/></b></h6>
+		    	<h6><b>CONNECTED USERS <i class="pi pi-sitemap"/></b></h6>
 		  	</div>
 		  
 			<div jsf:id="connectedUsersDiv" class="w3-bar-block w3-theme-light" style="overflow: auto; height: 500px;">
@@ -154,7 +154,7 @@
 		
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:25px;bottom:25px">
             <f:facet name="start">
-                <i class="fa fa-refresh fa-spin fa-3x fa-fw w3-text-blue-grey"/>
+                <i class="pi pi-refresh pi-spin w3-xxlarge w3-text-blue-grey"/>
             </f:facet>
 
             <f:facet name="complete">

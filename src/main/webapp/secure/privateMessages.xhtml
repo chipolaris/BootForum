@@ -15,7 +15,7 @@
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<b><i class="fa fa-envelope"></i> Private Messages</b>
+		<b><i class="pi pi-envelope"></i> Private Messages</b>
 	</ui:define>
 	
 	<ui:define name="content">
@@ -135,10 +135,10 @@
 		<div id="viewMessagesDiv">
 			
 			<div id="tabButtons" style="padding-bottom: 2px;border-bottom: 3px solid gray;">
-				<span class="w3-button w3-border w3-padding-16 tab-button" id="receivedButton" onclick="switchTab($(this));showReceivedTab();hideMessageDetailsDiv();"><b><i class="fa fa-envelope-o"/> Received</b></span>
-				<span class="w3-button w3-border w3-padding-16 tab-button" id="sentButton" onclick="switchTab($(this));showSentTab();hideMessageDetailsDiv();"><b><i class="fa fa-envelope"/> Sent</b></span>
-				<span class="w3-button w3-border w3-padding-16 tab-button" id="deletedButton" onclick="switchTab($(this));showDeletedTab();hideMessageDetailsDiv();"><b><i class="fa fa-trash"/> Deleted</b></span>
-				<span class="w3-button w3-border w3-padding-16 tab-button" id="plusButton" onclick="switchTab($(this));showNewTab();hideMessageDetailsDiv();"><b><i class="fa fa-plus"/></b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button w3-text-green" id="receivedButton" onclick="switchTab($(this));showReceivedTab();hideMessageDetailsDiv();"><b><i class="pi pi-envelope"/> Received</b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button w3-text-orange" id="sentButton" onclick="switchTab($(this));showSentTab();hideMessageDetailsDiv();"><b><i class="pi pi-envelope"/> Sent</b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button w3-text-red" id="deletedButton" onclick="switchTab($(this));showDeletedTab();hideMessageDetailsDiv();"><b><i class="pi pi-trash"/> Deleted</b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button" id="plusButton" onclick="switchTab($(this));showNewTab();hideMessageDetailsDiv();"><b><i class="pi pi-plus"/></b></span>
 				
 				<h:form>
 					<p:remoteCommand name="showReceivedTab" update=":tabs" actionListener="#{privateMessages.setViewTab('receivedTab')}" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
@@ -400,10 +400,10 @@
 											
 											<p/>
 											
-											<p:commandButton ajax="true" icon="fa fa-trash" title="Delete this attachment" process="@this"
+											<p:commandButton ajax="true" icon="pi pi-trash" title="Delete this attachment" process="@this"
 												action="#{privateMessages.uploadedFileManager.deleteUploadedFile}"
 												update=":newMessageForm:attachmentPanel">
-												<p:confirm header="Confirm Delete Attachment" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+												<p:confirm header="Confirm Delete Attachment" message="Are you sure?" icon="pi pi-exclamation-triangle"/>
 												<f:setPropertyActionListener value="#{attachment}" target="#{privateMessages.uploadedFileManager.selectedUploadedFile}" />  
 											</p:commandButton>
 									
@@ -428,7 +428,7 @@
 			       		
 			       		<p>
 				       		<p:commandButton id="createMessageButton" ajax="true" action="#{privateMessages.createMessage}"
-		            			update=":sentPrivateMessageTable" value=" Send" icon="fa fa-paper-plane"/>         
+		            			update=":sentPrivateMessageTable" value=" Send" icon="pi pi-send"/>         
 				       	</p>
 			    
 			    	</h:form>
@@ -441,8 +441,8 @@
 		
 		<!-- confirm dialog -->
 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-       		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-       		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+       		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+       		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
    		</p:confirmDialog>
 	    
 		<div jsf:id="messageDetailsDiv" class="w3-panel w3-round w3-border w3-display-container w3-animate-top" style="display:none">
@@ -466,7 +466,7 @@
 	    			
 	    			<div class="w3-col l8 m8 s12">
 	    				<div > <!-- Note: put negative margin-top so the top edge of text aligns with the top of the avatar image -->
-	    					<h5 class="w3-opacity-min">From: <b>#{privateMessages.selectedMessage.message.fromUser}</b>, <i class="fa fa-clock-o"/> #{privateMessages.selectedMessage.createDate}</h5>
+	    					<h5 class="w3-opacity-min">From: <b>#{privateMessages.selectedMessage.message.fromUser}</b>, <i class="pi pi-clock"/> #{privateMessages.selectedMessage.createDate}</h5>
 	    				</div>
 	    				
 		    			<div class="w3-section">
@@ -516,22 +516,22 @@
 	    			
 	    			<hr style="border: 1px solid; opacity: 0.25"/>
 
-					<p:commandButton ajax="true" icon="fa fa-trash" value="Delete Message" rendered="#{!privateMessages.selectedMessage.deleted}"
+					<p:commandButton ajax="true" icon="pi pi-trash" value="Delete Message" rendered="#{!privateMessages.selectedMessage.deleted}"
 						 action="#{privateMessages.deleteMessage}" title="Delete this message" process="@this"
 						 oncomplete="hideMessageDetailsDiv();changeAvatarBackgrounds();customizeDatatableStyle();" 
 						 update=":receivedPrivateMessageTable :sentPrivateMessageTable :deletedPrivateMessageTable">
 						<p:confirm header="Confirm Delete Message" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
 					</p:commandButton>
 					
-					<p:commandButton ajax="true" icon="fa fa-undo" value="Restore Message" rendered="#{privateMessages.selectedMessage.deleted}"
+					<p:commandButton ajax="true" icon="pi pi-undo" value="Restore Message" rendered="#{privateMessages.selectedMessage.deleted}"
 						action="#{privateMessages.restoreMessage}" title="Restore this message" process="@this"
 						oncomplete="hideMessageDetailsDiv();changeAvatarBackgrounds();customizeDatatableStyle();"
 						update=":receivedPrivateMessageTable :sentPrivateMessageTable :deletedPrivateMessageTable">
-						<p:confirm header="Confirm Restore Message" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+						<p:confirm header="Confirm Restore Message" message="Are you sure?" icon="pi pi-exclamation-triangle"/>
 					</p:commandButton>						
 					
 					<p:commandButton type="button" onclick="hideMessageDetailsDiv();" value="Close"
-	            		icon="fa fa-close" style="margin-left:5px;"/>
+	            		icon="pi pi-times" style="margin-left:5px;"/>
 					
 					<p/>		    		
 	    		
