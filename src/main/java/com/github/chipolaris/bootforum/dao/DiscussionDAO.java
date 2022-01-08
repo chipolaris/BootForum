@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum.dao;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -84,7 +85,11 @@ public class DiscussionDAO {
 		
 		Query query = entityManager.createNativeQuery(nativeQuery).setParameter(1, tagId);
 		
-		return (Long) query.getSingleResult();
+		/* 
+		 * Note: the query above returns Long in Postgresql and BigInteger in SQL Server 
+		 * So, the compromise is to downcast to Number first, then return longValue
+		 */
+		return ((Number) query.getSingleResult()).longValue();
 	}
 	
 	public Long countDiscusionsForTag(Tag tag) {
