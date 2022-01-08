@@ -81,7 +81,7 @@
 				
 					<p:treeTable value="#{forumMap.forumRootTreeNode}" var="data" nodeVar="treeNode" style="margin: 0 auto;" styleClass="borderless">
 				        
-				        <p:column headerText="#{msg['category/name']}" style="text-align:left;" priority="1">
+				        <p:column headerText="#{msg['category/name']}" style="text-align:left;" responsivePriority="1">
 				        	<span class="w3-large w3-opacity-min" jsf:rendered="#{treeNode.type eq 'Root'}">
 				        		<i class="pi pi-sitemap w3-xlarge"/> #{msg['forum.home']}
 				        	</span>
@@ -103,15 +103,15 @@
 				        	</span>
 				        </p:column>
 				        
-				        <p:column headerText="#{msg['discussions']}" style="text-align:center;width:100px;" priority="3">
+				        <p:column headerText="#{msg['discussions']}" style="text-align:center;width:100px;" responsivePriority="3">
 				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.discussionCount}</span>
 				        </p:column>
 				        
-				        <p:column headerText="#{msg['comments']}" style="text-align:center;width:100px;" priority="4">
+				        <p:column headerText="#{msg['comments']}" style="text-align:center;width:100px;" responsivePriority="4">
 				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.commentCount}</span>
 				        </p:column>
 
-						<p:column headerText="#{msg['latest.comments']}" style="text-align:right;width:200px;" priority="2">
+						<p:column headerText="#{msg['latest.comments']}" style="text-align:right;width:200px;" responsivePriority="2">
 							<div jsf:rendered="#{treeNode.type eq 'Forum' and not empty data.stat.lastComment.updateBy}">
 								<pe:timeAgo value="#{data.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy " /> #{msg['by']}
 								
