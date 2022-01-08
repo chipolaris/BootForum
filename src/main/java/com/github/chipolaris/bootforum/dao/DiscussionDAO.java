@@ -45,6 +45,24 @@ public class DiscussionDAO {
 		return typedQuery.getResultList();
 	}
 
+	/*
+	 * Note: 
+	 * 
+	 * The following JPQL query:
+	 * 		"SELECT COALESCE(SUM(SIZE(d.comments)), 0) FROM Discussion d WHERE :tag MEMBER OF d.tags"
+	 * 
+	 * Will work fine in Postgresql and H2, but not in SQL Server.
+	 * 
+	 * In SQL Server, it Would result in the error:
+	 *
+	 *	com.microsoft.sqlserver.jdbc.SQLServerException: Cannot perform an aggregate function on an expression containing
+	 *	 an aggregate or a subquery. Error Code: 130 Call: 
+	 *	 		SELECT COALESCE(SUM((SELECT COUNT(t3.ID) FROM COMMENT_T t3 WHERE (t3.DISCUSSION_ID = t0.ID))),? ) 
+	 *			FROM DISCUSSION_T t0, DISCUSSION_TAG_T t2, TAG_T t1 WHERE ((? = t1.ID) 
+	 *			AND ((t2.DISCUSSION_ID = t0.ID) AND (t1.ID = t2.TAG_ID))) 
+	 *
+	 * So the work around for now is to use a native SQL query
+	 */
 	public Long countCommentsForTag(Tag tag) {
 		
 		String queryStr = "SELECT COALESCE(SUM(SIZE(d.comments)), 0) FROM Discussion d WHERE :tag MEMBER OF d.tags";
@@ -53,6 +71,20 @@ public class DiscussionDAO {
 		typedQuery.setParameter("tag", tag);
 		
 		return typedQuery.getSingleResult().longValue();
+	}
+	
+	/**
+	 * This method identical as the method above, using native SQL query to avoid SQL Server issue as noted above
+	 */
+	public Long countCommentsForTag(Long tagId) {
+		
+		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_T C"
+				+ " LEFT JOIN DISCUSSION_TAG_T DT ON DT.DISCUSSION_ID = C.DISCUSSION_ID"
+				+ " WHERE DT.TAG_ID = ?1";
+		
+		Query query = entityManager.createNativeQuery(nativeQuery).setParameter(1, tagId);
+		
+		return (Long) query.getSingleResult();
 	}
 	
 	public Long countDiscusionsForTag(Tag tag) {

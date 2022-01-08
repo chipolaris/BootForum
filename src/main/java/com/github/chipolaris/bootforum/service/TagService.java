@@ -81,7 +81,7 @@ public class TagService {
 		
 		ServiceResponse<Long> response = new ServiceResponse<>();
 		
-		response.setDataObject(discussionDAO.countCommentsForTag(tag));
+		response.setDataObject(discussionDAO.countCommentsForTag(tag.getId()));
 		
 		return response;
 	}
