@@ -289,7 +289,9 @@
 						<div class="w3-container" style="padding:0;">
 						
 				        	<div class="w3-right-align">
-				        		<h:outputText value="#{comment.createDate} "/>
+				        		<h:outputText value="#{comment.createDate}">
+									<f:convertDateTime pattern="MMMM dd, yyyy"/>
+								</h:outputText>
 				        		<h:outputText value="[#{rowIndex + 1}]" style="font-weight:bold;"/>
 				        	</div>
 

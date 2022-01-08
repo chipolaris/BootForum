@@ -113,7 +113,10 @@
 				<div class="w3-center">
 				
 					<div class="w3-margin w3-large">
-						Started by <b>#{moderateDiscussion.discussion.createBy}</b> on #{moderateDiscussion.discussion.createDate}
+						Started by <b>#{moderateDiscussion.discussion.createBy}</b>	- 
+						<h:outputText value="#{moderateDiscussion.discussion.createDate}">
+							<f:convertDateTime pattern="MMMM dd, yyyy"/>
+						</h:outputText>
 					</div>
 				
 					<div class="w3-large" jsf:id="forumTitleDiv">
@@ -184,7 +187,10 @@
 						<div class="w3-container" style="padding:0;">
 						
 							<div class="w3-right-align">
-								<h:outputText value="[IP: #{empty comment.ipAddress ? 'unknown' : comment.ipAddress}] #{comment.createDate} "/>
+								<h:outputText value="[IP: #{empty comment.ipAddress ? 'unknown' : comment.ipAddress}] "/>
+								<h:outputText value="#{comment.createDate}">
+									<f:convertDateTime pattern="MMMM dd, yyyy"/>
+								</h:outputText>
 					        	<h:outputText value="[#{rowIndex + 1}]" style="font-weight:bold;"/>
 							</div>
 							
