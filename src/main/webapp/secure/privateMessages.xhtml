@@ -420,10 +420,8 @@
 							<p:fileUpload listener="#{privateMessages.uploadedFileManager.handleFileUpload}" mode="advanced" dragDropSupport="true"
 				        			update=":newMessageForm:attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Message.attachment.maxFileSize'] * 1024}" 
 				        			allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG|zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
-				        			rendered="#{applicationProperties['Message.attachment.maxPerMessage'] gt fn:length(privateMessages.uploadedFileManager.uploadedFileList)}"/>
-			          		
-			          		<p/>
-			       		
+				        			rendered="#{applicationProperties['Message.attachment.maxPerMessage'] gt fn:length(privateMessages.uploadedFileManager.uploadedFileList)}" label="#{msg['choose']}"/>
+			          	          				       		
 			       		</div>
 			       		
 			       		<p>

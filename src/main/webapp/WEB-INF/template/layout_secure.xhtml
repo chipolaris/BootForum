@@ -71,7 +71,7 @@
 		    </div>	
 		    	
 		    <div class="w3-col s9 w3-bar">
-		      <div class="w3-center"><strong>#{empty userSession.user.person.firstName and empty userSession.user.person.lastName ? 'Username: ' + userSession.user.username : userSession.user.person.firstName += ' ' += userSession.user.person.lastName}</strong></div>
+		      <div class="w3-center"><strong>#{empty userSession.user.person.firstName and empty userSession.user.person.lastName ? 'Username: ' += userSession.user.username : userSession.user.person.firstName += ' ' += userSession.user.person.lastName}</strong></div>
 		      <div class="w3-center">Role: #{userSession.user.userRole.label}</div>
 		    </div>
 		    

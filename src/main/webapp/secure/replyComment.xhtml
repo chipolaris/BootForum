@@ -65,7 +65,7 @@
  					<h2 jsf:rendered="#{empty replyComment.comment.title}">#{msg['add.comment.to.discussion']} '#{replyComment.reply.discussion.title}'</h2>
  				</div>
  								
-				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-comment"/> #{msg['comment']}</button> <!-- accordion button  -->
+				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="pi pi-comment"/> #{msg['comment']}</button> <!-- accordion button  -->
 			
 				<div id="commentPanel" class="w3-container w3-animate-right w3-hide w3-show">
 					
@@ -106,7 +106,7 @@
 					
 				</div>
 				
-				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-image"/> #{msg['images']}</button> <!-- accordion button  -->
+				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="pi pi-image"/> #{msg['images']}</button> <!-- accordion button  -->
 					
 				<div jsf:id="thumbnailPanel" class="w3-container w3-animate-right w3-hide w3-hide">
 					<h:form>
@@ -163,7 +163,7 @@
 					
 				</div>
 				
-				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-paperclip"/> #{msg['attachments']}</button> <!-- accordion button  -->
+				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="pi pi-paperclip"/> #{msg['attachments']}</button> <!-- accordion button  -->
 					
 				<div jsf:id="attachmentPanel" class="w3-container w3-animate-right w3-hide w3-hide">
 				      
@@ -230,8 +230,8 @@
 						 -->
 						 
 						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['submit']}" type="button" icon="fa fa-check" onclick="submitReplyForm();"/>
-						<p:button onclick="javascript:history.back();return;" value="#{msg['cancel']}" icon="fa fa-close"/>
+						<p:commandButton value="#{msg['submit']}" type="button" icon="pi pi-check" onclick="submitReplyForm();"/>
+						<p:button onclick="javascript:history.back();return;" value="#{msg['cancel']}" icon="pi pi-times"/>
 					</h:form>
 					
 				</h:panelGroup>					

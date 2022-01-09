@@ -121,7 +121,7 @@
 								<!-- if logged in, show the send private message link -->
 								<sec:authorize ifNotGranted="ROLE_ANONYMOUS">								
 									<h:link outcome="/secure/privateMessages">
-										[<i class="fa fa-paper-plane" title="Send private message to '#{user.username}'"></i>]
+										[<i class="pi pi-send w3-small" title="Send private message to '#{user.username}'"></i>]
 										<f:param name="viewTab" value="newTab"/>
 										<f:param name="to" value="#{user.username}"/>
 									</h:link>
@@ -131,7 +131,7 @@
 						
 						<p:column sortBy="#{user.stat.discussionCount}" style="text-align:center;">
 							<f:facet name="header">
-								<h:outputText value="#{msg['discussions.started']}" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['discussions.created']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<span><b>#{user.stat.discussionCount}</b></span>
@@ -153,7 +153,7 @@
 							</f:facet>
 							
 							<span jsf:rendered="#{not empty user.stat.lastComment}"><pe:timeAgo value="#{user.stat.lastComment.updateDate}"/></span>
-							<span jsf:rendered="#{empty user.stat.lastComment}">None</span>
+							<span jsf:rendered="#{empty user.stat.lastComment}">#{msg['none']}</span>
 						</p:column>
 
 						<p:column sortBy="#{user.createDate}" style="text-align:right;">

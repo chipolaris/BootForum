@@ -54,7 +54,7 @@
 								- <pe:timeAgo value="#{discussion.createDate}"/>
 								<p:repeat var="tag" value="#{discussion.tags}">
 									<h:link outcome="viewTag">
-										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="pi pi-tag"/> #{tag.label}</span>
 										<f:param name="id" value="#{tag.id}"/>
 									</h:link>
 								</p:repeat>
@@ -72,7 +72,7 @@
 					
 						<div class="w3-xlarge" 
 							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-							<i class="fa fa-eye"/> #{msg['most.views.discussions']}
+							<i class="pi pi-eye w3-xlarge"/> #{msg['most.views.discussions']}
 						</div>
 					
 						<p:repeat var="discussion" value="#{homePage.mostViewsDiscussions}">
@@ -90,7 +90,7 @@
 								- <pe:timeAgo value="#{discussion.createDate}"/>
 								<p:repeat var="tag" value="#{discussion.tags}">
 									<h:link outcome="viewTag">
-										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="pi pi-tag"/> #{tag.label}</span>
 										<f:param name="id" value="#{tag.id}"/>
 									</h:link>
 								</p:repeat>
@@ -109,7 +109,7 @@
 					
 						<div class="w3-xlarge" 
 							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-							<i class="fa fa-comment-o"/> #{msg['most.comments.discussions']}
+							<i class="pi pi-comments w3-xlarge"/> #{msg['most.comments.discussions']}
 						</div>
 					
 						<p:repeat var="discussion" value="#{homePage.mostCommentsDiscussions}">
@@ -127,7 +127,7 @@
 								- <pe:timeAgo value="#{discussion.createDate}"/>
 								<p:repeat var="tag" value="#{discussion.tags}">
 									<h:link outcome="viewTag">
-										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="fa fa-tag"/> #{tag.label}</span>
+										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="pi pi-tag"/> #{tag.label}</span>
 										<f:param name="id" value="#{tag.id}"/>
 									</h:link>
 								</p:repeat>
@@ -147,7 +147,7 @@
 							<div class="w3-container" style="padding:0;">
 								<div class="w3-xlarge" 
 									style="border-bottom-style:solid; border-width: 2px; border-color:##{tag.color}; color:##{tag.color}">
-									<i class="fa #{tag.icon}"/> #{tag.label}
+									<i class="pi #{tag.icon}"/> #{tag.label}
 								</div>
 								<p:repeat var="discussion" value="#{tag.discussions}">
 									<p>
@@ -188,26 +188,26 @@
 							<div class="w3-container">
 								<p>
 									<h:link outcome="/secure/index">
-										<i class="fa fa-gear fa-fw"/> #{msg['my.account']}
+										<i class="pi pi-cog w3-medium"/> #{msg['my.account']}
 									</h:link>
 								</p>
 								<p>
 									<h:link outcome="/secure/privateMessages">
-										<i class="fa fa-envelope-o fa-fw"></i> #{msg['my.private.messages']}
+										<i class="pi pi-envelope w3-medium"></i> #{msg['my.private.messages']}
 									</h:link>
 								</p>
 								<p>
 									<h:link outcome="/secure/switchTheme">
-										<i class="fa fa-paint-brush fa-fw"></i> #{msg['ui.theme.color']}
+										<i class="pi pi-palette w3-medium"></i> #{msg['ui.theme.color']}
 									</h:link>
 								</p>
 								<p>
 									<h:link outcome="/chat/index">
-										<i class="fa fa-commenting fa-fw"></i> #{msg['chat.rooms']}
+										<i class="pi pi-comments w3-medium"></i> #{msg['chat.rooms']}
 									</h:link>
 								</p>								
 								<p>
-									<a href="#{request.contextPath}/logout"><i class="fa fa-sign-out fa-fw"/> #{msg['logout']}</a>
+									<a href="#{request.contextPath}/logout"><i class="pi pi-sign-out w3-medium"/> #{msg['logout']}</a>
 								</p>
 							</div>
 						</sec:authorize>
@@ -251,7 +251,7 @@
 						<div class="w3-container w3-padding-small">
 							<p:repeat var="tag" value="#{homePage.allTags}">
 								<h:link outcome="viewTag">
-									<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;margin-top:8px;"><i class="fa fa-tag"/> #{tag.label}</span>
+									<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;margin-top:8px;"><i class="pi pi-tag"/> #{tag.label}</span>
 									<f:param name="id" value="#{tag.id}"/>
 								</h:link>
 							</p:repeat>

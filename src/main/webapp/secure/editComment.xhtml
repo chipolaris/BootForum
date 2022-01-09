@@ -69,7 +69,7 @@
  					<h2 jsf:rendered="#{not empty editComment.comment.title}">#{msg['edit.comment']} '#{editComment.comment.title}'</h2>
  				</div>
  								
-				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-comment"/> #{msg['comment']}</button> <!-- accordion button  -->
+				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="pi pi-comment"/> #{msg['comment']}</button> <!-- accordion button  -->
 			
 				<div id="commentPanel" class="w3-container w3-animate-right w3-hide w3-show">
 					
@@ -104,13 +104,13 @@
 						
 						<p/>
 						
-						<p:commandButton value="#{msg['save.and.continue']}" ajax="true" icon="fa fa-check" 
+						<p:commandButton value="#{msg['save.and.continue']}" ajax="true" icon="pi pi-check" 
 							action="#{editComment.submit(true)}" styleClass="w3-btn w3-border w3-theme-dark w3-border-0" update="titleError contentError"/>
 						
-						<p:commandButton value="#{msg['save.and.go.to.discussion']}" ajax="true" icon="fa fa-check" 
+						<p:commandButton value="#{msg['save.and.go.to.discussion']}" ajax="true" icon="pi pi-check" 
 							action="#{editComment.submit(false)}" styleClass="w3-btn w3-theme-dark w3-border-0"/>
 
-						<p:linkButton outcome="/viewDiscussion" value="#{msg['cancel']}" icon="fa fa-close" styleClass="w3-btn w3-theme-dark w3-border-0">
+						<p:linkButton outcome="/viewDiscussion" value="#{msg['cancel']}" icon="pi pi-times" styleClass="w3-btn w3-theme-dark w3-border-0">
 							<f:param name="id" value="#{editComment.comment.discussion.id}"/>
 						</p:linkButton>
 							
@@ -120,7 +120,7 @@
 					
 				</div>
 				
-				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-image"/> #{msg['images']}</button> <!-- accordion button  -->
+				<button onclick="toggle('thumbnailPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="pi pi-image"/> #{msg['images']}</button> <!-- accordion button  -->
 					
 				<div jsf:id="thumbnailPanel" class="w3-container w3-animate-right w3-hide w3-hide">
 					<h:form>
@@ -177,7 +177,7 @@
 					
 				</div>
 				
-				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="fa fa-paperclip"/> #{msg['attachments']}</button> <!-- accordion button  -->
+				<button onclick="toggle('attachmentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="pi pi-paperclip"/> #{msg['attachments']}</button> <!-- accordion button  -->
 					
 				<div jsf:id="attachmentPanel" class="w3-container w3-animate-right w3-hide w3-hide">
 				      
@@ -236,8 +236,8 @@
 				
 				<!-- confirm dialog -->
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-	        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+	        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
 	    		</p:confirmDialog>
 				
 			</div>

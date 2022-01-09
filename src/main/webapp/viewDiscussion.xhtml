@@ -223,7 +223,7 @@
 					
 					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
 						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
-						<i class="fa fa-comment-o"/> #{msg['add.new.comment']}
+						<i class="pi pi-comment"/> #{msg['add.new.comment']}
 					</h:link>
 					
 					<span jsf:rendered="#{viewDiscussion.discussion.closed}" class="w3-tag w3-red"><b>Discussion is closed</b></span>
@@ -428,13 +428,13 @@
 				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-l2 w3-right w3-round" id="voteDownScore"/>
 				        			
 				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="#{msg['dislike']}" action="#{voteManager.voteDown(comment)}" process="@this" 
-				        			update="growl voteDownScore" styleClass="w3-right"><i class="fa fa-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
+				        			update="growl voteDownScore" styleClass="w3-right"><i class="pi pi-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
 					        	
 				        		<p:outputLabel value="#{comment.commentVote.voteUpCount}" 
 				        			style="margin: 0px 15px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d2 w3-right w3-round" id="voteUpScore"/>					        	
 					        							    
 				        		<p:commandLink title="#{msg['like']}" action="#{voteManager.voteUp(comment)}" process="@this" 
-				        			update="growl voteUpScore" styleClass="w3-right"><i class="fa fa-thumbs-up fa-2x w3-opacity"/></p:commandLink>
+				        			update="growl voteUpScore" styleClass="w3-right"><i class="pi pi-thumbs-up fa-2x w3-opacity"/></p:commandLink>
 						    </div>
 
 							<!-- mobile screen -->
@@ -459,13 +459,13 @@
 					        	
 					        	<!-- right side: like buttons -->
 				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="#{msg['dislike']}" action="#{voteManager.voteDown(comment)}" process="@this" 
-				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="fa fa-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
+				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
 					        	
 				        		<p:outputLabel value="#{comment.commentVote.voteUpCount - comment.commentVote.voteDownCount}" id="voteScoreMobile" 
 				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d1 w3-right w3-round"/>					        	
 					        							    
 				        		<p:commandLink title="#{msg['like']}" action="#{voteManager.voteUp(comment)}" process="@this" 
-				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="fa fa-thumbs-up fa-2x w3-opacity"/></p:commandLink>
+				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-up fa-2x w3-opacity"/></p:commandLink>
 						    </div>
 				        					        					        
 				        </div>
@@ -475,7 +475,7 @@
 				        <f:facet name="footer">
 				        	<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border" rendered="#{! viewDiscussion.discussion.closed}" >
 								<f:param name="discussionId" value="#{viewDiscussion.id}"/>
-								<i class="fa fa-comment-o"/> #{msg['add.new.comment']}
+								<i class="pi pi-comment"/> #{msg['add.new.comment']}
 							</h:link>
 				            <h:outputText value="This discussion is closed" rendered="#{viewDiscussion.discussion.closed}" style="font-size:16pt; color:red;"/>
 				        </f:facet>
