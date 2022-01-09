@@ -111,7 +111,7 @@
     				
 					<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 					
-					<p:column sortBy="#{discussion.title}" style="text-align:left;width:33%;" priority="1">
+					<p:column sortBy="#{discussion.title}" style="text-align:left;width:33%;" responsivePriority="1">
 						<f:facet name="header">
 							<h:outputText value="Discussion Title" style="font-weight:bold;"/>
 						</f:facet>
@@ -123,7 +123,7 @@
 						<span>Started by <b>#{discussion.createBy} </b><pe:timeAgo value="#{discussion.createDate}" titlePattern="MMMMM dd yyyy" /></span>
 					</p:column>
 					
-					<p:column sortBy="#{discussion.stat.commentCount}" style="text-align:center;width:120px;" priority="4">
+					<p:column sortBy="#{discussion.stat.commentCount}" style="text-align:center;width:120px;" responsivePriority="4">
 						<f:facet name="header">
 							<h:outputText value="Comments" style="font-weight:bold;"/>
 						</f:facet>
@@ -132,7 +132,7 @@
 						
 					</p:column>
 
-					<p:column sortBy="#{discussion.stat.viewCount}" style="text-align:center;width:120px;" priority="5">
+					<p:column sortBy="#{discussion.stat.viewCount}" style="text-align:center;width:120px;" responsivePriority="5">
 						<f:facet name="header">
 							<h:outputText value="Views" style="font-weight:bold;"/>
 						</f:facet>
@@ -141,7 +141,7 @@
 						
 					</p:column>
 
-					<p:column sortBy="#{discussion.createDate}" style="text-align:left;" priority="2">
+					<p:column sortBy="#{discussion.createDate}" style="text-align:left;" responsivePriority="2">
 						<f:facet name="header">
 							<h:outputText value="Started" />
 						</f:facet>
@@ -150,7 +150,7 @@
 						
 					</p:column>
 
-					<p:column sortBy="#{discussion.stat.lastComment.updateDate}" style="text-align:right;" priority="3">
+					<p:column sortBy="#{discussion.stat.lastComment.updateDate}" style="text-align:right;" responsivePriority="3">
 						<f:facet name="header">
 							<h:outputText value="Last Comment" />
 						</f:facet>

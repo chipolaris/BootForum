@@ -206,7 +206,7 @@
 				
 					<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
 
-					<p:column sortBy="#{registration.email}" style="text-align:left;width:33%;" priority="1">
+					<p:column sortBy="#{registration.email}" style="text-align:left;width:33%;" responsivePriority="1">
 						<f:facet name="header">
 							<h:outputText value="Email" style="font-weight:bold;"/>
 						</f:facet>
@@ -215,7 +215,7 @@
 						
 					</p:column>
 
-					<p:column sortBy="#{registration.username}" style="text-align:left;width:33%;" priority="2">
+					<p:column sortBy="#{registration.username}" style="text-align:left;width:33%;" responsivePriority="2">
 						<f:facet name="header">
 							<h:outputText value="Username" style="font-weight:bold;"/>
 						</f:facet>
@@ -224,7 +224,7 @@
 						
 					</p:column>
 					
-					<p:column sortBy="#{registration.registrationKey}" style="text-align:left;width:33%;" priority="3">
+					<p:column sortBy="#{registration.registrationKey}" style="text-align:left;width:33%;" responsivePriority="3">
 						<f:facet name="header">
 							<h:outputText value="Registration Key" style="font-weight:bold;"/>
 						</f:facet>

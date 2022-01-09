@@ -99,7 +99,7 @@
 						
 					</f:facet>
 		       		
-					<p:column sortBy="#{user.username}" filterBy="#{user.username}" priority="1">
+					<p:column sortBy="#{user.username}" filterBy="#{user.username}" responsivePriority="1">
 						<f:facet name="header">
 							<h:outputText value="User Name" style="font-weight:bold;"/>
 						</f:facet>
@@ -118,28 +118,28 @@
 						
 					</p:column>
 		
-					<p:column sortBy="#{user.person.firstName}" filterBy="#{user.person.firstName}" priority="5">
+					<p:column sortBy="#{user.person.firstName}" filterBy="#{user.person.firstName}" responsivePriority="5">
 						<f:facet name="header">
 							<h:outputText value="First Name" style="font-weight:bold;"/>
 						</f:facet>
 						<h:outputText value="#{user.person.firstName}" />
 					</p:column>
 		
-					<p:column sortBy="#{user.person.lastName}" filterBy="#{user.person.lastName}" priority="4">
+					<p:column sortBy="#{user.person.lastName}" filterBy="#{user.person.lastName}" responsivePriority="4">
 						<f:facet name="header">
 							<h:outputText value="Last Name" style="font-weight:bold;"/>
 						</f:facet>
 						<h:outputText value="#{user.person.lastName}" />
 					</p:column>
 		
-					<!-- <p:column sortBy="#{user.person.email}" filterBy="#{user.person.email}" priority="6">
+					<!-- <p:column sortBy="#{user.person.email}" filterBy="#{user.person.email}" responsivePriority="6">
 						<f:facet name="header">
 							<h:outputText value="Email Address" style="font-weight:bold;"/>
 						</f:facet>
 						<h:outputText value="#{user.person.email}" />
 					</p:column> -->
 
-					<p:column sortBy="#{user.userRole}" filterBy="#{user.userRole}" style="text-align:center;font-weight:bold;" priority="2">
+					<p:column sortBy="#{user.userRole}" filterBy="#{user.userRole}" style="text-align:center;font-weight:bold;" responsivePriority="2">
 						<f:facet name="header">
 							<h:outputText value="Role" style="font-weight:bold;"/>
 						</f:facet>
@@ -155,7 +155,7 @@
 						<h:outputText value="#{user.userRole.label}" />
 					</p:column>
 					
-					<p:column sortBy="#{user.accountStatus}" filterBy="#{user.accountStatus}" style="text-align:center;font-weight:bold;" priority="3">
+					<p:column sortBy="#{user.accountStatus}" filterBy="#{user.accountStatus}" style="text-align:center;font-weight:bold;" responsivePriority="3">
 						<f:facet name="header">
 							<h:outputText value="Account Status" style="font-weight:bold;"/>
 						</f:facet>
