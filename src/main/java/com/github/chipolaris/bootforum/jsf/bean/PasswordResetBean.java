@@ -51,7 +51,7 @@ public class PasswordResetBean {
 
 	public void onLoad() {
 		Map<String, Object> filters = new HashMap<>();
-		filters.put("key", key);
+		filters.put("resetKey", key);
 		
 		ServiceResponse<List<PasswordReset>> serviceResponse = 
 				genericService.getEntities(PasswordReset.class, filters);

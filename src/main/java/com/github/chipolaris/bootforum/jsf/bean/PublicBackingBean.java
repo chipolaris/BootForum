@@ -1,5 +1,7 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -17,6 +19,7 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
+import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.PasswordResetService;
@@ -176,7 +179,11 @@ public class PublicBackingBean {
 		}
 		else {
 			passwordResetEmailSent = false;
-			passwordResetMessages = serviceResponse.getMessages();
+			
+			passwordResetMessages = new ArrayList<>();
+			for(String errorKey : serviceResponse.getMessages()) {
+				passwordResetMessages.add(JSFUtils.getMessageBundle().getString(errorKey));
+			}
 		}
 	}
 }

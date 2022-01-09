@@ -11,6 +11,12 @@
 
     <h:head>
         <f:facet name="first">
+        
+	    	<!-- if user access this page while already logged in, redirect to the homepage -->
+	    	<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+	    		<meta http-equiv="refresh" content="0; url=index.xhtml"/>
+	    	</sec:authorize>
+    	        
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
@@ -44,7 +50,7 @@
         <style>
         
 			html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
-			a { text-decoration: none }	
+			a { text-decoration: none; font-weight:bold; }	
 			
 			input[type=text].searchInput {
 			  
@@ -177,8 +183,6 @@
 						<i class="pi pi-users"/>
 					</a>
 					
-
-					
 					<!-- large screen top menu items -->
 					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
 						<i class="pi pi-comments w3-large"/><br/><span class="w3-medium">#{msg['forums']}</span>
@@ -186,31 +190,6 @@
 					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
 						<i class="pi pi-users w3-large"/><br/><span class="w3-medium">#{msg['members']}</span>
 					</a>
-					
-					
-					<!-- if logged in, show the profile image on all three screen sizes: small, medium, and large -->
-					<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-						
-						<div class="w3-dropdown-hover">
-							<button class="w3-button" style="height: 60px;">
-								<h:graphicImage value="#{requestContext}/avatar/#{userSession.user.username}" class="w3-circle"
-									id="commentorAvatar" height="40" width="40" style="border:3px;" title="#{userSession.user.username}"
-									rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"/>
-							
-								<span jsf:rendered="#{!fileHandler.isAvatarExists(userSession.user.username)}" class="w3-circle avatarSpan"
-									title="#{userSession.user.username}"
-									style="display:inline-block;font-size:1.0rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;">
-									#{fn:substring(userSession.user.username, 0, 3)}
-								</span>							
-							
-							</button>
-							<div class="w3-dropdown-content w3-bar-block w3-card-4">
-								<a href="#{request.contextPath}/secure/index.xhtml" class="w3-bar-item w3-button"><i class="pi pi-send"/> #{msg['my.account']}</a>
-								<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button"><i class="pi pi-sign-out"/> #{msg['logout']}</a>
-							</div>
-						</div>
-						
-					</sec:authorize>
 					
 					<!-- search icon button, show on small screens -->
 					<a class="w3-bar-item w3-button w3-border-left w3-hover-text-white w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" 

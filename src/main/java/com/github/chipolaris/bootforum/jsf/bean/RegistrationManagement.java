@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.domain.PasswordReset;
 import com.github.chipolaris.bootforum.domain.Registration;
 import com.github.chipolaris.bootforum.domain.RegistrationOption;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
@@ -36,7 +37,8 @@ public class RegistrationManagement {
 	
 	public void onLoad() {
 		this.registrationOption = genericService.getEntity(RegistrationOption.class, 1L).getDataObject();
-		this.lazyModel = new GenericLazyModel<>(Registration.class, genericService);
+		this.registrationLazyModel = new GenericLazyModel<>(Registration.class, genericService);
+		this.passwordResetLazyModel = new GenericLazyModel<>(PasswordReset.class, genericService);
 	}
 
 	public void edit() {
@@ -84,39 +86,75 @@ public class RegistrationManagement {
     	}
 	}
 	
-	private LazyDataModel<Registration> lazyModel;
+	private LazyDataModel<Registration> registrationLazyModel;
 
-	public LazyDataModel<Registration> getLazyModel() {
-		return lazyModel;
+	public LazyDataModel<Registration> getRegistrationLazyModel() {
+		return registrationLazyModel;
 	}
-	public void setLazyModel(LazyDataModel<Registration> lazyModel) {
-		this.lazyModel = lazyModel;
-	}
-	
-	private Registration deleteRecord;
-	
-	public Registration getDeleteRecord() {
-		return deleteRecord;
-	}
-	public void setDeleteRecord(Registration deleteRecord) {
-		this.deleteRecord = deleteRecord;
+	public void setRegistrationLazyModel(LazyDataModel<Registration> registrationLazyModel) {
+		this.registrationLazyModel = registrationLazyModel;
 	}
 	
-	public void delete() {
+	private Registration selectedRegistration;
+	
+	public Registration getSelectedRegistration() {
+		return selectedRegistration;
+	}
+	public void setSelectedRegistration(Registration selectedRegistration) {
+		this.selectedRegistration = selectedRegistration;
+	}
+	
+	public void deleteRegistration() {
 		
-		if(deleteRecord == null) {
+		if(selectedRegistration == null) {
 			JSFUtils.addErrorStringMessage(null, "No record is selected to delete");
 			return;
 		}
 		
-		ServiceResponse<?> response = genericService.deleteEntity(this.deleteRecord);
+		ServiceResponse<?> response = genericService.deleteEntity(this.selectedRegistration);
 		if(response.getAckCode() != AckCodeType.FAILURE) {
 			
-			deleteRecord = null;
-			JSFUtils.addInfoStringMessage(null, "Record deleted");
+			selectedRegistration = null;
+			JSFUtils.addInfoStringMessage(null, "Registration deleted");
 		}
 		else {
-			JSFUtils.addErrorStringMessage(null, "Error deleting " + deleteRecord + " : " + response.getMessages());
+			JSFUtils.addErrorStringMessage(null, "Error deleting " + selectedRegistration + " : " + response.getMessages());
+		}
+	}
+	
+	private LazyDataModel<PasswordReset> passwordResetLazyModel;
+	
+	public LazyDataModel<PasswordReset> getPasswordResetLazyModel() {
+		return passwordResetLazyModel;
+	}
+	public void setPasswordResetLazyModel(LazyDataModel<PasswordReset> passwordResetLazyModel) {
+		this.passwordResetLazyModel = passwordResetLazyModel;
+	}
+	
+	private PasswordReset selectedPasswordReset;
+	
+	public PasswordReset getSelectedPasswordReset() {
+		return selectedPasswordReset;
+	}
+	public void setSelectedPasswordReset(PasswordReset selectedPasswordReset) {
+		this.selectedPasswordReset = selectedPasswordReset;
+	}
+	
+	public void deletePasswordReset() {
+		
+		if(selectedPasswordReset == null) {
+			JSFUtils.addErrorStringMessage(null, "No record is selected to delete");
+			return;
+		}
+		
+		ServiceResponse<?> response = genericService.deleteEntity(this.selectedPasswordReset);
+		if(response.getAckCode() != AckCodeType.FAILURE) {
+			
+			selectedPasswordReset = null;
+			JSFUtils.addInfoStringMessage(null, "Password Reset deleted");
+		}
+		else {
+			JSFUtils.addErrorStringMessage(null, "Error deleting " + selectedPasswordReset + " : " + response.getMessages());
 		}
 	}
 }

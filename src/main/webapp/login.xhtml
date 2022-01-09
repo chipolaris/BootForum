@@ -8,14 +8,11 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:jsf="http://xmlns.jcp.org/jsf"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:sec="http://www.springframework.org/security/tags"
     template="/WEB-INF/template/layout_login.xhtml">
     
     <ui:define name="title">
 		#{msg['application.title']} - #{msg['login']}
 	</ui:define>
-	
-
 	
 	<ui:define name="content">
 	
@@ -163,18 +160,13 @@
 				<div id="passwordResetDiv" class="w3-display-middle" style="display:none">
 					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 98vw;">
 					
-					
 						<header class="w3-container w3-padding w3-theme-dark w3-center">
-							<span class="w3-xlarge"><i class="fa fa-undo"/> #{msg['reset.your.password']}</span>
+							<span class="w3-xlarge"><i class="pi pi-lock-open w3-xlarge"/> #{msg['reset.your.password']}</span>
 						</header>
 	
 						<div class="w3-center w3-section w3-text-theme">
-				      		<span class="fa-passwd-reset fa-stack" style="font-size: 50pt;">
-							  <i class="fa fa-undo fa-stack-2x"></i>
-							  <i class="fa fa-lock fa-stack-1x"></i>
-							</span>
+							<i class="pi pi-lock-open" style="font-size:80pt;"/>
 				    	</div>					
-					
 
 						<h:form styleClass="w3-container" id="passwordResetForm">
 							
@@ -183,7 +175,7 @@
 								<h6>#{msg['please.check.email.for.password.reset.instruction']}</h6>
 							</div>
 							
-							<div jsf:rendered="#{!publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-red w3-section w3-round">
+							<div jsf:rendered="#{not publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-red w3-section w3-round">
 								<h4>#{msg['unable.to.complete.request']}:</h4>
 								<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.passwordResetMessages}" style="list-style-position: inside; padding-left: 0;">
 									<li>#{message}</li>
@@ -192,18 +184,18 @@
 	
 							<div jsf:rendered="#{not publicBackingBean.passwordResetEmailSent}" class="w3-section w3-center">
 								
-								<h5>#{msg['enter.email.to.get.password.reset.link']}.</h5>
+								<h5>#{msg['enter.email.to.get.password.reset.link']}</h5>
 								
 								<p>
 									<p:inputText id="passwordResetEmail" value="#{publicBackingBean.passwordResetEmail}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="#{msg['email']}"
-										style="font-family:Open Sans, FontAwesome;text-align:center;"
+										style="text-align:center;"
 										onblur="validPasswordResetEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 									</p:inputText>
 									<h:message for="passwordResetEmail" id="passwordResetEmailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 								</p>
 								<p>
-									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf1d8; #{msg['submit']}" 
-										onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" style="font-family:Open Sans, FontAwesome;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
+									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="#{msg['submit']}" icon="pi pi-send" 
+										onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
 								</p>
 							</div>
 							

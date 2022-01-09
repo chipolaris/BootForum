@@ -13,20 +13,6 @@
 	</ui:define>
 	
 	<ui:define name="content">
-	
-		<script type="text/javascript">
- 			//<![CDATA[
- 				
- 				$(document).ready(function(){
-					
-					customizePrimefaceButtons();
-				});
-				
-				function customizePrimefaceButtons() {
- 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
- 				}
-			//]]>	
-		</script>
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 		
@@ -77,7 +63,7 @@
 					</h:form>				
 				</div>
 				
-				<div class="tab" id="discussion">
+				<div class="tab" id="discussion" style="display:none">
 					<h:form id="discussionForm">
 					
 						<div class="w3-row w3-border w3-round w3-padding">
@@ -149,7 +135,7 @@
 				</div>
 
 
-				<div class="tab" id="forumData">
+				<div class="tab" id="forumData" style="display:none">
 					<h:form id="forumDataForm">
 					
 						<div class="w3-row w3-border w3-round w3-padding">
@@ -220,7 +206,7 @@
 					
 				</div>
 				
-				<div class="tab" id="privateMessages">
+				<div class="tab" id="privateMessages" style="display:none">
 					<h:form id="privateMessagesForm">
 						<div class="w3-row w3-border w3-round w3-padding">
 							
@@ -286,6 +272,8 @@
 				$(".tab").hide();
 				$("#users").show();
 				$("#usersButton").addClass('w3-theme-d3');
+				
+				customizePrimefaceButtons();
 			});
  
  			function openTab(tabClass, tabId, buttonClass, buttonId) {
@@ -295,6 +283,10 @@
 				
 			  	$("#" + tabId).show();
 			  	$("#" + buttonId).addClass('w3-theme-d3');
+			}
+ 			
+			function customizePrimefaceButtons() {
+				$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
 			}
  			
  			//]]>	

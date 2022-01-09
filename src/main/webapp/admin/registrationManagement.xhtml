@@ -47,219 +47,315 @@
 				<p:autoUpdate/>
 			</p:messages>
 			
-			<h:form id="form" styleClass="w3-theme-light">
-				<div class="w3-container w3-xlarge w3-border-bottom">
-					User Registration Option
-				</div>
-				
-				<div class="w3-row-padding">
-					<p/>
-					<div>
-						<h:selectBooleanCheckbox id="enableCaptcha" value="#{registrationManagement.registrationOption.enableCaptcha}" 
-							styleClass="w3-check"/>&nbsp;&nbsp;					
-						<p:outputLabel for="enableCaptcha" value="Enable Captcha on registration page" styleClass="w3-medium" style="font-weight:bold;"/>
+			<h:form id="form">
+				<p:tabView id="tabView">
+					<p:tab>
+						<f:facet name="title">
+							<div class="w3-container w3-xlarge">
+								<i class="pi pi-users w3-xlarge"/> User Registration Option
+							</div>
+						</f:facet>
 						
-					</div>
+						<div class="w3-row-padding">
+							<p/>
+							<div>
+								<h:selectBooleanCheckbox id="enableCaptcha" value="#{registrationManagement.registrationOption.enableCaptcha}" 
+									styleClass="w3-check"/>&nbsp;&nbsp;					
+								<p:outputLabel for="enableCaptcha" value="Enable Captcha on registration page" styleClass="w3-medium" style="font-weight:bold;"/>
+								
+							</div>
+											
+							<div class="w3-margin-top">
+								<h:selectBooleanCheckbox id="enableEmailConfirm" value="#{registrationManagement.registrationOption.enableEmailConfirm}" 
+									styleClass="w3-check" onchange="updateRegistrationEmailInputs();"/>&nbsp;&nbsp;
+								<p:outputLabel for="enableEmailConfirm" value="Enable Email Confirm" styleClass="w3-medium" style="font-weight:bold;"/>
+							</div>
+							
+							<div class="w3-margin-top w3-padding">
+								<p/>
+								<p:outputLabel for="registrationEmailSubject" value="Registration Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailSubject"/>
+								<p:overlayPanel for="helpRegistrationEmailSubject" style="width:240px" styleClass="w3-black">
+									<h5>Example:</h5>
+									<hr/> 
+									Confirm account registration at <b>BootForum</b>
+								</p:overlayPanel>
+								<p/>
+								<p:inputText id="registrationEmailSubject" value="#{registrationManagement.registrationOption.registrationEmailSubject}" styleClass="w3-input" maxlength="200" 
+									readonly="#{registrationManagement.registrationOption.enableEmailConfirm ? 'false' : 'true'}"/>
+								<h:message id="registrationEmailSubjectError" for="registrationEmailSubject" styleClass="w3-pale-red">
+									<p:autoUpdate/>
+								</h:message>
+							</div>
+							
+							<div jsf:id="registrationEmailTemplateDiv" class="w3-margin-top w3-padding">
+		
+								<p:outputLabel for="registrationEmailTemplate" value="Registration Email Template" styleClass="w3-medium" 
+									style="font-weight:bold;" indicateRequired="false"/>
+								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailTemplate"/>
+								<p/>
+								<p:overlayPanel for="helpRegistrationEmailTemplate" style="width:350px" styleClass="w3-black">
+									<h5>Sample email to send when user register for account:</h5>
+									<hr/>
+									<b>Hi #username</b>,
+									<p>
+									This email <b>#email</b> has been used for account registration on BootForum.
+									</p>
+									<p>
+									If that wasn't your intention, kindly ignore this email. 
+									Otherwise, please lick on this link #confirm-url to activate your account.
+									</p>
+									<p>
+									Regards,
+									</p>
+									<hr/>
+									<p>
+									<b>Note:</b> #username, #email, and #confirm-url
+									will be replaced by the system on the actual email
+									</p>
+								</p:overlayPanel>
+		
+								<pe:ckEditor id="registrationEmailTemplate" value="#{registrationManagement.registrationOption.registrationEmailTemplate}" skin="moono-lisa" width="100%"
+									toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
+												'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
+												'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
+												'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" 
+												readonly="#{registrationManagement.registrationOption.enableEmailConfirm ? 'false' : 'true'}">
+								</pe:ckEditor>
+								<h:message id="registrationEmailTemplateError" for="registrationEmailTemplate" styleClass="w3-pale-red">
+									<p:autoUpdate/>
+								</h:message>							
+								
+							</div>
+							
+							<div class="w3-margin-top w3-padding">
+								<p/>
+								<p:outputLabel for="passwordResetEmailSubject" value="Password Reset Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailSubject"/>
+								<p:overlayPanel for="helpPasswordResetEmailSubject" style="width:240px" styleClass="w3-black">
+									<h5>Example:</h5>
+									<hr/> 
+									Password reset requested at <b>BootForum</b>
+								</p:overlayPanel>
+								<p/>
+								<p:inputText id="passwordResetEmailSubject" value="#{registrationManagement.registrationOption.passwordResetEmailSubject}" 
+									required="true" styleClass="w3-input" maxlength="200" />
+								<h:message id="passwordResetEmailSubjectError" for="passwordResetEmailSubject" styleClass="w3-pale-red">
+									<p:autoUpdate/>
+								</h:message>
+							</div>					
+		
+							<div jsf:id="passwordResetEmailTemplateDiv" class="w3-margin-top w3-padding">
+		
+								<p:outputLabel for="passwordResetEmailTemplate" value="Password Reset Email Template" styleClass="w3-medium" 
+									style="font-weight:bold;" indicateRequired="false"/>
+								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailTemplate"/>
+								<p/>
+								<p:overlayPanel for="helpPasswordResetEmailTemplate" style="width:350px" styleClass="w3-black">
+									<h5>Sample email to send when user requests password reset:</h5>
+									<hr/>
+									<b>Hi #username</b>,
+									<p>
+									Here is the #reset-url to reset your password in <b>BootForum</b>
+									</p>
+									<p> 
+									If you didn't request this, kindly ignore this email.
+									</p>
+									<p>
+									Regards,
+									</p>
+									<hr/>
+									<p>
+									<b>Note:</b> #username, #email, and #reset-url will be replaced by the actual values on the email
+									</p>
+								</p:overlayPanel>
+		
+								<pe:ckEditor id="passwordResetEmailTemplate" value="#{registrationManagement.registrationOption.passwordResetEmailTemplate}" skin="moono-lisa" width="100%" required="true"
+									toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
+												'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
+												'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
+												'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" requiredMessage="Password Reset Email Template is required">
+								</pe:ckEditor>
+								<h:message id="passwordResetEmailTemplateError" for="passwordResetEmailTemplate" styleClass="w3-pale-red">
+									<p:autoUpdate/>
+								</h:message>							
+								
+							</div>
+		
+							<div class="w3-margin-top w3-padding">
+								
+								<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
+								<p:commandButton value="#{msg['save']}" type="button" icon="pi pi-check" onclick="submitForm();"
+									styleClass="w3-btn w3-theme-dark w3-border-0" />
+							</div>
+						
+							<p:remoteCommand name="submitForm" action="#{registrationManagement.edit}"/>
+							
+						</div>
+											
+					</p:tab>
+					<p:tab id="registrationTab">
+						<f:facet name="title">
+							<div class="w3-container w3-xlarge">
+								<i class="pi pi-book w3-xlarge"/> User Registrations
+							</div>
+						</f:facet>
+						
+						<div class="w3-row-padding">
+							
+							<p:dataTable var="registration" value="#{registrationManagement.registrationLazyModel}" style="margin: 0 auto;" styleClass="borderless"
+								widgetVar="registrationTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+								currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} registrations"
+								rows="10" lazy="true" id="registrationTable" draggableColumns="true">
+							
+								<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+			
+								<p:column sortBy="#{registration.email}" style="text-align:left;width:25%;" responsivePriority="1">
+									<f:facet name="header">
+										<h:outputText value="Email" style="font-weight:bold;"/>
+									</f:facet>
 									
-					<div class="w3-margin-top">
-						<h:selectBooleanCheckbox id="enableEmailConfirm" value="#{registrationManagement.registrationOption.enableEmailConfirm}" 
-							styleClass="w3-check" onchange="updateRegistrationEmailInputs();"/>&nbsp;&nbsp;
-						<p:outputLabel for="enableEmailConfirm" value="Enable Email Confirm" styleClass="w3-medium" style="font-weight:bold;"/>
-					</div>
-					
-					<div class="w3-margin-top w3-padding">
-						<p/>
-						<p:outputLabel for="registrationEmailSubject" value="Registration Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailSubject"/>
-						<p:overlayPanel for="helpRegistrationEmailSubject" style="width:240px" styleClass="w3-black">
-							<h5>Example:</h5>
-							<hr/> 
-							Confirm account registration at <b>BootForum</b>
-						</p:overlayPanel>
-						<p/>
-						<p:inputText id="registrationEmailSubject" value="#{registrationManagement.registrationOption.registrationEmailSubject}" styleClass="w3-input" maxlength="200" 
-							readonly="#{registrationManagement.registrationOption.enableEmailConfirm ? 'false' : 'true'}"/>
-						<h:message id="registrationEmailSubjectError" for="registrationEmailSubject" styleClass="w3-pale-red">
-							<p:autoUpdate/>
-						</h:message>
-					</div>
-					
-					<div jsf:id="registrationEmailTemplateDiv" class="w3-margin-top w3-padding">
-
-						<p:outputLabel for="registrationEmailTemplate" value="Registration Email Template" styleClass="w3-medium" 
-							style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailTemplate"/>
-						<p/>
-						<p:overlayPanel for="helpRegistrationEmailTemplate" style="width:350px" styleClass="w3-black">
-							<h5>Sample email to send when user register for account:</h5>
-							<hr/>
-							<b>Hi #username</b>,
-							<p>
-							This email <b>#email</b> has been used for account registration on BootForum.
-							</p>
-							<p>
-							If that wasn't your intention, kindly ignore this email. 
-							Otherwise, please lick on this link #confirm-url to activate your account.
-							</p>
-							<p>
-							Regards,
-							</p>
-							<hr/>
-							<p>
-							<b>Note:</b> #username, #email, and #confirm-url
-							will be replaced by the system on the actual email
-							</p>
-						</p:overlayPanel>
-
-						<pe:ckEditor id="registrationEmailTemplate" value="#{registrationManagement.registrationOption.registrationEmailTemplate}" skin="moono-lisa" width="100%"
-							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
-										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
-										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
-										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" 
-										readonly="#{registrationManagement.registrationOption.enableEmailConfirm ? 'false' : 'true'}">
-						</pe:ckEditor>
-						<h:message id="registrationEmailTemplateError" for="registrationEmailTemplate" styleClass="w3-pale-red">
-							<p:autoUpdate/>
-						</h:message>							
+									<b>#{registration.email}</b>
+									
+								</p:column>
+			
+								<p:column sortBy="#{registration.username}" style="text-align:left;width:25%;" responsivePriority="3">
+									<f:facet name="header">
+										<h:outputText value="Username" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<b>#{registration.username}</b>
+									
+								</p:column>
+								
+								<p:column sortBy="#{registration.registrationKey}" style="text-align:left;width:25%;" responsivePriority="4">
+									<f:facet name="header">
+										<h:outputText value="Registration Key" style="font-weight:bold;"/>
+									</f:facet>
+									
+									#{registration.registrationKey}
+									
+								</p:column>
+								
+								<p:column sortBy="#{registration.createDate}" style="text-align:left;width:15%;" responsivePriority="5">
+									<f:facet name="header">
+										<h:outputText value="Create Date" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<h:outputText value="#{registration.createDate}" title="#{registration.createDate}">
+										<f:convertDateTime pattern="MMMM dd, yyyy"/>
+									</h:outputText>
+									
+								</p:column>								
+								
+								<p:column exportable="false" style="vertical-align:middle;width:10%;text-align:center;" responsivePriority="2">
+								
+									<f:facet name="header">
+										<h:outputText value="Delete" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<p:commandButton oncomplete="PF('confirmDeleteRegistrationDialogVar').show()" icon="pi pi-times" title="Delete" styleClass="w3-btn w3-theme-dark w3-border-0">
+										<f:setPropertyActionListener value="#{registration}" target="#{registrationManagement.selectedRegistration}" />
+									</p:commandButton>
+									
+								</p:column>
+			
+							</p:dataTable>
 						
-					</div>
-					
-					<div class="w3-margin-top w3-padding">
-						<p/>
-						<p:outputLabel for="passwordResetEmailSubject" value="Password Reset Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailSubject"/>
-						<p:overlayPanel for="helpPasswordResetEmailSubject" style="width:240px" styleClass="w3-black">
-							<h5>Example:</h5>
-							<hr/> 
-							Password reset requested at <b>BootForum</b>
-						</p:overlayPanel>
-						<p/>
-						<p:inputText id="passwordResetEmailSubject" value="#{registrationManagement.registrationOption.passwordResetEmailSubject}" 
-							required="true" styleClass="w3-input" maxlength="200" />
-						<h:message id="passwordResetEmailSubjectError" for="passwordResetEmailSubject" styleClass="w3-pale-red">
-							<p:autoUpdate/>
-						</h:message>
-					</div>					
-
-					<div jsf:id="passwordResetEmailTemplateDiv" class="w3-margin-top w3-padding">
-
-						<p:outputLabel for="passwordResetEmailTemplate" value="Password Reset Email Template" styleClass="w3-medium" 
-							style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailTemplate"/>
-						<p/>
-						<p:overlayPanel for="helpPasswordResetEmailTemplate" style="width:350px" styleClass="w3-black">
-							<h5>Sample email to send when user requests password reset:</h5>
-							<hr/>
-							<b>Hi #username</b>,
-							<p>
-							Here is the #reset-link to reset your password in <b>BootForum</b>
-							</p>
-							<p> 
-							If you didn't request this, kindly ignore this email.
-							</p>
-							<p>
-							Regards,
-							</p>
-							<hr/>
-							<p>
-							<b>Note:</b> #username and #reset-link will be replaced by the actual values on the email
-							</p>
-						</p:overlayPanel>
-
-						<pe:ckEditor id="passwordResetEmailTemplate" value="#{registrationManagement.registrationOption.passwordResetEmailTemplate}" skin="moono-lisa" width="100%" required="true"
-							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
-										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
-										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
-										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" requiredMessage="Password Reset Email Template is required">
-						</pe:ckEditor>
-						<h:message id="passwordResetEmailTemplateError" for="passwordResetEmailTemplate" styleClass="w3-pale-red">
-							<p:autoUpdate/>
-						</h:message>							
-						
-					</div>
-
-					<div class="w3-margin-top w3-padding">
-						
-						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['save']}" type="button" icon="pi pi-check" onclick="submitForm();"
-							styleClass="w3-btn w3-theme-dark w3-border-0" />
-					</div>
-				
-					<p:remoteCommand name="submitForm" action="#{registrationManagement.edit}"/>
-					
-				</div>
-				
-			</h:form>
-
-			<p/>
-
-			<h:form id="registrationForm" styleClass="w3-theme-light">
-				<div class="w3-container w3-xlarge w3-border-bottom">
-					User Registrations
-				</div>
-				
-				<p:dataTable var="registration" value="#{registrationManagement.lazyModel}" style="margin: 0 auto;" styleClass="borderless"
-					widgetVar="registrationTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
-					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-					currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} registrations"
-					rows="10" lazy="true" id="registrationTable" draggableColumns="true">
-				
-					<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
-
-					<p:column sortBy="#{registration.email}" style="text-align:left;width:33%;" responsivePriority="1">
-						<f:facet name="header">
-							<h:outputText value="Email" style="font-weight:bold;"/>
+						</div>
+											
+					</p:tab>
+					<p:tab id="passwordResetTab">
+						<f:facet name="title">
+							<div class="w3-container w3-xlarge">
+								<i class="pi pi-lock-open w3-xlarge"/> Password Resets
+							</div>
 						</f:facet>
 						
-						<b>#{registration.email}</b>
-						
-					</p:column>
-
-					<p:column sortBy="#{registration.username}" style="text-align:left;width:33%;" responsivePriority="2">
-						<f:facet name="header">
-							<h:outputText value="Username" style="font-weight:bold;"/>
-						</f:facet>
-						
-						<b>#{registration.username}</b>
-						
-					</p:column>
-					
-					<p:column sortBy="#{registration.registrationKey}" style="text-align:left;width:33%;" responsivePriority="3">
-						<f:facet name="header">
-							<h:outputText value="Registration Key" style="font-weight:bold;"/>
-						</f:facet>
-						
-						<b>#{registration.registrationKey}</b>
-						
-					</p:column>
-					
-					<p:column exportable="false" style="vertical-align:middle;width:50px;text-align:center;">
-					
-						<f:facet name="header">
-							<h:outputText value="Delete" style="font-weight:bold;"/>
-						</f:facet>
-						
-						<p:commandButton oncomplete="PF('confirmDeleteDialogVar').show()" icon="pi pi-times" title="Delete" styleClass="w3-btn w3-theme-dark w3-border-0">
-							<f:setPropertyActionListener value="#{registration}" target="#{registrationManagement.deleteRecord}" />
-						</p:commandButton>
-						
-					</p:column>
-
-				</p:dataTable>
-				
+						<div class="w3-row-padding">
+							<p:dataTable var="passwordReset" value="#{registrationManagement.passwordResetLazyModel}" style="margin: 0 auto;" styleClass="borderless"
+								widgetVar="passwordResetTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+								currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} Password Reset Requests"
+								rows="10" lazy="true" id="passwordResetTable" draggableColumns="true">
+							
+								<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+			
+								<p:column sortBy="#{passwordReset.email}" style="text-align:left;width:28%;" responsivePriority="1">
+									<f:facet name="header">
+										<h:outputText value="Email" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<b>#{passwordReset.email}</b>
+									
+								</p:column>
+			
+								<p:column sortBy="#{passwordReset.resetKey}" style="text-align:left;width:28%;" responsivePriority="3">
+									<f:facet name="header">
+										<h:outputText value="Reset Key" style="font-weight:bold;"/>
+									</f:facet>
+									
+									#{passwordReset.resetKey}
+									
+								</p:column>
+								
+								<p:column sortBy="#{passwordReset.createDate}" style="text-align:left;width:28%;" responsivePriority="4">
+									<f:facet name="header">
+										<h:outputText value="Create Date" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<h:outputText value="#{passwordReset.createDate}" title="#{passwordReset.createDate}">
+										<f:convertDateTime pattern="MMMM dd, yyyy"/>
+									</h:outputText>
+									
+								</p:column>
+								
+								<p:column exportable="false" style="vertical-align:middle;width:16%;text-align:center;" responsivePriority="2">
+								
+									<f:facet name="header">
+										<h:outputText value="Delete" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<p:commandButton oncomplete="PF('confirmDeletePasswordResetDialogVar').show()" icon="pi pi-times" title="Delete" styleClass="w3-btn w3-theme-dark w3-border-0">
+										<f:setPropertyActionListener value="#{passwordReset}" target="#{registrationManagement.selectedPasswordReset}" />
+									</p:commandButton>
+									
+								</p:column>
+			
+							</p:dataTable>
+						</div>
+											
+					</p:tab>				
+				</p:tabView>
 			</h:form>
 
 			<p:confirmDialog message="Are you sure?" width="300" global="true"
 				showEffect="explode" hideEffect="explode" header="Confirm"
-				severity="alert" widgetVar="confirmDeleteDialogVar">
-				<h:form id="deleteForm">
+				severity="alert" widgetVar="confirmDeleteRegistrationDialogVar">
+				<h:form id="deleteRegistrationForm">
 					<p:commandButton value="Yes" icon="pi pi-check"
-						update=":registrationForm:registrationTable"
-						action="#{registrationManagement.delete}"
-						oncomplete="PF('confirmDeleteDialogVar').hide()" />
+						update=":form:tabView:registrationTable"
+						action="#{registrationManagement.deleteRegistration}"
+						oncomplete="PF('confirmDeleteRegistrationDialogVar').hide()" />
 						
 					<p:commandButton value="Cancel"
-						onclick="PF('confirmDeleteDialogVar').hide();return false;"
+						onclick="PF('confirmDeleteRegistrationDialogVar').hide();return false;"
+						type="button" icon="pi pi-times" style="margin-left:5px;" />
+				</h:form>
+			</p:confirmDialog>
+
+			<p:confirmDialog message="Are you sure?" width="300" global="true"
+				showEffect="explode" hideEffect="explode" header="Confirm"
+				severity="alert" widgetVar="confirmDeletePasswordResetDialogVar">
+				<h:form id="deletePasswordResetForm">
+					<p:commandButton value="Yes" icon="pi pi-check"
+						update=":form:tabView:passwordResetTable"
+						action="#{registrationManagement.deletePasswordReset}"
+						oncomplete="PF('confirmDeletePasswordResetDialogVar').hide()" />
+						
+					<p:commandButton value="Cancel"
+						onclick="PF('confirmDeletePasswordResetDialogVar').hide();return false;"
 						type="button" icon="pi pi-times" style="margin-left:5px;" />
 				</h:form>
 			</p:confirmDialog>
@@ -306,7 +402,7 @@
  						$('#form\\:registrationEmailSubject').prop('readonly', true);
  						CKEDITOR.instances['form:registrationEmailTemplate'].setReadOnly(true);
  					}
- 				} 				
+ 				}
  				
 			//]]>	
 		</script>		

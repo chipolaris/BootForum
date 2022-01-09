@@ -1,28 +1,31 @@
 package com.github.chipolaris.bootforum.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.QuerySpec;
 import com.github.chipolaris.bootforum.dao.UserDAO;
+import com.github.chipolaris.bootforum.domain.EmailOption;
 import com.github.chipolaris.bootforum.domain.PasswordReset;
+import com.github.chipolaris.bootforum.domain.RegistrationOption;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.util.EmailSender;
-import com.github.chipolaris.bootforum.util.VelocityTemplateUtil;
 
 @Service
 @Transactional
 public class PasswordResetService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(PasswordResetService.class);
 	
 	@Resource
 	private GenericDAO genericDAO;
@@ -44,8 +47,7 @@ public class PasswordResetService {
 		// check if passwordReset already exists for the given email
 		if(passwordResetExists(email)) {
 			response.setAckCode(AckCodeType.FAILURE);
-			response.addMessage(String.format(
-					"Password reset request exists for email '%s'", email));
+			response.addMessage("password.reset.exists");
 		}
 		else if(userDAO.emailExists(email)) {
 			PasswordReset passwordReset = new PasswordReset();
@@ -58,18 +60,17 @@ public class PasswordResetService {
 			// send email 
 			try {
 				emailPasswordReset(passwordReset);
-				
-				response.addMessage(String.format("Password reset email sent to '%s'", email));
 			} 
 			catch (Exception e) {
 				response.setAckCode(AckCodeType.FAILURE);
-				response.addMessage(String.format(
-						"Error sending password reset email to '%s'. Cause: %s", email, e.toString()));
+				response.addMessage("system.error");
+				logger.error(ExceptionUtils.getStackTrace(e));
+				TransactionInterceptor.currentTransactionStatus().setRollbackOnly();
 			}
 		}
 		else {
 			response.setAckCode(AckCodeType.FAILURE);
-			response.addMessage(String.format("Email '%s' not found", email));
+			response.addMessage("email.not.found");
 		}
 		
 		return response;
@@ -96,19 +97,31 @@ public class PasswordResetService {
 	 */
 	private void emailPasswordReset(PasswordReset passwordReset) throws Exception {
 		
-		/*
-		 * Map<String, String> paramsMap = new HashMap<>();
-		 * paramsMap.put("applicationName", this.applicationName);
-		 * paramsMap.put("baseUrl", JSFUtils.getBaseURL()); paramsMap.put("username",
-		 * userDAO.getUsernameForEmail(passwordReset.getEmail()));
-		 * paramsMap.put("requestedDate", new
-		 * SimpleDateFormat("MM/dd/yyyy hh:mm a").format(passwordReset.getCreateDate()))
-		 * ; paramsMap.put("key", passwordReset.getResetKey());
-		 * 
-		 * emailSender.sendEmail(fromEmailAddress, passwordReset.getEmail(),
-		 * String.format("%s: Password Reset", this.applicationName),
-		 * VelocityTemplateUtil.build("email_templates/PasswordResetEmail.vm",
-		 * paramsMap), true);
-		 */
+		RegistrationOption registrationOption = genericDAO.find(RegistrationOption.class, 1L);
+		
+		EmailOption emailOption = genericDAO.find(EmailOption.class, 1L);
+		
+		EmailSender emailSender = EmailSender.builder().host(emailOption.getHost()).port(emailOption.getPort())
+				.username(emailOption.getUsername()).password(emailOption.getPassword())
+				.tlsEnable(emailOption.getTlsEnable()).authentication(emailOption.getAuthentication()).build();
+		
+		emailSender.sendEmail(emailOption.getUsername(), passwordReset.getEmail(), 
+				registrationOption.getPasswordResetEmailSubject(), 
+				buildPasswordResetEmailContent(registrationOption.getPasswordResetEmailTemplate(), passwordReset),
+				true);
+	}
+	
+	/*
+	 * replace the following patterns: #username, #email, and #confirm-url with values from registration and system 
+	 */
+	private String buildPasswordResetEmailContent(String emailTemplate, PasswordReset passwordReset) {
+		
+		return emailTemplate
+				.replaceAll("#username", userDAO.getUsernameForEmail(passwordReset.getEmail()))
+				.replaceAll("#email", passwordReset.getEmail())
+				.replaceAll("#reset-url",
+						"<a href=\""
+						+ JSFUtils.getBaseURL() + "passwordReset.xhtml?key=" + passwordReset.getResetKey()
+						+ "\">" + this.applicationName + "</a>");
 	}
 }
