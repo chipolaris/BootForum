@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import com.github.chipolaris.bootforum.service.UserService;
 @Component
 @Scope("view")
 public class PasswordResetBean {
+
+	private static final int MIN_PASSWORD_LENGTH = 6;
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(PasswordResetBean.class);
@@ -66,8 +69,9 @@ public class PasswordResetBean {
 	
 	public void submit() {
 		
-		if(newPassword.length() < 7) {
-			JSFUtils.addErrorStringMessage("passwordResetForm:password", "Password length must be at least 7");
+		if(newPassword.length() < MIN_PASSWORD_LENGTH) {
+			JSFUtils.addErrorStringMessage("passwordResetForm:password", 
+					MessageFormat.format(JSFUtils.getMessageBundle().getString("password.length.at.least"), MIN_PASSWORD_LENGTH));
 		}
 		else {
 			ServiceResponse<Void> serviceResponse =
@@ -79,7 +83,7 @@ public class PasswordResetBean {
 			}
 			else {
 				this.resetSuccessful = false;
-				JSFUtils.addServiceErrorMessage(null, serviceResponse);
+				JSFUtils.addServiceErrorMessage(JSFUtils.getMessageBundle().getString("system.error"), serviceResponse);
 			}
 		}
 	}
