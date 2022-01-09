@@ -28,7 +28,7 @@
 					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 98vw;">
 					
 						<header class="w3-container w3-padding-16 w3-theme-dark w3-center">
-							<span class="w3-xlarge"><i class="fa fa-lock"/> #{msg['login.to']} <h:outputLink value="#{request.contextPath}" style="color:inherit">#{msg['application.title']}</h:outputLink></span>
+							<span class="w3-xlarge"><i class="pi pi-lock w3-xlarge"/> #{msg['login.to']} <h:outputLink value="#{request.contextPath}" style="color:inherit">#{msg['application.title']}</h:outputLink></span>
 						</header>
 
 						<div class="w3-center w3-pale-green" jsf:rendered="#{param.logout_success != null}" 
@@ -47,10 +47,10 @@
 		    			<form action="#{request.contextPath}/login" method="post" class="w3-container">
 		    				<div class="w3-section w3-center">
 			    				<p>
-			    					<input type="text" name="username" placeholder="&#xf007; #{msg['enter.username']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+			    					<input type="text" name="username" placeholder="&#xe939; #{msg['enter.username']}" class="w3-input w3-border w3-round" style="font-family:Arial, PrimeIcons;text-align:center;" />
 			    				</p>
 			    				<p>
-			    					<input type="password" name="password" placeholder="&#xf084; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+			    					<input type="password" name="password" placeholder="&#xe981; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family:Arial, PrimeIcons;text-align:center;" />
 			    				</p>
 			    				<p>
 			    					<button type="submit" class="w3-input w3-btn w3-theme-dark w3-round"><i class="pi pi-sign-in"/> #{msg['login']}</button>
@@ -63,7 +63,7 @@
 					
 					    <div class="w3-container w3-border-top w3-padding-16 w3-theme-light">
 					      	<span class="w3-left">#{msg['no.account']}? <a href="#" onclick="toggleMiddleDivs('registerDiv'); return false;">#{msg['register']}</a></span>
-					      	<span class="w3-right">#{msg['forgot.password']}? <a href="#" onclick="toggleMiddleDivs('passwordResetDiv'); return false;">#{msg['reset']}</a></span>
+					      	<span class="w3-right">#{msg['forgot.password']} <a href="#" onclick="toggleMiddleDivs('passwordResetDiv'); return false;">#{msg['reset']}</a></span>
 					    </div>
 			
 			 		</div>
@@ -76,7 +76,7 @@
 					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 98vw;">
 				
 						<header class="w3-container w3-padding w3-theme-dark w3-center">
-							<span class="w3-xlarge"><i class="fa fa-clipboard"/> #{msg['register.account']}</span>
+							<span class="w3-xlarge"><i class="pi pi-book w3-xlarge"/> #{msg['register.account']}</span>
 						</header>
 						
 						<div class="w3-center w3-section w3-text-theme">
@@ -97,7 +97,7 @@
 							
 								<div jsf:rendered="#{publicBackingBean.emailSent}">
 									<h4>Email has been sent to #{publicBackingBean.user.person.email}</h4>
-									<h5>Please find the email and activate your account</h5>
+									<h6>Please find the email and activate your account</h6>
 								</div>
 								<div jsf:rendered="#{not publicBackingBean.emailSent}">
 									<h4>Your account has been created</h4>
@@ -108,41 +108,41 @@
 						
 							<div jsf:rendered="#{!publicBackingBean.registrationSuccess}" class="w3-section w3-center">
 								<p>
-									<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xf2c0; #{msg['pick.a.username']}" styleClass="w3-input" title="#{msg['username']}"
-										style="font-family:Open Sans, FontAwesome;text-align:center;"
+									<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xe939; #{msg['pick.a.username']}" styleClass="w3-input" title="#{msg['username']}"
+										style="font-family:Arial, PrimeIcons;text-align:center;"
 										onblur="validateRegisterUsername();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 									</p:inputText>
 									<h:message for="username" id="usernameMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 								</p>
 								<p>
 									<p:inputText id="email" value="#{publicBackingBean.user.person.email}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="#{msg['email']}"
-										style="font-family:Open Sans, FontAwesome;text-align:center;"
+										style="font-family:Arial, PrimeIcons;text-align:center;"
 										onblur="validEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 									</p:inputText>
 									<h:message for="email" id="emailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 								</p>
 								<p>
-									<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; #{msg['choose.a.password']}" styleClass="w3-input w3-margin-top" title="#{msg['password']}" 
-										style="font-family:Open Sans, FontAwesome;text-align:center;" toggleMask="true"
+									<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xe981; #{msg['choose.a.password']}" styleClass="w3-input w3-margin-top" title="#{msg['password']}" 
+										style="font-family:Arial, PrimeIcons;text-align:center;" toggleMask="true"
 										onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 									</p:password>
 									<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 								</p>
 								<p>
-									<p:password id="confirmPassword" placeholder="&#xf00c; #{msg['confirm.password']}" styleClass="w3-input" title="#{msg['confirm.password']}" 
-										style="font-family:Open Sans, FontAwesome;text-align:center;" toggleMask="true"
+									<p:password id="confirmPassword" placeholder="&#xe981; #{msg['confirm.password']}" styleClass="w3-input" title="#{msg['confirm.password']}" 
+										style="font-family:Arial, PrimeIcons;text-align:center;" toggleMask="true"
 										onblur="validateConfirmPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 									</p:password>
 									<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 								</p>
 								<p>
-									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf234; #{msg['submit']}" 
-										onclick="return validateRegistration()"	id="submitButton" style="font-family:Open Sans, FontAwesome;" action="#{publicBackingBean.register}" update=":registerForm"/>
+									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xe909; #{msg['submit']}" 
+										onclick="return validateRegistration()"	id="submitButton" style="font-family:Arial, PrimeIcons;" action="#{publicBackingBean.register}" update=":registerForm"/>
 								</p>
 							</div>
 						</h:form>
 						
-					    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey w3-center">
+					    <div class="w3-container w3-border-top w3-padding-16 w3-theme-light w3-center">
 					      
 					      <span class="w3-left">
 					      	#{msg['already.registered']}?	<a href="#" onclick="toggleMiddleDivs('loginDiv');return false;">#{msg['login']}</a>
@@ -184,7 +184,7 @@
 	
 							<div jsf:rendered="#{not publicBackingBean.passwordResetEmailSent}" class="w3-section w3-center">
 								
-								<h5>#{msg['enter.email.to.get.password.reset.link']}</h5>
+								<h6>#{msg['enter.email.to.get.password.reset.link']}</h6>
 								
 								<p>
 									<p:inputText id="passwordResetEmail" value="#{publicBackingBean.passwordResetEmail}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="#{msg['email']}"
@@ -194,7 +194,7 @@
 									<h:message for="passwordResetEmail" id="passwordResetEmailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 								</p>
 								<p>
-									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="#{msg['submit']}" icon="pi pi-send" 
+									<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xe909; #{msg['submit']}" style="font-family:Arial, PrimeIcons"
 										onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
 								</p>
 							</div>

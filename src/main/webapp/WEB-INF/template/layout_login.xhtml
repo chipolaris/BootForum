@@ -49,12 +49,12 @@
         
         <style>
         
-			html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
-			a { text-decoration: none;  font-weight:bold; }	
-			a:link           { color: #339966 }  /* unvisited links       */
-			a:visited        { color: #C92D99 }  /* visited links         */
-			a:hover, a:focus { color: #990000 }  /* user hovers, or focus */
-			a:active         { color: #339966 }  /* active links   
+			html, body, h1, h2, h3, h4, h5 {font-family: Arial, sans-serif}
+			a { text-decoration: none }
+			a:link           { color: #339966 } 
+			a:visited        { color: #C92D99 } 
+			a:hover, a:focus { color: #990000 } 
+			a:active         { color: #339966 } 
 
 			input[type=text].searchInput {
 			  
@@ -159,7 +159,6 @@
     	
     	<h:form>
     		<p:remoteCommand name="invokeSearchSuggestion" update="searchSuggestionResultDiv searchSuggestionResultDivSmall" action="#{searchSuggestion.suggest}" />
-    		<!-- <h:commandScript name="invokeSearchSuggestion" action="#{searchSuggestion.suggest}" render=":searchSuggestionDiv"/> -->
     	</h:form>
 
 		<!-- navbar -->
@@ -178,20 +177,20 @@
 					</a>
 					
 					<!-- medium screen top menu items -->
-					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
+					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white w3-text-dark-gray" 
 						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['forums']}">
 						<i class="pi pi-comments"/>
 					</a>
-					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
+					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white w3-text-dark-gray" 
 						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['members']}">
 						<i class="pi pi-users"/>
 					</a>
 					
 					<!-- large screen top menu items -->
-					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
+					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white w3-text-dark-gray">
 						<i class="pi pi-comments w3-large"/><br/><span class="w3-medium">#{msg['forums']}</span>
 					</a>
-					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
+					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white w3-text-dark-gray">
 						<i class="pi pi-users w3-large"/><br/><span class="w3-medium">#{msg['members']}</span>
 					</a>
 					
@@ -205,7 +204,7 @@
 					<div class="w3-dropdown-click w3-bar-item w3-right w3-hover-none w3-hide-small" style="margin-top:2px;"> <!-- try the margin-top to vertically align the search div to middle -->
 						
 						<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
-						<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="font-family:Open Sans, FontAwesome" autocomplete="off"
+						<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." autocomplete="off"
 							class="w3-input w3-border w3-round searchInput searchInputExpand" id="keywords" 
 							onkeyup="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv');document.getElementById('keywordsSmall').value = this.value;" 
 							onfocus="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv', false)" 

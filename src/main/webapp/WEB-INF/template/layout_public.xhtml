@@ -44,12 +44,12 @@
         
         <style>
         
-			html, body, h1, h2, h3, h4, h5 {font-family: "Helvetica", sans-serif}
+			html, body, h1, h2, h3, h4, h5 {font-family: Arial, sans-serif}
 			a { text-decoration: none }
-			a:link           { color: #339966 }  /* unvisited links       */
-			a:visited        { color: #C92D99 }  /* visited links         */
-			a:hover, a:focus { color: #990000 }  /* user hovers, or focus */
-			a:active         { color: #339966 }  /* active links   
+			a:link           { color: #339966 } 
+			a:visited        { color: #C92D99 } 
+			a:hover, a:focus { color: #990000 } 
+			a:active         { color: #339966 }  
 			
 			input[type=text].searchInput {
 			  
@@ -153,8 +153,7 @@
     <h:body class="w3-theme-light" style="margin:0px;">
     	
     	<h:form>
-    		<p:remoteCommand name="invokeSearchSuggestion" update="searchSuggestionResultDiv searchSuggestionResultDivSmall" action="#{searchSuggestion.suggest}" />
-    		<!-- <h:commandScript name="invokeSearchSuggestion" action="#{searchSuggestion.suggest}" render=":searchSuggestionDiv"/> -->
+    		<p:remoteCommand name="invokeSearchSuggestion" update="searchSuggestionResultDiv searchSuggestionResultDivSmall" action="#{searchSuggestion.suggest}"/>
     	</h:form>
 
 		<!-- navbar -->
@@ -173,41 +172,41 @@
 					</a>
 					
 					<!-- medium screen top menu items -->
-					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
+					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white w3-text-dark-gray" 
 						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['forums']}">
-						<i class="pi pi-comments"/>
+						<i class="pi pi-comments w3-xlarge"/>
 					</a>
-					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white" 
+					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white w3-text-dark-gray" 
 						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['members']}">
-						<i class="pi pi-users"/>
+						<i class="pi pi-users w3-xlarge"/>
 					</a>
 					
 					<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
-						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white"
+						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white w3-text-dark-gray"
 							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['register']}" onclick="document.getElementById('registerModal').style.display='block'">
-							<i class="pi pi-book"/>
+							<i class="pi pi-book w3-xlarge"/>
 						</a>					
-						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white"
+						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white w3-text-dark-gray"
 							style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['login']}" onclick="document.getElementById('loginModal').style.display='block'">
-							<i class="pi pi-sign-in"/>
+							<i class="pi pi-sign-in w3-xlarge"/>
 						</a>
 					</sec:authorize>
 					
 					<!-- large screen top menu items -->
-					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
+					<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white w3-text-dark-gray">
 						<i class="pi pi-comments w3-xlarge"/><br/><span class="w3-medium">#{msg['forums']}</span>
 					</a>
-					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white">
+					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white w3-text-dark-gray">
 						<i class="pi pi-users w3-xlarge"/><br/><span class="w3-medium">#{msg['members']}</span>
 					</a>
 					
 					<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
 					
-						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white"
+						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white w3-text-dark-gray"
 							onclick="document.getElementById('registerModal').style.display='block'">
 							<i class="pi pi-book w3-xlarge"/><br/><span class="w3-medium">#{msg['register']}</span>
 						</a>					
-						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white" 
+						<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white w3-text-dark-gray" 
 							onclick="document.getElementById('loginModal').style.display='block'">
 							<i class="pi pi-sign-in w3-xlarge"/><br/><span class="w3-medium">#{msg['login']}</span>
 						</a>
@@ -231,8 +230,8 @@
 							
 							</button>
 							<div class="w3-dropdown-content w3-bar-block w3-card-4">
-								<a href="#{request.contextPath}/secure/index.xhtml" class="w3-bar-item w3-button"><i class="fa fa-gear fa-fw"/> #{msg['my.account']}</a>
-								<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button"><i class="fa fa-sign-out fa-fw"/> #{msg['logout']}</a>
+								<a href="#{request.contextPath}/secure/index.xhtml" class="w3-bar-item w3-button"><i class="pi pi-cog"/> #{msg['my.account']}</a>
+								<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button"><i class="pi pi-sign-out"/> #{msg['logout']}</a>
 							</div>
 						</div>
 						
@@ -241,14 +240,14 @@
 					<!-- search icon button, show on small screens -->
 					<a class="w3-bar-item w3-button w3-border-left w3-hover-text-white w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" 
 						onclick="openNav('searchSmall')" style="font-size:28px;padding-top:9px;padding-bottom: 9px;" title="#{msg['search']}">
-						<i class="fa fa-search"/>
+						<i class="pi pi-search"/>
 					</a>
 					
 					<!-- search bar, show on large and medium screens -->
 					<div class="w3-dropdown-click w3-bar-item w3-right w3-hover-none w3-hide-small" style="margin-top:2px;"> <!-- try the margin-top to vertically align the search div to middle -->
 						
 						<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
-						<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="font-family:Open Sans, FontAwesome" autocomplete="off"
+						<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." autocomplete="off"
 							class="w3-input w3-border w3-round searchInput searchInputExpand" id="keywords" 
 							onkeyup="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv');document.getElementById('keywordsSmall').value = this.value;" 
 							onfocus="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv', false)" 
@@ -301,22 +300,20 @@
 		  	<!-- Navbar on small screens -->
 		  	<div id="navSmall" class="w3-bar w3-theme-l4 w3-hide w3-hide-large w3-hide-medium w3-border-top">
 		    	
-		    	<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="fa fa-users fa-lg"/><br/>Members</a>
-		    	<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="fa fa-comments fa-lg"/><br/>Forums</a>
+		    	<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-users w3-large"/><br/>Members</a>
+		    	<a href="#{request.contextPath}/viewForumGroup.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-comments w3-large"/><br/>Forums</a>
 		    	
 		    	<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
 		    	
 		    		<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"
 						onclick="document.getElementById('registerModal').style.display='block'">
-						<i class="fa fa-clipboard fa-lg"/><br/>#{msg['register']}
+						<i class="pi pi-book w3-large"/><br/>#{msg['register']}
 					</a>					
 					<a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right" 
 						onclick="document.getElementById('loginModal').style.display='block'">
-						<i class="fa fa-sign-in fa-lg"/><br/>#{msg['login']}
+						<i class="pi pi-sign-in w3-large"/><br/>#{msg['login']}
 					</a>
-		    	
-		    		<!-- <a href="javascript:void(0);" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right" onclick="document.getElementById('loginModal').style.display='block'"><i class="fa fa-sign-in fa-lg"/><br/>#{msg['login']}</a>
-		    		<a href="#{request.contextPath}/register.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="fa fa-clipboard fa-lg"/><br/>Register</a> -->
+					
 		    	</sec:authorize>
 		  	</div>
 		  	
@@ -326,7 +323,7 @@
 				<div class="w3-dropdown-click w3-bar-item w3-hover-none w3-block">
 					
 					<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
-					<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="width:100%; font-family:Open Sans, FontAwesome" autocomplete="off"
+					<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="width:100%; font-family:Arial, PrimeIcons" autocomplete="off"
 						class="w3-input w3-border w3-round searchInput" id="keywordsSmall"
 						onkeyup="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall'); document.getElementById('keywords').value = this.value;" 
 						onfocus="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall', false)" 
@@ -378,7 +375,7 @@
 				<span onclick="$('#loginModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="#{msg['close']}">&#215;</span>
 		
 				<header class="w3-container w3-padding w3-theme-dark w3-center">
-					<span class="w3-xlarge"><i class="pi pi-lock w3-large"/> #{msg['login.to']} #{msg['application.title']}</span>
+					<span class="w3-xlarge"><i class="pi pi-lock w3-xlarge"/> #{msg['login.to']} #{msg['application.title']}</span>
 				</header>
 				
 				<div class="w3-center w3-pale-red" jsf:rendered="#{param.login_error != null and SPRING_SECURITY_LAST_EXCEPTION != null}"
@@ -393,10 +390,10 @@
     			<form action="#{request.contextPath}/login" method="post" class="w3-container">
     				<div class="w3-section w3-center">
 	    				<p>
-	    					<input type="text" name="username" placeholder="&#xf007; #{msg['enter.username']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+	    					<input type="text" name="username" placeholder="&#xe939; #{msg['enter.username']}" class="w3-input w3-border w3-round" style="font-family:Arial, PrimeIcons;text-align:center;" />
 	    				</p>
 	    				<p>
-	    					<input type="password" name="password" placeholder="&#xf084; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family:Open Sans, FontAwesome;text-align:center;" />
+	    					<input type="password" name="password" placeholder="&#xe981; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family:Arial, PrimeIcons;text-align:center;" />
 	    				</p>
 	    				<p>
 	    					<button type="submit" class="w3-input w3-btn w3-theme-dark w3-round"><i class="pi pi-sign-in"/> #{msg['login']}</button>
@@ -407,15 +404,9 @@
     				</div>
     			</form>
 			
-			    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-			      
-			      <span class="w3-left">
-			      	<a href="#" onclick="$('.w3-modal').hide();$('#registerModal').show();return false;">#{msg['register']}</a>
-			      </span>
-			      
-			      <span class="w3-right">
-			      	<a href="#" onclick="$('.w3-modal').hide();$('#passwordResetModal').show();return false;">#{msg['forgot.password']}?</a>
-			      </span>
+			    <div class="w3-container w3-border-top w3-padding-16 w3-theme-light">
+			      <span class="w3-left"><a href="#" onclick="$('.w3-modal').hide();$('#registerModal').show();return false;">#{msg['register']}</a></span>
+			      <span class="w3-right"><a href="#" onclick="$('.w3-modal').hide();$('#passwordResetModal').show();return false;">#{msg['forgot.password']}</a></span>
 			    </div>
 			
 			  </div>
@@ -441,7 +432,7 @@
 						<div jsf:rendered="#{publicBackingBean.registrationSuccess}" class="w3-green w3-container w3-round">
 							<div jsf:rendered="#{publicBackingBean.emailSent}">
 								<h4>Email has been sent to #{publicBackingBean.user.person.email}</h4>
-								<h5>Please find the email and activate your account</h5>
+								<h6>Please find the email and activate your account</h6>
 							</div>
 							<div jsf:rendered="#{not publicBackingBean.emailSent}">
 								<h4>Your account has been created</h4>
@@ -459,41 +450,41 @@
 					
 						<div jsf:rendered="#{!publicBackingBean.registrationSuccess}" class="w3-section w3-center">
 							<p>
-								<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xf2c0; #{msg['pick.a.username']}" styleClass="w3-input" title="#{msg['username']}"
-									style="font-family:Open Sans, FontAwesome;text-align:center;"
+								<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xe939; #{msg['pick.a.username']}" styleClass="w3-input" title="#{msg['username']}"
+									style="font-family:Arial, PrimeIcons;text-align:center;"
 									onblur="validateRegisterUsername();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:inputText>
 								<h:message for="username" id="usernameMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
 								<p:inputText id="email" value="#{publicBackingBean.user.person.email}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="#{msg['email']}"
-									style="font-family:Open Sans, FontAwesome;text-align:center;"
+									style="font-family:Arial, PrimeIcons;text-align:center;"
 									onblur="validEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:inputText>
 								<h:message for="email" id="emailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
-								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xf084; #{msg['choose.a.password']}" styleClass="w3-input" title="#{msg['password']}" 
-									style="font-family:Open Sans, FontAwesome;text-align:center;" toggleMask="true"
+								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xe981; #{msg['choose.a.password']}" styleClass="w3-input" title="#{msg['password']}" 
+									style="font-family:Arial, PrimeIcons;text-align:center;" toggleMask="true"
 									onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
 								<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
-								<p:password id="confirmPassword" placeholder="&#xf00c; #{msg['confirm.password']}" styleClass="w3-input" title="#{msg['confirm.password']}" 
-									style="font-family:Open Sans, FontAwesome;text-align:center;" toggleMask="true"
+								<p:password id="confirmPassword" placeholder="&#xe981; #{msg['confirm.password']}" styleClass="w3-input" title="#{msg['confirm.password']}" 
+									style="font-family:Arial, PrimeIcons;text-align:center;" toggleMask="true"
 									onblur="validateConfirmPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
 								<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
-								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf234; #{msg['submit']}" 
-									onclick="return validateRegistration()"	id="submitButton" style="font-family:Open Sans, FontAwesome;" action="#{publicBackingBean.register}" update=":registerForm"/>
+								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xe909; #{msg['submit']}" 
+									onclick="return validateRegistration()"	id="submitButton" style="font-family:Arial, PrimeIcons;" action="#{publicBackingBean.register}" update=":registerForm"/>
 							</p>
 						</div>
 					</h:form>
 					
-				    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey w3-center">
+				    <div class="w3-container w3-border-top w3-padding-16 w3-theme-light w3-center">
 				      
 				      <span>
 				      	#{msg['already.registered']}?
@@ -512,14 +503,11 @@
 					<span onclick="$('#passwordResetModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="#{msg['close']}">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="fa fa-undo"/> #{msg['reset.your.password']} </span>
+						<span class="w3-xlarge"><i class="pi pi-lock-open w3-xlarge"/> #{msg['reset.your.password']} </span>
 					</header>
 
 					<div class="w3-center w3-section w3-text-theme">
-			      		<span class="fa-passwd-reset fa-stack" style="font-size: 50pt;">
-						  <i class="fa fa-undo fa-stack-2x"></i>
-						  <i class="fa fa-lock fa-stack-1x"></i>
-						</span>
+			      		<i class="pi pi-lock-open" style="font-size:80pt;"/>
 			    	</div>
 					
 					<h:form styleClass="w3-container" id="passwordResetForm">
@@ -538,32 +526,26 @@
 
 						<div jsf:rendered="#{!publicBackingBean.passwordResetEmailSent}" class="w3-section w3-center">
 							
-							<h5>#{msg['enter.email.to.get.password.reset.link']}</h5>
+							<h6>#{msg['enter.email.to.get.password.reset.link']}</h6>
 							
 							<p>
 								<p:inputText id="passwordResetEmail" value="#{publicBackingBean.passwordResetEmail}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="#{msg['email']}"
-									style="font-family:Open Sans, FontAwesome;text-align:center;"
+									style="font-family:Arial, PrimeIcons;text-align:center;"
 									onblur="validPasswordResetEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:inputText>
 								<h:message for="passwordResetEmail" id="passwordResetEmailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
-								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xf1d8; #{msg['submit']}" 
-									onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" style="font-family:Open Sans, FontAwesome;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
+								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xe909; #{msg['submit']}" 
+									onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" style="font-family:Arial, PrimeIcons;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
 							</p>
 						</div>
 					
 					</h:form>
 
-				    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-				      
-				      <span class="w3-left">
-				      	<a href="#" onclick="$('.w3-modal').hide();$('#loginModal').show();return false;">#{msg['login']}</a>
-				      </span>
-				      
-				      <span class="w3-right">
-				      	<a href="#" onclick="$('.w3-modal').hide();$('#registerModal').show();return false;">#{msg['register']}</a>
-				      </span>
+				    <div class="w3-container w3-border-top w3-padding-16 w3-theme-light">
+				      <span class="w3-left"><a href="#" onclick="$('.w3-modal').hide();$('#loginModal').show();return false;">#{msg['login']}</a></span>
+				      <span class="w3-right"><a href="#" onclick="$('.w3-modal').hide();$('#registerModal').show();return false;">#{msg['register']}</a></span>
 				    </div>
 					
 				</div>
@@ -738,7 +720,7 @@
 
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:25px;bottom:25px">
             <f:facet name="start">
-                <i class="fa fa-refresh fa-spin fa-3x fa-fw w3-text-blue-grey"/>
+                <i class="pi pi-spin pi-spinner w3-xxlarge w3-text-blue-grey"/>
             </f:facet>
 
             <f:facet name="complete">
