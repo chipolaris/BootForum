@@ -50,8 +50,12 @@
         <style>
         
 			html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
-			a { text-decoration: none; font-weight:bold; }	
-			
+			a { text-decoration: none;  font-weight:bold; }	
+			a:link           { color: #339966 }  /* unvisited links       */
+			a:visited        { color: #C92D99 }  /* visited links         */
+			a:hover, a:focus { color: #990000 }  /* user hovers, or focus */
+			a:active         { color: #339966 }  /* active links   
+
 			input[type=text].searchInput {
 			  
 			  box-sizing: border-box;
@@ -321,7 +325,7 @@
 			
 			<!-- bottom copyright -->
 			<div class="w3-section w3-display-bottommiddle"> 
-				&#169; <a href="http://www.SoftUnify.com">SoftUnify.com 2021</a>. 
+				<center>&#169; <a href="http://www.SoftUnify.com">SoftUnify.com 2021</a>. </center>
 				Powered by <a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a>, 
 				<a href="https://spring.io/projects/spring-boot">Spring Boot</a>, <a href="http://www.eclipse.org/eclipselink/">EclipseLink</a>, 
 				<a href="https://www.primefaces.org">Primefaces</a>, and <a href="https://www.w3schools.com/w3css/default.asp">W3.CSS</a> 
