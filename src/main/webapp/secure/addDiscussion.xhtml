@@ -147,7 +147,7 @@
 									
 									<p:commandButton ajax="true" icon="pi pi-trash" oncomplete="toggle('thumbnailPanel');" title="Delete this thumbnail"
 										update=":thumbnailPanel" action="#{addDiscussion.commentThumbnailManagement.deleteUploadedFile}">
-										<p:confirm header="Confirm Delete Thumbnail" message="Are you sure?" icon="pi pi-exclamation-triangle"/>
+										<p:confirm header="#{msg['confirm.delete.image']}" message="#{msg['are.you.sure']}?" icon="pi pi-exclamation-triangle"/>
 										<f:setPropertyActionListener value="#{thumbnail}" target="#{addDiscussion.commentThumbnailManagement.selectedUploadedFile}" />  
 									</p:commandButton>
 							
@@ -204,9 +204,9 @@
 									
 									<p:commandButton ajax="true" icon="pi pi-trash" oncomplete="toggle('attachmentPanel');" title="Delete this attachment"
 										update=":attachmentPanel" action="#{addDiscussion.commentAttachmentManagement.deleteUploadedFile}">
-										<p:confirm header="Confirm Delete Attachment" message="Are you sure?" icon="pi pi-exclamation-triangle"/>
-										<f:setPropertyActionListener value="#{attachment}" target="#{addDiscussion.commentAttachmentManagement.selectedUploadedFile}" />  
-									</p:commandButton>
+										<p:confirm header="#{msg['confirm.delete.attachment']}" message="#{msg['are.you.sure']}?" icon="pi pi-exclamation-triangle"/>
+												<f:setPropertyActionListener value="#{attachment}" target="#{replyComment.commentAttachmentManagement.selectedUploadedFile}" />  
+											</p:commandButton>
 							
 									<p/>
 									
@@ -247,8 +247,8 @@
 
 				<!-- confirm dialog -->
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-	        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+	        		<p:commandButton value="#{msg['yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+	        		<p:commandButton value="#{msg['no']}" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
 	    		</p:confirmDialog>
 				
 			</div>
