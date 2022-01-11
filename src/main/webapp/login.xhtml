@@ -31,16 +31,15 @@
 							<span class="w3-xlarge"><i class="pi pi-lock w3-xlarge"/> #{msg['login.to']} <h:outputLink value="#{request.contextPath}" style="color:inherit">#{msg['application.title']}</h:outputLink></span>
 						</header>
 
-						<div class="w3-center" jsf:rendered="#{param.logout_success != null}" style="line-height: 50px;">
-							<p:staticMessage severity="error" summary="#{msg['INFO']}" detail="#{msg['successfully.logged.out']}" style="width: 100%"/>
+						<div class="w3-center w3-margin-top" jsf:rendered="#{param.logout_success != null}">
+							<p:staticMessage severity="info" summary="#{msg['INFO']}" detail="#{msg['successfully.logged.out']}"/>
 						</div>
-						<div class="w3-center" jsf:rendered="#{param.login_error != null and SPRING_SECURITY_LAST_EXCEPTION != null}"
-							 style="line-height: 50px;">
-							 <p:staticMessage severity="error" summary="#{msg['ERROR']}" detail="#{msg['login.failed.please.try.again']}" style="width: 100%"/>
+						<div class="w3-center w3-margin-top" jsf:rendered="#{param.login_error != null and SPRING_SECURITY_LAST_EXCEPTION != null}">
+							 <p:staticMessage severity="error" summary="#{msg['ERROR']}" detail="#{msg['login.failed.please.try.again']}"/>
 						</div>
 					
 						<div class="w3-center w3-section w3-text-theme">
-		      				<i class="fa fa-user-circle-o" style="font-size: 100pt;"/>
+		      				<i class="pi pi-user" style="font-size: 100pt;"/>
 		    			</div>
 		    			
 		    			<form action="#{request.contextPath}/login" method="post" class="w3-container">
@@ -79,7 +78,7 @@
 						</header>
 						
 						<div class="w3-center w3-section w3-text-theme">
-				      		<i class="fa fa-id-card-o" style="font-size: 100pt;"/>
+				      		<i class="pi pi-id-card" style="font-size: 100pt;"/>
 				    	</div>
 								
 						<h:form styleClass="w3-container" id="registerForm">
