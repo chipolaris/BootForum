@@ -118,7 +118,7 @@ public class ReplyComment {
 					if(!StringUtils.startsWith(comment.getTitle(), "Re: ")) {
 						reply.setTitle("Re: " + comment.getTitle());
 					}
-					reply.setContent(String.format("<blockquote>%s said:%s</blockquote><br/>", comment.getCreateBy(), comment.getContent()));
+					reply.setContent(String.format("<blockquote>%s:%s</blockquote><br/>", comment.getCreateBy(), comment.getContent()));
 				}
 				
 				this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);

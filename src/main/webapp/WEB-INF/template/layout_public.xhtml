@@ -429,7 +429,7 @@
 							
 					<h:form styleClass="w3-container" id="registerForm">
 					
-						<div jsf:rendered="#{publicBackingBean.registrationSuccess}" class="w3-green w3-container w3-round">
+						<div jsf:rendered="#{publicBackingBean.registrationSuccess}" class="w3-pale-green w3-container w3-round">
 							<div jsf:rendered="#{publicBackingBean.emailSent}">
 								<h4>Email has been sent to #{publicBackingBean.user.person.email}</h4>
 								<h6>Please find the email and activate your account</h6>
@@ -440,7 +440,7 @@
 							</div>
 						</div>
 					
-						<div jsf:rendered="#{!publicBackingBean.registrationSuccess and not empty publicBackingBean.registrationMessages}" class="w3-red w3-container w3-round">
+						<div jsf:rendered="#{!publicBackingBean.registrationSuccess and not empty publicBackingBean.registrationMessages}" class="w3-pale-red w3-container w3-round">
 							<h4>#{msg['unable.to.create.account']}</h4>
 							<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.registrationMessages}" style="list-style-position: inside; padding-left: 0;">
 								<li>#{message}</li>
@@ -512,12 +512,12 @@
 					
 					<h:form styleClass="w3-container" id="passwordResetForm">
 						
-						<div jsf:rendered="#{publicBackingBean.passwordResetEmailSent}" class="w3-green w3-section w3-round w3-center">
+						<div jsf:rendered="#{publicBackingBean.passwordResetEmailSent}" class="w3-pale-green w3-section w3-round w3-center">
 							<h4>#{msg['password.reset.email.sent']}</h4>
 							<h6>#{msg['please.check.email.for.password.reset.instruction']}</h6>
 						</div>
 						
-						<div jsf:rendered="#{!publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-red w3-section w3-round">
+						<div jsf:rendered="#{!publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-pale-red w3-section w3-round">
 							<h4>#{msg['unable.to.complete.request']}:</h4>
 							<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.passwordResetMessages}" style="list-style-position: inside; padding-left: 0;">
 								<li>#{message}</li>

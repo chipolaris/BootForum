@@ -31,13 +31,12 @@
 							<span class="w3-xlarge"><i class="pi pi-lock w3-xlarge"/> #{msg['login.to']} <h:outputLink value="#{request.contextPath}" style="color:inherit">#{msg['application.title']}</h:outputLink></span>
 						</header>
 
-						<div class="w3-center w3-pale-green" jsf:rendered="#{param.logout_success != null}" 
-							style="line-height: 50px;">
-							<span class="w3-large">#{msg['successfully.logged.out']}</span>
+						<div class="w3-center" jsf:rendered="#{param.logout_success != null}" style="line-height: 50px;">
+							<p:staticMessage severity="error" summary="#{msg['INFO']}" detail="#{msg['successfully.logged.out']}" style="width: 100%"/>
 						</div>
-						<div class="w3-center w3-pale-red" jsf:rendered="#{param.login_error != null and SPRING_SECURITY_LAST_EXCEPTION != null}"
+						<div class="w3-center" jsf:rendered="#{param.login_error != null and SPRING_SECURITY_LAST_EXCEPTION != null}"
 							 style="line-height: 50px;">
-							<span class="w3-large">#{msg['login.failed.please.try.again']}.</span>
+							 <p:staticMessage severity="error" summary="#{msg['ERROR']}" detail="#{msg['login.failed.please.try.again']}" style="width: 100%"/>
 						</div>
 					
 						<div class="w3-center w3-section w3-text-theme">
@@ -85,7 +84,7 @@
 								
 						<h:form styleClass="w3-container" id="registerForm">
 						
-							<div jsf:rendered="#{!publicBackingBean.registrationSuccess and not empty publicBackingBean.registrationMessages}" class="w3-red w3-section w3-round">
+							<div jsf:rendered="#{!publicBackingBean.registrationSuccess and not empty publicBackingBean.registrationMessages}" class="w3-pale-red w3-section w3-round">
 								<h4>#{msg['unable.to.create.account']}</h4>
 								<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.registrationMessages}">
 									<li>#{message}</li>
@@ -93,7 +92,7 @@
 								
 							</div>
 							
-							<div jsf:rendered="#{publicBackingBean.registrationSuccess}" class="w3-green w3-section w3-round w3-center">
+							<div jsf:rendered="#{publicBackingBean.registrationSuccess}" class="w3-pale-green w3-section w3-round w3-center">
 							
 								<div jsf:rendered="#{publicBackingBean.emailSent}">
 									<h4>Email has been sent to #{publicBackingBean.user.person.email}</h4>
@@ -170,12 +169,12 @@
 
 						<h:form styleClass="w3-container" id="passwordResetForm">
 							
-							<div jsf:rendered="#{publicBackingBean.passwordResetEmailSent}" class="w3-green w3-section w3-round w3-center">
+							<div jsf:rendered="#{publicBackingBean.passwordResetEmailSent}" class="w3-pale-green w3-section w3-round w3-center">
 								<h4>#{msg['password.reset.email.sent']}</h4>
 								<h6>#{msg['please.check.email.for.password.reset.instruction']}</h6>
 							</div>
 							
-							<div jsf:rendered="#{not publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-red w3-section w3-round">
+							<div jsf:rendered="#{not publicBackingBean.passwordResetEmailSent and not empty publicBackingBean.passwordResetMessages}" class="w3-pale-red w3-section w3-round">
 								<h4>#{msg['unable.to.complete.request']}:</h4>
 								<ul jsfc="ui:repeat" var="message" value="#{publicBackingBean.passwordResetMessages}" style="list-style-position: inside; padding-left: 0;">
 									<li>#{message}</li>

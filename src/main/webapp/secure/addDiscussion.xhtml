@@ -145,9 +145,9 @@
 									
 									<p/>
 									
-									<p:commandButton ajax="true" icon="fa fa-trash" oncomplete="toggle('thumbnailPanel');" title="Delete this thumbnail"
+									<p:commandButton ajax="true" icon="pi pi-trash" oncomplete="toggle('thumbnailPanel');" title="Delete this thumbnail"
 										update=":thumbnailPanel" action="#{addDiscussion.commentThumbnailManagement.deleteUploadedFile}">
-										<p:confirm header="Confirm Delete Thumbnail" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+										<p:confirm header="Confirm Delete Thumbnail" message="Are you sure?" icon="pi pi-exclamation-triangle"/>
 										<f:setPropertyActionListener value="#{thumbnail}" target="#{addDiscussion.commentThumbnailManagement.selectedUploadedFile}" />  
 									</p:commandButton>
 							
@@ -202,9 +202,9 @@
 									
 									<p/>
 									
-									<p:commandButton ajax="true" icon="fa fa-trash" oncomplete="toggle('attachmentPanel');" title="Delete this attachment"
+									<p:commandButton ajax="true" icon="pi pi-trash" oncomplete="toggle('attachmentPanel');" title="Delete this attachment"
 										update=":attachmentPanel" action="#{addDiscussion.commentAttachmentManagement.deleteUploadedFile}">
-										<p:confirm header="Confirm Delete Attachment" message="Are you sure?" icon="fa fa-exclamation-triangle"/>
+										<p:confirm header="Confirm Delete Attachment" message="Are you sure?" icon="pi pi-exclamation-triangle"/>
 										<f:setPropertyActionListener value="#{attachment}" target="#{addDiscussion.commentAttachmentManagement.selectedUploadedFile}" />  
 									</p:commandButton>
 							
@@ -238,8 +238,8 @@
 						 -->
 						 
 						 <!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['submit']}" type="button" icon="fa fa-check" onclick="submitDiscussionForm();" />
-						<p:button onclick="javascript:history.go(-1);return;" value="#{msg['cancel']}" icon="fa fa-close"/>
+						<p:commandButton value="#{msg['submit']}" type="button" icon="pi pi-check" onclick="submitDiscussionForm();" />
+						<p:button onclick="javascript:history.go(-1);return;" value="#{msg['cancel']}" icon="pi pi-times" style="margin-left:3px;"/>
 						
 					</h:form>
 					
@@ -247,8 +247,8 @@
 
 				<!-- confirm dialog -->
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-	        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+	        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
 	    		</p:confirmDialog>
 				
 			</div>
