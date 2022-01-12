@@ -156,7 +156,7 @@ public class ReplyComment {
 	
 	public String submit() {
 		
-		logger.info("Reply for comment '" + comment.getTitle() + "'");
+		logger.info("Reply for comment '" + reply.getTitle() + "'");
 		
 		reply.setIpAddress(JSFUtils.getRemoteIPAddress());
 		

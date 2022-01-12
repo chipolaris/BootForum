@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,14 @@ public class StatDAO {
 	@PersistenceContext//(unitName = "BootForumPersistenceUnit")
 	protected EntityManager entityManager;
 
+	/**
+	 * 
+	 * @param discussion
+	 * @return
+	 * 
+	 * @deprecated This method will not work with SQL Server due to SUM(SIZE()) usage
+	 */
+	@Deprecated
 	public Long countThumbnail(Discussion discussion) {
 		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.thumbnails)), 0) FROM Comment c WHERE c.discussion = :discussion", BigDecimal.class);
 		typedQuery.setParameter("discussion", discussion);
@@ -30,6 +39,14 @@ public class StatDAO {
 		return typedQuery.getSingleResult().longValue();
 	}
 	
+	/**
+	 * 
+	 * @param discussion
+	 * @return
+	 * 
+	 * @deprecated This method will not work with SQL Server due to SUM(SIZE()) usage
+	 */
+	@Deprecated
 	public Long countAttachment(Discussion discussion) {
 		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.discussion = :discussion", BigDecimal.class);
 		typedQuery.setParameter("discussion", discussion);
@@ -129,7 +146,15 @@ public class StatDAO {
 		return typedQuery.getSingleResult();
 	}
 
-	public Long countCommentThumbnails(String username) {
+	/**
+	 * 
+	 * @param username
+	 * @return
+	 * 
+	 * @deprecated: this method does not work with SQL Server due to SUM(SIZE()) call
+	 */
+	@Deprecated
+	public Long countCommentThumbnails_Deprecated(String username) {
 		
 		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.thumbnails)), 0) FROM Comment c WHERE c.createBy = :createBy", BigDecimal.class);
 		typedQuery.setParameter("createBy", username);
@@ -137,12 +162,55 @@ public class StatDAO {
 		return typedQuery.getSingleResult().longValue();
 	}
 	
-	public Long countCommentAttachments(String username) {
+	/**
+	 * This method identical as the method above, using native SQL query to avoid SQL Server issue as noted above
+	 */
+	public Long countCommentThumbnails(String username) {
+		
+		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_THUMBNAIL_T CT"
+				+ " LEFT JOIN COMMENT_T C ON CT.COMMENT_ID = C.ID"
+				+ " WHERE C.CREATED_BY = ?1";
+		
+		Query query = entityManager.createNativeQuery(nativeQuery).setParameter(1, username);
+		
+		/* 
+		 * Note: the query above returns Long in Postgresql and BigInteger in SQL Server 
+		 * So, the compromise is to downcast to Number first, then return longValue
+		 */
+		return ((Number) query.getSingleResult()).longValue();
+	}	
+	
+	/**
+	 * 
+	 * @param username
+	 * @return
+	 * 
+	 * @deprecated: this method does not work with SQL Server due to SUM(SIZE()) call
+	 */
+	public Long countCommentAttachments_Deprecated(String username) {
 		
 		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.createBy = :createBy", BigDecimal.class);
 		typedQuery.setParameter("createBy", username);
 		
 		return typedQuery.getSingleResult().longValue();
+	}
+	
+	/**
+	 * This method identical as the method above, using native SQL query to avoid SQL Server issue as noted above
+	 */
+	public Long countCommentAttachments(String username) {
+		
+		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_ATTACHMENT_T CA"
+				+ " LEFT JOIN COMMENT_T C ON CA.COMMENT_ID = C.ID"
+				+ " WHERE C.CREATED_BY = ?1";
+		
+		Query query = entityManager.createNativeQuery(nativeQuery).setParameter(1, username);
+		
+		/* 
+		 * Note: the query above returns Long in Postgresql and BigInteger in SQL Server 
+		 * So, the compromise is to downcast to Number first, then return longValue
+		 */
+		return ((Number) query.getSingleResult()).longValue();
 	}
 	
 	public Long countComment(String username) {

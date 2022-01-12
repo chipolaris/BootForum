@@ -24,8 +24,8 @@
 		<link rel="icon" type="image/png" sizes="16x16" href="#{request.contextPath}/favicon_io/favicon-16x16.png"/>
 		<link rel="manifest" href="#{request.contextPath}/favicon_io/site.webmanifest"/>
         
-        <h:outputStylesheet library="css" name="w3.css"/>
         <h:outputScript library="js" name="app/timeAgoLocale.js"/>
+        <h:outputStylesheet library="css" name="w3.css"/>
         
         <!-- color themes -->
         <!-- read from cookie name 'theme.color', if empty, set to default value 'w3-theme-light-blue' -->
@@ -52,9 +52,9 @@
 		<!-- Top container -->
 		<div class="w3-bar w3-top w3-theme-l3 w3-large w3-bottombar w3-border-green" style="z-index:4">
 			<button class="w3-bar-item w3-button w3-hide-large" onclick="openSidebar();"><i class="pi pi-bars"/></button>
-			<h:link outcome="/index" styleClass="w3-bar-item w3-hover-green" title="Forum Home"><b><i class="pi pi-home"/> #{msg['application.title']}</b></h:link>
+			<h:link outcome="/index" styleClass="w3-bar-item" title="#{msg['application.title']}"><b><i class="pi pi-home w3-large"/> #{msg['application.title']}</b></h:link>
 			<!-- Note: for Logout link below, use h:outputLink instead of h:link because logout url is /logout (not /logout.xhtml) -->
-			<h:outputLink value="#{request.contextPath}/logout" styleClass="w3-bar-item w3-right w3-hover-orange"><i class="pi pi-sign-out"/> Logout</h:outputLink>
+			<h:outputLink value="#{request.contextPath}/logout" styleClass="w3-bar-item w3-right"><i class="pi pi-sign-out"/> #{msg['logout']}</h:outputLink>
 		</div>
 		
 		<!-- Sidebar/menu -->
@@ -118,7 +118,7 @@
            	
 			<!-- Footer -->
 			<footer class="w3-container w3-padding-16">
-				&#169; <a href="http://www.SoftwarePrincipals.com">SoftwarePrincipals.com 2019</a>. Powered by <a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a>, <a href="https://spring.io/projects/spring-framework">Spring Framework</a>, <a href="http://www.eclipse.org/eclipselink/">EclipseLink</a>, <a href="https://www.primefaces.org">Primefaces</a>, and <a href="https://www.w3schools.com/w3css/default.asp">W3.CSS</a> | All rights reserved.
+				&#169; <a href="http://www.SoftUnify.com">SoftUnify.com 2021</a>. Powered by <a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a>, <a href="https://spring.io/projects/spring-framework">Spring Framework</a>, <a href="http://www.eclipse.org/eclipselink/">EclipseLink</a>, <a href="https://www.primefaces.org">Primefaces</a>, and <a href="https://www.w3schools.com/w3css/default.asp">W3.CSS</a> | All rights reserved.
 			</footer>
 			
 			<!-- End page content -->         	
