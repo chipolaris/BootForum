@@ -211,9 +211,9 @@
 									<p:commandButton ajax="true" icon="pi pi-trash" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();" 
 										title="Delete this attachment" update=":attachmentPanel" action="#{editComment.deleteAttachment}">
 										<p:confirm header="#{msg['confirm.delete.attachment']}" message="#{msg['are.you.sure']}?" icon="pi pi-exclamation-triangle"/>
-												<f:setPropertyActionListener value="#{attachment}" target="#{replyComment.commentAttachmentManagement.selectedUploadedFile}" />  
-											</p:commandButton>
-							
+										<f:setPropertyActionListener value="#{attachment}" target="#{editComment.selectedAttachment}" />  
+									</p:commandButton>
+									
 									<p/>
 									
 								</div>
