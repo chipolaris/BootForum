@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.chipolaris.bootforum.dao.QueryFilterMeta;
 import com.github.chipolaris.bootforum.dao.QueryMeta;
+import com.github.chipolaris.bootforum.dao.QuerySortMeta.SortOrder;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.service.GenericService;
@@ -50,6 +51,7 @@ public class CommentListLazyModel extends LazyDataModel<Comment> {
 		QueryMeta.Builder<Comment> builder = LazyModelUtil.queryBuilder(Comment.class, sortBy, filterBy);
 		
 		builder.filterMeta("discussion", this.discussion, QueryFilterMeta.MatchMode.EQUALS);
+		builder.sortMeta("id", SortOrder.ASCENDING, false);
 		
 		return this.genericService.getEntities2(builder.startIndex(first).
 				maxResult(pageSize).build()).getDataObject();

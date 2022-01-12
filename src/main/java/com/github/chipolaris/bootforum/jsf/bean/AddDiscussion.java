@@ -1,5 +1,7 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.text.MessageFormat;
+
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
@@ -90,12 +92,10 @@ public class AddDiscussion {
 		if (this.forum != null) {
 
 			if (!forum.isActive()) {
-				this.setLoadingErrorMessage("Forum is closed");
+				this.setLoadingErrorMessage(JSFUtils.getMessageBundle().getString("forum.is.closed"));
 				this.forum = null;
 				return;
 			}
-
-			logger.info("add discussion for " + forum.getTitle());
 
 			this.discussion = new Discussion();
 			this.discussion.setForum(forum);
@@ -107,11 +107,14 @@ public class AddDiscussion {
 			this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
 		} 
 		else {
-			this.setLoadingErrorMessage("Forum not found");
+			this.setLoadingErrorMessage("forum.not.found");
 		}
 	}
 	
 	public String submit() {
+		
+		logger.info("add discussion for " + forum.getTitle());
+		
 		comment.setIpAddress(JSFUtils.getRemoteIPAddress());
 		ServiceResponse<Long> response = 
 				discussionService.addDiscussion(discussion, comment, userSession.getUser(),
@@ -119,7 +122,8 @@ public class AddDiscussion {
 		
 		if(response.getAckCode() == AckCodeType.SUCCESS) {
 		
-			JSFUtils.addInfoStringMessage(null, "New Discussion '" + discussion.getTitle() + "' added");
+			JSFUtils.addInfoStringMessage(null, 
+					MessageFormat.format(JSFUtils.getMessageBundle().getString("new.discussion.added"), discussion.getTitle()));
 			
 			return "/viewDiscussion?faces-redirect=true&id=" + discussion.getId();
 		}

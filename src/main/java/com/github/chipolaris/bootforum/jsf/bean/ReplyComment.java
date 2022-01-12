@@ -104,11 +104,9 @@ public class ReplyComment {
 			if(this.comment != null) {
 			
 				if(comment.getDiscussion().isClosed()) {
-					this.setLoadingErrorMessage("Discussion is closed");
+					this.setLoadingErrorMessage(JSFUtils.getMessageBundle().getString("discussion.is.closed"));
 					return;
 				}
-				
-				logger.info("Reply for comment '" + comment.getTitle() + "'");
 				
 				this.reply = new Comment();
 				this.reply.setReplyTo(this.comment);
@@ -125,7 +123,7 @@ public class ReplyComment {
 				this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
 			}
 			else {
-				this.setLoadingErrorMessage("Comment is not valid");
+				this.setLoadingErrorMessage(JSFUtils.getMessageBundle().getString("comment.does.not.exist"));
 			}
 		}
 		else if(discussionId != null) { // reply to main discussion
@@ -157,6 +155,8 @@ public class ReplyComment {
 	}
 	
 	public String submit() {
+		
+		logger.info("Reply for comment '" + comment.getTitle() + "'");
 		
 		reply.setIpAddress(JSFUtils.getRemoteIPAddress());
 		

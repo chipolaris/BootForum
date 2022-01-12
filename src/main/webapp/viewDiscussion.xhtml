@@ -131,7 +131,7 @@
 	 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">
 							#{msg['comments']}: <b>#{viewDiscussion.discussion.stat.commentCount}</b>,
 							#{msg['views']}: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
-							&#160;&#160;<i class="fa fa-chevron-right rotate" id="discussionInfoToggleIcon"/>
+							&#160;&#160;<i class="pi pi-angle-right rotate" id="discussionInfoToggleIcon"/>
 						</span>
 				    </p>
 			    	
@@ -279,7 +279,7 @@
 				  								</span>
 												
 												<!-- TODO: show icon for user based on group(s) user is in. For now, hard code to fa-user -->
-												<span class="w3-display-topright w3-badge w3-theme-dark" title="user"><i class="fa fa-user fa-lg"/></span>
+												<span class="w3-display-topright w3-badge w3-theme-dark" title="user"><i class="pi pi-user w3-large"/></span>
 											
 											</div>
 											
@@ -293,7 +293,7 @@
 									    
 									    <p:commandLink rendered="#{not empty comment.replyTo}" 
 									    	onclick="$('#replyTo_#{rowIndex}_Div').toggle(300); return false;">
-									    	<i class="fa fa-share"/>
+									    	<i class="pi pi-share-alt"/>
 									    	<span>@#{comment.replyTo.createBy}: </span>
 									    	<h:outputText value=" #{comment.replyTo.title}" style="font-weight:bold;font-style:italic;" />
 									    </p:commandLink>
@@ -331,7 +331,7 @@
 					        		<p/>
 					        		
 					        		<a onclick="$('#replyTo_#{rowIndex}_Div').hide();" style="cursor:pointer;font-size: large;">
-					        			[ <i class="fa fa-caret-up" title="Collapse"/> #{msg['collapse']} ]
+					        			[ <i class="pi pi-caret-up" title="Collapse"/> #{msg['collapse']} ]
 					        		</a>
 					        		
 					        		<h:link outcome="commentThread">
@@ -408,19 +408,19 @@
 								
 								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light">
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-reply"/> #{msg['reply']}
+									<i class="pi pi-reply"/> #{msg['reply']}
 								</h:link>
 								
 								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;">
 									<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
-									<i class="fa fa-quote-left"/> #{msg['quote']}
+									<i class="pi pi-chevron-circle-right"/> #{msg['quote']}
 								</h:link>
 					        	
 					        	<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
 					        		rendered="#{userSession.user.username eq comment.createBy}" >
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-pencil-square-o"/> #{msg['edit']}
+									<i class="pi pi-pencil"/> #{msg['edit']}
 								</h:link>	
 					        	
 					        	<!-- right side: like buttons -->
@@ -428,13 +428,13 @@
 				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-l2 w3-right w3-round" id="voteDownScore"/>
 				        			
 				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="#{msg['dislike']}" action="#{voteManager.voteDown(comment)}" process="@this" 
-				        			update="growl voteDownScore" styleClass="w3-right"><i class="pi pi-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
+				        			update="growl voteDownScore" styleClass="w3-right"><i class="pi pi-thumbs-down w3-xlarge w3-opacity"/></p:commandLink>					        	
 					        	
 				        		<p:outputLabel value="#{comment.commentVote.voteUpCount}" 
 				        			style="margin: 0px 15px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d2 w3-right w3-round" id="voteUpScore"/>					        	
 					        							    
 				        		<p:commandLink title="#{msg['like']}" action="#{voteManager.voteUp(comment)}" process="@this" 
-				        			update="growl voteUpScore" styleClass="w3-right"><i class="pi pi-thumbs-up fa-2x w3-opacity"/></p:commandLink>
+				        			update="growl voteUpScore" styleClass="w3-right"><i class="pi pi-thumbs-up w3-xlarge w3-opacity"/></p:commandLink>
 						    </div>
 
 							<!-- mobile screen -->
@@ -442,30 +442,30 @@
 								
 								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Reply">
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-reply"/>
+									<i class="pi pi-reply"/>
 								</h:link>
 								
 								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Quote">
 									<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
-									<i class="fa fa-quote-left"/>
+									<i class="pi pi-chevron-circle-right"/>
 								</h:link>
 								
 								<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" title="Edit"
 									rendered="#{userSession.user.username eq comment.createBy}">
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-pencil-square-o"/>
+									<i class="pi pi-pencil"/>
 								</h:link>
 					        	
 					        	<!-- right side: like buttons -->
 				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="#{msg['dislike']}" action="#{voteManager.voteDown(comment)}" process="@this" 
-				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
+				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-down w3-xlarge w3-opacity"/></p:commandLink>					        	
 					        	
 				        		<p:outputLabel value="#{comment.commentVote.voteUpCount - comment.commentVote.voteDownCount}" id="voteScoreMobile" 
 				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d1 w3-right w3-round"/>					        	
 					        							    
 				        		<p:commandLink title="#{msg['like']}" action="#{voteManager.voteUp(comment)}" process="@this" 
-				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-up fa-2x w3-opacity"/></p:commandLink>
+				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-up w3-xlarge w3-opacity"/></p:commandLink>
 						    </div>
 				        					        					        
 				        </div>
