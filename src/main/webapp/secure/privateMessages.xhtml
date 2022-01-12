@@ -403,8 +403,8 @@
 											<p:commandButton ajax="true" icon="pi pi-trash" title="Delete this attachment" process="@this"
 												action="#{privateMessages.uploadedFileManager.deleteUploadedFile}"
 												update=":newMessageForm:attachmentPanel">
-												<p:confirm header="Confirm Delete Attachment" message="Are you sure?" icon="pi pi-exclamation-triangle"/>
-												<f:setPropertyActionListener value="#{attachment}" target="#{privateMessages.uploadedFileManager.selectedUploadedFile}" />  
+												<p:confirm header="#{msg['confirm.delete.attachment']}" message="#{msg['are.you.sure']}?" icon="pi pi-exclamation-triangle"/>
+												<f:setPropertyActionListener value="#{attachment}" target="#{replyComment.commentAttachmentManagement.selectedUploadedFile}" />  
 											</p:commandButton>
 									
 											<p/>
