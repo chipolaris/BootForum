@@ -16,6 +16,10 @@
 	</ui:define>
 
 	<ui:define name="content">
+	
+		<f:metadata>
+			<f:viewAction action="#{imageUploadView.onLoad}"/>
+		</f:metadata>
 
 		<script type="text/javascript">
  			//<![CDATA[	
@@ -33,7 +37,7 @@
 		</script>	
 		
 		<div>
-			<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
+			<p:messages id="messages" showDetail="true" showSummary="false" closable="true" globalOnly="true">
 				<p:autoUpdate/>
 			</p:messages>
 		</div>
@@ -135,20 +139,48 @@
 						
 					</p:fileUpload> -->
 					
-					<p:fileUpload listener="#{fileHandler.uploadAvatar}"
-						mode="advanced" dragDropSupport="true" update="viewAvatarPanel"
-						auto="false"
+					<p:fileUpload listener="#{imageUploadView.uploadImage}"
+						mode="advanced" dragDropSupport="true" update="viewAvatarPanel cropperPanel"
+						auto="false" oncomplete="customizePrimefaceButtons();"
 						sizeLimit="#{applicationProperties['Avatar.maxFileSize'] * 1024}"
 						allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
 						
-						<f:attribute name="username" value="#{userSession.user.username}" />
+						<!-- <f:attribute name="username" value="#{userSession.user.username}" /> -->
 						
 					</p:fileUpload>
 					
 					<h:outputText
 						value="*Note: max file size is #{applicationProperties['Avatar.maxFileSize']}KB and max image dimension is #{applicationProperties['Avatar.maxWidth']} pixels x #{applicationProperties['Avatar.maxHeight']} pixels"
 						style="font-style:italic;font-weight:normal;" />
+						
 					<p/>
+					
+					<p:outputPanel id="cropperPanel">
+			
+			            <h:panelGrid columns="1" rendered="#{not empty imageUploadView.image}">
+			
+			                <p:commandButton value="Crop" action="#{fileHandler.crop(userSession.user.username)}" update="cropped viewAvatarPanel" icon="pi pi-clone"/>
+			
+			                <h:panelGrid columns="2" cellpadding="7">
+			
+			                    <p:imageCropper value="#{fileHandler.croppedImage}"
+			                            id="imageCropper" cache="false" image="#{imageUploadView.imageContent}"
+			                            initialCoords="0,0,100,100" minSize="100,100" maxSize="300,300">
+			                            			                    	
+			                    </p:imageCropper>
+			
+			                    <p:outputPanel id="cropped">
+			                        <p:graphicImage cache="false"
+			                                        rendered="#{not empty fileHandler.croppedImage}"
+			                                        value="#{fileHandler.croppedImage}"/>
+			                    </p:outputPanel>
+			
+			                </h:panelGrid>
+			
+			
+			            </h:panelGrid>
+			        </p:outputPanel>
+        
 				</h:form>
 			</div>
 		</div>

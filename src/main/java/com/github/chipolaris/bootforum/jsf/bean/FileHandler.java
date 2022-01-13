@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.CroppedImage;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
@@ -258,6 +260,43 @@ public class FileHandler {
     		return new DefaultStreamedContent();
     	}
     }
+    
+	private CroppedImage croppedImage = null;
+	
+	public CroppedImage getCroppedImage() {
+		return croppedImage;
+	}
+	public void setCroppedImage(CroppedImage croppedImage) {
+		this.croppedImage = croppedImage;
+	}
+	
+    public void crop(String username) {
+    	
+        if (this.croppedImage == null || this.croppedImage.getBytes() == null 
+        		|| this.croppedImage.getBytes().length == 0) {
+        	JSFUtils.addErrorStringMessage(null, "Cropping Failed.");
+        	return;
+        }
+        
+		ServiceResponse<String> response = fileService.uploadAvatar(
+				croppedImage.getBytes(), username);
+
+		if (response.getAckCode() != AckCodeType.SUCCESS) {
+
+			for (String message : response.getMessages()) {
+				JSFUtils.addErrorStringMessage("messages", message);
+			}
+
+			return;
+		}
+
+		// clear avatar cache entry for the key username
+		cacheManager.getCache(CachingConfig.AVATAR_BASE_64).evict(username);
+		cacheManager.getCache(CachingConfig.AVATAR_EXISTS).evict(username);
+
+		JSFUtils.addInfoStringMessage("messages", "Avatar file has been uploaded");
+    }    
+    
     
     public void uploadAvatar(FileUploadEvent event) {  
         logger.info("Uploaded: {}", event.getFile().getFileName());
