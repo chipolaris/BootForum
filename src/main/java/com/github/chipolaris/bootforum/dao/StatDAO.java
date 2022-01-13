@@ -169,7 +169,7 @@ public class StatDAO {
 		
 		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_THUMBNAIL_T CT"
 				+ " LEFT JOIN COMMENT_T C ON CT.COMMENT_ID = C.ID"
-				+ " WHERE C.CREATED_BY = ?1";
+				+ " WHERE C.CREATE_BY = ?1";
 		
 		Query query = entityManager.createNativeQuery(nativeQuery).setParameter(1, username);
 		
@@ -202,7 +202,7 @@ public class StatDAO {
 		
 		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_ATTACHMENT_T CA"
 				+ " LEFT JOIN COMMENT_T C ON CA.COMMENT_ID = C.ID"
-				+ " WHERE C.CREATED_BY = ?1";
+				+ " WHERE C.CREATE_BY = ?1";
 		
 		Query query = entityManager.createNativeQuery(nativeQuery).setParameter(1, username);
 		

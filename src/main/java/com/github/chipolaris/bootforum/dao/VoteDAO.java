@@ -34,7 +34,7 @@ public class VoteDAO {
 		return resultList.isEmpty() ? null : resultList.get(0);
 	}
 	
-	public Map<String, Long> getReputation4AllUsers() {
+	public Map<String, Long> getReputation4EveryUsers() {
 		
 		Map<String, Long> results = new HashMap<>();
 		
@@ -54,7 +54,8 @@ public class VoteDAO {
 		return results;
 	}
 	
-	public Long getReputation4User(String username) {
+	@Deprecated
+	public Long getReputation4User_Deprecated(String username) {
 		
 		// use COALESCE(X, Y) function to handle the case when there is no vote
 		String queryStr = "SELECT COALESCE(SUM(v.voteValue), 0) FROM Comment c, c.commentVote.votes v WHERE c.createBy = :username";
@@ -63,5 +64,25 @@ public class VoteDAO {
 		typedQuery.setParameter("username", username);
 		
 		return typedQuery.getSingleResult();
+	}
+	
+	/**
+	 * This method identical as the method above, using native SQL query to avoid SQL Server issue as noted above
+	 */
+	public Long getReputation4User(String username) {
+		
+		String nativeQuery = "SELECT SUM(V.VOTE_VALUE) FROM VOTE_T V"
+				+ " LEFT JOIN COMMENT_VOTE_VOTE_T CVV ON V.ID = CVV.VOTE_ID"
+				+ " LEFT JOIN COMMENT_VOTE_T CV ON CVV.COMMENT_VOTE_ID = CV.ID"
+				+ " LEFT JOIN COMMENT_T C ON CV.ID = C.COMMENT_VOTE_ID"
+				+ " WHERE C.CREATE_BY = ?1";
+		
+		Query query = entityManager.createNativeQuery(nativeQuery).setParameter(1, username);
+		
+		/* 
+		 * Note: the query above returns Long in Postgresql and BigInteger in SQL Server 
+		 * So, the compromise is to downcast to Number first, then return longValue
+		 */
+		return ((Number) query.getSingleResult()).longValue();
 	}
 }

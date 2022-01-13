@@ -62,7 +62,7 @@ public class VoteService {
 	
 		ServiceResponse<Map<String, Long>> response = new ServiceResponse<>();
 		
-		response.setDataObject(voteDAO.getReputation4AllUsers());
+		response.setDataObject(voteDAO.getReputation4EveryUsers());
 		
 		return response;
 	}
