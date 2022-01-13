@@ -87,7 +87,7 @@ public class PasswordResetService {
 		QuerySpec<PasswordReset> querySpec = 
 				QuerySpec.builder(PasswordReset.class).addEqualFilter("email", email.toLowerCase()).build();
 		
-		return genericDAO.countEntities(querySpec) > 0;
+		return genericDAO.countEntities(querySpec).longValue() > 0;
 	}
 
 	/**

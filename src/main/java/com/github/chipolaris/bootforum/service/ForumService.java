@@ -134,7 +134,7 @@ public class ForumService {
 		
 		// reset forum count
 		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
-		systemStat.setForumCount(genericDAO.countEntities(Forum.class));
+		systemStat.setForumCount(genericDAO.countEntities(Forum.class).longValue());
 		
 		return  response;
 	}

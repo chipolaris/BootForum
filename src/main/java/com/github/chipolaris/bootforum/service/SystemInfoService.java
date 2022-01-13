@@ -50,11 +50,11 @@ public class SystemInfoService {
 		
 		Statistics stat = new Statistics();
 		
-		stat.setCommentCount(genericDAO.countEntities(Comment.class));
-		stat.setDiscussionCount(genericDAO.countEntities(Discussion.class));
-		stat.setForumCount(genericDAO.countEntities(Forum.class));
-		stat.setForumGroupCount(genericDAO.countEntities(ForumGroup.class));
-		stat.setUserCount(genericDAO.countEntities(User.class));
+		stat.setCommentCount(genericDAO.countEntities(Comment.class).longValue());
+		stat.setDiscussionCount(genericDAO.countEntities(Discussion.class).longValue());
+		stat.setForumCount(genericDAO.countEntities(Forum.class).longValue());
+		stat.setForumGroupCount(genericDAO.countEntities(ForumGroup.class).longValue());
+		stat.setUserCount(genericDAO.countEntities(User.class).longValue());
 		stat.setLastComment(statDAO.latestCommentInfo());
 		stat.setLastRegisteredUser(statDAO.getLatestUsername());
 		stat.setLastUserRegisteredDate(statDAO.getLastUserRegisteredDate());

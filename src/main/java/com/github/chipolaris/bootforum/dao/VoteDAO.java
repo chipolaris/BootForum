@@ -54,7 +54,7 @@ public class VoteDAO {
 		return results;
 	}
 	
-	public Long getReputation4User(String username) {
+	public Number getReputation4User(String username) {
 		
 		// use COALESCE(X, Y) function to handle the case when there is no vote
 		String queryStr = "SELECT COALESCE(SUM(v.voteValue), 0) FROM Comment c, c.commentVote.votes v WHERE c.createBy = :username";
@@ -62,6 +62,6 @@ public class VoteDAO {
 		TypedQuery<Number> typedQuery = entityManager.createQuery(queryStr, Number.class);
 		typedQuery.setParameter("username", username);
 		
-		return ((Number) typedQuery.getSingleResult()).longValue();
+		return (Number) typedQuery.getSingleResult();
 	}
 }

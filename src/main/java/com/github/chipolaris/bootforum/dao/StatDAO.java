@@ -1,6 +1,5 @@
 package com.github.chipolaris.bootforum.dao;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -32,11 +31,11 @@ public class StatDAO {
 	 * @deprecated This method will not work with SQL Server due to SUM(SIZE()) usage
 	 */
 	@Deprecated
-	public Long countThumbnail(Discussion discussion) {
-		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.thumbnails)), 0) FROM Comment c WHERE c.discussion = :discussion", BigDecimal.class);
+	public Number countThumbnail(Discussion discussion) {
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.thumbnails)), 0) FROM Comment c WHERE c.discussion = :discussion", Number.class);
 		typedQuery.setParameter("discussion", discussion);
 		
-		return typedQuery.getSingleResult().longValue();
+		return typedQuery.getSingleResult();
 	}
 	
 	/**
@@ -47,24 +46,24 @@ public class StatDAO {
 	 * @deprecated This method will not work with SQL Server due to SUM(SIZE()) usage
 	 */
 	@Deprecated
-	public Long countAttachment(Discussion discussion) {
-		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.discussion = :discussion", BigDecimal.class);
+	public Number countAttachment(Discussion discussion) {
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.discussion = :discussion", Number.class);
 		typedQuery.setParameter("discussion", discussion);
 		
 		return typedQuery.getSingleResult().longValue();
 	}
 	
-	public Long countComment(Forum forum) {
+	public Number countComment(Forum forum) {
 		
-		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.discussion.forum = :forum", Long.class);
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.discussion.forum = :forum", Number.class);
 		typedQuery.setParameter("forum", forum);
 		
 		return typedQuery.getSingleResult();
 	}
 	
-	public Long countDiscussion(Forum forum) {
+	public Number countDiscussion(Forum forum) {
 		
-		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT COUNT(d) FROM Discussion d WHERE d.forum = :forum", Long.class);
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COUNT(d) FROM Discussion d WHERE d.forum = :forum", Number.class);
 		typedQuery.setParameter("forum", forum);
 		
 		return typedQuery.getSingleResult();
@@ -138,9 +137,9 @@ public class StatDAO {
 		return resultList.isEmpty() ? null : resultList.get(0);
 	}
 
-	public Long countComment(Discussion discussion) {
+	public Number countComment(Discussion discussion) {
 
-		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.discussion = :discussion", Long.class);
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.discussion = :discussion", Number.class);
 		typedQuery.setParameter("discussion", discussion);
 		
 		return typedQuery.getSingleResult();
@@ -154,18 +153,18 @@ public class StatDAO {
 	 * @deprecated: this method does not work with SQL Server due to SUM(SIZE()) call
 	 */
 	@Deprecated
-	public Long countCommentThumbnails_Deprecated(String username) {
+	public Number countCommentThumbnails_Deprecated(String username) {
 		
-		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.thumbnails)), 0) FROM Comment c WHERE c.createBy = :createBy", BigDecimal.class);
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.thumbnails)), 0) FROM Comment c WHERE c.createBy = :createBy", Number.class);
 		typedQuery.setParameter("createBy", username);
 		
-		return typedQuery.getSingleResult().longValue();
+		return typedQuery.getSingleResult();
 	}
 	
 	/**
 	 * This method identical as the method above, using native SQL query to avoid SQL Server issue as noted above
 	 */
-	public Long countCommentThumbnails(String username) {
+	public Number countCommentThumbnails(String username) {
 		
 		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_THUMBNAIL_T CT"
 				+ " LEFT JOIN COMMENT_T C ON CT.COMMENT_ID = C.ID"
@@ -177,7 +176,7 @@ public class StatDAO {
 		 * Note: the query above returns Long in Postgresql and BigInteger in SQL Server 
 		 * So, the compromise is to downcast to Number first, then return longValue
 		 */
-		return ((Number) query.getSingleResult()).longValue();
+		return ((Number) query.getSingleResult());
 	}	
 	
 	/**
@@ -187,18 +186,18 @@ public class StatDAO {
 	 * 
 	 * @deprecated: this method does not work with SQL Server due to SUM(SIZE()) call
 	 */
-	public Long countCommentAttachments_Deprecated(String username) {
+	public Number countCommentAttachments_Deprecated(String username) {
 		
-		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.createBy = :createBy", BigDecimal.class);
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.createBy = :createBy", Number.class);
 		typedQuery.setParameter("createBy", username);
 		
-		return typedQuery.getSingleResult().longValue();
+		return typedQuery.getSingleResult();
 	}
 	
 	/**
 	 * This method identical as the method above, using native SQL query to avoid SQL Server issue as noted above
 	 */
-	public Long countCommentAttachments(String username) {
+	public Number countCommentAttachments(String username) {
 		
 		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_ATTACHMENT_T CA"
 				+ " LEFT JOIN COMMENT_T C ON CA.COMMENT_ID = C.ID"
@@ -210,19 +209,19 @@ public class StatDAO {
 		 * Note: the query above returns Long in Postgresql and BigInteger in SQL Server 
 		 * So, the compromise is to downcast to Number first, then return longValue
 		 */
-		return ((Number) query.getSingleResult()).longValue();
+		return (Number) query.getSingleResult();
 	}
 	
-	public Long countComment(String username) {
-		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.createBy = :createBy", Long.class);
+	public Number countComment(String username) {
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.createBy = :createBy", Number.class);
 		typedQuery.setParameter("createBy", username);
 		
 		return typedQuery.getSingleResult();
 	}
 	
-	public Long countDiscussion(String username) {
+	public Number countDiscussion(String username) {
 
-		TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT COUNT(d) FROM Discussion d WHERE d.createBy = :username", Long.class);
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COUNT(d) FROM Discussion d WHERE d.createBy = :username", Number.class);
 		typedQuery.setParameter("username", username);
 		
 		return typedQuery.getSingleResult();

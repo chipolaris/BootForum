@@ -91,10 +91,10 @@ public class GenericQuery {
 	 * @param queryMeta
 	 * @return
 	 */
-	public <E> long countEntities(QueryMeta<E> queryMeta) {
+	public <E> Number countEntities(QueryMeta<E> queryMeta) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		CriteriaQuery<Number> query = builder.createQuery(Number.class);
 
 		Root<?> root = query.from(queryMeta.getRootEntityClass());
 		

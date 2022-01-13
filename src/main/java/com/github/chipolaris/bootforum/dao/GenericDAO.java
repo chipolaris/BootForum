@@ -154,8 +154,8 @@ public class GenericDAO {
      * @param entityClass
      * @return
      */
-	public <E> long countEntities(Class<E> entityClass) {
-    	TypedQuery<Long> typedQuery = entityManager.createQuery("SELECT count(e) FROM " + entityClass.getSimpleName() + " e", Long.class);
+	public <E> Number countEntities(Class<E> entityClass) {
+    	TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT count(e) FROM " + entityClass.getSimpleName() + " e", Number.class);
     	return typedQuery.getSingleResult();
     }
 	
@@ -331,10 +331,10 @@ public class GenericDAO {
 	 * @param querySpec
 	 * @return
 	 */
-	public <E> long countEntities(QuerySpec<E> querySpec) {
+	public <E> Number countEntities(QuerySpec<E> querySpec) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		CriteriaQuery<Number> query = builder.createQuery(Number.class);
 
 		Root<?> root = query.from(querySpec.getRootEntityClass());
 		
@@ -628,7 +628,7 @@ public class GenericDAO {
 	 *            map that hold key/value to be applied in the query
 	 * @return number of entities matching the given entity type and predicates
 	 */
-	public <E> long countEntities(Class<E> entityClass,
+	public <E> Number countEntities(Class<E> entityClass,
 			Map<String, Object> filters) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
@@ -675,7 +675,7 @@ public class GenericDAO {
 	 * @return
 	 * 
 	 */
-	public <E> long countEntities(Class<E> entityClass,
+	public <E> Number countEntities(Class<E> entityClass,
 			Map<String, Object> equalAttrs, Map<String, Object> notEqualAttrs) {
 		
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -765,11 +765,11 @@ public class GenericDAO {
 	 * @param fieldPaths
 	 * @return
 	 */
-	public <E> Long searchTextCount(Class<E> entityClass, String text, List<String> fieldPaths) {
+	public <E> Number searchTextCount(Class<E> entityClass, String text, List<String> fieldPaths) {
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		
-		CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+		CriteriaQuery<Number> criteriaQuery = criteriaBuilder.createQuery(Number.class);
 		
 		Root<E> root = criteriaQuery.from(entityClass);
 		
@@ -777,7 +777,7 @@ public class GenericDAO {
 		criteriaQuery.select(criteriaBuilder.countDistinct(root));
 		criteriaQuery.where(criteriaBuilder.or(predicates));
 		
-		TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
+		TypedQuery<Number> typedQuery = entityManager.createQuery(criteriaQuery);
 		
 		return typedQuery.getSingleResult();
 	}

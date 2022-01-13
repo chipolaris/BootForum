@@ -65,7 +65,7 @@ public class StatService {
 		}
 		
 		CommentInfo lastComment = statDAO.latestCommentInfo(forum);
-		Long commentCount = statDAO.countComment(forum);
+		Long commentCount = statDAO.countComment(forum).longValue();
 		
 		ForumStat forumStat = forum.getStat();
 		forumStat.setCommentCount(commentCount);
@@ -82,7 +82,7 @@ public class StatService {
 		
 		DiscussionStat discussionStat = discussion.getStat();
 		
-		discussionStat.setCommentCount(statDAO.countComment(discussion));
+		discussionStat.setCommentCount(statDAO.countComment(discussion).longValue());
 		
 		Comment lastComment = statDAO.getLatestComment(discussion);
 		
@@ -106,11 +106,11 @@ public class StatService {
 		
 		UserStat userStat = statDAO.getUserStat(username);
 		
-		userStat.setCommentThumbnailCount(statDAO.countCommentThumbnails(username));
-		userStat.setCommentAttachmentCount(statDAO.countCommentAttachments(username));
-		userStat.setCommentCount(statDAO.countComment(username));
-		userStat.setDiscussionCount(statDAO.countDiscussion(username));
-		userStat.setReputation(voteDAO.getReputation4User(username));
+		userStat.setCommentThumbnailCount(statDAO.countCommentThumbnails(username).longValue());
+		userStat.setCommentAttachmentCount(statDAO.countCommentAttachments(username).longValue());
+		userStat.setCommentCount(statDAO.countComment(username).longValue());
+		userStat.setDiscussionCount(statDAO.countDiscussion(username).longValue());
+		userStat.setReputation(voteDAO.getReputation4User(username).longValue());
 		
 		// latest commentInfo for user
 		Comment lastComment = statDAO.getLatestComment(username);

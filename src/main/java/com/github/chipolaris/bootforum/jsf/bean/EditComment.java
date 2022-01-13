@@ -79,20 +79,16 @@ public class EditComment {
 		
 		if(this.comment != null) {
 			if(this.comment.getDiscussion().isClosed()) {
-				this.setLoadingErrorMessage("This discussion is closed");
+				this.setLoadingErrorMessage(JSFUtils.getMessageBundle().getString("discussion.is.closed"));
 				
 				this.comment = null;
 			}
 			else if(!this.comment.getCreateBy().equals(userSession.getUser().getUsername())) {
-				this.setLoadingErrorMessage("This comment cannot be edited by the current user");
+				
+				this.setLoadingErrorMessage(JSFUtils.getMessageBundle().getString("comment.cannot.be.edited.by.current.user"));
 				
 				this.comment = null;
 			}
-		}
-		if(this.comment == null) {
-			this.setLoadingErrorMessage("Comment is not valid");
-			
-			this.comment = null;
 		}
 	}
 	

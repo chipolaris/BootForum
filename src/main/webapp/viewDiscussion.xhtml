@@ -418,7 +418,7 @@
 								</h:link>
 					        	
 					        	<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
-					        		rendered="#{userSession.user.username eq comment.createBy}" >
+					        		rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}" >
 									<f:param name="id" value="#{comment.id}"/>
 									<i class="pi pi-pencil"/> #{msg['edit']}
 								</h:link>	
@@ -452,7 +452,7 @@
 								</h:link>
 								
 								<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" title="Edit"
-									rendered="#{userSession.user.username eq comment.createBy}">
+									rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
 									<i class="pi pi-pencil"/>
 								</h:link>

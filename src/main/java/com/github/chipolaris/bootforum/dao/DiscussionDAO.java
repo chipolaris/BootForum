@@ -1,6 +1,5 @@
 package com.github.chipolaris.bootforum.dao;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -63,20 +62,20 @@ public class DiscussionDAO {
 	 *
 	 * So the work around for now is to use a native SQL query
 	 */
-	public Long countCommentsForTag(Tag tag) {
+	public Number countCommentsForTag(Tag tag) {
 		
 		String queryStr = "SELECT COALESCE(SUM(SIZE(d.comments)), 0) FROM Discussion d WHERE :tag MEMBER OF d.tags";
 		
-		TypedQuery<BigDecimal> typedQuery = entityManager.createQuery(queryStr, BigDecimal.class);
+		TypedQuery<Number> typedQuery = entityManager.createQuery(queryStr, Number.class);
 		typedQuery.setParameter("tag", tag);
 		
-		return typedQuery.getSingleResult().longValue();
+		return typedQuery.getSingleResult();
 	}
 	
 	/**
 	 * This method identical as the method above, using native SQL query to avoid SQL Server issue as noted above
 	 */
-	public Long countCommentsForTag(Long tagId) {
+	public Number countCommentsForTag(Long tagId) {
 		
 		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_T C"
 				+ " LEFT JOIN DISCUSSION_TAG_T DT ON DT.DISCUSSION_ID = C.DISCUSSION_ID"
@@ -88,14 +87,14 @@ public class DiscussionDAO {
 		 * Note: the query above returns Long in Postgresql and BigInteger in SQL Server 
 		 * So, the compromise is to downcast to Number first, then return longValue
 		 */
-		return ((Number) query.getSingleResult()).longValue();
+		return (Number) query.getSingleResult();
 	}
 	
-	public Long countDiscusionsForTag(Tag tag) {
+	public Number countDiscusionsForTag(Tag tag) {
 		
 		String queryStr = "SELECT COUNT(d) FROM Discussion d WHERE :tag MEMBER OF d.tags";
 		
-		TypedQuery<Long> typedQuery = entityManager.createQuery(queryStr, Long.class);
+		TypedQuery<Number> typedQuery = entityManager.createQuery(queryStr, Number.class);
 		typedQuery.setParameter("tag", tag);
 		
 		return typedQuery.getSingleResult();

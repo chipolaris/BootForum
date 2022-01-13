@@ -168,7 +168,7 @@ public class GenericService {
 	public <E> ServiceResponse<Long> countEntities(Class<E> entityClass) {
 		
 		ServiceResponse<Long> response = new ServiceResponse<Long>();
-		response.setDataObject(genericDAO.countEntities(entityClass));
+		response.setDataObject(genericDAO.countEntities(entityClass).longValue());
 		
 		return response;
 	}
@@ -177,7 +177,7 @@ public class GenericService {
 	public <E> ServiceResponse<Long> countEntities(Class<E> entityClass, Map<String, Object> filters) {
 		
 		ServiceResponse<Long> response = new ServiceResponse<Long>();
-		response.setDataObject(genericDAO.countEntities(entityClass, filters));
+		response.setDataObject(genericDAO.countEntities(entityClass, filters).longValue());
 		
 		return response;
 	}
@@ -199,7 +199,7 @@ public class GenericService {
 	public <E> ServiceResponse<Long> countEntities(QuerySpec<E> querySpec) {
 		
 		ServiceResponse<Long> response = new ServiceResponse<Long>();
-		response.setDataObject(genericDAO.countEntities(querySpec));
+		response.setDataObject(genericDAO.countEntities(querySpec).longValue());
 		
 		return response;
 	}
@@ -217,7 +217,7 @@ public class GenericService {
 	public <E> ServiceResponse<Long> countEntities2(QueryMeta<E> queryMeta) {
 		
 		ServiceResponse<Long> response = new ServiceResponse<Long>();
-		response.setDataObject(genericQuery.countEntities(queryMeta));
+		response.setDataObject(genericQuery.countEntities(queryMeta).longValue());
 		
 		return response;
 	}

@@ -173,7 +173,7 @@ public class RegistrationService {
 		}
 		else if(userDAO.usernameExists(registration.getUsername())
 			|| genericDAO.countEntities(Registration.class, 
-					Collections.singletonMap("username", registration.getUsername())) > 0) {
+					Collections.singletonMap("username", registration.getUsername())).longValue() > 0) {
 			errors.add("Username already exists in the system");
 		}
 		
@@ -186,7 +186,7 @@ public class RegistrationService {
 		}
 		else if(userDAO.emailExists(registration.getEmail())
 			|| genericDAO.countEntities(Registration.class, 
-					Collections.singletonMap("email", registration.getEmail())) > 0) {
+					Collections.singletonMap("email", registration.getEmail())).longValue() > 0) {
 			errors.add("Email already exists in the system");
 		}
 		
