@@ -119,7 +119,7 @@
 			
 			<div jsf:id="viewDiscussionDiv" jsf:rendered="#{not empty viewDiscussion.discussion}">
 			
-				<div class="w3-hide-small">
+				<div class="w3-hide-small w3-margin-top">
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(viewDiscussion.discussion)}"/>
 				</div>
 				
@@ -131,7 +131,7 @@
 	 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">
 							#{msg['comments']}: <b>#{viewDiscussion.discussion.stat.commentCount}</b>,
 							#{msg['views']}: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
-							&#160;&#160;<i class="pi pi-angle-right rotate" id="discussionInfoToggleIcon"/>
+							&#160;&#160;<i class="pi pi-chevron-right rotate" id="discussionInfoToggleIcon"/>
 						</span>
 				    </p>
 			    	
@@ -406,12 +406,14 @@
 						    <!-- large screen and tablet -->
 						    <div class="w3-bar w3-hide-small">
 								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light">
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light"
+									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
 									<i class="pi pi-reply"/> #{msg['reply']}
 								</h:link>
 								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;">
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
+									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
 									<i class="pi pi-chevron-circle-right"/> #{msg['quote']}
@@ -440,12 +442,14 @@
 							<!-- mobile screen -->
 							<div class="w3-bar w3-hide-medium w3-hide-large">
 								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Reply">
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Reply"
+									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
 									<i class="pi pi-reply"/>
 								</h:link>
 								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Quote">
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Quote"
+									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
 									<i class="pi pi-chevron-circle-right"/>
@@ -473,7 +477,7 @@
 				        <hr style="border: 1px dashed; opacity: 0.75"/>
 				        
 				        <f:facet name="footer">
-				        	<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border" rendered="#{! viewDiscussion.discussion.closed}" >
+				        	<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border" rendered="#{not viewDiscussion.discussion.closed}" >
 								<f:param name="discussionId" value="#{viewDiscussion.id}"/>
 								<i class="pi pi-comment"/> #{msg['add.new.comment']}
 							</h:link>
@@ -485,6 +489,8 @@
 			    <p/>
 			    
 			</div>
+			
+			<p:scrollTop />
 			
 			<h:form id="userDetailsForm">
 				<p:overlayPanel widgetVar="userStatOverlayPanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">

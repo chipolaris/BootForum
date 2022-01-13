@@ -51,7 +51,20 @@
 			 
 			blockquote cite:before {
 				content: "\2014 \2009";
-			}	
+			}
+			
+			/* https://stackoverflow.com/questions/26173376/rotate-font-awesome-icon-on-click/26173496 */
+			.rotate{
+			    -moz-transition: all 0.3s linear;
+			    -webkit-transition: all 0.3s linear;
+			    transition: all 0.3s linear;
+			}
+			
+			.rotate.down{
+			    -moz-transform:rotate(90deg);
+			    -webkit-transform:rotate(90deg);
+			    transform:rotate(90deg);
+			}			
 			
 			/* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top */
 			#scrollTopButton {
@@ -105,32 +118,6 @@
 					})
 				};
 				
-				/* scroll to top button */
-				/* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_scroll_to_top */
-				//Get the button
-				$( document ).ready(function() {
-					scrollTopButton = document.getElementById("scrollTopButton");
-				})
-				
-				// When the user scrolls down 200px from the top of the document, show the button
-				window.onscroll = function() {scrollFunction()};
-
-				function scrollFunction() {
-					
-					if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-						scrollTopButton.style.display = "block";
-				  	} 
-					else {
-						scrollTopButton.style.display = "none";
-				  	}
-				}
-
-				// When the user clicks on the button, scroll to the top of the document
-				function topFunction() {
-				  document.body.scrollTop = 0;
-				  document.documentElement.scrollTop = 0;
-				}
-				
 			//]]>
 		</script>
 		
@@ -158,11 +145,9 @@
 			
 			</div>
 			
-			<button onclick="topFunction()" id="scrollTopButton" title="Go to top"><i class="fa fa-caret-up"/></button>
-			
 			<div jsf:id="viewDiscussionDiv" jsf:rendered="#{not empty viewDiscussion.discussion}">
 			
-				<div class="w3-hide-small">
+				<div class="w3-hide-small w3-margin-top">
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(viewDiscussion.discussion)}"/>
 				</div>
 				
@@ -173,7 +158,7 @@
 	 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">
 							Comments: <b>#{viewDiscussion.discussion.stat.commentCount}</b>,
 							Views: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
-							&#160;&#160;<i class="fa fa-chevron-right rotate" id="discussionInfoToggleIcon"/>
+							&#160;&#160;<i class="pi pi-chevron-right rotate" id="discussionInfoToggleIcon"/>
 						</span>
 					</p>
 					
@@ -268,7 +253,7 @@
 					
 					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
 						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
-						<i class="fa fa-comment-o"/> Add new Comment
+						<i class="pi pi-comment"/> Add new Comment
 					</h:link>
 					
 					<span jsf:rendered="#{viewDiscussion.discussion.closed}" class="w3-tag w3-red"><b>Discussion is closed</b></span>
@@ -279,12 +264,10 @@
 				
 					<p:dataScroller value="#{viewDiscussion.commentListLazyModel}" var="comment" lazy="true" 
 						rowIndexVar="rowIndex" chunkSize="10">
-					
-						<!-- 
+						
 						<f:facet name="loader">
 							<p:commandButton type="button" value="View More" />
-						</f:facet> 
-						-->
+						</f:facet>
 	
 						<div class="w3-container" style="padding:0;">
 						
@@ -315,7 +298,7 @@
 				  								</span>
 												
 												<!-- TODO: show icon for user based on group(s) user is in. For now, hard code to fa-user -->
-												<span class="w3-display-topright w3-badge w3-theme-dark" title="user"><i class="fa fa-user fa-lg"/></span>
+												<span class="w3-display-topright w3-badge w3-theme-dark" title="user"><i class="pi pi-user w3-large"/></span>
 											
 											</div>
 											
@@ -329,7 +312,7 @@
 									    
 									    <p:commandLink rendered="#{not empty comment.replyTo}" 
 									    	onclick="$('#replyTo_#{rowIndex}_Div').toggle(300); return false;">
-									    	<i class="fa fa-share"/>
+									    	<i class="pi pi-share-alt"/>
 									    	<span>@#{comment.replyTo.createBy}: </span>
 									    	<h:outputText value=" #{comment.replyTo.title}" style="font-weight:bold;font-style:italic;" />
 									    </p:commandLink>
@@ -367,7 +350,7 @@
 					        		<p/>
 					        		
 					        		<a onclick="$('#replyTo_#{rowIndex}_Div').hide();" style="cursor:pointer;font-size: large;">
-					        			[ <i class="fa fa-caret-up" title="Collapse"/> Collapse ]
+					        			[ <i class="pi pi-caret-up" title="Collapse"/> Collapse ]
 					        		</a>
 					        		
 					        		<h:link outcome="commentThread">
@@ -442,21 +425,23 @@
 						    <!-- large screen and tablet -->
 						    <div class="w3-bar w3-hide-small">
 						        
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light">
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light"
+									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-reply"/> Reply
+									<i class="pi pi-reply"/> Reply
 								</h:link>
 								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;">
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
+									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
-									<i class="fa fa-quote-left"/> Quote
+									<i class="pi pi-chevron-circle-right"/> #{msg['quote']}
 								</h:link>
 					        	
 					        	<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
 					        		rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}" >
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-pencil-square-o"/> Edit
+									<i class="pi pi-pencil"/> #{msg['edit']}
 								</h:link>		
 					        	
 					        	<!-- right side: like buttons -->
@@ -464,44 +449,46 @@
 				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-l2 w3-right w3-round" id="voteDownScore"/>
 				        			
 				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="Dislike" action="#{voteManager.voteDown(comment)}" process="@this" 
-				        			update="growl voteDownScore" styleClass="w3-right"><i class="fa fa-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
+				        			update="growl voteDownScore" styleClass="w3-right"><i class="pi pi-thumbs-down w3-xlarge w3-opacity"/></p:commandLink>					        	
 					        	
 				        		<p:outputLabel value="#{comment.commentVote.voteUpCount}" 
 				        			style="margin: 0px 15px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d2 w3-right w3-round" id="voteUpScore"/>					        	
 					        							    
 				        		<p:commandLink title="Like" action="#{voteManager.voteUp(comment)}" process="@this" 
-				        			update="growl voteUpScore" styleClass="w3-right"><i class="fa fa-thumbs-up fa-2x w3-opacity"/></p:commandLink>
+				        			update="growl voteUpScore" styleClass="w3-right"><i class="pi pi-thumbs-up w3-xlarge w3-opacity"/></p:commandLink>
 						    </div>
 
 							<!-- mobile screen -->
 							<div class="w3-bar w3-hide-medium w3-hide-large">
 								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Reply">
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Reply"
+									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-reply"/>
+									<i class="pi pi-reply"/>
 								</h:link>
 								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Quote">
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Quote"
+									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
-									<i class="fa fa-quote-left"/>
+									<i class="pi pi-chevron-circle-right"/>
 								</h:link>
 								
 								<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" title="Edit"
 									rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
-									<i class="fa fa-pencil-square-o"/>
+									<i class="pi pi-pencil"/>
 								</h:link>
 					        	
 					        	<!-- right side: like buttons -->
 				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="Dislike" action="#{voteManager.voteDown(comment)}" process="@this" 
-				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="fa fa-thumbs-down fa-2x w3-opacity"/></p:commandLink>					        	
+				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-down w3-xlarge w3-opacity"/></p:commandLink>					        	
 					        	
 				        		<p:outputLabel value="#{comment.commentVote.voteUpCount - comment.commentVote.voteDownCount}" id="voteScoreMobile" 
 				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d1 w3-right w3-round"/>					        	
 					        							    
 				        		<p:commandLink title="Like" action="#{voteManager.voteUp(comment)}" process="@this" 
-				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="fa fa-thumbs-up fa-2x w3-opacity"/></p:commandLink>
+				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-up w3-xlarge w3-opacity"/></p:commandLink>
 						    </div>
 				        					        					        
 				        </div>
@@ -513,16 +500,17 @@
 			    
 			    <div class="w3-section w3-center">
 			    
-					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border"
-						rendered="#{! viewDiscussion.discussion.closed}">
+					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border"	rendered="#{not viewDiscussion.discussion.closed}">
 						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
-						<i class="fa fa-comment-o"/> <b>Add new Comment</b>
+						<i class="pi pi-comment"/> #{msg['add.new.comment']}
 					</h:link>
 		            <h:outputText value="This discussion is closed" rendered="#{viewDiscussion.discussion.closed}" style="font-size:16pt; color:red;"/>
 			    
 			    </div>
 			    
 			</div>
+			
+			<p:scrollTop />
 			
 			<h:form id="userDetailsForm">
 				<p:overlayPanel widgetVar="userStatOverlayPanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
