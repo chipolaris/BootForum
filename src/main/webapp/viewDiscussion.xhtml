@@ -105,9 +105,9 @@
 				
 				<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true"/>
 				
-				<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
+				<!-- <p:messages id="messages" showDetail="true" showSummary="false" closable="true">
 					<p:autoUpdate/>
-				</p:messages>
+				</p:messages> -->
 			</div>
 			
 			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty viewDiscussion.discussion}">
@@ -125,7 +125,21 @@
 				
 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					
- 					<h2>#{viewDiscussion.discussion.title}</h2>
+ 					<p:inplace id="discussionTitleInplace" editor="true" rendered="#{userSession.user.username eq viewDiscussion.discussion.createBy and not viewDiscussion.discussion.closed}"
+ 						saveLabel="#{msg['save']}" cancelLabel="#{msg['cancel']}">
+ 						
+ 						<p:ajax event="save" listener="#{viewDiscussion.saveDiscussionTitle}" update="growl discussionTitleInplace" partialSubmit="true"/>
+ 						<f:facet name="output">
+                			<h2>#{viewDiscussion.discussion.title}</h2>
+                			*Note: you are this discussion's creator, click here to edit the discussion title
+            			</f:facet>
+            			
+            			<f:facet name="input">
+            				<p:inputText value="#{viewDiscussion.discussion.title}" required="true" label="text" size="80"/>
+            			</f:facet>
+        			</p:inplace>
+ 					
+ 					<h2 jsf:rendered="#{userSession.user.username ne viewDiscussion.discussion.createBy}">#{viewDiscussion.discussion.title}</h2>
  					
  					<p>
 	 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">

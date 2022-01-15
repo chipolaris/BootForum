@@ -17,7 +17,7 @@
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<b><i class="fa fa-dashboard"></i> Dashboard Overview</b>
+		<b><i class="pi pi-palette w3-xlarge"></i> Dashboard Overview</b>
 	</ui:define>
 
 	<ui:define name="content">
@@ -32,31 +32,31 @@
 			<div class="w3-quarter">
 				<div class="w3-container w3-red w3-padding-16">
 					<div class="w3-left">
-						<i class="fa fa-user w3-xxxlarge"></i>
+						<i class="pi pi-user w3-xxlarge"/>
 					</div>
 					<div class="w3-right">
 						<h3>&#160;</h3>
 					</div>
 					<div class="w3-clear"></div>
-					<h4><a href="#{request.contextPath}/secure/accountInfo.xhtml" class="w3-text-white">Account</a></h4>
+					<h:link value="Account" outcome="/secure/accountInfo" styleClass="w3-text-white w3-xlarge"/>
 				</div>
 			</div>
 			<div class="w3-quarter">
 				<div class="w3-container w3-blue w3-padding-16">
 					<div class="w3-left">
-						<i class="fa fa-envelope-o w3-xxxlarge"></i>
+						<i class="pi pi-envelope w3-xxlarge"/>
 					</div>
 					<div class="w3-right">
 						<h3>#{userDashboard.unreadMessage}/#{userDashboard.totalMessage}</h3>
 					</div>
 					<div class="w3-clear"></div>
-					<h4><a href="#{request.contextPath}/secure/privateMessages.xhtml" class="w3-text-white">Messages</a></h4>
+					<h:link value="Messages" outcome="/secure/privateMessages" styleClass="w3-text-white w3-xlarge"/>
 				</div>
 			</div>
 			<div class="w3-quarter">
 				<div class="w3-container w3-teal w3-padding-16">
 					<div class="w3-left">
-						<i class="fa fa-comment-o w3-xxxlarge"></i>
+						<i class="pi pi-comment w3-xxlarge"/>
 					</div>
 					<div class="w3-right">
 						<h3>#{userSession.user.stat.commentCount}</h3>
@@ -68,13 +68,13 @@
 			<div class="w3-quarter">
 				<div class="w3-container w3-orange w3-text-white w3-padding-16">
 					<div class="w3-left">
-						<span class="fa-stack w3-xlarge"><i class="fa fa-sticky-note-o fa-stack-2x"/><i class="fa fa-pencil fa-stack-1x"/></span>
+						<i class="pi pi-pencil w3-xxlarge"/>
 					</div>
 					<div class="w3-right">
 						<h3>&#160;</h3>
 					</div>
 					<div class="w3-clear"></div>
-					<h4><a href="#{request.contextPath}/secure/signaturePreference.xhtml" class="w3-text-white">Signature</a></h4>
+					<h:link value="Signature" outcome="/secure/signaturePreference" styleClass="w3-text-white w3-xlarge"/>
 				</div>
 			</div>
 		</div>

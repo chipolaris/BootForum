@@ -92,7 +92,7 @@
 		<div id="avatarPanel" class="w3-container w3-animate-right w3-hide">
 			<div class="w3-panel w3-border">
 		
-				<h:form>
+				<h:form id="avatarForm">
 
 					<p/>
 					
@@ -128,60 +128,59 @@
 					<div class="w3-clear"/> <!-- need this clear because the avatar view above is floated left -->
 					
 					<p>
-						<b>Upload New Avatar:</b>
+						<p:commandButton value="Create New Avatar" type="button" icon="pi pi-external-link" onclick="PF('avatarUpload').show()"/>
 					</p>
-					
-					<!-- <p:fileUpload listener="#{avatarImage.handleFileUpload}" 
-						mode="advanced" dragDropSupport="true" update="viewAvatarPanel"
-						auto="false"
-						sizeLimit="#{applicationProperties['Avatar.maxFileSize'] * 1024}"
-						allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
-						
-					</p:fileUpload> -->
-					
-					<p:fileUpload listener="#{imageUploadView.uploadImage}"
-						mode="advanced" dragDropSupport="true" update="viewAvatarPanel cropperPanel"
-						auto="false" oncomplete="customizePrimefaceButtons();"
-						sizeLimit="#{applicationProperties['Avatar.maxFileSize'] * 1024}"
-						allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
-						
-						<!-- <f:attribute name="username" value="#{userSession.user.username}" /> -->
-						
-					</p:fileUpload>
-					
-					<h:outputText
-						value="*Note: max file size is #{applicationProperties['Avatar.maxFileSize']}KB and max image dimension is #{applicationProperties['Avatar.maxWidth']} pixels x #{applicationProperties['Avatar.maxHeight']} pixels"
-						style="font-style:italic;font-weight:normal;" />
-						
-					<p/>
-					
-					<p:outputPanel id="cropperPanel">
-			
-			            <h:panelGrid columns="1" rendered="#{not empty imageUploadView.image}">
-			
-			                <p:commandButton value="Crop" action="#{fileHandler.crop(userSession.user.username)}" update="cropped viewAvatarPanel" icon="pi pi-clone"/>
-			
-			                <h:panelGrid columns="2" cellpadding="7">
-			
-			                    <p:imageCropper value="#{fileHandler.croppedImage}"
-			                            id="imageCropper" cache="false" image="#{imageUploadView.imageContent}"
-			                            initialCoords="0,0,100,100" minSize="100,100" maxSize="300,300">
-			                            			                    	
-			                    </p:imageCropper>
-			
-			                    <p:outputPanel id="cropped">
-			                        <p:graphicImage cache="false"
-			                                        rendered="#{not empty fileHandler.croppedImage}"
-			                                        value="#{fileHandler.croppedImage}"/>
-			                    </p:outputPanel>
-			
-			                </h:panelGrid>
-			
-			
-			            </h:panelGrid>
-			        </p:outputPanel>
         
 				</h:form>
+				
+				
+				<p:dialog header="Create New Avatar" widgetVar="avatarUpload" minHeight="500" width="650" showEffect="fade" modal="true">
+				
+					<h:form id="avatarUploadForm">
+					
+						<p:fileUpload listener="#{imageUploadView.uploadImage}"
+							mode="advanced" dragDropSupport="true" update="cropperPanel"
+							auto="false" oncomplete="customizePrimefaceButtons();"
+							sizeLimit="#{applicationProperties['Avatar.maxFileSize'] * 1024}"
+							allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+							
+							<!-- <f:attribute name="username" value="#{userSession.user.username}" /> -->
+							
+						</p:fileUpload>
+						
+						<h:outputText
+							value="*Note: max file size is #{applicationProperties['Avatar.maxFileSize']}KB and max image dimension is #{applicationProperties['Avatar.maxWidth']} pixels x #{applicationProperties['Avatar.maxHeight']} pixels"
+							style="font-style:italic;font-weight:normal;" />
+							
+						<p/>
+						
+						<p:outputPanel id="cropperPanel">
+				
+				            <div class="w3-containter w3-center" jsf:rendered="#{not empty imageUploadView.image}">
+								
+								<p>
+				                	<p:commandButton value="Crop" action="#{fileHandler.crop(userSession.user.username)}" update=":avatarForm:viewAvatarPanel" 
+				                		icon="pi pi-clone" oncomplete="PF('avatarUpload').hide();customizePrimefaceButtons();"/>
+								</p>
+								
+				                <p>
+				
+				                    <p:imageCropper value="#{fileHandler.croppedImage}"
+				                            id="imageCropper" cache="false" image="#{imageUploadView.imageContent}"
+				                            initialCoords="0,0,100,100" minSize="100,100" maxSize="#{applicationProperties['Avatar.maxWidth']},#{applicationProperties['Avatar.maxHeight']}" aspectRatio="1.0">
+				                            			                    	
+				                    </p:imageCropper>
+				
+				                </p>
+				                
+				           	</div>
+				            
+				        </p:outputPanel>
+			        
+			        
+			        </h:form>
+			        
+			    </p:dialog>
 			</div>
 		</div>
 
