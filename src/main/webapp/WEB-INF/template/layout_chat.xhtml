@@ -59,9 +59,9 @@
 		<!-- Top container -->
 		<div class="w3-bar w3-top w3-theme-l3 w3-large w3-bottombar w3-border-orange" style="z-index:4">
 		  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="openSidebar();"><i class="pi pi-bars"/></button>
-		  <h:link outcome="/index" styleClass="w3-bar-item w3-hover-green" title="Forum Home"><b><i class="pi pi-home"/> #{msg['application.title']}</b></h:link>
+		  <h:link outcome="/index" styleClass="w3-bar-item" title="Forum Home"><b><i class="pi pi-home w3-large"/> #{msg['application.title']}</b></h:link>
 		  <!-- Note: for Logout link below, use h:outputLink instead of h:link because logout url is /logout (not /logout.xhtml) -->
-		  <h:outputLink value="#{request.contextPath}/logout" styleClass="w3-bar-item w3-right w3-hover-orange"><i class="pi pi-sign-out"/> Logout</h:outputLink>
+		  <h:outputLink value="#{request.contextPath}/logout" styleClass="w3-bar-item w3-right"><i class="pi pi-sign-out"/> Logout</h:outputLink>
 		</div>
 		
 		<!-- Sidebar/menu -->

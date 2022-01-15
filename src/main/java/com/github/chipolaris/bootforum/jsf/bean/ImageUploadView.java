@@ -13,8 +13,12 @@ import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 
-@Component
-@Scope("session")
+/*
+ * Note: the "view" scope does not work because the StreamedContent does not work in view scope
+ *  https://stackoverflow.com/questions/25424713/why-primefaces-media-dynamic-doesnt-work-in-view-scope
+ * So use "session" scope as the work around
+ */
+@Component @Scope("view")  
 public class ImageUploadView {
 
 	@SuppressWarnings("unused")

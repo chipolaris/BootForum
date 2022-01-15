@@ -134,8 +134,13 @@
 				</h:form>
 				
 				
-				<p:dialog header="Create New Avatar" widgetVar="avatarUpload" minHeight="500" width="650" showEffect="fade" modal="true">
-				
+				<p:dialog header="Create New Avatar" widgetVar="avatarUpload" minHeight="500" width="650" showEffect="fade" modal="true" position="top">
+					
+					<span class="w3-small">
+						* Click 'Choose' button to upload a new image file, then crop a desire area to create the avatar
+					</span>
+					
+					
 					<h:form id="avatarUploadForm">
 					
 						<p:fileUpload listener="#{imageUploadView.uploadImage}"
@@ -159,7 +164,7 @@
 				            <div class="w3-containter w3-center" jsf:rendered="#{not empty imageUploadView.image}">
 								
 								<p>
-				                	<p:commandButton value="Crop" action="#{fileHandler.crop(userSession.user.username)}" update=":avatarForm:viewAvatarPanel" 
+				                	<p:commandButton value="Crop as new avatar" action="#{fileHandler.crop(userSession.user.username)}" update=":avatarForm:viewAvatarPanel" 
 				                		icon="pi pi-clone" oncomplete="PF('avatarUpload').hide();customizePrimefaceButtons();"/>
 								</p>
 								
