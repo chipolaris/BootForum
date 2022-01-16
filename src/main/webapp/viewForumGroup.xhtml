@@ -64,14 +64,14 @@
 			
 			<div jsf:id="forumGroupDiv" >
 			
-				<div class="w3-hide-small">
+				<div class="w3-hide-small w3-margin-top">
 					<p:breadCrumb>
 						<p:menuitem value="Home" url="#{request.contextPath}/" />
    						<p:menuitem value="#{msg['forums.index']}" url="#{request.requestURI}?#{request.queryString}" />
 					</p:breadCrumb>
 				</div>
 				
-				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					<h2>#{msg['forums.index']}</h2>
  				</div>
 				
@@ -104,30 +104,30 @@
 				        </p:column>
 				        
 				        <p:column headerText="#{msg['discussions']}" style="text-align:center;width:100px;" responsivePriority="3">
-				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.discussionCount}</span>
+				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{statBean.getForumStat(data).discussionCount}</span>
 				        </p:column>
 				        
 				        <p:column headerText="#{msg['comments']}" style="text-align:center;width:100px;" responsivePriority="4">
-				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.commentCount}</span>
+				        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{statBean.getForumStat(data).commentCount}</span>
 				        </p:column>
 
 						<p:column headerText="#{msg['latest.comments']}" style="text-align:right;width:200px;" responsivePriority="2">
-							<div jsf:rendered="#{treeNode.type eq 'Forum' and not empty data.stat.lastComment.updateBy}">
-								<pe:timeAgo value="#{data.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy " /> #{msg['by']}
+							<div jsf:rendered="#{treeNode.type eq 'Forum' and not empty statBean.getForumStat(data).lastComment}">
+								<pe:timeAgo value="#{statBean.getForumStat(data).lastComment.createDate}" titlePattern="MMMMM dd yyyy " /> #{msg['by']}
 								
 								<h:link outcome="memberProfile">
-									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(data.stat.lastComment.updateBy)}" class="w3-circle"
+									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(statBean.getForumStat(data).lastComment.createBy)}" class="w3-circle"
 											id="commentorAvatar" height="36" width="36" style="border:3px;margin-right:15px;" title="#{data.stat.lastComment.updateBy}"/> -->
-									<h:graphicImage value="#{requestContext}/avatar/#{data.stat.lastComment.updateBy}" class="w3-circle"
-											id="commentorAvatar" height="36" width="36" title="#{data.stat.lastComment.updateBy}"
-											rendered="#{fileHandler.isAvatarExists(data.stat.lastComment.updateBy)}"/>
+									<h:graphicImage value="#{requestContext}/avatar/#{statBean.getForumStat(data).lastComment.createBy}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36" title="#{statBean.getForumStat(data).lastComment.createBy}"
+											rendered="#{fileHandler.isAvatarExists(statBean.getForumStat(data).lastComment.createBy)}"/>
 											
-									<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(data.stat.lastComment.updateBy)}"
-										title="#{data.stat.lastComment.updateBy}"
+									<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(statBean.getForumStat(data).lastComment.createBy)}"
+										title="#{statBean.getForumStat(data).lastComment.createBy}"
 	  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
-	  									#{fn:substring(data.stat.lastComment.updateBy, 0, 3)}
+	  									#{fn:substring(statBean.getForumStat(data).lastComment.createBy, 0, 3)}
 	  								</span>
-									<f:param name="username" value="#{data.stat.lastComment.updateBy}"/>
+									<f:param name="username" value="#{statBean.getForumStat(data).lastComment.createBy}"/>
 								</h:link>
 							</div>
 				        </p:column>

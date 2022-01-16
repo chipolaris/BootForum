@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,6 @@ import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.FileInfo;
 import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.User;
-import com.github.chipolaris.bootforum.event.CommentAddEvent;
 
 @Service @Transactional
 public class CommentService {
@@ -52,9 +50,6 @@ public class CommentService {
 	
 	@Resource
 	private FileInfoHelper fileInfoHelper;
-	
-	@Resource
-	private ApplicationEventPublisher applicationEventPublisher;
 	
 	@Transactional(readOnly=true)
 	public ServiceResponse<List<Comment>> getComments(Discussion discussion) {
@@ -135,11 +130,7 @@ public class CommentService {
 		genericDAO.merge(discussion); // this merge will cascade to discussionStat
 
 		// lucene index the comment
-		indexService.addCommentIndex(reply); 
-		
-		// updateStats4newComment(discussion, user, lastComment); // replaced by the publisher below
-		// publish CommentAddEvent for listeners to process		
-		applicationEventPublisher.publishEvent(new CommentAddEvent(this, reply, user));
+		indexService.addCommentIndex(reply);
 		
 		return response;
 	}
@@ -234,6 +225,7 @@ public class CommentService {
 		return response;
 	}
 	
+	@Transactional(readOnly = true)
 	public ServiceResponse<List<Comment>> getLatestCommentsForUser(String username, int maxResult) {
 		
 		ServiceResponse<List<Comment>> response = new ServiceResponse<>();

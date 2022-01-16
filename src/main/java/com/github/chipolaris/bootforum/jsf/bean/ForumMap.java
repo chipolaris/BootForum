@@ -1,8 +1,10 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -50,14 +52,11 @@ public class ForumMap {
 	@PostConstruct
 	public void init() {
 		
-		Map<String, Object> filters = new HashMap<>();
-		filters.put("forumGroup", null);
-		
-		List<Forum> forums = genericService.getEntities(Forum.class, filters, "sortOrder", false).getDataObject();
-		
-		filters.clear();
-		filters.put("parent", null);
-		List<ForumGroup> forumGroups = genericService.getEntities(ForumGroup.class, filters, "sortOrder", false).getDataObject();
+		List<Forum> forums = genericService.getEntities(Forum.class, Collections.singletonMap("forumGroup", null), 
+				"sortOrder", false).getDataObject();
+
+		List<ForumGroup> forumGroups = genericService.getEntities(ForumGroup.class, Collections.singletonMap("parent", null), 
+				"sortOrder", false).getDataObject();
 		
 		forumRootTreeNode = new DefaultTreeNode(null, null);
 		forumRootTreeNode.setExpanded(true);
@@ -88,7 +87,7 @@ public class ForumMap {
 		
 		for(ForumGroup forumGroup : forumGroups) {
 			
-			TreeNode forumGroupNode = new DefaultTreeNode("ForumGroup", forumGroup, parent);
+			TreeNode<ForumGroup> forumGroupNode = new DefaultTreeNode<ForumGroup>("ForumGroup", forumGroup, parent);
 			forumGroupNode.setExpanded(true);
 			buildManagementTree(forumGroup.getForums(), forumGroup.getSubGroups(), forumGroupNode);
 		}
@@ -101,13 +100,13 @@ public class ForumMap {
 		
 		for(Forum forum : forums) {
 			
-			TreeNode forumNode = new DefaultTreeNode("Forum", forum, parent);
+			TreeNode<Forum> forumNode = new DefaultTreeNode<Forum>("Forum", forum, parent);
 			forumNode.setExpanded(true);
 		}
 		
 		for(ForumGroup forumGroup : forumGroups) {
 			
-			TreeNode forumGroupNode = new DefaultTreeNode("ForumGroup", forumGroup, parent);
+			TreeNode<ForumGroup> forumGroupNode = new DefaultTreeNode<ForumGroup>("ForumGroup", forumGroup, parent);
 			forumGroupNode.setExpanded(true);
 			buildForumTreeNodes(forumGroup.getForums(), forumGroup.getSubGroups(), forumGroupNode);
 		}

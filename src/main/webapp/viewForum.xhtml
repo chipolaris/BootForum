@@ -83,11 +83,11 @@
 			
 			<div jsf:id="viewForumDiv" jsf:rendered="#{not empty viewForum.forum}">
 			
-				<div class="w3-hide-small">
+				<div class="w3-hide-small w3-margin-top">
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(viewForum.forum)}"/>
 				</div>
 
-				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					<h2>#{msg['forum']} "#{viewForum.forum.title}"</h2>
  					
  					<span class="w3-tag w3-theme-light w3-padding">

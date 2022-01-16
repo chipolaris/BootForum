@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import com.github.chipolaris.bootforum.domain.PasswordReset;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
-import com.github.chipolaris.bootforum.event.UserRegistrationEvent;
 import com.github.chipolaris.bootforum.util.Validators;
 
 @Service @Transactional
@@ -30,9 +28,6 @@ public class UserService {
 	
 	@Resource
 	private GenericDAO genericDAO;
-	
-	@Resource
-	private ApplicationEventPublisher applicationEventPublisher;
 	
 	@Resource
 	private UserDAO userDAO;
@@ -52,9 +47,6 @@ public class UserService {
 		if(errorMessages.isEmpty()) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			userDAO.createUser(user);
-			
-			// publish new user registration event so listeners get invoked
-			applicationEventPublisher.publishEvent(new UserRegistrationEvent(this, user));
 		}
 		else {
 			response.setAckCode(AckCodeType.FAILURE);

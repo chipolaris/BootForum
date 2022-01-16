@@ -90,7 +90,7 @@
 								  		
 							  			<p:commandLink update=":thumbnailAttachmentsContent" oncomplete="$('#thumbnailAttachmentModal').show();">
 							  				<f:setPropertyActionListener value="#{comment}" target="#{commentThread.selectedComment}"/>
-							  				<b>[ <i class="fa fa-paperclip"/> #{msg['view.images.attachments']} ]</b>
+							  				<b>[ <i class="pi pi-paperclip"/> #{msg['view.images.attachments']} ]</b>
 							  			</p:commandLink>
 								  		
 								  	</p>
@@ -113,7 +113,7 @@
 					<span onclick="$('#thumbnailAttachmentModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="fa fa-paperclip"/> #{msg['images.attachments']}</span>
+						<span class="w3-xlarge"><i class="pi pi-paperclip"/> #{msg['images.attachments']}</span>
 					</header>
 					
 					<p/>

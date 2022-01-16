@@ -44,14 +44,14 @@
 			<div jsf:id="userProfileDiv" >
 			
 				<div>
-					<p:breadCrumb class="w3-hide-small">
+					<p:breadCrumb class="w3-hide-small w3-margin-top">
 						<p:menuitem value="Home" url="#{request.contextPath}/" />
 						<p:menuitem value="#{msg['members']}" url="#{request.contextPath}/listMembers.xhtml" />
    						<p:menuitem value="#{msg['member.profile']}: &lt;b&gt;#{memberProfile.username}&lt;/b&gt;" url="#{request.requestURI}?#{request.queryString}" escape="false"/>
 					</p:breadCrumb>
 				</div>
 				
-				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					<h2>#{msg['member.profile']}</h2>
  				</div>
  				
@@ -97,6 +97,10 @@
  					<div class="w3-section">
  						#{msg['reputation']}: <b>#{memberProfile.user.stat.reputation}</b>
  					</div>			
+
+ 					<div class="w3-section">
+ 						#{msg['member.profile.viewed']}: <b>#{memberProfile.user.stat.profileViewed}</b>
+ 					</div>	
  
 					<div class="w3-section">
  						#{msg['last.login']}: <b><pe:timeAgo value="#{memberProfile.user.stat.lastLogin}"/></b>

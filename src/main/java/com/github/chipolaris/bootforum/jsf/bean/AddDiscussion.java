@@ -8,12 +8,14 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Forum;
+import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.DiscussionService;
@@ -40,6 +42,9 @@ public class AddDiscussion {
 	
 	@Resource
 	private LoggedOnSession userSession;
+	
+	@Resource
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	private Long forumId;
 
@@ -124,6 +129,9 @@ public class AddDiscussion {
 		
 			JSFUtils.addInfoStringMessage(null, 
 					MessageFormat.format(JSFUtils.getMessageBundle().getString("new.discussion.added"), discussion.getTitle()));
+			
+			// publish DiscussionAddEvent for listeners to process
+			applicationEventPublisher.publishEvent(new DiscussionAddEvent(this, this.discussion, userSession.getUser()));
 			
 			return "/viewDiscussion?faces-redirect=true&id=" + discussion.getId();
 		}

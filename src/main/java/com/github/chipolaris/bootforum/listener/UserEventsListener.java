@@ -4,10 +4,12 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
@@ -25,6 +27,9 @@ public class UserEventsListener {
 	
 	@Resource
 	private GenericDAO genericDAO;
+	
+	@Resource 
+	private CacheManager cacheManager;
 	
 	@EventListener
 	public void handleUserRegistrationEvent(UserRegistrationEvent userRegistrationEvent) {
@@ -51,5 +56,8 @@ public class UserEventsListener {
 		userStat.addProfileViewed(1);
 		
 		genericDAO.merge(userStat);
+		
+		// evict cache's entry with key user.username
+		cacheManager.getCache(CachingConfig.USER_STAT).evict(user.getUsername());
 	}
 }

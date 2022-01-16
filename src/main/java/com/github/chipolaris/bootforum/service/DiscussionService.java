@@ -30,6 +30,7 @@ import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
 import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
+import com.github.chipolaris.bootforum.event.DiscussionMovedEvent;
 
 @Service
 @Transactional
@@ -55,9 +56,6 @@ public class DiscussionService {
 	
 	@Resource
 	private FileInfoHelper fileInfoHelper;
-	
-	@Resource
-	private ApplicationEventPublisher applicationEventPublisher;
 
 	/**
 	 * 
@@ -113,12 +111,6 @@ public class DiscussionService {
 		 // lucene index the first comment
 		indexService.addCommentIndex(comment);
 		
-		// the following is commented out as the stat is handled by the eventListener below
-		// updateStats4newDiscussion(newDiscussion, user, lastComment); 
-		
-		// publish DiscussionAddEvent for listeners to process
-		applicationEventPublisher.publishEvent(new DiscussionAddEvent(this, newDiscussion, user));
-		
 		return response;
 	}
 	
@@ -135,8 +127,6 @@ public class DiscussionService {
 		// delete indexes
 		List<Long> commentIds = commentDAO.getCommentIdsForDiscussion(discussion);
 		indexService.deleteCommentIndexes(commentIds);
-		
-		List<String> commentors = commentDAO.getCommentorsForDiscussion(discussion);
 		
 		List<String> attachmentPaths = commentDAO.getAttachmentPathsForDiscussion(discussion);
 		List<String> thumbnailPaths = commentDAO.getThumnailPathsForDiscussion(discussion);
@@ -176,9 +166,6 @@ public class DiscussionService {
 		 */
 		genericDAO.remove(discussion);
 		
-		applicationEventPublisher.publishEvent(new DiscussionDeleteEvent(this, discussion,
-				commentors, commentIds.size()));
-		
 		return response;
 	}
 	
@@ -191,23 +178,11 @@ public class DiscussionService {
 		discussion.setForum(toForum);
 		genericDAO.merge(discussion);
 		
-		DiscussionStat discussionStat = discussion.getStat();
-		
 		toForum.getDiscussions().add(discussion);
-		ForumStat toStat = toForum.getStat();
-		toStat.addCommentCount(discussionStat.getCommentCount());
-		toStat.addDiscussionCount(1);
-		toStat.setLastComment(statDAO.latestCommentInfo(toForum));
 		genericDAO.merge(toForum);
 		
 		if(fromForum != null) {
-			fromForum.getDiscussions().remove(discussion);
-			
-			ForumStat fromStat = fromForum.getStat();
-			fromStat.addCommentCount(-discussionStat.getCommentCount());
-			fromStat.addDiscussionCount(-1);
-			fromStat.setLastComment(statDAO.latestCommentInfo(fromForum));
-			
+			fromForum.getDiscussions().remove(discussion);			
 			genericDAO.merge(fromForum);
 		}
 		
@@ -249,6 +224,16 @@ public class DiscussionService {
 		cal.add(Calendar.HOUR, -(daysBack * 24));
 		
 		response.setDataObject(discussionDAO.getMostCommentsDiscussions(cal.getTime(), maxResult));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<List<String>> getCommentors(Discussion discussion) {
+		
+		ServiceResponse<List<String>> response = new ServiceResponse<>();
+		
+		response.setDataObject(commentDAO.getCommentorsForDiscussion(discussion));
 		
 		return response;
 	}

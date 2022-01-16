@@ -7,11 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.event.CommentAddEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.CommentService;
@@ -38,6 +40,9 @@ public class ReplyComment {
 	
 	@Resource
 	private LoggedOnSession userSession;
+	
+	@Resource
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	private Comment reply;
 	private Comment comment;
@@ -170,9 +175,11 @@ public class ReplyComment {
 			JSFUtils.addInfoStringMessage(null, "Reply added for " 
 					+ (comment != null ? "comment " + comment.getTitle() : "discussion " + reply.getDiscussion().getTitle()));
 			
+			// publish CommentAddEvent for listeners to process		
+			applicationEventPublisher.publishEvent(new CommentAddEvent(this, reply, userSession.getUser()));
+			
 			return "/viewDiscussion?faces-redirect=true&id=" + reply.getDiscussion().getId();
-		}
-		
+		}		
 		else {
 			
 			JSFUtils.addServiceErrorMessage(response);

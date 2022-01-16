@@ -76,10 +76,10 @@ public class CommentEventsListener {
 	public void handleCommentAddEvent(CommentAddEvent commentAddEvent) {
 		
 		logger.info("Handling commentAddEvent");
-		updateStats4newComment(commentAddEvent.getComment(), commentAddEvent.getUser());
+		updateStats4NewComment(commentAddEvent.getComment(), commentAddEvent.getUser());
 	}
 	
-	private void updateStats4newComment(Comment comment, User user) {
+	private void updateStats4NewComment(Comment comment, User user) {
 
 		Discussion discussion = comment.getDiscussion();
 		DiscussionStat discussionStat = discussion.getStat();
@@ -95,6 +95,7 @@ public class CommentEventsListener {
 		discussionStat.addCommentCount(1);
 		discussionStat.addAttachmentCount(comment.getAttachments().size());
 		discussionStat.addThumbnailCount(comment.getThumbnails().size());
+		discussionStat.setLastComment(lastComment);
 		add2FirstUsersMap(discussionStat, user.getUsername());
 		
 		genericDAO.merge(discussionStat);
@@ -102,8 +103,7 @@ public class CommentEventsListener {
 		// forum stat
 		Forum forum = discussion.getForum();
 		ForumStat forumStat = forum.getStat();
-		forumStat.setCommentCount(forumStat.getCommentCount() + 1);
-		
+		forumStat.addCommentCount(1);
 		forumStat.setLastComment(lastComment);
 		
 		genericDAO.merge(forumStat);
@@ -123,7 +123,7 @@ public class CommentEventsListener {
 		
 		// system stat
 		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
-		systemStat.setCommentCount(systemStat.getCommentCount() + 1);
+		systemStat.addCommentCount(1);
 		systemStat.setLastComment(lastComment);
 	}
 

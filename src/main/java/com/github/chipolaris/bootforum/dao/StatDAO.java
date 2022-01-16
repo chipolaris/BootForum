@@ -71,7 +71,7 @@ public class StatDAO {
 	
 	public CommentInfo latestCommentInfo(Forum forum) {
 		
-		String queryStr = "SELECT d.stat.lastComment FROM Discussion d WHERE d.forum = :forum ORDER BY d.stat.lastComment.updateDate DESC";
+		String queryStr = "SELECT d.stat.lastComment FROM Discussion d WHERE d.forum = :forum ORDER BY d.stat.lastComment.createDate DESC";
 		
 		TypedQuery<CommentInfo> typedQuery = entityManager.createQuery(queryStr, CommentInfo.class);
 		typedQuery.setParameter("forum", forum);
@@ -91,7 +91,7 @@ public class StatDAO {
 		
 		query.select(builder.max(root.get("createDate")));*/
 		
-		TypedQuery<CommentInfo> typedQuery = entityManager.createQuery("FROM CommentInfo ci ORDER BY ci.updateDate DESC", CommentInfo.class);
+		TypedQuery<CommentInfo> typedQuery = entityManager.createQuery("FROM CommentInfo ci ORDER BY ci.createDate DESC", CommentInfo.class);
 		
 		/*
 		 * A note about TypedQuery.getSingleResult() vs.Typedquery.getResultList(0):

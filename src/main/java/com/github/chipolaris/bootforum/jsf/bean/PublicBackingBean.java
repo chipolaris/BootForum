@@ -1,6 +1,5 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +19,7 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
+import com.github.chipolaris.bootforum.event.UserRegistrationEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.GenericService;
@@ -44,6 +45,9 @@ public class PublicBackingBean {
 	
 	@Resource
 	private PasswordResetService passwordResetService;
+	
+	@Resource
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	public PublicBackingBean() {
 		initializeUser();
@@ -94,7 +98,10 @@ public class PublicBackingBean {
 			if(serviceResponse.getAckCode() == AckCodeType.SUCCESS) {
 				
 				this.registrationSuccess = true;
-				initializeUser();
+				initializeUser();				
+				
+				// publish new user registration event so listeners get invoked
+				applicationEventPublisher.publishEvent(new UserRegistrationEvent(this, user));
 			}
 			else {
 				

@@ -129,7 +129,7 @@
 						</span>
 						
 	 					<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
-	 						<i class="pi pi-sitemap"/> Move to new Forum
+	 						<i class="pi pi-sitemap w3-large"/> Move to new Forum
 	 					</button><p/>
 					</div>
 					
@@ -387,7 +387,7 @@
     				<span onclick="$('#forumMapModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="pi pi-sitemap"/> Forum Map</span>
+						<span class="w3-xlarge"><i class="pi pi-sitemap w3-xlarge"/> Forum Map</span>
 					</header>
 					
 					<div class="w3-padding-large">
@@ -415,13 +415,13 @@
 						        		<i class="#{data.icon}"/>
 						        	</span>
 					        		
-					        		#{data.title} [#{data.stat.discussionCount} discussions]
+					        		#{data.title} [#{data.stat.discussionCount} discussions, #{data.stat.commentCount} comments]
 				        			<f:setPropertyActionListener value="#{data}" target="#{moderateDiscussion.toForum}"/>
 				        		</p:commandLink>
 				        		
 				        		<span jsf:rendered="#{data.id eq moderateDiscussion.discussion.forum.id}" 
 				        			class="w3-tag w3-theme-dark w3-large" title="Current Forum for this discussion">
-				        			<i class="#{data.icon}"/> #{data.title} [#{data.stat.discussionCount} discussions]
+				        			<i class="#{data.icon}"/> #{data.title} [#{data.stat.discussionCount} discussions, #{data.stat.commentCount} comments] *Current*
 				        		</span>					        	 
 					        	 
 					        </p:treeNode>

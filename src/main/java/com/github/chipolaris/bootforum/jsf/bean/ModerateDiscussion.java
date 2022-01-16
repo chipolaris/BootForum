@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,8 @@ import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Tag;
-import com.github.chipolaris.bootforum.event.ForumUpdateEvent;
+import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
+import com.github.chipolaris.bootforum.event.DiscussionMovedEvent;
 import com.github.chipolaris.bootforum.jsf.converter.EntityConverter;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
@@ -146,14 +148,16 @@ public class ModerateDiscussion {
 	
 	public void assignDiscussionForum() {
 		
+		Forum fromForum = this.discussion.getForum();
+		
 		ServiceResponse<Void> response = discussionService.assignNewForum(this.discussion, toForum);
 		
 		if(response.getAckCode() != AckCodeType.FAILURE) {
 			
-			// publish event
-    		applicationEventPublisher.publishEvent(new ForumUpdateEvent(this, this.toForum));
+			// publish events
+    		applicationEventPublisher.publishEvent(new DiscussionMovedEvent(this, discussion, fromForum, toForum));
 			
-			JSFUtils.addInfoStringMessage(null, "Discussion Forum Updated");
+			JSFUtils.addInfoStringMessage(null, "Discussion's Forum Updated");
 		}
 		else {
 			JSFUtils.addServiceErrorMessage(response);
@@ -162,9 +166,17 @@ public class ModerateDiscussion {
 	
 	public String deleteDiscussion() {
 		
+		// retrieve information about this discussion before calling delete
+		List<String> commentors = discussionService.getCommentors(this.discussion).getDataObject();
+		Long commentCount = genericService.countEntities(Comment.class, 
+				Collections.singletonMap("discussion", this.discussion)).getDataObject();
+		
 		ServiceResponse<Void> response = discussionService.deleteDiscussion(this.discussion);
 		
 		if(response.getAckCode() != AckCodeType.FAILURE) {
+						
+			applicationEventPublisher.publishEvent(new DiscussionDeleteEvent(this, discussion,
+					commentors, commentCount));
 			
 			JSFUtils.addInfoStringMessage(null, "Discussion Deleted");
 			return "/admin/discussionManagement?faces-redirect=true";

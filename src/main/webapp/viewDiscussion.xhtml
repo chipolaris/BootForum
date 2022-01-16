@@ -123,7 +123,7 @@
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(viewDiscussion.discussion)}"/>
 				</div>
 				
-				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					
  					<p:inplace id="discussionTitleInplace" editor="true" rendered="#{userSession.user.username eq viewDiscussion.discussion.createBy and not viewDiscussion.discussion.closed}"
  						saveLabel="#{msg['save']}" cancelLabel="#{msg['cancel']}">

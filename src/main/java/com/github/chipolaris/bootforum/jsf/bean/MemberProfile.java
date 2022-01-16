@@ -6,11 +6,13 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.User;
+import com.github.chipolaris.bootforum.event.UserProfileViewEvent;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.CommentService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
@@ -30,6 +32,9 @@ public class MemberProfile {
 	
 	@Resource
 	private CommentService commentService;
+	
+	@Resource
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	private String username;
 	
@@ -71,6 +76,8 @@ public class MemberProfile {
 		if(userResponse.getAckCode() != AckCodeType.FAILURE) {
 			this.latestComments = latestCommentResponse.getDataObject();
 		}
+		
+		applicationEventPublisher.publishEvent(new UserProfileViewEvent(this, user));
 	}
 	
 }

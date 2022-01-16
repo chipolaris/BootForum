@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,16 +24,12 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
-import com.github.chipolaris.bootforum.event.UserRegistrationEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.util.EmailSender;
 import com.github.chipolaris.bootforum.util.Validators;
 
 @Service @Transactional
 public class RegistrationService {
-
-	@Resource
-	private ApplicationEventPublisher applicationEventPublisher;
 	
 	@Resource
 	private PasswordEncoder passwordEncoder;
@@ -50,9 +45,9 @@ public class RegistrationService {
 
 	
 	@Transactional(readOnly=false)
-	public ServiceResponse<Void> confirmRegistration(String key) {
+	public ServiceResponse<User> confirmRegistration(String key) {
 		
-		ServiceResponse<Void> response = new ServiceResponse<Void>();
+		ServiceResponse<User> response = new ServiceResponse<>();
 		
 		Registration registration = genericDAO.getEntity(Registration.class, Collections.singletonMap("registrationKey", key));
 		
@@ -65,8 +60,7 @@ public class RegistrationService {
 			// delete registration
 			genericDAO.remove(registration);
 			
-			// publish new user registration event so listeners get invoked
-			applicationEventPublisher.publishEvent(new UserRegistrationEvent(this, user));
+			response.setDataObject(user);
 		}
 		else {
 			response.setAckCode(AckCodeType.FAILURE);
