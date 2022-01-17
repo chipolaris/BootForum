@@ -88,7 +88,7 @@
 				</div>
 
 				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2>#{msg['forum']} "#{viewForum.forum.title}"</h2>
+ 					<h3>#{msg['forum']} "#{viewForum.forum.title}"</h3>
  					
  					<span class="w3-tag w3-theme-light w3-padding">
  						#{msg['discussions']}: <b>#{viewForum.forum.stat.discussionCount}</b>,
@@ -177,18 +177,18 @@
 							<div>
 								<pe:timeAgo value="#{discussion.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy" /> #{msg['by']}
 								<h:link outcome="memberProfile">
-									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(discussion.stat.lastComment.updateBy)}" class="w3-circle"
-											id="commentorAvatar" height="40" width="40" style="border:3px;margin-right:15px;" title="#{discussion.stat.lastComment.updateBy}"/> -->
-									<h:graphicImage value="#{requestContext}/avatar/#{discussion.stat.lastComment.updateBy}" class="w3-circle"
-											id="commentorAvatar" height="30" width="30" title="#{discussion.stat.lastComment.updateBy}"
-											rendered="#{fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}"/>
+									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(discussion.stat.lastComment.commentor)}" class="w3-circle"
+											id="commentorAvatar" height="40" width="40" style="border:3px;margin-right:15px;" title="#{discussion.stat.lastComment.commentor}"/> -->
+									<h:graphicImage value="#{requestContext}/avatar/#{discussion.stat.lastComment.commentor}" class="w3-circle"
+											id="commentorAvatar" height="30" width="30" title="#{discussion.stat.lastComment.commentor}"
+											rendered="#{fileHandler.isAvatarExists(discussion.stat.lastComment.commentor)}"/>
 																	
-									<span  jsf:rendered="#{!fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}" class="w3-circle avatarSpan"
-										 title="#{discussion.stat.lastComment.updateBy}"
+									<span  jsf:rendered="#{!fileHandler.isAvatarExists(discussion.stat.lastComment.commentor)}" class="w3-circle avatarSpan"
+										 title="#{discussion.stat.lastComment.commentor}"
 	  									style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white">
-	  									#{fn:substring(discussion.stat.lastComment.updateBy, 0, 3)}
+	  									#{fn:substring(discussion.stat.lastComment.commentor, 0, 3)}
 	  								</span>									
-									<f:param name="username" value="#{discussion.stat.lastComment.updateBy}"/>
+									<f:param name="username" value="#{discussion.stat.lastComment.commentor}"/>
 								</h:link>
 							</div>
 						</p:column>

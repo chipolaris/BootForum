@@ -25,6 +25,9 @@ import com.github.chipolaris.bootforum.event.CommentAddEvent;
 import com.github.chipolaris.bootforum.event.CommentFileEvent;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
 
+import net.htmlparser.jericho.Source;
+import net.htmlparser.jericho.TextExtractor;
+
 @Component
 public class CommentEventsListener {
 	
@@ -86,11 +89,14 @@ public class CommentEventsListener {
 		
 		// update lastComment info
 		CommentInfo lastComment = discussionStat.getLastComment();
-		lastComment.setUpdateBy(user.getUsername());
+		lastComment.setCommentor(user.getUsername());
+		lastComment.setCommentDate(comment.getCreateDate());
 		lastComment.setTitle(comment.getTitle());
 		lastComment.setCommentId(comment.getId());
-		lastComment.setContentAbbr(comment.getContent().length() > 100 ? 
-				comment.getContent().substring(0, 97) + "..." : comment.getContent());
+		
+		String contentAbbr = new TextExtractor(new Source(comment.getContent())).toString();
+		lastComment.setContentAbbr(contentAbbr.length() > 100 ? 
+				contentAbbr.substring(0, 97) + "..." : contentAbbr);
 		
 		discussionStat.addCommentCount(1);
 		discussionStat.addAttachmentCount(comment.getAttachments().size());

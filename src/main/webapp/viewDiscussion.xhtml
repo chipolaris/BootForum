@@ -100,15 +100,14 @@
 		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
+			
+			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000"/>
 						
-			<div>
-				
-				<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true"/>
-				
-				<!-- <p:messages id="messages" showDetail="true" showSummary="false" closable="true">
+			<!-- <div>
+				<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
 					<p:autoUpdate/>
-				</p:messages> -->
-			</div>
+				</p:messages>
+			</div> -->
 			
 			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty viewDiscussion.discussion}">
 			
@@ -130,7 +129,7 @@
  						
  						<p:ajax event="save" listener="#{viewDiscussion.saveDiscussionTitle}" update="growl discussionTitleInplace" partialSubmit="true"/>
  						<f:facet name="output">
-                			<h2>#{viewDiscussion.discussion.title}</h2>
+                			<h3>#{viewDiscussion.discussion.title}</h3>
                 			*Note: you are this discussion's creator, click here to edit the discussion title
             			</f:facet>
             			
@@ -139,7 +138,7 @@
             			</f:facet>
         			</p:inplace>
  					
- 					<h2 jsf:rendered="#{userSession.user.username ne viewDiscussion.discussion.createBy}">#{viewDiscussion.discussion.title}</h2>
+ 					<h3 jsf:rendered="#{userSession.user.username ne viewDiscussion.discussion.createBy}">#{viewDiscussion.discussion.title}</h3>
  					
  					<p>
 	 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">
@@ -186,7 +185,7 @@
 								style="display:inline-block;font-size:0.9rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
 								#{fn:substring(viewDiscussion.discussion.stat.lastComment.updateBy, 0, 3)}
 							</span>
-							<f:param name="username" value="#{viewDiscussion.discussion.stat.lastComment.updateBy}"/>
+							<f:param name="username" value="#{viewDiscussion.discussion.stat.lastComment.commentor}"/>
 						</h:link><br/>
 						<pe:timeAgo value="#{viewDiscussion.discussion.stat.lastComment.updateDate}" titlePattern="MMM dd, yyyy"/>
 					</span>

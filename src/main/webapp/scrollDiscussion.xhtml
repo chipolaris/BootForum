@@ -128,15 +128,14 @@
 		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
-						
-			<div>
-				
-				<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true"/>
-				
+			
+			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000"/>
+			
+			<!-- <div>				
 				<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
 					<p:autoUpdate/>
 				</p:messages>
-			</div>
+			</div> -->
 			
 			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty viewDiscussion.discussion}">
 			
@@ -152,7 +151,7 @@
 				</div>
 				
 				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2>#{viewDiscussion.discussion.title}</h2>
+ 					<h3>#{viewDiscussion.discussion.title}</h3>
  					
  					<p>
 	 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">

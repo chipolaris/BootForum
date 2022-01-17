@@ -29,8 +29,12 @@ import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
 import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
 import com.github.chipolaris.bootforum.event.DiscussionMovedEvent;
 import com.github.chipolaris.bootforum.event.DiscussionViewEvent;
+import com.github.chipolaris.bootforum.jsf.bean.ForumMap;
 import com.github.chipolaris.bootforum.service.StatService;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
+
+import net.htmlparser.jericho.Source;
+import net.htmlparser.jericho.TextExtractor;
 
 @Component
 public class DiscussionEventsListener {
@@ -54,6 +58,9 @@ public class DiscussionEventsListener {
 	
 	@Resource 
 	private CacheManager cacheManager;
+	
+	@Resource
+	private ForumMap forumMap;
 	
 	@EventListener @Transactional(readOnly = false)
 	public void handleDiscussionViewEvent(DiscussionViewEvent discussionViewEvent) {
@@ -84,7 +91,6 @@ public class DiscussionEventsListener {
 		updateStats4DiscussionMoved(event.getDiscussion(), event.getFromForum(), event.getToForum());
 	}
 
-
 	private void updateDiscussionStat(DiscussionViewEvent discussionViewEvent) {
 		Discussion discussion = discussionViewEvent.getDiscussion();
 		DiscussionStat stat = discussion.getStat();
@@ -105,10 +111,13 @@ public class DiscussionEventsListener {
 		 */
 		CommentInfo lastComment = new CommentInfo();
 		lastComment.setCreateBy(username);
-		lastComment.setUpdateBy(username);
+		lastComment.setCommentor(username);
+		lastComment.setCommentDate(comment.getCreateDate());
 		lastComment.setTitle(comment.getTitle());
-		lastComment.setContentAbbr(comment.getContent().length() > 100 ? 
-				comment.getContent().substring(0, 97) + "..." : comment.getContent());
+		
+		String contentAbbr = new TextExtractor(new Source(comment.getContent())).toString();
+		lastComment.setContentAbbr(contentAbbr.length() > 100 ? 
+				contentAbbr.substring(0, 97) + "..." : contentAbbr);
 		lastComment.setCommentId(comment.getId());
 		
 		DiscussionStat discussionStat = new DiscussionStat();
@@ -118,8 +127,6 @@ public class DiscussionEventsListener {
 		discussionStat.setThumbnailCount(comment.getThumbnails().size());
 		discussionStat.setAttachmentCount(comment.getAttachments().size());
 		
-		genericDAO.persist(discussionStat);
-		
 		discussion.setStat(discussionStat);
 		
 		genericDAO.merge(discussion);
@@ -128,7 +135,6 @@ public class DiscussionEventsListener {
 		 *  forum stat
 		 */
 		Forum forum = discussion.getForum();
-		//CommentInfo lastComment = discussion.getStat().getLastComment();
 		
 		ForumStat forumStat = forum.getStat();
 		forumStat.addDiscussionCount(1);
@@ -207,7 +213,7 @@ public class DiscussionEventsListener {
 	}	
 	
 	private void updateStats4DiscussionMoved(Discussion discussion, Forum fromForum, Forum toForum) {
-
+		
 		ForumStat fromForumStat = fromForum.getStat();
 		ForumStat toForumStat = toForum.getStat();
 		
@@ -237,5 +243,7 @@ public class DiscussionEventsListener {
 		
 		// evict cache's entry with key toForumStat.id
 		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(toForumStat.getId());
+		
+		forumMap.init();
 	}
 }

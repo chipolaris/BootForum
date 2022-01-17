@@ -21,6 +21,9 @@ import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.domain.UserStat;
 
+import net.htmlparser.jericho.Source;
+import net.htmlparser.jericho.TextExtractor;
+
 @Service 
 public class StatService {
 
@@ -90,9 +93,12 @@ public class StatService {
 		
 		commentInfo.setCommentId(lastComment.getId());
 		commentInfo.setTitle(lastComment.getTitle());
-		commentInfo.setContentAbbr(lastComment.getContent().length() > 100 ? 
-				lastComment.getContent().substring(0, 97) + "..." : lastComment.getContent());
-		commentInfo.setUpdateDate(lastComment.getCreateDate());
+		
+		String contentAbbr = new TextExtractor(new Source(lastComment.getContent())).toString();
+		commentInfo.setContentAbbr(contentAbbr.length() > 100 ? 
+				contentAbbr.substring(0, 97) + "..." : contentAbbr);
+		commentInfo.setCommentDate(lastComment.getCreateDate());
+		commentInfo.setCommentor(lastComment.getCreateBy());
 		
 		genericDAO.merge(discussionStat);
 		

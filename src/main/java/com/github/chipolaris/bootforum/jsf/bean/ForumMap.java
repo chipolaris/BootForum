@@ -111,10 +111,4 @@ public class ForumMap {
 			buildForumTreeNodes(forumGroup.getForums(), forumGroup.getSubGroups(), forumGroupNode);
 		}
 	}
-	
-	@Cacheable(value=CachingConfig.FORUM_STAT, key="#forum.stat.id")
-	public ForumStat getForumStat(Forum forum) {
-		logger.info("getForumStat: " + forum.getStat().getId());
-		return genericService.getEntity(ForumStat.class, forum.getStat().getId()).getDataObject();
-	}
 }

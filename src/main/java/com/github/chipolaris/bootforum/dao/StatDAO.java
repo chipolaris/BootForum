@@ -71,7 +71,7 @@ public class StatDAO {
 	
 	public CommentInfo latestCommentInfo(Forum forum) {
 		
-		String queryStr = "SELECT d.stat.lastComment FROM Discussion d WHERE d.forum = :forum ORDER BY d.stat.lastComment.createDate DESC";
+		String queryStr = "SELECT d.stat.lastComment FROM Discussion d WHERE d.forum = :forum ORDER BY d.stat.lastComment.commentDate DESC";
 		
 		TypedQuery<CommentInfo> typedQuery = entityManager.createQuery(queryStr, CommentInfo.class);
 		typedQuery.setParameter("forum", forum);

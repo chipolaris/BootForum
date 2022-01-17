@@ -90,12 +90,14 @@
 		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">		
+			
+			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000"/>
 						
-			<div>
+			<!-- <div>
 				<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
 					<p:autoUpdate/>
 				</p:messages>
-			</div>
+			</div> -->
 			
 			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{moderateDiscussion.discussion == null}">
 			
@@ -139,17 +141,19 @@
 							style="font-weight:bold;color:#{moderateDiscussion.discussion.closed ? 'Tomato' : 'LimeGreen'};"/>
 						<p:selectBooleanButton id="discussionCloseButton" value="#{moderateDiscussion.discussion.closed}" title="click to change"
 							onLabel="Click to open" offLabel="Click to close" onIcon="pi pi-check" offIcon="pi pi-ban">
-	            			<p:ajax update=":messages discussionStatusLabel" listener="#{moderateDiscussion.updateDiscussion}" />
+	            			<p:ajax update=":growl discussionStatusLabel" listener="#{moderateDiscussion.updateDiscussion}" />
 	        			</p:selectBooleanButton>
 	        			
 						<h:outputLabel id="discussionImportantLabel" for="discussionImportantButton" value="Mark as important" style="font-weight:bold;margin:0px 5px 0px 25px;"/>
 						<p:selectBooleanButton id="discussionImportantButton" value="#{moderateDiscussion.discussion.closed}" title="click to change"
 							onLabel="Yes" offLabel="No" onIcon="pi pi-check" offIcon="pi pi-times">
-	            			<p:ajax update=":messages" listener="#{moderateDiscussion.updateDiscussion}" />
+	            			<p:ajax update=":growl" listener="#{moderateDiscussion.updateDiscussion}" />
 	        			</p:selectBooleanButton>
 	        			
-	        			<p:commandButton type="button" value=" Delete this Discussion" icon="pi pi-exclamation-triangle"
-	        				onclick="PF('deleteDiscussionConfirmation').show();" styleClass="w3-red w3-border-red" style="margin-left:25px;"/>
+	        			<p:commandButton value=" #{msg['delete.this.discussion']}" icon="pi pi-exclamation-triangle"
+	        				action="#{moderateDiscussion.deleteDiscussion}" styleClass="w3-red w3-border-red" style="margin-left:25px;">
+	        				<p:confirm type="popup" header="#{msg['confirmation']}" message="#{msg['are.you.sure.you.want.to.proceed']}" icon="pi pi-exclamation-triangle"/>
+	        			</p:commandButton>
 					</h:form>
 					
 					<p/>
@@ -162,7 +166,7 @@
 	                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px" converter="#{moderateDiscussion.tagConverter}">
 					            <f:selectItems value="#{moderateDiscussion.tags}" var="tag" itemLabel="#{tag.label}" itemValue="#{tag}"/>
 					        </p:selectCheckboxMenu>
-					        <p:commandButton ajax="true" value="&#160;Apply" action="#{moderateDiscussion.updateDiscussionTag}" update=":messages" icon="pi pi-check"
+					        <p:commandButton ajax="true" value="&#160;Apply" action="#{moderateDiscussion.updateDiscussionTag}" update=":growl" icon="pi pi-check"
 					         	styleClass="w3-theme-dark w3-border-0" style="margin-top:-5px;"/>
 				        </h:panelGrid>
 				        
@@ -327,7 +331,7 @@
 					        
 							<p:selectBooleanButton id="commentHideButton" value="#{comment.hidden}" title="click to toggle"
 								onLabel="Click to show" offLabel="Click to hide" onIcon="pi pi-check" offIcon="pi pi-ban" style="width:150px;">
-			            		<p:ajax update=":messages commentStatusText" listener="#{moderateDiscussion.updateComment(comment)}" process="@this"/>
+			            		<p:ajax update=":growl commentStatusText" listener="#{moderateDiscussion.updateComment(comment)}" process="@this"/>
 			        		</p:selectBooleanButton>					        	
 					    </div>
 				        
@@ -371,7 +375,7 @@
 				</p:overlayPanel>
 			</h:form>
 			
-			<p:confirmDialog message="Delete Discussion and related Comments?" showEffect="fade" hideEffect="fade"  
+			<!-- <p:confirmDialog message="Delete Discussion and related Comments?" showEffect="fade" hideEffect="fade"  
 		        header="Confirm" severity="alert" widgetVar="deleteDiscussionConfirmation">
 		  		<h:form>
 			        <p:commandButton value="Yes" icon="pi pi-exclamation-triangle" styleClass="w3-red w3-border-red"
@@ -380,7 +384,12 @@
 			        	icon="pi pi-times" style="margin-left:5px;" styleClass="w3-green w3-border-green">
 			        </p:commandButton>  
 		  		</h:form>
-		    </p:confirmDialog>			
+		    </p:confirmDialog> -->
+		    
+	        <p:confirmPopup global="true">
+	            <p:commandButton value="#{msg['no']}" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+	            <p:commandButton value="#{msg['yes']}" type="button" styleClass="ui-confirm-popup-yes" />
+	        </p:confirmPopup>		    			
 	
     		<div id="forumMapModal" class="w3-modal">
     			<div class="w3-modal-content w3-animate-zoom" jsf:id="forumMapContent">
@@ -409,19 +418,19 @@
 
 					        	<p:commandLink rendered="#{data.id ne moderateDiscussion.discussion.forum.id}"
 					        		title="Assign to this Forum" action="#{moderateDiscussion.assignDiscussionForum}" 
-									update=":messages :forumTitleDiv :forumMapContent" oncomplete="$('#forumMapModal').hide();" styleClass="w3-large">
+									update=":growl :forumTitleDiv :forumMapContent" oncomplete="$('#forumMapModal').hide();" styleClass="w3-large">
 									
 									<span class="w3-tag" style="line-height:28px;width:28px;height:28px;border-radius:2px;color:#fff;background-color:##{data.iconColor};">
 						        		<i class="#{data.icon}"/>
 						        	</span>
 					        		
-					        		#{data.title} [#{data.stat.discussionCount} discussions, #{data.stat.commentCount} comments]
+					        		#{data.title} [#{statBean.getForumStat(data).discussionCount} discussions, #{statBean.getForumStat(data).commentCount} comments]
 				        			<f:setPropertyActionListener value="#{data}" target="#{moderateDiscussion.toForum}"/>
 				        		</p:commandLink>
 				        		
 				        		<span jsf:rendered="#{data.id eq moderateDiscussion.discussion.forum.id}" 
 				        			class="w3-tag w3-theme-dark w3-large" title="Current Forum for this discussion">
-				        			<i class="#{data.icon}"/> #{data.title} [#{data.stat.discussionCount} discussions, #{data.stat.commentCount} comments] *Current*
+				        			<i class="#{data.icon}"/> #{data.title} [#{statBean.getForumStat(data).discussionCount} discussions, #{statBean.getForumStat(data).commentCount} comments] *Current*
 				        		</span>					        	 
 					        	 
 					        </p:treeNode>

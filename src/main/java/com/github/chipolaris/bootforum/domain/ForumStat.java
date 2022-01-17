@@ -23,7 +23,7 @@ public class ForumStat extends BaseEntity {
 	private Long id;
 	
 	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="LAST_COMMENT_ID", foreignKey = @ForeignKey(name="FK_FORUM_STAT_LAST_COMMEN"))
+	@JoinColumn(name="LAST_COMMENT_INFO_ID", foreignKey = @ForeignKey(name="FK_FORUM_STAT_LAST_COMMEN"))
 	private CommentInfo lastComment; // info about last comment, used for display
 	
 	@Column(name="COMMENT_COUNT")

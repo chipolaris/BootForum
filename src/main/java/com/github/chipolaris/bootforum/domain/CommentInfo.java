@@ -12,6 +12,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="COMMENT_INFO_T")
@@ -45,14 +47,21 @@ public class CommentInfo extends BaseEntity {
 	@Column(name="COMMENT_ID")
 	private Long commentId; // id of the Comment instance
 	
+	@Column(name="COMMENTOR", length=50)
+	private String commentor;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="COMMENT_DATE")
+	private Date commentDate;
+	
 	@Override
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}	
-	
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -72,5 +81,19 @@ public class CommentInfo extends BaseEntity {
 	}
 	public void setCommentId(Long commentId) {
 		this.commentId = commentId;
+	}
+	
+	public String getCommentor() {
+		return commentor;
+	}
+	public void setCommentor(String commentor) {
+		this.commentor = commentor;
+	}
+
+	public Date getCommentDate() {
+		return commentDate;
+	}
+	public void setCommentDate(Date commentDate) {
+		this.commentDate = commentDate;
 	}
 }

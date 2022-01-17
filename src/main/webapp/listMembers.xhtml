@@ -78,7 +78,7 @@
 				</div>
 				
 				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2>#{msg['list.members']}</h2>
+ 					<h3>#{msg['list.members']}</h3>
  				</div>
  				
 				<p/>
@@ -146,13 +146,14 @@
 							<span><b>#{user.stat.commentCount}</b></span>
 							
 						</p:column>
-
+						
+						<!-- Note: since user.stat.lastComment is nullable, it's tricky to sort, so leave the sorting off this column for now  -->
 						<p:column style="text-align:center;">
 							<f:facet name="header">
 								<h:outputText value="#{msg['latest.comments']}" style="font-weight:bold;"/>
 							</f:facet>
 							
-							<span jsf:rendered="#{not empty user.stat.lastComment}"><pe:timeAgo value="#{user.stat.lastComment.updateDate}"/></span>
+							<span jsf:rendered="#{not empty user.stat.lastComment}"><pe:timeAgo value="#{user.stat.lastComment.commentDate}"/></span>
 							<span jsf:rendered="#{empty user.stat.lastComment}">#{msg['none']}</span>
 						</p:column>
 

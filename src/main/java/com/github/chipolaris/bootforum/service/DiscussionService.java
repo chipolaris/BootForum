@@ -121,6 +121,7 @@ public class DiscussionService {
 		
 		Forum forum = discussion.getForum();
 		forum.getDiscussions().remove(discussion);
+		forum.getStat().setLastComment(null);
 		
 		genericDAO.merge(forum);
 		
@@ -174,10 +175,10 @@ public class DiscussionService {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
 		
-		Forum fromForum = discussion.getForum(); 
+		Forum fromForum = discussion.getForum();
+		
 		discussion.setForum(toForum);
 		genericDAO.merge(discussion);
-		
 		toForum.getDiscussions().add(discussion);
 		genericDAO.merge(toForum);
 		
