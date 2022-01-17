@@ -109,7 +109,7 @@
 			<div jsf:id="moderateDiscussionDiv" jsf:rendered="#{moderateDiscussion.discussion != null}">
 				
 				<div class="w3-panel w3-theme-dark w3-center w3-round">
- 					<h2>Moderate Discussion '#{moderateDiscussion.discussion.title}'</h2>
+ 					<h3>Moderate Discussion '#{moderateDiscussion.discussion.title}'</h3>
  				</div>
 				
 				<div class="w3-center">
@@ -420,7 +420,7 @@
 					        		title="Assign to this Forum" action="#{moderateDiscussion.assignDiscussionForum}" 
 									update=":growl :forumTitleDiv :forumMapContent" oncomplete="$('#forumMapModal').hide();" styleClass="w3-large">
 									
-									<span class="w3-tag" style="line-height:28px;width:28px;height:28px;border-radius:2px;color:#fff;background-color:##{data.iconColor};">
+									<span class="w3-tag" style="line-height:30px;width:30px;height:30px;border-radius:2px;color:#fff;background-color:##{data.iconColor};">
 						        		<i class="#{data.icon}"/>
 						        	</span>
 					        		
