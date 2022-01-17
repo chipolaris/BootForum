@@ -1,6 +1,5 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -75,8 +74,7 @@ public class HomePage {
 	
 	public void onLoad() {
 		
-		this.allTags = genericService.getEntities(Tag.class, 
-				Collections.singletonMap("disabled", false), "sortOrder", false).getDataObject();
+		this.allTags = tagService.getActiveTags().getDataObject();
 		
 		this.displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
 		

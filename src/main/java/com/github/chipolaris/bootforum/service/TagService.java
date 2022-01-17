@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.DiscussionDAO;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
+import com.github.chipolaris.bootforum.dao.SortSpec;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Tag;
 
@@ -44,11 +45,11 @@ public class TagService {
 	@Transactional(readOnly = true)
 	@Cacheable(value=CachingConfig.ACTIVE_TAGS, key="'tagService.getActiveTags'")
 	public ServiceResponse<List<Tag>> getActiveTags() {
-		
 		ServiceResponse<List<Tag>> response = new ServiceResponse<>();
 
 		List<Tag> tags = genericDAO.getEntities(Tag.class, 
-				Collections.singletonMap("disabled", Boolean.FALSE));
+				Collections.singletonMap("disabled", Boolean.FALSE),
+				new SortSpec("sortOrder", SortSpec.Direction.DESC));
 		response.setDataObject(tags);
 
 		return response;

@@ -129,12 +129,17 @@
  						
  						<p:ajax event="save" listener="#{viewDiscussion.saveDiscussionTitle}" update="growl discussionTitleInplace" partialSubmit="true"/>
  						<f:facet name="output">
-                			<h3>#{viewDiscussion.discussion.title}</h3>
-                			*Note: you are this discussion's creator, click here to edit the discussion title
+                			<span class="w3-xlarge">#{viewDiscussion.discussion.title}</span>
+                			<br/>
+                			*Note: you created this discussion, click to edit the discussion title
             			</f:facet>
             			
             			<f:facet name="input">
-            				<p:inputText value="#{viewDiscussion.discussion.title}" required="true" label="text" size="80"/>
+            				<p:message for="discussionTitle"/><p/>
+            				<p:inputText id="discussionTitle" value="#{viewDiscussion.discussion.title}" label="text" size="80"
+            					maxlength="255" validatorMessage="Discussion title length must be between 1 to 255">
+            					<f:validateLength minimum="1" maximum="255"/>
+            				</p:inputText>
             			</f:facet>
         			</p:inplace>
  					

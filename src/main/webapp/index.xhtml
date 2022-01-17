@@ -36,9 +36,8 @@
 			
 				<div class="w3-col l9 m12 s12 w3-container">
 					<div class="w3-container" style="padding:0;" jsf:rendered="#{not empty homePage.mostRecentDiscussions}">
-						<div class="w3-xlarge" 
-							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-							<i class="pi pi-clock w3-xlarge"/> #{msg['most.recent.discussions']}
+						<div class="w3-large w3-border-theme w3-text-theme"	style="border-bottom-style:solid; border-width: 2px;">
+							<b><i class="pi pi-clock w3-large"/> #{msg['most.recent.discussions']}</b>
 						</div>
 						<p:repeat var="discussion" value="#{homePage.mostRecentDiscussions}">
 							<p>
@@ -70,9 +69,8 @@
 					
 					<div class="w3-container" style="padding:0;" jsf:rendered="#{not empty homePage.mostViewsDiscussions}">
 					
-						<div class="w3-xlarge" 
-							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-							<i class="pi pi-eye w3-xlarge"/> #{msg['most.views.discussions']}
+						<div class="w3-large w3-border-theme w3-text-theme"	style="border-bottom-style:solid; border-width: 2px;">
+							<b><i class="pi pi-eye w3-large"/> #{msg['most.views.discussions']}</b>
 						</div>
 					
 						<p:repeat var="discussion" value="#{homePage.mostViewsDiscussions}">
@@ -107,9 +105,8 @@
 					
 					<div class="w3-container" style="padding:0;" jsf:rendered="#{not empty homePage.mostCommentsDiscussions}">
 					
-						<div class="w3-xlarge" 
-							style="border-bottom-style:solid; border-width: 2px; border-color:grey; color:grey">
-							<i class="pi pi-comments w3-xlarge"/> #{msg['most.comments.discussions']}
+						<div class="w3-large w3-border-theme w3-text-theme"	style="border-bottom-style:solid; border-width: 2px;">
+							<b><i class="pi pi-comments w3-large"/> #{msg['most.comments.discussions']}</b>
 						</div>
 					
 						<p:repeat var="discussion" value="#{homePage.mostCommentsDiscussions}">
@@ -145,9 +142,9 @@
 					<p:repeat var="tag" value="#{homePage.displayTags}">
 						<div jsf:rendered="#{not empty tag.discussions}">
 							<div class="w3-container" style="padding:0;">
-								<div class="w3-xlarge" 
+								<div class="w3-large" 
 									style="border-bottom-style:solid; border-width: 2px; border-color:##{tag.color}; color:##{tag.color}">
-									<i class="pi #{tag.icon}"/> #{tag.label}
+									<b><i class="pi #{tag.icon} w3-large"/> #{tag.label}</b>
 								</div>
 								<p:repeat var="discussion" value="#{tag.discussions}">
 									<p>

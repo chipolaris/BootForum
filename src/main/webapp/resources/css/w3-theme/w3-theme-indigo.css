@@ -21,6 +21,9 @@
 .w3-hover-text-theme:hover {color:#3f51b5 !important}
 .w3-hover-border-theme:hover {border-color:#3f51b5 !important}
 
+/***** Gradient definitions *****/
+
+/* Using l1 and l2 colors above */
 .w3-theme-gradient-l1 {
   color: #fff !important;
   background:-webkit-linear-gradient(top,#8995d6 25%,#6271c8 75%)}
@@ -36,7 +39,8 @@
 .w3-theme-gradient-l1 {
   color: #fff !important;
   background: linear-gradient(top,#8995d6 25%,#6271c8 75%)}
-  
+
+/* Using d2 and d5 colors above */  
 .w3-theme-gradient-d5 {
   color: #fff !important;
   background:-webkit-linear-gradient(top,#334191 25%,#20295b 75%)}

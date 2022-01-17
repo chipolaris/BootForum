@@ -85,7 +85,7 @@ public class ViewDiscussion {
 		ServiceResponse<Discussion> serviceResponse = genericService.updateEntity(this.discussion);
 		
 		if(serviceResponse.getAckCode() == AckCodeType.SUCCESS) {
-			JSFUtils.addInfoStringMessage(null, JSFUtils.getMessageBundle().getString("discussion.title.saved"));
+			JSFUtils.addInfoStringMessage(null, JSFUtils.getMessageBundle().getString("discussion.title.updated"));
 		}
 		else {
 			JSFUtils.addErrorStringMessage(null, JSFUtils.getMessageBundle().getString("unable.to.save.discussion.title"));
