@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf" 
+    template="/WEB-INF/template/layout_secure.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} - My Comments
+	</ui:define>
+	
+	<ui:define name="pageTitle">
+		<b><i class="pi pi-comment"></i> My Comments</b>
+	</ui:define>
+
+	<ui:define name="content">
+	
+		<f:metadata>
+			
+		</f:metadata>
+		
+		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000"/>
+		
+		<div id="myCommentsPanel" class="w3-container w3-animate-right">
+			<h:form>
+			
+				<p:dataTable var="comment" value="#{myComments.lazyModel}" style="margin: 0 auto;"
+					widgetVar="commentTableVar" rowIndexVar="rowIndex" paginator="true" reflow="false"
+					rows="10" lazy="true" id="commentTable" filterEvent="enter" 
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="Comment count: ({totalRecords})"
+					rowsPerPageTemplate="10,25,100" editable="true" draggableColumns="true">
+				
+					<p:ajax event="page" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+					<p:ajax event="sort" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+					<p:ajax event="filter" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+				
+					<p:column sortBy="#{comment.createDate}" responsivePriority="3" style="width:14%;">
+						<f:facet name="header">
+							<span><b><i class="pi pi-clock"/> Post Date</b></span>
+						</f:facet>
+						<h:outputText value="#{comment.createDate}">
+							<f:convertDateTime pattern="MMMM dd, yyyy HH:mm" />
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{comment.title}" responsivePriority="1" style="width:35%;">
+						<f:facet name="header">
+							<span><b>Title</b></span>
+						</f:facet>
+						<h:outputText value="#{comment.title.length() gt 50 ? comment.title.substring(0,47).concat('...') : comment.title}" />
+					</p:column>
+
+					<p:column sortBy="#{comment.commentVote.voteUpCount}" responsivePriority="4" style="width:8%;text-align:center;">
+						<f:facet name="header">
+							<span title="Voted Up Count"><b><i class="pi pi-thumbs-up"/> Count</b></span>
+						</f:facet>
+						<h:outputText value="#{comment.commentVote.voteUpCount}" />
+					</p:column>
+
+					<p:column sortBy="#{comment.commentVote.voteDownCount}" responsivePriority="5" style="width:8%;text-align:center;">
+						<f:facet name="header">
+							<span title="Voted Down Count"><b><i class="pi pi-thumbs-down"/> Count</b></span>
+						</f:facet>
+						<h:outputText value="#{comment.commentVote.voteDownCount}" />
+					</p:column>
+
+					<p:column sortBy="#{comment.discussion.title}" responsivePriority="2" style="width:35%;">
+						<f:facet name="header">
+							<span><b><i class="pi pi-comments"/> Discussion</b></span>
+						</f:facet>
+						<h:link value="#{comment.discussion.title}" outcome="/viewDiscussion">
+							<f:param name="id" value="#{comment.discussion.id}"/>
+						</h:link>
+					</p:column>
+				
+				</p:dataTable>
+			</h:form>
+		</div>
+		
+		<script type="text/javascript">
+ 			//<![CDATA[	
+ 				
+ 				/* set table header's background color */
+ 				$(document).ready(function(){
+ 					customizeDatatableStyle();
+ 					customizePrimefaceButtons();
+ 					changeAvatarBackgrounds();
+ 				});
+ 				
+				function customizeDatatableStyle() {
+					/* set datatable header's background color */
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+					
+					/* set datatable paginator button color */
+					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
+						function(el) {
+							el.className += ' w3-button';
+							
+							if(el.className.indexOf('ui-state-active') >= 0) {
+								el.className += ' w3-theme-dark';	
+							}
+							else {
+								el.className += ' w3-white';
+							}
+						}
+					);
+				}
+				
+				function customizePrimefaceButtons() {
+ 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
+ 				} 				
+			//]]>	
+		</script>	
+		
+	</ui:define>
+</ui:composition>

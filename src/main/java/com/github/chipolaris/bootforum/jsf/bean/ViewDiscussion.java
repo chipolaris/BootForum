@@ -1,7 +1,5 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
-import java.text.MessageFormat;
-
 import javax.annotation.Resource;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,6 +23,9 @@ public class ViewDiscussion {
 	
 	@Resource
 	private ApplicationEventPublisher applicationEventPublisher;
+	
+	@Resource
+	private LoggedOnSession userSession;
 	
 	private Long id;
 
@@ -79,8 +80,12 @@ public class ViewDiscussion {
 		this.selectedComment = selectedComment;
 	}
 	
-	
 	public void saveDiscussionTitle() {
+		
+		if(this.userSession.getUser() == null || !this.discussion.getCreateBy().equals(this.userSession.getUser().getUsername())) {
+			JSFUtils.addErrorStringMessage(null, JSFUtils.getMessageBundle().getString("unable.to.complete.request"));
+			return;
+		}
 		
 		ServiceResponse<Discussion> serviceResponse = genericService.updateEntity(this.discussion);
 		

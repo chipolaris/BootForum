@@ -74,7 +74,7 @@
 				</span>
 		    </div>	
 		    	
-		    <div class="w3-col s9 w3-bar">
+		    <div class="w3-col s9 w3-bar w3-text-theme">
 		      <div class="w3-center"><strong>#{empty userSession.user.person.firstName and empty userSession.user.person.lastName ? 'Username: ' += userSession.user.username : userSession.user.person.firstName += ' ' += userSession.user.person.lastName}</strong></div>
 		      <div class="w3-center">Role: #{userSession.user.userRole.label}</div>
 		    </div>
@@ -92,6 +92,7 @@
 		    
 		    <h:link outcome="/secure/index" styleClass="w3-bar-item w3-button w3-padding"><b>Dashboard</b></h:link>
 		    <h:link outcome="/secure/accountInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-user"/> Account</h:link>
+		    <h:link outcome="/secure/myComments" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comment"/> My Comments</h:link>
 		    <h:link outcome="/secure/privateMessages" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope"/> Messages</h:link>
 		  	<h:link outcome="/secure/signaturePreference" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-pencil"/> Signature</h:link>
 		  	<h:link outcome="/secure/switchTheme" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-palette"/> UI Themes</h:link>
