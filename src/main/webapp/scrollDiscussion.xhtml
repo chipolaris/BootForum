@@ -129,13 +129,9 @@
 	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
 			
-			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000"/>
-			
-			<!-- <div>				
-				<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
-					<p:autoUpdate/>
-				</p:messages>
-			</div> -->
+			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000">
+				<p:autoUpdate/>
+			</p:growl>
 			
 			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty viewDiscussion.discussion}">
 			

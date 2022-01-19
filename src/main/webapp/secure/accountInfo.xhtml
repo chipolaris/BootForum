@@ -36,7 +36,9 @@
 			//]]>	
 		</script>
 			
-		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000"/>
+		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000">
+			<p:autoUpdate/>
+		</p:growl>
 						
 		<p:tabView id="tabView">
 			<p:tab>
@@ -79,7 +81,7 @@
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
 							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-save"
-								action="#{accountInfo.updatePersonalInfo}" update=":growl"/>
+								action="#{accountInfo.updatePersonalInfo}"/>
 						</div>
 						
 					</div>						
@@ -124,7 +126,7 @@
 						<p:commandButton id="deleteAvatarButton" value=" Delete Avatar"
 							rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"
 							actionListener="#{fileHandler.deleteAvatar(userSession.user.username)}"
-							icon="pi pi-trash" update="viewAvatarPanel :growl" ajax="true">
+							icon="pi pi-trash" update="viewAvatarPanel" ajax="true">
 							
 							<p:confirm type="popup" header="Confirmation" message="Are you sure?" icon="pi pi-exclamation-triangle"/>
 							
@@ -149,7 +151,7 @@
 					<h:form id="avatarUploadForm">
 					
 						<p:fileUpload listener="#{imageUploadView.uploadImage}"
-							mode="advanced" dragDropSupport="true" update="cropperPanel :growl"
+							mode="advanced" dragDropSupport="true" update="cropperPanel"
 							auto="false" oncomplete="customizePrimefaceButtons();"
 							sizeLimit="#{applicationProperties['Avatar.maxFileSize'] * 1024}"
 							allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
@@ -169,7 +171,7 @@
 				            <div class="w3-containter w3-center" jsf:rendered="#{not empty imageUploadView.image}">
 								
 								<p>
-				                	<p:commandButton value="Crop as new avatar" action="#{fileHandler.crop(userSession.user.username)}" update=":tabView:avatarForm:viewAvatarPanel :growl" 
+				                	<p:commandButton value="Crop as new avatar" action="#{fileHandler.crop(userSession.user.username)}" update=":tabView:avatarForm:viewAvatarPanel" 
 				                		icon="pi pi-clone" oncomplete="PF('avatarUpload').hide();customizePrimefaceButtons();"/>
 								</p>
 								
@@ -186,7 +188,6 @@
 				           	</div>
 				            
 				        </p:outputPanel>
-			        
 			        
 			        </h:form>
 			        
@@ -245,7 +246,7 @@
 					
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-save" action="#{accountInfo.updatePassword}" update=":growl"/>
+							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-save" action="#{accountInfo.updatePassword}"/>
 						</div>
 						
 					</div>

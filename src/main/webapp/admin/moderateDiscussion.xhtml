@@ -91,7 +91,9 @@
 	
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">		
 			
-			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000"/>
+			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000">
+				<p:autoUpdate/>
+			</p:growl>
 			
 			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{moderateDiscussion.discussion == null}">
 			
@@ -135,13 +137,13 @@
 							style="font-weight:bold;color:#{moderateDiscussion.discussion.closed ? 'Tomato' : 'LimeGreen'};"/>
 						<p:selectBooleanButton id="discussionCloseButton" value="#{moderateDiscussion.discussion.closed}" title="click to change"
 							onLabel="Click to open" offLabel="Click to close" onIcon="pi pi-check" offIcon="pi pi-ban">
-	            			<p:ajax update=":growl discussionStatusLabel" listener="#{moderateDiscussion.updateDiscussion}" />
+	            			<p:ajax update="discussionStatusLabel" listener="#{moderateDiscussion.updateDiscussion}" />
 	        			</p:selectBooleanButton>
 	        			
 						<h:outputLabel id="discussionImportantLabel" for="discussionImportantButton" value="Mark as important" style="font-weight:bold;margin:0px 5px 0px 25px;"/>
 						<p:selectBooleanButton id="discussionImportantButton" value="#{moderateDiscussion.discussion.closed}" title="click to change"
 							onLabel="Yes" offLabel="No" onIcon="pi pi-check" offIcon="pi pi-times">
-	            			<p:ajax update=":growl" listener="#{moderateDiscussion.updateDiscussion}" />
+	            			<p:ajax listener="#{moderateDiscussion.updateDiscussion}" />
 	        			</p:selectBooleanButton>
 	        			
 	        			<p:commandButton value=" #{msg['delete.this.discussion']}" icon="pi pi-exclamation-triangle"
@@ -160,7 +162,7 @@
 	                              filter="true" filterMatchMode="startsWith" panelStyle="width:250px" converter="#{moderateDiscussion.tagConverter}">
 					            <f:selectItems value="#{moderateDiscussion.tags}" var="tag" itemLabel="#{tag.label}" itemValue="#{tag}"/>
 					        </p:selectCheckboxMenu>
-					        <p:commandButton ajax="true" value="&#160;Apply" action="#{moderateDiscussion.updateDiscussionTag}" update=":growl" icon="pi pi-check"
+					        <p:commandButton ajax="true" value="&#160;Apply" action="#{moderateDiscussion.updateDiscussionTag}" icon="pi pi-check"
 					         	styleClass="w3-theme-dark w3-border-0" style="margin-top:-5px;"/>
 				        </h:panelGrid>
 				        
@@ -325,7 +327,7 @@
 					        
 							<p:selectBooleanButton id="commentHideButton" value="#{comment.hidden}" title="click to toggle"
 								onLabel="Click to show" offLabel="Click to hide" onIcon="pi pi-check" offIcon="pi pi-ban" style="width:150px;">
-			            		<p:ajax update=":growl commentStatusText" listener="#{moderateDiscussion.updateComment(comment)}" process="@this"/>
+			            		<p:ajax update="commentStatusText" listener="#{moderateDiscussion.updateComment(comment)}" process="@this"/>
 			        		</p:selectBooleanButton>					        	
 					    </div>
 				        
@@ -412,7 +414,7 @@
 
 					        	<p:commandLink rendered="#{data.id ne moderateDiscussion.discussion.forum.id}"
 					        		title="Assign to this Forum" action="#{moderateDiscussion.assignDiscussionForum}" 
-									update=":growl :forumTitleDiv :forumMapContent" oncomplete="$('#forumMapModal').hide();" styleClass="w3-large">
+									update=":forumTitleDiv :forumMapContent" oncomplete="$('#forumMapModal').hide();" styleClass="w3-large">
 									
 									<span class="w3-tag" style="line-height:30px;width:30px;height:30px;border-radius:2px;color:#fff;background-color:##{data.iconColor};">
 						        		<i class="#{data.icon}"/>
