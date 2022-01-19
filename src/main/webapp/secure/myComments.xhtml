@@ -26,7 +26,7 @@
 		<div id="myCommentsPanel" class="w3-container w3-animate-right">
 			<h:form>
 			
-				<p:dataTable var="comment" value="#{myComments.lazyModel}" style="margin: 0 auto;"
+				<p:dataTable var="comment" value="#{myComments.lazyModel}" style="margin: 0 auto;" styleClass="borderless"
 					widgetVar="commentTableVar" rowIndexVar="rowIndex" paginator="true" reflow="false"
 					rows="10" lazy="true" id="commentTable" filterEvent="enter" 
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -37,7 +37,7 @@
 					<p:ajax event="sort" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 					<p:ajax event="filter" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 				
-					<p:column sortBy="#{comment.createDate}" responsivePriority="3" style="width:14%;">
+					<p:column sortBy="#{comment.createDate}" responsivePriority="3" style="width:16%;">
 						<f:facet name="header">
 							<span><b><i class="pi pi-clock"/> Post Date</b></span>
 						</f:facet>
@@ -45,36 +45,57 @@
 							<f:convertDateTime pattern="MMMM dd, yyyy HH:mm" />
 						</h:outputText>
 					</p:column>
-
-					<p:column sortBy="#{comment.title}" responsivePriority="1" style="width:35%;">
+					<!-- Note: set the title column width to 99% to make it fill the available horizontal table space
+						https://stackoverflow.com/questions/7138605/how-do-i-make-one-table-column-fill-all-the-spare-horizontal-space 
+					-->
+					<p:column sortBy="#{comment.title}" responsivePriority="1" style="width:99%;">
 						<f:facet name="header">
 							<span><b>Title</b></span>
 						</f:facet>
 						<h:outputText value="#{comment.title.length() gt 50 ? comment.title.substring(0,47).concat('...') : comment.title}" />
 					</p:column>
 
-					<p:column sortBy="#{comment.commentVote.voteUpCount}" responsivePriority="4" style="width:8%;text-align:center;">
+					<p:column sortBy="#{comment.commentVote.voteUpCount}" responsivePriority="4" style="width:10%;text-align:center;">
 						<f:facet name="header">
 							<span title="Voted Up Count"><b><i class="pi pi-thumbs-up"/> Count</b></span>
 						</f:facet>
 						<h:outputText value="#{comment.commentVote.voteUpCount}" />
 					</p:column>
 
-					<p:column sortBy="#{comment.commentVote.voteDownCount}" responsivePriority="5" style="width:8%;text-align:center;">
+					<p:column sortBy="#{comment.commentVote.voteDownCount}" responsivePriority="5" style="width:10%;text-align:center;">
 						<f:facet name="header">
 							<span title="Voted Down Count"><b><i class="pi pi-thumbs-down"/> Count</b></span>
 						</f:facet>
 						<h:outputText value="#{comment.commentVote.voteDownCount}" />
 					</p:column>
-
-					<p:column sortBy="#{comment.discussion.title}" responsivePriority="2" style="width:35%;">
+					
+					<p:column responsivePriority="2" style="width:8%;text-align:center;">
 						<f:facet name="header">
-							<span><b><i class="pi pi-comments"/> Discussion</b></span>
+							<span title="Details"><b><i class="pi pi-eye"/> Details</b></span>
 						</f:facet>
-						<h:link value="#{comment.discussion.title}" outcome="/viewDiscussion">
-							<f:param name="id" value="#{comment.discussion.id}"/>
-						</h:link>
-					</p:column>
+                		<p:rowToggler/>
+            		</p:column>
+
+					<p:rowExpansion>
+						<div class="w3-container">
+							<div class="w3-padding" style="font-weight:bold;">
+								In discussion: 
+								<h:link value="#{comment.discussion.title}" outcome="/viewDiscussion">
+									<f:param name="id" value="#{comment.discussion.id}"/>
+								</h:link>
+							</div>
+							<div class="w3-panel w3-round w3-padding" style="background-color: lightgray">
+								<h:outputText value="#{comment.content.length() gt 500 ? comment.content.substring(0,497).concat('...') : comment.content}" escape="false"/>
+								<p>
+								[
+								<h:link value="View Comment Thread" outcome="/commentThread">
+									<f:param name="id" value="#{comment.id}"/>
+								</h:link>
+								]
+								</p>
+							</div>
+						</div>
+					</p:rowExpansion>
 				
 				</p:dataTable>
 			</h:form>
@@ -92,7 +113,7 @@
  				
 				function customizeDatatableStyle() {
 					/* set datatable header's background color */
-					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l5'})
 					
 					/* set datatable paginator button color */
 					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(

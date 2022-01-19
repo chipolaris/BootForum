@@ -55,4 +55,9 @@ public class CommentByUserLazyModel extends LazyDataModel<Comment> {
 		return this.genericService.getEntities2(builder.startIndex(first).
 				maxResult(pageSize).build()).getDataObject();
 	}
+	
+	@Override
+	public String getRowKey(final Comment comment) {
+		return comment.getId().toString();
+	}
 }

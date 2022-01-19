@@ -182,20 +182,20 @@
 						#{msg['latest.comment']}<br/>
 						<h:link outcome="memberProfile"> 
 
-			        		<h:graphicImage value="#{requestContext}/avatar/#{viewDiscussion.discussion.stat.lastComment.updateBy}" class="w3-circle"
-								height="36" width="36" title="#{viewDiscussion.discussion.stat.lastComment.updateBy}" rendered="#{fileHandler.isAvatarExists(viewDiscussion.discussion.stat.lastComment.updateBy)}"/>
+			        		<h:graphicImage value="#{requestContext}/avatar/#{viewDiscussion.discussion.stat.lastComment.commentor}" class="w3-circle"
+								height="36" width="36" title="#{viewDiscussion.discussion.stat.lastComment.commentor}" rendered="#{fileHandler.isAvatarExists(viewDiscussion.discussion.stat.lastComment.commentor)}"/>
 								
-							<span jsf:rendered="#{!fileHandler.isAvatarExists(viewDiscussion.discussion.stat.lastComment.updateBy)}" class="w3-circle avatarSpan"
-								title="#{viewDiscussion.discussion.stat.lastComment.updateBy}"
+							<span jsf:rendered="#{!fileHandler.isAvatarExists(viewDiscussion.discussion.stat.lastComment.commentor)}" class="w3-circle avatarSpan"
+								title="#{viewDiscussion.discussion.stat.lastComment.commentor}"
 								style="display:inline-block;font-size:0.9rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
-								#{fn:substring(viewDiscussion.discussion.stat.lastComment.updateBy, 0, 3)}
+								#{fn:substring(viewDiscussion.discussion.stat.lastComment.commentor, 0, 3)}
 							</span>
 							<f:param name="username" value="#{viewDiscussion.discussion.stat.lastComment.commentor}"/>
 						</h:link><br/>
 						<pe:timeAgo value="#{viewDiscussion.discussion.stat.lastComment.updateDate}" titlePattern="MMM dd, yyyy"/>
 					</span>
 					
-					<p:repeat var="username" value="#{viewDiscussion.discussion.stat.firstUsersMap.keySet().toArray()}">
+					<p:repeat var="username" value="#{viewDiscussion.discussion.stat.firstCommentors.keySet().toArray()}">
 						<span class="w3-tag w3-white">
 							&#160;<br/>
 							<h:link outcome="memberProfile" style="position: relative"> 
@@ -209,7 +209,7 @@
 								</span>
 								<f:param name="username" value="#{username}"/>
 								<span class="w3-badge w3-theme-dark w3-tiny" style="position:absolute; top: -12px; right:-8px;">
-									<b>#{viewDiscussion.discussion.stat.firstUsersMap[username]}</b>
+									<b>#{viewDiscussion.discussion.stat.firstCommentors[username]}</b>
 								</span>
 							</h:link><br/>
 							&#160;

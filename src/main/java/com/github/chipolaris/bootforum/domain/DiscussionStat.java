@@ -1,11 +1,12 @@
 package com.github.chipolaris.bootforum.domain;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -13,15 +14,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.PostLoad;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name="DISCUSSION_STAT_T")
@@ -51,38 +49,12 @@ public class DiscussionStat extends BaseEntity {
 	@Column(name="ATTACHMENT_COUNT")
 	private long attachmentCount;
 	
-	@Column(name="FIRST_USERS", length = 256)
-	private String firstUsers; // comma separated of first 10 users of the discussion, for display
-	
-	@Transient
-	private Map<String, Integer> firstUsersMap = new HashMap<>();
-	
-	@PostLoad
-	private void afterLoad() {
-		
-		if(firstUsers != null) {
-			for(String user : firstUsers.split(",")) {
-				String[] nameAndCount = user.split(":");
-				firstUsersMap.put(nameAndCount[0], Integer.valueOf(nameAndCount[1]));
-			}
-		}
-	}
-	
-	@PrePersist @PreUpdate
-	private void beforeSave() {
-		
-		StringBuilder stringBuilder = new StringBuilder();
-		for(String username : firstUsersMap.keySet()) {
-			Integer count = firstUsersMap.get(username);
-			stringBuilder.append(username + ":" + count + ",");
-		}
-		
-		this.firstUsers = stringBuilder.toString();
-		
-		if(firstUsers.isEmpty()) {
-			firstUsers = null;
-		}
-	}
+	@ElementCollection
+	@CollectionTable(name = "DISC_STAT_FIRST_COMMENTOR", 
+		joinColumns = {@JoinColumn(name = "DISC_STAT_ID")})
+	@MapKeyColumn(name = "COMMENTOR") 
+	@Column(name = "COMMENT_COUNT")
+	private Map<String, Integer> firstCommentors;
 
 	@Override
 	public Long getId() {
@@ -145,8 +117,8 @@ public class DiscussionStat extends BaseEntity {
 		this.attachmentCount += number;
 	}
 	
-	public Map<String, Integer> getFirstUsersMap() {
-		return this.firstUsersMap;
+	public Map<String, Integer> getFirstCommentors() {
+		return this.firstCommentors;
 	}
 }
 

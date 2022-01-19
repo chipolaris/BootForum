@@ -53,11 +53,11 @@ public class AccountInfo {
 			userService.updatePersonalInfo(user);
 		
 		if(response.getAckCode() != AckCodeType.SUCCESS) {
-			JSFUtils.addServiceErrorMessage("accountMessages", response);
+			JSFUtils.addServiceErrorMessage(null, response);
 			return;
 		}
 		
-		JSFUtils.addInfoStringMessage("accountMessages", "Personal Info Updated!");
+		JSFUtils.addInfoStringMessage(null, "Personal Info Updated!");
 	}
 	
 	public void updatePassword() {
@@ -69,7 +69,7 @@ public class AccountInfo {
 			return;
 		}
 		
-		JSFUtils.addInfoStringMessage("accountMessages", "Password updated!");
+		JSFUtils.addInfoStringMessage(null, "Password updated!");
 	}
 	
 	private String currentPassword;

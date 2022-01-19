@@ -123,7 +123,7 @@ public class DiscussionEventsListener {
 		DiscussionStat discussionStat = new DiscussionStat();
 		discussionStat.setCommentCount(1);
 		discussionStat.setLastComment(lastComment);
-		discussionStat.getFirstUsersMap().put(username, 1);
+		discussionStat.getFirstCommentors().put(username, 1);
 		discussionStat.setThumbnailCount(comment.getThumbnails().size());
 		discussionStat.setAttachmentCount(comment.getAttachments().size());
 		

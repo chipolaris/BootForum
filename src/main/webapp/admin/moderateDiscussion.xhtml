@@ -92,12 +92,6 @@
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">		
 			
 			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000"/>
-						
-			<!-- <div>
-				<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
-					<p:autoUpdate/>
-				</p:messages>
-			</div> -->
 			
 			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{moderateDiscussion.discussion == null}">
 			
@@ -424,13 +418,13 @@
 						        		<i class="#{data.icon}"/>
 						        	</span>
 					        		
-					        		#{data.title} [#{statBean.getForumStat(data).discussionCount} discussions, #{statBean.getForumStat(data).commentCount} comments]
+					        		#{data.title} [#{data.stat.discussionCount} discussions, #{data.stat.commentCount} comments]
 				        			<f:setPropertyActionListener value="#{data}" target="#{moderateDiscussion.toForum}"/>
 				        		</p:commandLink>
 				        		
 				        		<span jsf:rendered="#{data.id eq moderateDiscussion.discussion.forum.id}" 
 				        			class="w3-tag w3-theme-dark w3-large" title="Current Forum for this discussion">
-				        			<i class="#{data.icon}"/> #{data.title} [#{statBean.getForumStat(data).discussionCount} discussions, #{statBean.getForumStat(data).commentCount} comments] *Current*
+				        			<i class="#{data.icon}"/> #{data.title} [#{data.stat.discussionCount} discussions, #{data.stat.commentCount} comments] *Current*
 				        		</span>					        	 
 					        	 
 					        </p:treeNode>

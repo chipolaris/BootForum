@@ -102,7 +102,7 @@ public class CommentEventsListener {
 		discussionStat.addAttachmentCount(comment.getAttachments().size());
 		discussionStat.addThumbnailCount(comment.getThumbnails().size());
 		discussionStat.setLastComment(lastComment);
-		add2FirstUsersMap(discussionStat, user.getUsername());
+		add2FirstCommentorsMap(discussionStat, user.getUsername());
 		
 		genericDAO.merge(discussionStat);
 		
@@ -133,14 +133,14 @@ public class CommentEventsListener {
 		systemStat.setLastComment(lastComment);
 	}
 
-	private void add2FirstUsersMap(DiscussionStat discussionStat, String username) {
+	private void add2FirstCommentorsMap(DiscussionStat discussionStat, String username) {
 		
-		Map<String, Integer> firstUsersMap = discussionStat.getFirstUsersMap();
-		if(firstUsersMap.containsKey(username)) {
-			firstUsersMap.put(username, firstUsersMap.get(username) + 1);
+		Map<String, Integer> firstCommentorsMap = discussionStat.getFirstCommentors();
+		if(firstCommentorsMap.containsKey(username)) {
+			firstCommentorsMap.put(username, firstCommentorsMap.get(username) + 1);
 		}
-		else if(firstUsersMap.size() < 10) {
-			firstUsersMap.put(username, 1);
+		else if(firstCommentorsMap.size() < 10) {
+			firstCommentorsMap.put(username, 1);
 		}
 	}
 }

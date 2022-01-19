@@ -18,7 +18,7 @@ import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
  *  https://stackoverflow.com/questions/25424713/why-primefaces-media-dynamic-doesnt-work-in-view-scope
  * So use "session" scope as the work around
  */
-@Component @Scope("view")  
+@Component @Scope("session")  
 public class ImageUploadView {
 
 	@SuppressWarnings("unused")

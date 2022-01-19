@@ -34,10 +34,10 @@
  					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
  				}
 			//]]>	
-		</script>
-			
+		</script>	
+		
 		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000"/>
-						
+		
 		<p:tabView id="tabView">
 			<p:tab>
 			
@@ -79,7 +79,7 @@
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
 							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-save"
-								action="#{accountInfo.updatePersonalInfo}" update=":growl"/>
+								action="#{accountInfo.updatePersonalInfo}" />
 						</div>
 						
 					</div>						
@@ -124,11 +124,7 @@
 						<p:commandButton id="deleteAvatarButton" value=" Delete Avatar"
 							rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"
 							actionListener="#{fileHandler.deleteAvatar(userSession.user.username)}"
-							icon="pi pi-trash" update="viewAvatarPanel :growl" ajax="true">
-							
-							<p:confirm type="popup" header="Confirmation" message="Are you sure?" icon="pi pi-exclamation-triangle"/>
-							
-						</p:commandButton>
+							icon="pi pi-trash" update="viewAvatarPanel" ajax="true" />
 							
 					</div>
 					
@@ -149,7 +145,7 @@
 					<h:form id="avatarUploadForm">
 					
 						<p:fileUpload listener="#{imageUploadView.uploadImage}"
-							mode="advanced" dragDropSupport="true" update="cropperPanel :growl"
+							mode="advanced" dragDropSupport="true" update="cropperPanel"
 							auto="false" oncomplete="customizePrimefaceButtons();"
 							sizeLimit="#{applicationProperties['Avatar.maxFileSize'] * 1024}"
 							allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
@@ -169,7 +165,7 @@
 				            <div class="w3-containter w3-center" jsf:rendered="#{not empty imageUploadView.image}">
 								
 								<p>
-				                	<p:commandButton value="Crop as new avatar" action="#{fileHandler.crop(userSession.user.username)}" update=":tabView:avatarForm:viewAvatarPanel :growl" 
+				                	<p:commandButton value="Crop as new avatar" action="#{fileHandler.crop(userSession.user.username)}" update=":tabView:avatarForm:viewAvatarPanel" 
 				                		icon="pi pi-clone" oncomplete="PF('avatarUpload').hide();customizePrimefaceButtons();"/>
 								</p>
 								
@@ -245,7 +241,7 @@
 					
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-save" action="#{accountInfo.updatePassword}" update=":growl"/>
+							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-save" action="#{accountInfo.updatePassword}" />
 						</div>
 						
 					</div>
@@ -256,10 +252,46 @@
 		
 		</p:tabView>
 
-        <p:confirmPopup global="true">
-            <p:commandButton value="#{msg['no']}" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
-            <p:commandButton value="#{msg['yes']}" type="button" styleClass="ui-confirm-popup-yes" />
-        </p:confirmPopup>
+		<button onclick="toggle('accountInfoPanel');" class="w3-button w3-block w3-left-align w3-theme-d3 w3-border w3-round"><i class="pi pi-user"/> Personal Information</button>
+
+		<div id="accountInfoPanel" class="w3-container w3-animate-right w3-hide w3-show">
+			<div class="w3-panel w3-border">
+
+			</div>
+		</div>
+		
+		<button onclick="toggle('avatarPanel');" class="w3-button w3-block w3-left-align w3-theme-d3 w3-border w3-round"><i class="pi pi-image"/> Avatar</button>
+		
+		<div id="avatarPanel" class="w3-container w3-animate-right w3-hide">
+			<div class="w3-panel w3-border">
+		
+
+			</div>
+		</div>
+
+		<button onclick="toggle('passwordPanel');" class="w3-btn w3-block w3-left-align w3-theme-d3 w3-border w3-round"><i class="pi pi-key"/> Change Password</button>
+
+		<div id="passwordPanel" class="w3-container w3-animate-right w3-hide">
+			<div class="w3-panel w3-border">
+		
+
+			</div>
+		</div>
+		
+		<script>
+			//<![CDATA[
+				
+				function toggle(id) {
+					var x = document.getElementById(id);
+					if (x.className.indexOf("w3-show") == -1) {
+						x.className += " w3-show";
+					} else {
+						x.className = x.className.replace(" w3-show", "");
+					}
+				};
+			
+			//]]>	
+		</script>
 		
 	</ui:define>
 </ui:composition>
