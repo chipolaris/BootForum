@@ -79,17 +79,18 @@
 		  <div class="w3-bar-block">
 		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="pi pi-times"></i>  Close Menu</a>
 		    
-			<a href="#{request.contextPath}/admin/index.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-briefcase" title="Home"/> ADMIN HOME</a> 
-			<a href="#{request.contextPath}/admin/userList.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="Manage Users"/> <b>Manage Users</b></a> 
-			<a href="#{request.contextPath}/admin/discussionManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Discussions"/> <b>Manage Discussions</b></a> 
-			<a href="#{request.contextPath}/admin/forumAdmin.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-align-right" title="Manage Forums"/> <b>Manage Forums</b></a>
-			<a href="#{request.contextPath}/admin/tagManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-tags" title="Manage Tags"/> <b>Manage Tags</b></a>
-			<a href="#{request.contextPath}/admin/chatChannelManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Chat Channels"/> <b>Manage Chat</b></a>
-			<a href="#{request.contextPath}/admin/displayManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="Manage Diplay"/> <b>Display Configuration</b></a>
-			<a href="#{request.contextPath}/admin/emailManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="Manage Email Option"/> <b>Email Configuration</b></a>
-			<a href="#{request.contextPath}/admin/registrationManagement.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-book" title="Manage Registration"/><b> Manage Registration</b></a>
-			<a href="#{request.contextPath}/admin/systemInfo.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-cog" title="Manage System"/> <b>System Information</b></a>
-			<a href="#{request.contextPath}/admin/simulateData.xhtml" class="w3-bar-item w3-button w3-padding"><i class="pi pi-play" title="Create Simulation Data"/> <b>Simulate Data</b></a>
+		    <h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-briefcase" title="Home"/> ADMIN HOME</h:link>
+		    <h:link outcome="/admin/userList" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="Manage Users"/> <b>Manage Users</b></h:link>
+		    <h:link outcome="/admin/discussionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Discussions"/> <b>Manage Discussions</b></h:link>
+		    <h:link outcome="/admin/forumAdmin" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-align-right" title="Manage Forums"/> <b>Manage Forums</b></h:link>
+		    <h:link outcome="/admin/tagManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-tags" title="Manage Tags"/> <b>Manage Tags</b></h:link>
+		    <h:link outcome="/admin/chatChannelManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Chat Channels"/> <b>Manage Chat</b></h:link>
+		    <h:link outcome="/admin/displayManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="Manage Diplay"/> <b>Display Configuration</b></h:link>
+		    <h:link outcome="/admin/emailManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="Manage Email Option"/> <b>Email Configuration</b></h:link>
+		    <h:link outcome="/admin/registrationManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-book" title="Manage Registration"/><b> Manage Registration</b></h:link>
+		    <h:link outcome="/admin/systemInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-cog" title="Manage System"/> <b>System Information</b></h:link>
+			
+			<h:link rendered="#{applicationProperties['application.devMode'] eq 'true'}" outcome="/admin/simulateData" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-play" title="Create Simulation Data"/> <b>Simulate Data</b></h:link>
 		  </div>
 		</nav>
 

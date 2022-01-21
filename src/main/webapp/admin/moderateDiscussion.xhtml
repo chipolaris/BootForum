@@ -178,7 +178,7 @@
 				    	itemType="none" rowIndexVar="rowIndex" lazy="true"
 				    	paginator="true" rows="10" style="width:100%;" itemStyleClass="padding-inline-start:0px;">
 				    	
-				    	<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
+				    	<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 				    	
 				        <f:facet name="header">
 				        	<h:outputText value="There are #{moderateDiscussion.discussion.stat.commentCount} comments in this discussion. This discussion has been viewed #{moderateDiscussion.discussion.stat.viewCount} times"/>

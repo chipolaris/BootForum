@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -8,11 +9,9 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.github.chipolaris.bootforum.CachingConfig;
@@ -23,14 +22,9 @@ import com.github.chipolaris.bootforum.dao.StatDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.CommentVote;
 import com.github.chipolaris.bootforum.domain.Discussion;
-import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
-import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.User;
-import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
-import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
-import com.github.chipolaris.bootforum.event.DiscussionMovedEvent;
 
 @Service
 @Transactional
@@ -69,10 +63,10 @@ public class DiscussionService {
 	 * @return
 	 */
 	@Transactional(readOnly = false)
-	public ServiceResponse<Long> addDiscussion(Discussion newDiscussion, Comment comment, User user,
+	public ServiceResponse<Discussion> addDiscussion(Discussion newDiscussion, Comment comment, User user,
 			List<UploadedFileData> thumbnailList, List<UploadedFileData> attachmentList) {
 		
-		ServiceResponse<Long> response = new ServiceResponse<Long>();
+		ServiceResponse<Discussion> response = new ServiceResponse<>();
 		
 		String username = user.getUsername();
 				
@@ -97,7 +91,7 @@ public class DiscussionService {
 		// commentVote
 		comment.setCommentVote(new CommentVote());
 		
-		newDiscussion.setComments(Arrays.asList(comment));
+		newDiscussion.setComments(new ArrayList<>(Arrays.asList(comment)));
 		genericDAO.persist(newDiscussion); 
 		
 		comment.setDiscussion(newDiscussion);
@@ -110,6 +104,8 @@ public class DiscussionService {
 		
 		 // lucene index the first comment
 		indexService.addCommentIndex(comment);
+		
+		response.setDataObject(newDiscussion);
 		
 		return response;
 	}

@@ -62,7 +62,7 @@
 				</p:messages>
 			</div>
 			
-			<div jsf:id="forumGroupDiv" >
+			<div jsf:id="forumGroupDiv">
 			
 				<div class="w3-hide-small w3-margin-top">
 					<p:breadCrumb>
@@ -87,7 +87,7 @@
 				        	</span>
 				        	<h:link outcome="viewForum" rendered="#{treeNode.type eq 'Forum'}">
 								<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{data.iconColor};">
-				        			<i class="fa-lg #{data.icon}"/>
+				        			<i class="#{data.icon} w3-large"/>
 				        		</span>
 				        		<span class="w3-large">#{data.title}</span>
 				        		<f:param name="id" value="#{data.id}"/>

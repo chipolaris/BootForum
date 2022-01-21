@@ -12,8 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.domain.Forum;
+import com.github.chipolaris.bootforum.jsf.converter.EntityConverter;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
+import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 import com.github.chipolaris.bootforum.service.SimulateDataService;
 import com.github.chipolaris.bootforum.service.UserService;
@@ -30,15 +33,41 @@ public class SimulateData {
 	@Resource
 	private UserService userService;
 	
-	private Form form;
+	@Resource
+	private GenericService genericService;
 	
+	private List<Forum> forums;
+	
+	public List<Forum> getForums() {
+		return forums;
+	}
+	public void setForums(List<Forum> forums) {
+		this.forums = forums;
+	}
+
 	@PostConstruct
 	private void postConstruct() {
 		
 		List<String> allUsernames = userService.getAllUsernames().getDataObject();
 		
+		this.forums = genericService.getAllEntities(Forum.class).getDataObject();
+		
+		this.setForumConverter(new EntityConverter<>(forums));
+		
 		form = new Form(allUsernames);
 	}
+	
+	private EntityConverter<Forum> forumConverter;
+	
+	public EntityConverter<Forum> getForumConverter() {
+		return forumConverter;
+	}
+
+	public void setForumConverter(EntityConverter<Forum> forumConverter) {
+		this.forumConverter = forumConverter;
+	}
+	
+	private Form form;
 	
 	public Form getForm() {
 		return form;
@@ -67,11 +96,11 @@ public class SimulateData {
 
 	public void simulateDiscussion() {
 		
-		logger.info(String.format("Simulate discussion for forum group '%s', forum '%s', discussion '%s', with %d comments", 
-				form.getForumGroupTitle(), form.getForumTitle(), form.getDiscussionTitle(), form.getNumComments()));
+		logger.info(String.format("Simulate discussion for forum '%s', discussion '%s', with %d comments", 
+				form.getForum().getTitle(), form.getDiscussionTitle(), form.getNumComments()));
 		
-		ServiceResponse<Void> response = simulateDataService.simulateDiscussion(form.getForumGroupTitle(), 
-				form.getForumTitle(), form.getDiscussionTitle(), form.getNumComments(), form.getCommentors().getTarget());
+		ServiceResponse<Void> response = simulateDataService.simulateDiscussion(
+				form.getForum(), form.getDiscussionTitle(), form.getNumComments(), form.getCommentors().getTarget());
 		
 		if(response.getAckCode() != AckCodeType.SUCCESS) {
 			
@@ -109,7 +138,7 @@ public class SimulateData {
 			JSFUtils.addInfoStringMessage(null, "Simulate private messages created");
 		}
 	}
-	
+
 	public class Form {
 	
 		private String forumGroupTitle;
@@ -121,6 +150,8 @@ public class SimulateData {
 		private DualListModel<String> commentors;
 		
 		private int numUsers;
+		
+		private Forum forum;
 		
 		public Form(List<String> sourceUsers) {
 			commentors = new DualListModel<>();
@@ -175,6 +206,13 @@ public class SimulateData {
 		}
 		public void setNumUsers(int numUsers) {
 			this.numUsers = numUsers;
+		}
+
+		public Forum getForum() {
+			return forum;
+		}
+		public void setForum(Forum forum) {
+			this.forum = forum;
 		}
 	}
 }

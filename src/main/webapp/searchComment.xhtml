@@ -93,7 +93,7 @@
 			
 			<div jsf:id="searchFormDiv" >
 				
-				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					<h3>#{msg['search.comments']}</h3>
  				</div>
 			
@@ -109,8 +109,8 @@
 							<!-- Note: since this search page is AJAX submitted/refreshed, make sure to clear the resultTable, so the display between
 								searches is displayed properly: use the paginator.setPage(0) on the onclick event
 								ref: https://stackoverflow.com/questions/18441847/primefaces-datatable-reset-pagination -->
-							<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xf002; #{msg['search']}"
-								style="font-family:Open Sans, FontAwesome;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
+							<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xe908; #{msg['search']}"
+								style="font-family:Arial, PrimeIcons;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
 								onclick="PF('searchResultDatatable').getPaginator().setPage(0);" update=":searchResultDiv"
 								oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();changeAvatarBackgrounds();"/>
 						</div>
@@ -158,14 +158,8 @@
 							<f:facet name="header">
 								<h:outputText value="#{msg['comment']}"/>
 							</f:facet>
-				            <p:commandLink id="viewCommentLink" title="View Comment" style="color: #0084B4;"
-				            	oncomplete="PF('commentDialogVar').show();
-				            		$('#commentDialogForm\\:searchCommentText').mark($('#searchForm\\:keywords').val());
-				            		$('#searchCommentTitle').mark($('#searchForm\\:keywords').val());" 
-				            	update=":commentDialogForm" value="#{comment.title}" styleClass="commentTitle">  
-				                
-				                <f:setPropertyActionListener target="#{searchComment.selectedComment}" value="#{comment}"/>
-				            </p:commandLink>
+				            
+				            <span class="commentTitle">#{comment.title}</span>
 				            
 				            <p:rowToggler />
 				            
@@ -175,10 +169,10 @@
 							<f:facet name="header">
 								<h:outputText value="#{msg['discussion']}"/>
 							</f:facet>
-							<h:outputLink value="viewDiscussion.xhtml" style="color: #0084B4;">
-								<h:outputText value="#{comment.discussion.title}"/>
+							<h:link value="#{searchComment.getDiscussion(comment.discussion.id).title}" outcome="viewDiscussion" 
+								styleClass="w3-text-theme" style="font-weight:bold;">
 								<f:param name="id" value="#{comment.discussion.id}" />
-							</h:outputLink>
+							</h:link>
 						</p:column>
 						
 						<p:column style="text-align:right;">
@@ -197,23 +191,6 @@
 					 </p:dataTable>
 				</div>
 			</div>
-
-			<h:form id="commentDialogForm">
-			    <p:dialog header="#{searchComment.selectedComment.createBy} #{msg['posted.on']} #{searchComment.selectedComment.createDate}" 
-			    	widgetVar="commentDialogVar" width="900" resizable="false" id="commentDialog" position="center" 
-			        showEffect="scale" hideEffect="slide" modal="true">
-			        
-			        <h3 id="searchCommentTitle">#{searchComment.selectedComment.title}</h3>
-			        
-			        <p:scrollPanel style="max-height:500px;">	
-				  		<h:outputText value="#{searchComment.selectedComment.content}" escape="true" id="searchCommentText"/>
-					</p:scrollPanel>
-					
-					<p/>
-					
-					<p:button href="viewDiscussion.xhtml?id=#{searchComment.selectedComment.discussion.id}" value="View Discussion" icon="fa fa-eye"/>		
-				</p:dialog>
-			</h:form>
 
 		</div>
 		

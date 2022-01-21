@@ -56,6 +56,9 @@ public class CommentByUserLazyModel extends LazyDataModel<Comment> {
 				maxResult(pageSize).build()).getDataObject();
 	}
 	
+	/*
+	 * Need this method for the rowExpansion feature 
+	 */
 	@Override
 	public String getRowKey(final Comment comment) {
 		return comment.getId().toString();

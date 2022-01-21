@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.IndexService;
@@ -77,6 +78,11 @@ public class SearchComment {
 	public void viewSelectedComment() {
 		this.selectedComment = 
 			genericService.findEntity(Comment.class, selectedComment.getId()).getDataObject();
+	}
+	
+	public Discussion getDiscussion(Long discussionId) {
+		
+		return genericService.getEntity(Discussion.class, discussionId).getDataObject();
 	}
 	
 	// 

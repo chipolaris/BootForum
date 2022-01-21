@@ -98,4 +98,12 @@ public class CommentSearchLazyModel extends LazyDataModel<Comment> {
 		
 		return searchCommentResult.getComments();
 	}
+	
+	/*
+	 * Need this method for the rowExpansion feature 
+	 */
+	@Override
+	public String getRowKey(final Comment comment) {
+		return comment.getId().toString();
+	}
 }

@@ -121,7 +121,7 @@ public class AddDiscussion {
 		logger.info("add discussion for " + forum.getTitle());
 		
 		comment.setIpAddress(JSFUtils.getRemoteIPAddress());
-		ServiceResponse<Long> response = 
+		ServiceResponse<Discussion> response = 
 				discussionService.addDiscussion(discussion, comment, userSession.getUser(),
 						commentThumbnailManagement.getUploadedFileList(), commentAttachmentManagement.getUploadedFileList());
 		

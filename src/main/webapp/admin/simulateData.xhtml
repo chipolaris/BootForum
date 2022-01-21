@@ -67,31 +67,38 @@
 					<h:form id="discussionForm">
 					
 						<div class="w3-row w3-border w3-round w3-padding">
-						
-							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
-								<h:outputLabel value="Forum Group Title" for="forumGroupTitle"/><br/>
-								<p:inputText value="#{simulateData.form.forumGroupTitle}" style="width:100%;" required="true" id="forumGroupTitle"/>
+	
+							<div class="w3-twothird w3-margin-top" style="padding: 0px 5px;">
+								<h:outputLabel value="Forum" for="forumSelectListbox" style="font-weight:bold;"/>
+								<p/>								
+					            <p:selectOneListbox id="forumSelectListbox" value="#{simulateData.form.forum}" converter="#{simulateData.forumConverter}"
+					                var="forum" filter="true" filterMatchMode="contains">
+					                <f:selectItems value="#{simulateData.forums}" var="forum" itemLabel="#{forum.title}" itemValue="#{forum}"/>
+					                <p:column width="30">
+					                    <span class="#{forum.icon} w3-large"/>
+					                </p:column>
+					                <p:column>
+					                    <h:outputText value="#{forum.title}"/>
+					                </p:column>
+					            </p:selectOneListbox>						
 							</div>
 	
 							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
-								<h:outputLabel value="Forum Title" for="forumTitle"/><br/>
-								<p:inputText value="#{simulateData.form.forumTitle}" style="width:100%;" required="true" id="forumTitle"/>
-							</div>
-	
-							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
-								<h:outputLabel value="Discussion Title" for="discussionTitle"/><br/>
+								<h:outputLabel value="Discussion Title" for="discussionTitle" style="font-weight:bold;"/>
+								<p/>
 								<p:inputText value="#{simulateData.form.discussionTitle}" style="width:100%;" required="true" id="discussionTitle"/>
 							</div>
 							
 							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
-								<h:outputLabel value="Number of Comments" for="numComments"/><br/>
+								<h:outputLabel value="Number of Comments" for="numComments" style="font-weight:bold;"/>
+								<p/>
 								<p:inputText value="#{simulateData.form.numComments}" style="width:100%;" required="true" id="numComments"/>
 							</div>
 							
 							<div class="w3-col w3-rest w3-margin-top" style="padding: 0px 5px;">
 							
-								<h:outputLabel value="Pick Commentors" for="commentorList"/><br/>
-								
+								<h:outputLabel value="Pick Commentors" for="commentorList" style="font-weight:bold;"/>
+								<p/>
 							    <p:pickList id="commentorList" value="#{simulateData.form.commentors}" var="commentor"
 	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true">
 	         					

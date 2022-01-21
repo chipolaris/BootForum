@@ -251,7 +251,6 @@ public class IndexService {
 		
 		// discussion fields
 		document.add(new StringField("discussionId", comment.getDiscussion().getId() + "", Store.YES));
-		document.add(new TextField("discussionTitle", comment.getDiscussion().getTitle(), Store.YES));
 		
 		return document;
 	}
@@ -355,7 +354,7 @@ public class IndexService {
 		
 		Comment comment = new Comment();
 		
-		comment.setId(new Long(doc.getField("id").stringValue()));
+		comment.setId(Long.valueOf(doc.getField("id").stringValue()));
 		comment.setCreateBy(doc.getField("createBy").stringValue());
 		comment.setCreateDate(new Date(doc.getField("createDate").numericValue().longValue()));
 		comment.setTitle(doc.getField("title").stringValue());
@@ -363,8 +362,7 @@ public class IndexService {
 		
 		Discussion discussion = new Discussion();
 		comment.setDiscussion(discussion);
-		discussion.setId(new Long(doc.getField("discussionId").stringValue()));
-		discussion.setTitle(doc.getField("discussionTitle").stringValue());
+		discussion.setId(Long.valueOf(doc.getField("discussionId").stringValue()));
 		
 		return comment;
 	}

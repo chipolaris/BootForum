@@ -2,6 +2,7 @@ package com.github.chipolaris.bootforum.listener;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -121,6 +122,7 @@ public class DiscussionEventsListener {
 		lastComment.setCommentId(comment.getId());
 		
 		DiscussionStat discussionStat = new DiscussionStat();
+		discussionStat.setFirstCommentors(new HashMap<>());
 		discussionStat.setCommentCount(1);
 		discussionStat.setLastComment(lastComment);
 		discussionStat.getFirstCommentors().put(username, 1);
@@ -207,9 +209,6 @@ public class DiscussionEventsListener {
 		statistics.addCommentCount(-deletedCommentCount);
 		statistics.addDiscussionCount(-1);
 		statistics.setLastComment(statDAO.latestCommentInfo());
-		
-		// lastly, remove discussion.stat.lastComment
-		genericDAO.remove(discussion.getStat().getLastComment());
 	}	
 	
 	private void updateStats4DiscussionMoved(Discussion discussion, Forum fromForum, Forum toForum) {

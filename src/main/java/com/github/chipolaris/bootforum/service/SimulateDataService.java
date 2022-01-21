@@ -33,6 +33,8 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
+import com.github.chipolaris.bootforum.event.CommentAddEvent;
+import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
 import com.github.chipolaris.bootforum.event.ForumGroupAddEvent;
 import com.github.chipolaris.bootforum.event.UserRegistrationEvent;
 import com.thedeanda.lorem.Lorem;
@@ -155,18 +157,12 @@ public class SimulateDataService {
 	}
 	
 	@Transactional(readOnly = false)
-	public ServiceResponse<Void> simulateDiscussion(String forumGroupTitle, 
-			String forumTitle, String discussionTitle, int numComments, 
+	public ServiceResponse<Void> simulateDiscussion(Forum forum, String discussionTitle, int numComments, 
 			List<String> commentors) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
 		
-		ForumGroup simulatedForumGroup = createSimulatedForumGroup(forumGroupTitle);
-		Forum simulatedForum = createSimulatedForum(simulatedForumGroup, forumTitle);
-		createSimulatedDiscussion(simulatedForum, discussionTitle, numComments, commentors);
-		
-		// publish event
-		applicationEventPublisher.publishEvent(new ForumGroupAddEvent(this, simulatedForumGroup));
+		createSimulatedDiscussion(forum, discussionTitle, numComments, commentors);
 		
 		return response;
 	}
@@ -199,7 +195,7 @@ public class SimulateDataService {
 		ForumGroup forumGroup = new ForumGroup();
 		
 		forumGroup.setTitle(forumGroupTitle);
-		forumGroup.setIcon("fa fa-play");
+		forumGroup.setIcon("pi pi-play");
 		forumGroup.setIconColor("ff0000"); // red
 		
 		forumGroup = forumService.addForumGroup(forumGroup, null).getDataObject();
@@ -212,7 +208,7 @@ public class SimulateDataService {
 		Forum forum = new Forum();
 		
 		forum.setTitle(forumTitle);
-		forum.setIcon("fa fa-play");
+		forum.setIcon("pi pi-play");
 		forum.setIconColor("ff0000"); // red
 		
 		forum = forumService.addForum(forum, forumGroup).getDataObject();
@@ -242,13 +238,17 @@ public class SimulateDataService {
 		comment.setContent(lorem.getParagraphs(2, 4));
 		
 		String discussionCreator = commentors.get(random.nextInt(commentors.size()));
-		User admin = findUser(discussionCreator);
+		User discussionStarter = findUser(discussionCreator);
 		
-		if(admin != null) {
+		if(discussionStarter != null) {
 		
-			discussionService.addDiscussion(discussion, comment, admin, Collections.emptyList(), Collections.emptyList());
-		
-			createSimulateComments(discussion, numComments, commentors);
+			Discussion newDiscussion = discussionService.addDiscussion(discussion, comment, 
+					discussionStarter, Collections.emptyList(), Collections.emptyList()).getDataObject();
+			
+			// publish DiscussionAddEvent for listeners to process
+			applicationEventPublisher.publishEvent(new DiscussionAddEvent(this, newDiscussion, discussionStarter));
+			
+			createSimulateComments(newDiscussion, numComments, commentors);
 		}
 	}
 
@@ -277,6 +277,8 @@ public class SimulateDataService {
 			comment.setContent(lorem.getParagraphs(2, 4));
 			
 			commentService.addReply(comment, user, Collections.emptyList(), Collections.emptyList());
+			
+			applicationEventPublisher.publishEvent(new CommentAddEvent(this, comment, user));
 			
 			createdComments.add(comment);
 		}

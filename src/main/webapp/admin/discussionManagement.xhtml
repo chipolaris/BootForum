@@ -157,18 +157,18 @@
 						
 						<span>
 							<pe:timeAgo value="#{discussion.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy" />
-							by <b>#{discussion.stat.lastComment.updateBy} </b>
+							by <b>#{discussion.stat.lastComment.commentor} </b>
 							
-							<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(discussion.stat.lastComment.updateBy)}" class="w3-circle"
-									id="commentorAvatar" height="40" width="40" style="border:3px;" title="#{discussion.stat.lastComment.updateBy}"/> -->
-							<h:graphicImage value="#{requestContext}/avatar/#{discussion.stat.lastComment.updateBy}" class="w3-circle"
-								id="commentorAvatar" height="30" width="30" title="#{discussion.stat.lastComment.updateBy}"
-								rendered="#{fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}"/>
+							<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(discussion.stat.lastComment.commentor)}" class="w3-circle"
+									id="commentorAvatar" height="40" width="40" style="border:3px;" title="#{discussion.stat.lastComment.commentor}"/> -->
+							<h:graphicImage value="#{requestContext}/avatar/#{discussion.stat.lastComment.commentor}" class="w3-circle"
+								id="commentorAvatar" height="30" width="30" title="#{discussion.stat.lastComment.commentor}"
+								rendered="#{fileHandler.isAvatarExists(discussion.stat.lastComment.commentor)}"/>
 															
-							<span jsf:rendered="#{!fileHandler.isAvatarExists(discussion.stat.lastComment.updateBy)}" class="w3-circle avatarSpan"
-								title="#{discussion.stat.lastComment.updateBy}"
+							<span jsf:rendered="#{!fileHandler.isAvatarExists(discussion.stat.lastComment.commentor)}" class="w3-circle avatarSpan"
+								title="#{discussion.stat.lastComment.commentor}"
  								style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white">
- 								#{fn:substring(discussion.stat.lastComment.updateBy, 0, 3)}
+ 								#{fn:substring(discussion.stat.lastComment.commentor, 0, 3)}
  							</span>
 						</span>
 					</p:column>

@@ -120,6 +120,9 @@ public class DiscussionStat extends BaseEntity {
 	public Map<String, Integer> getFirstCommentors() {
 		return this.firstCommentors;
 	}
+	public void setFirstCommentors(Map<String, Integer> commentors) {
+		this.firstCommentors = commentors;
+	}
 }
 
 
