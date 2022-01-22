@@ -35,17 +35,17 @@ public class ChatManager {
 		this.subscribedUserMap = subscribedUserMap;
 	}
 
-	public boolean addSubscribedUser(String channelName, String username) {
+	public boolean addSubscribedUser(String roomName, String username) {
 		
-		logger.info(String.format("Adding subscribe username '%s' to topic '%s'", username, channelName));
+		logger.info(String.format("Adding subscribe username '%s' to topic '%s'", username, roomName));
 		
 		boolean result = false;
 		
-		if(!subscribedUserMap.containsKey(channelName)) {
-			subscribedUserMap.put(channelName, new HashMap<>());
+		if(!subscribedUserMap.containsKey(roomName)) {
+			subscribedUserMap.put(roomName, new HashMap<>());
 		}
 		
-		Map<String, Integer> connectedUsers = subscribedUserMap.get(channelName);
+		Map<String, Integer> connectedUsers = subscribedUserMap.get(roomName);
 		
 		Integer count = connectedUsers.get(username);
 		if(count == null) {
@@ -59,13 +59,13 @@ public class ChatManager {
 		return result;
 	}	
 
-	public boolean removeSubscribedUser(String channelName, String username) {
+	public boolean removeSubscribedUser(String roomName, String username) {
 		
-		logger.info(String.format("Removing subscribe username '%s' from topic '%s'", username, channelName));
+		logger.info(String.format("Removing subscribe username '%s' from topic '%s'", username, roomName));
 		
 		boolean result = false;
 		
-		Map<String, Integer> connectedUsers = subscribedUserMap.get(channelName);
+		Map<String, Integer> connectedUsers = subscribedUserMap.get(roomName);
 		
 		if(connectedUsers != null) {
 			

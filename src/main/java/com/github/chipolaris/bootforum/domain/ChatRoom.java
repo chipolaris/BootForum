@@ -14,10 +14,10 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 @Entity
-@Table(name="CHAT_CHANNEL_T")
-@TableGenerator(name="ChatChannelIdGenerator", table="ENTITY_ID_T", pkColumnName="GEN_KEY", 
-	pkColumnValue="CHAT_CHANNEL_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
-public class ChatChannel extends BaseEntity {
+@Table(name="CHAT_ROOM_T")
+@TableGenerator(name="ChatRoomIdGenerator", table="ENTITY_ID_T", pkColumnName="GEN_KEY", 
+	pkColumnValue="CHAT_ROOM_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
+public class ChatRoom extends BaseEntity {
 	
 	@PrePersist
 	public void prePersist() {
@@ -35,7 +35,7 @@ public class ChatChannel extends BaseEntity {
 	
 	// persisted attributes
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="ChatChannelIdGenerator")
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="ChatRoomIdGenerator")
 	private Long id;
 	
 	@Column(name = "LABEL", length = 100, unique = true)

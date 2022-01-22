@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.github.chipolaris.bootforum.domain.ChatChannel;
+import com.github.chipolaris.bootforum.domain.ChatRoom;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 @Component
@@ -23,16 +23,16 @@ public class ChatPage {
 	@Resource
 	private GenericService genericService;
 	
-	private List<ChatChannel> chatChannels;
+	private List<ChatRoom> chatRooms;
 	
-	public List<ChatChannel> getChatChannels() {
-		return chatChannels;
+	public List<ChatRoom> getChatRooms() {
+		return chatRooms;
 	}
-	public void setChatChannels(List<ChatChannel> chatChannels) {
-		this.chatChannels = chatChannels;
+	public void setChatRooms(List<ChatRoom> chatRooms) {
+		this.chatRooms = chatRooms;
 	}
 
 	public void onLoad() {
-		this.chatChannels = genericService.getEntities(ChatChannel.class, Collections.emptyMap(), "sortOrder", false).getDataObject();
+		this.chatRooms = genericService.getEntities(ChatRoom.class, Collections.emptyMap(), "sortOrder", false).getDataObject();
 	}
 }

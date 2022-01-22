@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.CachingConfig;
-import com.github.chipolaris.bootforum.domain.ChatChannel;
+import com.github.chipolaris.bootforum.domain.ChatRoom;
 import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.jsf.converter.EntityConverter;
@@ -36,7 +36,7 @@ public class ManageDisplay {
 	
 	private List<Tag> tags;
 	
-	private List<ChatChannel> chatChannels;
+	private List<ChatRoom> chatRooms;
 	
 	private DisplayOption displayOption;
 	
@@ -50,10 +50,10 @@ public class ManageDisplay {
 	public void onLoad() {
 		this.displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
 		this.tags = genericService.getAllEntities(Tag.class).getDataObject();
-		this.chatChannels = genericService.getAllEntities(ChatChannel.class).getDataObject();
+		this.chatRooms = genericService.getAllEntities(ChatRoom.class).getDataObject();
 		
 		this.tagConverter = new EntityConverter<>(tags);
-		this.chatChannelConverter = new EntityConverter<>(chatChannels);
+		this.chatRoomConverter = new EntityConverter<>(chatRooms);
 		
 		List<Tag> currentDisplayTags = displayOption.getDisplayTags();
 		
@@ -109,13 +109,13 @@ public class ManageDisplay {
 	
 	// converters
 	private EntityConverter<Tag> tagConverter;
-	private EntityConverter<ChatChannel> chatChannelConverter;
+	private EntityConverter<ChatRoom> chatRoomConverter;
 	
 	public EntityConverter<Tag> getTagConverter() {
 		return this.tagConverter;
 	}
 	
-	public EntityConverter<ChatChannel> getChatChannelConverter() {
-		return this.chatChannelConverter;
+	public EntityConverter<ChatRoom> getChatRoomConverter() {
+		return this.chatRoomConverter;
 	}
 }

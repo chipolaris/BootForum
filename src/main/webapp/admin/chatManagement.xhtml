@@ -9,7 +9,7 @@
     template="/WEB-INF/template/layout_admin.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} - Chat Channel Management
+		#{msg['application.title']} - Chat Room Management
 	</ui:define>
 	
 	<ui:define name="content">
@@ -46,19 +46,19 @@
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 			
 			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
- 				<h3>#{msg['chatChannelManagement.page.title']}</h3>
+ 				<h3>#{msg['chatManagement.page.title']}</h3>
  			</div>
  			
  			<p:messages id="messages" showDetail="true" closable="true">
 				<p:autoUpdate/>
 			</p:messages>
 			
-			<div jsf:id="newChatChannelDiv" class="toggleDiv w3-animate-bottom" style="display: none;border-bottom: 2px solid gray;">
+			<div jsf:id="newChatRoomDiv" class="toggleDiv w3-animate-bottom" style="display: none;border-bottom: 2px solid gray;">
 			
-				<h3><i class="pi pi-plus"/> Add New Chat Channel</h3>
+				<h3><i class="pi pi-plus"/> Add New Chat Room</h3>
 				
 				<div class="w3-panel w3-border w3-round w3-display-container">
-					<span onclick="$('#newChatChannelDiv').hide();" class="w3-button w3-display-topright">X</span>
+					<span onclick="$('#newChatRoomDiv').hide();" class="w3-button w3-display-topright">X</span>
 					
 					<h:form>
 					
@@ -71,7 +71,7 @@
 							</div>
 							
 							<div class="w3-col m8 l9">
-								<p:inputText id="label" value="#{chatChannelManagement.newChatChannel.label}" styleClass="w3-input" maxlength="30"/>
+								<p:inputText id="label" value="#{chatManagement.newChatRoom.label}" styleClass="w3-input" maxlength="30"/>
 							</div>
 								
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -81,7 +81,7 @@
 							</div>
 							
 							<div class="w3-col m8 l9">
-								<p:selectOneMenu id="icon" value="#{chatChannelManagement.newChatChannel.icon}" panelStyle="width:250px" style="width:270px;"
+								<p:selectOneMenu id="icon" value="#{chatManagement.newChatRoom.icon}" panelStyle="width:250px" style="width:270px;"
 				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 				  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 				  					
@@ -103,7 +103,7 @@
 							</div>
 							
 							<div class="w3-col m8 l9">
-								<p:colorPicker id="color" value="#{chatChannelManagement.newChatChannel.color}"/>
+								<p:colorPicker id="color" value="#{chatManagement.newChatRoom.color}"/>
 							</div>
 							
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -113,15 +113,15 @@
 							</div>
 							
 							<div class="w3-col m8 l9">
-								<h:selectBooleanCheckbox id="disabled" value="#{chatChannelManagement.newChatChannel.disabled}" styleClass="w3-check"/>
+								<h:selectBooleanCheckbox id="disabled" value="#{chatManagement.newChatRoom.disabled}" styleClass="w3-check"/>
 							</div>
 							
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
 							
 							<div class="w3-row">
-								<p:commandButton value="#{msg['save']}" ajax="true" action="#{chatChannelManagement.createChatChannel}" update=":listChatChannelsDiv :chatChannelOrderContent" 
-									icon="pi pi-plus" oncomplete="$('#newChatChannelDiv').hide();customizePrimefaceButtons();"/>
-								<p:commandButton type="button" value="Cancel" icon="pi pi-times" style="margin-left:5px;" onclick="$('#newChatChannelDiv').hide()"/>
+								<p:commandButton value="#{msg['save']}" ajax="true" action="#{chatManagement.createChatRoom}" update=":listChatRoomsDiv :chatRoomOrderContent" 
+									icon="pi pi-plus" oncomplete="$('#newChatRoomDiv').hide();customizePrimefaceButtons();"/>
+								<p:commandButton type="button" value="Cancel" icon="pi pi-times" style="margin-left:5px;" onclick="$('#newChatRoomDiv').hide()"/>
 							</div>
 							
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -130,14 +130,14 @@
 						
 					</h:form>
 				</div>
-			</div> <!-- end newChatChannelDiv -->
+			</div> <!-- end newChatRoomDiv -->
 
-			<div jsf:id="editChatChannelDiv" class="toggleDiv w3-animate-bottom" style="display: none;border-bottom: 2px solid gray;">
-				<div jsf:rendered="#{not empty chatChannelManagement.selectedChatChannel}">
+			<div jsf:id="editChatRoomDiv" class="toggleDiv w3-animate-bottom" style="display: none;border-bottom: 2px solid gray;">
+				<div jsf:rendered="#{not empty chatManagement.selectedChatRoom}">
 				
-					<h3><i class="pi pi-pencil"/> Edit Chat Channel '#{chatChannelManagement.selectedChatChannel.label}'</h3>
+					<h3><i class="pi pi-pencil"/> Edit Chat Room '#{chatManagement.selectedChatRoom.label}'</h3>
 					<div class="w3-panel w3-border w3-round w3-display-container">
-						<span onclick="$('#editChatChannelDiv').hide();" class="w3-button w3-display-topright">X</span>
+						<span onclick="$('#editChatRoomDiv').hide();" class="w3-button w3-display-topright">X</span>
 						
 						<h:form>
 						
@@ -150,7 +150,7 @@
 								</div>
 								
 								<div class="w3-col m8 l9">
-									<p:inputText id="label" value="#{chatChannelManagement.selectedChatChannel.label}" styleClass="w3-input" maxlength="30"/>
+									<p:inputText id="label" value="#{chatManagement.selectedChatRoom.label}" styleClass="w3-input" maxlength="30"/>
 								</div>
 									
 								<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -160,7 +160,7 @@
 								</div>
 								
 								<div class="w3-col m8 l9">
-									<p:selectOneMenu id="icon" value="#{chatChannelManagement.selectedChatChannel.icon}" panelStyle="width:250px" style="width:270px;"
+									<p:selectOneMenu id="icon" value="#{chatManagement.selectedChatRoom.icon}" panelStyle="width:250px" style="width:270px;"
 					  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 					  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 					  					
@@ -182,7 +182,7 @@
 								</div>
 								
 								<div class="w3-col m8 l9">
-									<p:colorPicker id="color" value="#{chatChannelManagement.selectedChatChannel.color}"/>
+									<p:colorPicker id="color" value="#{chatManagement.selectedChatRoom.color}"/>
 								</div>
 								
 								<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -192,15 +192,15 @@
 								</div>
 								
 								<div class="w3-col m8 l9">
-									<h:selectBooleanCheckbox id="disabled" value="#{chatChannelManagement.selectedChatChannel.disabled}" styleClass="w3-check"/>
+									<h:selectBooleanCheckbox id="disabled" value="#{chatManagement.selectedChatRoom.disabled}" styleClass="w3-check"/>
 								</div>
 								
 								<div class="w3-row w3-section"/> <!-- vertical spacer -->
 								
 								<div class="w3-row">
-									<p:commandButton value="Submit" ajax="true" action="#{chatChannelManagement.editChatChannel}" update=":listChatChannelsDiv :chatChannelOrderContent" 
-										icon="pi pi-check" oncomplete="$('#editChatChannelDiv').hide();customizePrimefaceButtons();"/>
-									<p:commandButton type="button" value="Cancel" icon="pi pi-times" style="margin-left:5px;" onclick="$('#editChatChannelDiv').hide()"/>
+									<p:commandButton value="Submit" ajax="true" action="#{chatManagement.editChatRoom}" update=":listChatRoomsDiv :chatRoomOrderContent" 
+										icon="pi pi-check" oncomplete="$('#editChatRoomDiv').hide();customizePrimefaceButtons();"/>
+									<p:commandButton type="button" value="Cancel" icon="pi pi-times" style="margin-left:5px;" onclick="$('#editChatRoomDiv').hide()"/>
 								</div>
 								
 								<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -211,50 +211,50 @@
 
 					</div>
 				</div>
-			</div> <!-- end editChatChannelDiv -->
+			</div> <!-- end editChatRoomDiv -->
 			
 			<div class="w3-panel w3-round w3-theme-light w3-center">
 			
-				<h3>Chat Channel List</h3>
+				<h3>Chat Room List</h3>
 				
-				<button onclick="toggleDiv('newChatChannelDiv');return;" class="w3-button w3-left-align w3-border">
-					<i class="pi pi-plus"/> Add New Chat Channel
+				<button onclick="toggleDiv('newChatRoomDiv');return;" class="w3-button w3-left-align w3-border">
+					<i class="pi pi-plus"/> Add New Chat Room
 				</button>
-				<button onclick="$('#chatChannelOrderModal').show();return;" class="w3-button w3-left-align w3-border" style="margin-left:5px;">
-					<i class="pi pi-sort"/> Order Chat Channels
+				<button onclick="$('#chatRoomOrderModal').show();return;" class="w3-button w3-left-align w3-border" style="margin-left:5px;">
+					<i class="pi pi-sort"/> Order Chat Rooms
 				</button>
 				<p/>
 			</div>	
 			
-			<div jsf:id="listChatChannelsDiv" class="w3-row">			
+			<div jsf:id="listChatRoomsDiv" class="w3-row">			
 			
-				<p:repeat var="chatChannel" value="#{chatChannelManagement.chatChannels}">
+				<p:repeat var="chatRoom" value="#{chatManagement.chatRooms}">
 				
 					<div class="w3-col l3 m6 s12" style="padding: 8px;position:relative">
-					    <div class="w3-display-container w3-padding-16 w3-hover-grey" style="color:white;background-color: ##{chatChannel.color}">
-							<span jsf:rendered="#{chatChannel.disabled}" class="w3-display-topright w3-margin" style="color:red;">
+					    <div class="w3-display-container w3-padding-16 w3-hover-grey" style="color:white;background-color: ##{chatRoom.color}">
+							<span jsf:rendered="#{chatRoom.disabled}" class="w3-display-topright w3-margin" style="color:red;">
 					        	<i class="pi pi-ban w3-xlarge" title="Disabled"/>
 					        </span>
 					        <div class="w3-center">
-					        	<i class="#{chatChannel.icon} w3-xxxlarge"></i>
+					        	<i class="#{chatRoom.icon} w3-xxxlarge"></i>
 					        	<p/>
-					        	<h4>#{chatChannel.label}</h4>
+					        	<h4>#{chatRoom.label}</h4>
 					        </div>
 					        
 					        <!-- use w3-display-hover to only show these when the mouse is hovered over -->
 					        <div class="w3-display-bottommiddle w3-display-hover">
 					        	
-					        	<p:commandLink ajax="true" update=":editChatChannelDiv"
-					        		 oncomplete="toggleDiv('editChatChannelDiv');document.getElementById('editChatChannelDiv').scrollIntoView();customizePrimefaceButtons();" 
-					        		title="Edit this chat channel">
+					        	<p:commandLink ajax="true" update=":editChatRoomDiv"
+					        		 oncomplete="toggleDiv('editChatRoomDiv');document.getElementById('editChatRoomDiv').scrollIntoView();customizePrimefaceButtons();" 
+					        		title="Edit this chat room">
 					        		<i class="pi pi-pencil w3-xlarge w3-text-black"/>
-					        		<f:setPropertyActionListener value="#{chatChannel}" target="#{chatChannelManagement.selectedChatChannel}"/>
+					        		<f:setPropertyActionListener value="#{chatRoom}" target="#{chatManagement.selectedChatRoom}"/>
 					        	</p:commandLink>
-					        	<p:commandLink action="#{chatChannelManagement.deleteChatChannel}" update=":listChatChannelsDiv"  oncomplete="window.scrollTo(0,0);" 
-					        		title="Delete this Chat Channel" style="margin-left:5px;">
+					        	<p:commandLink action="#{chatManagement.deleteChatRoom}" update=":listChatRoomsDiv"  oncomplete="window.scrollTo(0,0);" 
+					        		title="Delete this Chat Room" style="margin-left:5px;">
 					        		<i class="pi pi-trash w3-xlarge w3-text-black"/>
-					        		<p:confirm header="Confirm Delete" message="Delete Chat Channel?" icon="pi pi-exclamation-triangle"/>
-					        		<f:setPropertyActionListener value="#{chatChannel}" target="#{chatChannelManagement.selectedChatChannel}"/>
+					        		<p:confirm header="Confirm Delete" message="Delete Chat Room?" icon="pi pi-exclamation-triangle"/>
+					        		<f:setPropertyActionListener value="#{chatRoom}" target="#{chatManagement.selectedChatRoom}"/>
 					        	</p:commandLink>
 					        </div>
 					    </div>				
@@ -262,18 +262,18 @@
 				
 				</p:repeat>
 				
-				<h4 jsf:rendered="#{empty chatChannelManagement.chatChannels}"><b>No Chat Channel</b></h4>
+				<h4 jsf:rendered="#{empty chatManagement.chatRooms}"><b>No Chat Room</b></h4>
 				
 			</div>		
 
 
-    		<div id="chatChannelOrderModal" class="w3-modal">
+    		<div id="chatRoomOrderModal" class="w3-modal">
     		
-    			<div class="w3-modal-content w3-animate-zoom" jsf:id="chatChannelOrderContent">
-    				<span onclick="$('#chatChannelOrderModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
+    			<div class="w3-modal-content w3-animate-zoom" jsf:id="chatRoomOrderContent">
+    				<span onclick="$('#chatRoomOrderModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="pi pi-sort w3-xlarge"/> Order Chat Channel</span>
+						<span class="w3-xlarge"><i class="pi pi-sort w3-xlarge"/> Order Chat Room</span>
 					</header>
 					
 					<p/>
@@ -281,23 +281,23 @@
 					<div class="w3-container">
 					
 						<h:form>
-							<p:orderList value="#{chatChannelManagement.chatChannels}" var="chatChannel" itemValue="#{chatChannel}" converter="#{chatChannelManagement.chatChannelConverter}" 
+							<p:orderList value="#{chatManagement.chatRooms}" var="chatRoom" itemValue="#{chatRoom}" converter="#{chatManagement.chatRoomConverter}" 
 								controlsLocation="right" responsive="true" >
 								
 								<p:column style="width:60px;text-align:center;">
-									<i class="#{chatChannel.icon} w3-xlarge" style="color:##{chatChannel.color}"/>
+									<i class="#{chatRoom.icon} w3-xlarge" style="color:##{chatRoom.color}"/>
 								</p:column>
 							
 								<p:column>
-									<h5>#{chatChannel.label}</h5>
+									<h5>#{chatRoom.label}</h5>
 								</p:column>
 								
 							</p:orderList>
 							
 							<p/>
 							
-							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{chatChannelManagement.chatChannelOrderSubmit}" 
-								update=":listChatChannelsDiv" oncomplete="$('#chatChannelOrderModal').hide();" />
+							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{chatManagement.chatRoomOrderSubmit}" 
+								update=":listChatRoomsDiv" oncomplete="$('#chatRoomOrderModal').hide();" />
 							
 						</h:form>
 						

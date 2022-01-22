@@ -21,9 +21,9 @@ import org.springframework.web.util.HtmlUtils;
 import com.github.chipolaris.bootforum.jsf.bean.FileHandler;
 
 @Controller
-public class ChatChannelController {
+public class ChatRoomController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ChatChannelController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ChatRoomController.class);
 	
 	@Resource
 	private FileHandler fileHandler;
@@ -31,39 +31,39 @@ public class ChatChannelController {
 	@Resource
 	private ChatManager chatManager;
 	
-	@MessageMapping("/chat/postMessage/{channelId}")
-	@SendTo("/channel/{channelId}")
-	public UserMessage handlePostMessage(PostMessage message, @DestinationVariable Long channelId, Authentication authentication) throws Exception {
+	@MessageMapping("/chat/postMessage/{roomId}")
+	@SendTo("/room/{roomId}")
+	public UserMessage handlePostMessage(PostMessage message, @DestinationVariable Long roomId, Authentication authentication) throws Exception {
 		
 		String username = authentication != null ? authentication.getName() : "Anonymous";
 		
-		logger.info(String.format("user %s posts message to channel %d", username, channelId));
+		logger.info(String.format("user %s posts message to room %d", username, roomId));
 		
 		Boolean avatarExists = fileHandler.isAvatarExists(username);
 		
 		return new UserMessage(username, HtmlUtils.htmlEscape(message.getMessageText()), System.currentTimeMillis(), avatarExists);
 	}
 	
-	@MessageMapping("/chat/postImage/{channelId}")
-	@SendTo("/channel/{channelId}")
-	public UserImage handlePostImage(PostImage message, @DestinationVariable Long channelId, Authentication authentication) throws Exception {
+	@MessageMapping("/chat/postImage/{roomId}")
+	@SendTo("/room/{roomId}")
+	public UserImage handlePostImage(PostImage message, @DestinationVariable Long roomId, Authentication authentication) throws Exception {
 		
 		String username = authentication != null ? authentication.getName() : "Anonymous";
 		
-		logger.info(String.format("user %s post image to channel %d", username, channelId));
+		logger.info(String.format("user %s post image to room %d", username, roomId));
 		
 		Boolean avatarExists = fileHandler.isAvatarExists(username);
 		
 		return new UserImage(username, message.getImageBase64(), System.currentTimeMillis(), avatarExists);
 	}
 	
-	@GetMapping("/chat/channelUsers/{channelId}")
+	@GetMapping("/chat/roomUsers/{roomId}")
 	@ResponseBody
-	public List<ConnectedUser> getJoinedUsers(@PathVariable String channelId) {
+	public List<ConnectedUser> getJoinedUsers(@PathVariable String roomId) {
 		
 		List<ConnectedUser> joinedUsers = new ArrayList<>();
 		
-		Map<String, Integer> users = chatManager.getSubscribedUserMap().get("/channel/" + channelId);
+		Map<String, Integer> users = chatManager.getSubscribedUserMap().get("/room/" + roomId);
 		
 		for(String username : users.keySet()) {
 			

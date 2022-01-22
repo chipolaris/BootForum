@@ -1,8 +1,8 @@
 package com.github.chipolaris.bootforum.messaging;
 
-public class ChannelMessage implements StompMessage {
+public class RoomMessage implements StompMessage {
 
-	public ChannelMessage(String username, String action, long timestamp, Boolean avatarExists) {
+	public RoomMessage(String username, String action, long timestamp, Boolean avatarExists) {
 		this.username = username;
 		this.action = action;
 		this.timeMillis = timestamp;
@@ -44,6 +44,6 @@ public class ChannelMessage implements StompMessage {
 	
 	@Override
 	public String getType() {
-		return "channelMessage";
+		return "roomMessage";
 	}
 }

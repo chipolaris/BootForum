@@ -5,8 +5,8 @@ function setConnected(connected) {
     $("#disconnect").prop("disabled", !connected);
     
 	// join/leave buttons
-	$('.joinChannel').prop("disabled", !connected);
-	$('.leaveChannel').prop("disabled", true);
+	$('.joinRoom').prop("disabled", !connected);
+	$('.leaveRoom').prop("disabled", true);
 }
 
 function connect() {
@@ -21,12 +21,12 @@ function connect() {
 function disconnect() {
     if (stompClient !== null) {
     	
-    	// unsubscribe all channels
-    	channelSubscriptions.forEach(function(channelSubscription) {
-    		channelSubscription.unsubscribe();
+    	// unsubscribe all rooms
+    	roomSubscriptions.forEach(function(roomSubscription) {
+    		roomSubscription.unsubscribe();
     	});
     	// clear subscriptions map
-    	channelSubscriptions.clear();
+    	roomSubscriptions.clear();
     	
         stompClient.disconnect();
     }
@@ -34,68 +34,68 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function postMessage(channelId) {
+function postMessage(roomId) {
 	
-	var messageText = $("#messageText" + channelId).val();
+	var messageText = $("#messageText" + roomId).val();
 	
 	if((!messageText || /^\s*$/.test(messageText))) {
 		return;
 	}
 	
-    stompClient.send(contextPath + "/chat/postMessage/" + channelId, {}, JSON.stringify({'messageText': messageText.trim()}));
-    $("#messageText" + channelId).val(''); // clear the input field
-    //$("#counterMessage" + channelId).text(origCounterMessageText);
+    stompClient.send(contextPath + "/chat/postMessage/" + roomId, {}, JSON.stringify({'messageText': messageText.trim()}));
+    $("#messageText" + roomId).val(''); // clear the input field
+    //$("#counterMessage" + roomId).text(origCounterMessageText);
 }
 
-function postImage(channelId) {
+function postImage(roomId) {
 	
 	var imageBase64 = $('#imagePreview').attr('src');
 	
-    stompClient.send(contextPath + "/chat/postImage/" + channelId, {}, JSON.stringify({'imageBase64': imageBase64}));
+    stompClient.send(contextPath + "/chat/postImage/" + roomId, {}, JSON.stringify({'imageBase64': imageBase64}));
 }
 
-function showMessage(channelId, messageObj) {
+function processMessage(roomId, messageObj) {
 	
 	if(messageObj.type == 'userMessage') {
-		showUserMessage(channelId, messageObj);
+		showUserMessage(roomId, messageObj);
 	}
 	else if(messageObj.type == 'userImage') {
-		showUserImage(channelId, messageObj);
+		showUserImage(roomId, messageObj);
 	}
-	else if(messageObj.type == 'channelMessage') {
-		handleChannelMessage(channelId, messageObj);
+	else if(messageObj.type == 'roomMessage') {
+		handleRoomMessage(roomId, messageObj);
 	}
     
     // scroll to bottom of chat window with animation, duration 400 miliseconds
-    $("#conversationDiv" + channelId).animate({ scrollTop: $('#conversationDiv' + channelId).prop("scrollHeight")}, 400);
+    $("#conversationDiv" + roomId).animate({ scrollTop: $('#conversationDiv' + roomId).prop("scrollHeight")}, 400);
 }
 
-function handleChannelMessage(channelId, messageObj) {
+function handleRoomMessage(roomId, messageObj) {
 	 
-	$("#channelContent" + channelId).append("<tr><td colspan=2 class='w3-large'><span class='w3-text-orange'>" 
+	$("#roomContent" + roomId).append("<tr><td colspan=2 class='w3-large'><span class='w3-text-orange'>" 
 			 + messageObj.username + ' ' + messageObj.action + "</span> <span class='w3-text-blue'> - " 
 			 + new Date(messageObj.timeMillis).toLocaleTimeString() 
 			 + "</span></td></tr>");
 	 
 	if(messageObj.action == 'left') {
-		$('#user' + channelId + messageObj.username).remove();
+		$('#user' + roomId + messageObj.username).remove();
 	}
 	else if(messageObj.action == 'entered') {
 		
-		var newUserDiv = "<div class=\'w3-bar-item w3-button w3-row\' id=\'user" + channelId + messageObj.username + "\'>"
+		var newUserDiv = "<div class=\'w3-bar-item w3-button w3-row\' id=\'user" + roomId + messageObj.username + "\'>"
 			+ "<div class=\'w3-col s3 w3-padding-small\'>"
 			+ buildAvatarContent30(messageObj)
 			+ "</div><div class=\'w3-col s9 w3-padding-small\'><span class=\'w3-small\'><b>"
 			+ messageObj.username
 			+ "</b></span></div></div>";
 		
-		$('#userList' + channelId).append(newUserDiv);
+		$('#userList' + roomId).append(newUserDiv);
 	}
 }
 
-function showUserMessage(channelId, messageObj) {
+function showUserMessage(roomId, messageObj) {
 	
-    $("#channelContent" + channelId).append("<tr><td><p>" + buildAvatarContent36(messageObj)
+    $("#roomContent" + roomId).append("<tr><td><p>" + buildAvatarContent36(messageObj)
     		+ "</p></td><td><p><b>" + messageObj.username + "</b> <span class='w3-text-blue'> - <b>" 
     		+ new Date(messageObj.timeMillis).toLocaleTimeString() 
     		+ "</b></span></p><p>" + messageObj.content.replace('&amp;', '&') 
@@ -136,7 +136,7 @@ function buildAvatarContent36(messageObj) {
 	return avatar
 }
 
-function showUserImage(channelId, messageObj) {
+function showUserImage(roomId, messageObj) {
 	
 	var avatar = "";
 	
@@ -150,7 +150,7 @@ function showUserImage(channelId, messageObj) {
 	    	+ messageObj.username.substring(0,3) + "</span>";
 	}
 	
-    $("#channelContent" + channelId).append("<tr><td><p>" + avatar
+    $("#roomContent" + roomId).append("<tr><td><p>" + avatar
     		+ "</p></td><td><p><b>" + messageObj.username + "</b> <span class='w3-text-blue'> - <b>" 
     		+ new Date(messageObj.timeMillis).toLocaleTimeString() 
     		+ "</b></span></p><div><img style='width:100%;max-width:300px;height:auto;' src='" 
@@ -177,30 +177,32 @@ function readURL(input) {
 	}
 }
 
-function getJoinedUsers(channelId) {
+function getJoinedUsers(roomId) {
 	
-	$.getJSON(contextPath + "/chat/channelUsers/" + channelId, function(data) {
+	$.getJSON(contextPath + "/chat/roomUsers/" + roomId, function(data) {
 		
+		$('#userList' + roomId).empty();
+		data.sort();
 		$.each(data, function(index, messageObj){
 			// if user is NOT already exists, append user 
-			if($('#user' + channelId + messageObj.username).length == 0) {
-				$('#userList' + channelId).append(buildChannelUserDiv(channelId, messageObj));
-			}
+			//if($('#user' + roomId + messageObj.username).length == 0) {
+				$('#userList' + roomId).append(buildRoomUserDiv(roomId, messageObj));
+			//}
 		});
 		
 	});
 }
 
-function buildChannelUserDiv(channelId, messageObj) {
+function buildRoomUserDiv(roomId, messageObj) {
 	
-	var channelUserDiv = "<div class=\'w3-bar-item w3-button w3-row\' id=\'user" + channelId + messageObj.username + "\'>"
+	var roomUserDiv = "<div class=\'w3-bar-item w3-button w3-row\' id=\'user" + roomId + messageObj.username + "\'>"
 		+ "<div class=\'w3-col s3 w3-padding-small\'>"
 		+ buildAvatarContent30(messageObj)
 		+ "</div><div class=\'w3-col s9 w3-padding-small\'><span class=\'w3-small\'><b>"
 		+ messageObj.username
 		+ "</b></span></div></div>";
 	
-	return channelUserDiv
+	return roomUserDiv
 }
 
 function getConnectedUsers() {
@@ -212,11 +214,11 @@ function getConnectedUsers() {
 	});
 }
 
-// keep track of the selectedChannel for image preview and image post
-var selectedChannel = '';
+// keep track of the selectedRoom for image preview and image post
+var selectedRoom = '';
 
-// keep track of channel subscriptions
-var channelSubscriptions = new Map();
+// keep track of room subscriptions
+var roomSubscriptions = new Map();
 
 $(function () {
 	
@@ -226,87 +228,87 @@ $(function () {
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
     
-    $( ".toggleChannelButton" ).click(function(){
+    $( ".toggleRoomButton" ).click(function(){
     	
-    	// retrieve channelId from the button, note: use lowercase dataset.channelid
-    	var channelId = this.dataset.channelid;
+    	// retrieve roomId from the button, note: use lowercase dataset.roomid
+    	var roomId = this.dataset.roomid;
     	
-    	// hide other channels
-    	$('.toggleChannelDiv').hide();
+    	// hide other rooms
+    	$('.toggleRoomDiv').hide();
     	
-    	// show channel div with animation (duration 400)
-    	$('#channel' + channelId).show(400);
+    	// show room div with animation (duration 400)
+    	$('#room' + roomId).show(400);
     });
     
-    $( ".joinChannel" ).click(function(){
+    $( ".joinRoom" ).click(function(){
     	
-    	// retrieve channelId from the button, note: use lowercase dataset.channelid
-    	var channelId = this.dataset.channelid;
+    	// retrieve roomId from the button, note: use lowercase dataset.roomid
+    	var roomId = this.dataset.roomid;
     	
-    	getJoinedUsers(channelId);
+    	getJoinedUsers(roomId);
     	
-    	var channelSubscription = stompClient.subscribe("/channel/" + channelId, function (message) {
-            showMessage(channelId, JSON.parse(message.body));
+    	var roomSubscription = stompClient.subscribe("/room/" + roomId, function (message) {
+            processMessage(roomId, JSON.parse(message.body));
         });
     	
-    	// store the subscription in the channelSubscriptions map
-    	channelSubscriptions.set("channel" + channelId, channelSubscription);
+    	// store the subscription in the roomSubscriptions map
+    	roomSubscriptions.set("room" + roomId, roomSubscription);
     	
     	// disable enter button
     	$(this).prop("disabled", true);
     	
     	// enable leave button
-    	$('#leaveChannel' + channelId).prop("disabled", false);
+    	$('#leaveRoom' + roomId).prop("disabled", false);
     	
     	// enable post message form fieldset
-    	$('#fieldSet' + channelId).prop("disabled", false);
+    	$('#fieldSet' + roomId).prop("disabled", false);
     });
     
-    $( ".leaveChannel" ).click(function(){
+    $( ".leaveRoom" ).click(function(){
     	
-    	// retrieve channelId from the button, note: use lowercase dataset.channelid
-    	var channelId = this.dataset.channelid;
+    	// retrieve roomId from the button, note: use lowercase dataset.roomid
+    	var roomId = this.dataset.roomid;
     	
-    	var channelSubscription = channelSubscriptions.get("channel" + channelId);
-    	channelSubscription.unsubscribe();
-    	channelSubscriptions.delete("channel" + channelId);
+    	var roomSubscription = roomSubscriptions.get("room" + roomId);
+    	roomSubscription.unsubscribe();
+    	roomSubscriptions.delete("room" + roomId);
     	
     	// disable leave button
     	$(this).prop("disabled", true);
     	
     	// enable enter button
-    	$('#joinChannel' + channelId).prop("disabled", false);
+    	$('#joinRoom' + roomId).prop("disabled", false);
     	
     	// disable post message form fieldset
-    	$('#fieldSet' + channelId).prop("disabled", true);
+    	$('#fieldSet' + roomId).prop("disabled", true);
     	
-    	// clear channel content
-    	$("#channelContent" + channelId).html("");
+    	// clear room content
+    	$("#roomContent" + roomId).html("");
     	
-    	// clear channel users
-    	$("#userList" + channelId).empty();
+    	// clear room users
+    	$("#userList" + roomId).empty();
     });
     
-    $( ".usersChannel" ).click(function() {
+    $( ".usersRoom" ).click(function() {
     	
-    	// retrieve channelId from the button, note: use lowercase dataset.channelid
-    	var channelId = this.dataset.channelid;
+    	// retrieve roomId from the button, note: use lowercase dataset.roomid
+    	var roomId = this.dataset.roomid;
     	
-    	// hide/show usersChannel
-    	$('#channelUsersDiv' + channelId).toggle(400);
+    	// hide/show usersRoom
+    	$('#roomUsersDiv' + roomId).toggle(400);
     });
     
     $( ".postMessage" ).click(function(){
     	
-    	// retrieve channelId from the button, note: use lowercase dataset.channelid
-    	var channelId = this.dataset.channelid;
+    	// retrieve roomId from the button, note: use lowercase dataset.roomid
+    	var roomId = this.dataset.roomid;
     	
-    	postMessage(channelId);
+    	postMessage(roomId);
     });
     
     $(".emojiInput").click(function() {
     	
-    	selectedChannel = this.dataset.channelid;
+    	selectedRoom = this.dataset.roomid;
     	
     	$('#emojiModal').show();
     });
@@ -314,7 +316,7 @@ $(function () {
     // callback image for when imageInput file input is selected
     $(".imageInput").change(function(e) {
     	
-    	selectedChannel = this.dataset.channelid;
+    	selectedRoom = this.dataset.roomid;
     	const file = e.target.files[0];
     	
     	if(!file.type.startsWith('image/')) {
@@ -342,21 +344,21 @@ $(function () {
     $("#postImageButton").click(function() {
     	
     	$('#imagePreviewModal').hide();
-    	postImage(selectedChannel);
+    	postImage(selectedRoom);
     });
     
     buildEmojiTable();
     
     $("#emojiTableBody > tr > td").click(function() {
     	//alert($(this).html());
-    	//$("#messageText" + selectedChannel).html($(this).html());
-    	var insertPosition = $("#messageText" + selectedChannel).getCursorPosition();
+    	//$("#messageText" + selectedRoom).html($(this).html());
+    	var insertPosition = $("#messageText" + selectedRoom).getCursorPosition();
     	//alert('insertPosition: ' + insertPosition);
     	
-    	var currentText = $("#messageText" + selectedChannel).val();
+    	var currentText = $("#messageText" + selectedRoom).val();
     	var newText = [currentText.slice(0, insertPosition), $(this).html(), currentText.slice(insertPosition)].join('');
-    	$("#messageText" + selectedChannel).val(newText);
-    	$("#messageText" + selectedChannel).selectRange(insertPosition + 2);
+    	$("#messageText" + selectedRoom).val(newText);
+    	$("#messageText" + selectedRoom).selectRange(insertPosition + 2);
     });
     
 });

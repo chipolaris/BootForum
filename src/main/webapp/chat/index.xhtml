@@ -100,10 +100,10 @@
 			<div class="w3-panel w3-center">
 				<form class="w3-container">
 	                <div>
-	                	<ui:repeat var="chatChannel" value="#{chatPage.chatChannels}">
-	                    	<button id="toggleChannel#{chatChannel.id}" class="w3-btn toggleChannelButton" type="submit" 
-	                    		data-channelid="#{chatChannel.id}" style="background-color:##{chatChannel.color};color:white;">
-	                    		<i class="#{chatChannel.icon}"/> #{chatChannel.label}
+	                	<ui:repeat var="chatRoom" value="#{chatPage.chatRooms}">
+	                    	<button id="toggleRoom#{chatRoom.id}" class="w3-btn toggleRoomButton" type="submit" 
+	                    		data-roomid="#{chatRoom.id}" style="background-color:##{chatRoom.color};color:white;">
+	                    		<i class="#{chatRoom.icon}"/> #{chatRoom.label}
 	                    	</button>
 	                    </ui:repeat>
 	                </div>
@@ -114,26 +114,26 @@
 				important note: use build time <c:forEach> instead of render time <ui:repeat> to generate dynamic id for each jsf component
 				reference: https://stackoverflow.com/questions/16043218/refer-to-jsf-dynamically-generated-ids-based-on-iteration-index
 			  -->			  
-			<c:forEach items="#{chatPage.chatChannels}" var="chatChannel">
+			<c:forEach items="#{chatPage.chatRooms}" var="chatRoom">
 			
-				<div id="channel#{chatChannel.id}" class="w3-card toggleChannelDiv" style="display: none;">
+				<div id="room#{chatRoom.id}" class="w3-card toggleRoomDiv" style="display: none;">
 					
-					<div class="w3-cell-row w3-border-bottom" style="color:##{chatChannel.color};">
+					<div class="w3-cell-row w3-border-bottom" style="color:##{chatRoom.color};">
 						<div class="w3-cell w3-container">
-							<h4><b><i class="#{chatChannel.icon}"/> #{chatChannel.label} 
-								<!-- <h:outputText value=" (users: #{fn:length(chatManager.subscribedUserMap['/channel/'.concat(chatChannel.id)])})" id="userCount#{chatChannel.id}"/> -->
+							<h4><b><i class="#{chatRoom.icon}"/> #{chatRoom.label} 
+								<!-- <h:outputText value=" (users: #{fn:length(chatManager.subscribedUserMap['/room/'.concat(chatRoom.id)])})" id="userCount#{chatRoom.id}"/> -->
 								</b>
 							</h4>
 						</div>
 						<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
 							<form>
-								<button id="joinChannel#{chatChannel.id}" class="w3-btn joinChannel" type="submit" data-channelid="#{chatChannel.id}">
+								<button id="joinRoom#{chatRoom.id}" class="w3-btn joinRoom" type="submit" data-roomid="#{chatRoom.id}">
 									<b><i class="pi pi-sign-in"/> Join</b>
 								</button>
-		                    	<button id="usersChannel#{chatChannel.id}" class="w3-btn usersChannel" type="submit" data-channelid="#{chatChannel.id}">
+		                    	<button id="usersRoom#{chatRoom.id}" class="w3-btn usersRoom" type="submit" data-roomid="#{chatRoom.id}">
 		                    		<b><i class="pi pi-users"/> Users</b>
 		                    	</button>
-		                    	<button id="leaveChannel#{chatChannel.id}" class="w3-btn leaveChannel" type="submit" data-channelid="#{chatChannel.id}">
+		                    	<button id="leaveRoom#{chatRoom.id}" class="w3-btn leaveRoom" type="submit" data-roomid="#{chatRoom.id}">
 		                    		<b><i class="pi pi-sign-out"/> Leave</b>
 		                    	</button>
 		                    </form>
@@ -142,7 +142,7 @@
 					
 					<div class="w3-row-padding" style="display: flex;flex-direction: row;">
 					
-				        <div class="w3-col w3-rest w3-margin-top w3-margin-right" style="height: 500px; overflow: auto;" id="conversationDiv#{chatChannel.id}">
+				        <div class="w3-col w3-rest w3-margin-top w3-margin-right" style="height: 500px; overflow: auto;" id="conversationDiv#{chatRoom.id}">
 				            <table id="conversation1000" class="w3-table w3-striped">
 				                <thead>
 					                <tr class="w3-white">
@@ -152,38 +152,38 @@
 					                </tr>
 				                </thead>
 				                
-				                <tbody id="channelContent#{chatChannel.id}"/>
+				                <tbody id="roomContent#{chatRoom.id}"/>
 				                
 				            </table>
 				        </div>
 				        
-				        <div jsf:id="channelUsersDiv#{chatChannel.id}" class="w3-margin-top w3-margin-right w3-border"
+				        <div jsf:id="roomUsersDiv#{chatRoom.id}" class="w3-margin-top w3-margin-right w3-border"
 				        	style="width:250px; height: 500px;">
 				        	<div class="w3-container w3-center w3-theme-d1">
 				        		<h6><b><i class="pi pi-users"/> Joined Users</b></h6>
 				        	</div>
 				        	
-				        	<div id="userList#{chatChannel.id}" class="w3-bar-block w3-theme-light" style="overflow: auto;height: 456px;"/>
+				        	<div id="userList#{chatRoom.id}" class="w3-bar-block w3-theme-light" style="overflow: auto;height: 456px;"/>
 			        		
 				        </div>
 				        
 			        </div>
 			        
 		            <form class="w3-container w3-padding">
-		            	<fieldset style="border:0;padding: 0;" id="fieldSet#{chatChannel.id}" disabled="disabled">
-			            	<h:outputText id="counterMessage#{chatChannel.id}" styleClass="w3-opacity"/>
-		                	<p:inputTextarea rows="2" maxlength="200" counter="counterMessage#{chatChannel.id}" counterTemplate="{0} characters remaining"
-		                		autoResize="false" id="messageText#{chatChannel.id}" style="overflow-x: hidden;" styleClass="w3-input" placeholder="Type your message.."/>
+		            	<fieldset style="border:0;padding: 0;" id="fieldSet#{chatRoom.id}" disabled="disabled">
+			            	<h:outputText id="counterMessage#{chatRoom.id}" styleClass="w3-opacity"/>
+		                	<p:inputTextarea rows="2" maxlength="200" counter="counterMessage#{chatRoom.id}" counterTemplate="{0} characters remaining"
+		                		autoResize="false" id="messageText#{chatRoom.id}" style="overflow-x: hidden;" styleClass="w3-input" placeholder="Type your message.."/>
 		                	
-			                <button id="postMessage#{chatChannel.id}" class="w3-btn w3-theme-dark postMessage" data-channelid="#{chatChannel.id}" type="submit" style="margin-top: 5px;">
+			                <button id="postMessage#{chatRoom.id}" class="w3-btn w3-theme-dark postMessage" data-roomid="#{chatRoom.id}" type="submit" style="margin-top: 5px;">
 			                	<i class="pi pi-send w3-large"/> Post
 			                </button>
-			                <button id="emojiInput#{chatChannel.id}" class="w3-btn w3-theme-dark emojiInput" data-channelid="#{chatChannel.id}" type="submit"
+			                <button id="emojiInput#{chatRoom.id}" class="w3-btn w3-theme-dark emojiInput" data-roomid="#{chatRoom.id}" type="submit"
 			                	 title="Emoji" style="margin-top: 5px;">
 			                	<i class="pi pi-moon w3-large"/>
 			                </button>
 			                <label>
-			                	<input type="file" id="imageInput#{chatChannel.id}" class="imageInput" data-channelid="#{chatChannel.id}" style="display:none;" accept='image/*'/>
+			                	<input type="file" id="imageInput#{chatRoom.id}" class="imageInput" data-roomid="#{chatRoom.id}" style="display:none;" accept='image/*'/>
 			                	<span class="w3-btn w3-theme-dark w3-opacity" style="margin-top: 5px;" title="Image"><i class="pi pi-image w3-large"/></span>
 			                </label>
 		                </fieldset>
@@ -215,7 +215,7 @@
 								<button id="postImageButton" class="w3-btn w3-theme-dark" type="submit">
 		                			<i class="pi pi-send"/> Post
 		                		</button>
-		                		<button id="selectAnotherImage" class="w3-btn w3-theme-dark" type="submit" onclick="$('#imageInput' + selectedChannel).trigger('click');">
+		                		<button id="selectAnotherImage" class="w3-btn w3-theme-dark" type="submit" onclick="$('#imageInput' + selectedRoom).trigger('click');">
 		                			<i class="pi pi-image"/> Select Another
 		                		</button>
 		                		<span class="w3-btn w3-theme-dark" onclick="$('#imagePreviewModal').hide();">
