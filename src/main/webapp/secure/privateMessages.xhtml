@@ -11,11 +11,11 @@
     template="/WEB-INF/template/layout_secure.xhtml">
 	
 	<ui:define name="title">
-		Private Messages
+		#{msg['private.messages']}
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<b><i class="pi pi-envelope"></i> Private Messages</b>
+		<b><i class="pi pi-envelope"></i> #{msg['private.messages']}</b>
 	</ui:define>
 	
 	<ui:define name="content">
@@ -135,9 +135,9 @@
 		<div id="viewMessagesDiv">
 			
 			<div id="tabButtons" style="padding-bottom: 2px;" class="w3-bottombar w3-border-theme">
-				<span class="w3-button w3-border w3-padding-16 tab-button w3-text-green" id="receivedButton" onclick="switchTab($(this));showReceivedTab();hideMessageDetailsDiv();"><b><i class="pi pi-envelope"/> Received</b></span>
-				<span class="w3-button w3-border w3-padding-16 tab-button w3-text-orange" id="sentButton" onclick="switchTab($(this));showSentTab();hideMessageDetailsDiv();"><b><i class="pi pi-envelope"/> Sent</b></span>
-				<span class="w3-button w3-border w3-padding-16 tab-button w3-text-red" id="deletedButton" onclick="switchTab($(this));showDeletedTab();hideMessageDetailsDiv();"><b><i class="pi pi-trash"/> Deleted</b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button w3-text-green" id="receivedButton" onclick="switchTab($(this));showReceivedTab();hideMessageDetailsDiv();"><b><i class="pi pi-envelope"/> #{msg['received']}</b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button w3-text-orange" id="sentButton" onclick="switchTab($(this));showSentTab();hideMessageDetailsDiv();"><b><i class="pi pi-envelope"/> #{msg['sent']}</b></span>
+				<span class="w3-button w3-border w3-padding-16 tab-button w3-text-red" id="deletedButton" onclick="switchTab($(this));showDeletedTab();hideMessageDetailsDiv();"><b><i class="pi pi-trash"/> #{msg['deleted']}</b></span>
 				<span class="w3-button w3-border w3-padding-16 tab-button" id="plusButton" onclick="switchTab($(this));showNewTab();hideMessageDetailsDiv();"><b><i class="pi pi-plus"/></b></span>
 				
 				<h:form>
@@ -153,14 +153,14 @@
 					<p:dataTable var="privateMessage" value="#{privateMessages.receivedMessages}" style="margin: 0 auto;" styleClass="borderless"
 						widgetVar="receivedPrivateMessageTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-						currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} Messages"
+						currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} #{msg['messages']}"
 						rows="10" lazy="true" id="receivedPrivateMessageTable" draggableColumns="true">
 						
 						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 						
 						<p:column sortBy="#{privateMessage.message.fromUser}" style="text-align:left;" responsivePriority="2">
 							<f:facet name="header">
-								<h:outputText value="From" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['from']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<h:graphicImage value="#{requestContext}/avatar/#{privateMessage.message.fromUser}" class="w3-circle"
@@ -177,7 +177,7 @@
 						
 						<p:column sortBy="#{privateMessage.message.subject}" style="text-align:left;" responsivePriority="1">
 							<f:facet name="header">
-								<h:outputText value="Subject" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['subject']}" style="font-weight:bold;"/>
 							</f:facet>
 							<p:commandLink oncomplete="$('#messageDetailsDiv').show();$('#messageDetailsDiv')[0].scrollIntoView();customizePrimefaceButtons();" 
 								onclick="$(this).children('.subjectSpan').css('font-weight', 'normal');"
@@ -189,7 +189,7 @@
 
 						<p:column sortBy="#{privateMessage.createDate}" style="text-align:right;" responsivePriority="3">
 							<f:facet name="header">
-								<h:outputText value="Received" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['received']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<b>#{privateMessage.createDate} </b>
@@ -212,7 +212,7 @@
 						
 						<p:column style="text-align:left;" responsivePriority="2">
 							<f:facet name="header">
-								<h:outputText value="To" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['to']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<ui:repeat value="#{privateMessage.message.toUsers}" var="toUser" varStatus="status">
@@ -231,7 +231,7 @@
 						
 						<p:column sortBy="#{privateMessage.message.subject}" style="text-align:left;" responsivePriority="1">
 							<f:facet name="header">
-								<h:outputText value="Subject" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['subject']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<p:commandLink oncomplete="$('#messageDetailsDiv').show();$('#messageDetailsDiv')[0].scrollIntoView();customizePrimefaceButtons();"  
@@ -243,7 +243,7 @@
 
 						<p:column sortBy="#{privateMessage.createDate}" style="text-align:right;" responsivePriority="3">
 							<f:facet name="header">
-								<h:outputText value="Sent" style="font-weight:bold;"/>
+								<h:outputText value="#{msg['sent']}" style="font-weight:bold;"/>
 							</f:facet>
 							
 							<b>#{privateMessage.createDate} </b>
@@ -472,7 +472,7 @@
 		    			</div>
 		    			
 		    			<div class="w3-section">
-		    				<h5 class="w3-opacity-min">Subject: <b>#{privateMessages.selectedMessage.message.subject}</b></h5>
+		    				<h5 class="w3-opacity-min">#{privateMessages.selectedMessage.message.text}Subject: <b>#{privateMessages.selectedMessage.message.subject}</b></h5>
 		    			</div>		    				
 	    				
 	    			</div>

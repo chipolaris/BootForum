@@ -10,7 +10,7 @@
     template="/WEB-INF/template/layout_admin.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} - Discussions Management
+		#{msg['application.title']} - #{msg['discussions.management']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -73,31 +73,31 @@
 			</p:messages>
 			
 			<div class="w3-panel w3-round w3-theme-d5 w3-center">
- 				<h3>#{msg['discussionManagement.page.title']}</h3>
+ 				<h3>#{msg['manage.discussions']}</h3>
  				<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
- 					<i class="pi pi-sitemap"/> Filter Discussions by Forum
+ 					<i class="pi pi-sitemap"/> #{msg['filter.discussions.by.forum']}
  				</button>
  				<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
- 					<i class="pi pi-comments"/> Discussions with no associated Forum
+ 					<i class="pi pi-comments"/> #{msg['discussions.with.no.associated.forum']}
  					<f:param name="forumId" value="0"/>
  				</h:link>
  				<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
- 					All Discussions
+ 					#{msg['all.discussions']}
  				</h:link><p/>
  			</div>
  			
 			<h:form>
 				<center>
-					<h4> Showing
+					<h4> #{msg['showing']}
 						<c:choose>
 							<c:when test="#{not empty discussionManagement.forum}">
-								Discussions in Forum <b>#{discussionManagement.forum.title}</b>
+								#{msg['discussions.in.forum']} <b>#{discussionManagement.forum.title}</b>
 							</c:when>
 							<c:when test="#{discussionManagement.forumId eq 0}">
-								Discussions with no associated Forum
+								#{msg['discussions.with.no.associated.forum']}
 							</c:when>
 							<c:otherwise>
-								All Discussions
+								#{msg['all.discussions']}
 							</c:otherwise>
 						</c:choose>
 					</h4>
@@ -106,14 +106,14 @@
 				<p:dataTable var="discussion" value="#{discussionManagement.lazyModel}" style="margin: 0 auto;" styleClass="borderless"
 					widgetVar="discussionTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-					currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} discussions"
+					currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} #{msg['discussions']}"
 					rows="10" lazy="true" id="discussionTable" draggableColumns="true">
     				
 					<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 					
 					<p:column sortBy="#{discussion.title}" style="text-align:left;width:33%;" responsivePriority="1">
 						<f:facet name="header">
-							<h:outputText value="Discussion Title" style="font-weight:bold;"/>
+							<h:outputText value="#{msg['discussion.title']}" style="font-weight:bold;"/>
 						</f:facet>
 						
 						<h:outputLink value="moderateDiscussion.xhtml?id=#{discussion.id}" title="Click to moderate this discussion">
@@ -125,7 +125,7 @@
 					
 					<p:column sortBy="#{discussion.stat.commentCount}" style="text-align:center;width:120px;" responsivePriority="4">
 						<f:facet name="header">
-							<h:outputText value="Comments" style="font-weight:bold;"/>
+							<h:outputText value="#{msg['comments']}" style="font-weight:bold;"/>
 						</f:facet>
 						
 						<span><b>#{discussion.stat.commentCount}</b></span>
@@ -134,7 +134,7 @@
 
 					<p:column sortBy="#{discussion.stat.viewCount}" style="text-align:center;width:120px;" responsivePriority="5">
 						<f:facet name="header">
-							<h:outputText value="Views" style="font-weight:bold;"/>
+							<h:outputText value="#{msg['views']}" style="font-weight:bold;"/>
 						</f:facet>
 						
 						<span><b>#{discussion.stat.viewCount}</b></span>
@@ -143,7 +143,7 @@
 
 					<p:column sortBy="#{discussion.createDate}" style="text-align:left;" responsivePriority="2">
 						<f:facet name="header">
-							<h:outputText value="Started" />
+							<h:outputText value="#{msg['started']}" />
 						</f:facet>
 						
 						<span><b>#{discussion.createDate}</b></span>
@@ -152,7 +152,7 @@
 
 					<p:column sortBy="#{discussion.stat.lastComment.updateDate}" style="text-align:right;" responsivePriority="3">
 						<f:facet name="header">
-							<h:outputText value="Last Comment" />
+							<h:outputText value="#{msg['latest.comment']}" />
 						</f:facet>
 						
 						<span>
@@ -182,7 +182,7 @@
     				<span onclick="$('#forumMapModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-theme-dark w3-center">
-						<span class="w3-xlarge"><i class="pi pi-sitemap"/> Forum Map</span>
+						<span class="w3-xlarge"><i class="pi pi-sitemap"/> #{msg['forum.map']}</span>
 					</header>
 					
 					<div class="w3-padding-large">

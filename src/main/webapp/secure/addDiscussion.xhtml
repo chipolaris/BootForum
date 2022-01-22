@@ -160,7 +160,7 @@
 						
 						<p:fileUpload listener="#{addDiscussion.commentThumbnailManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();"
 		        			update=":thumbnailPanel" auto="true" sizeLimit="#{applicationProperties['Comment.thumbnail.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
-		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(addDiscussion.commentThumbnailManagement.uploadedFileList)}"/>
+		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(addDiscussion.commentThumbnailManagement.uploadedFileList)}" label="#{msg['choose']}"/>
           				
           				<p/>
           					
@@ -217,7 +217,7 @@
 						
 						<p:fileUpload listener="#{addDiscussion.commentAttachmentManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();"
 			        			update=":attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Comment.attachment.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
-			        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(addDiscussion.commentAttachmentManagement.uploadedFileList)}"/>
+			        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(addDiscussion.commentAttachmentManagement.uploadedFileList)}" label="#{msg['choose']}"/>
 		          		
 		          		<p/>
 				

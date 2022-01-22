@@ -10,7 +10,7 @@
     template="/WEB-INF/template/layout_admin.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} Administration - #{msg['userManagement.page.title']}
+		#{msg['application.title']} #{msg['administration.manage.users']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -67,10 +67,10 @@
 			<p/>
 			
 			<div class="w3-panel w3-theme-d5 w3-center w3-round">
- 				<h3 id="title">#{msg['userManagement.page.title']}</h3>
+ 				<h3 id="title">#{msg['manage.users']}</h3>
  				<h:link outcome="userManagement" styleClass="w3-button w3-border">
  					<i class="pi pi-table"/>
- 					View as Table
+ 					#{msg['view.as.table']}
  				</h:link><p/>
  			</div>
 			
@@ -86,11 +86,11 @@
 								
 								<h:panelGrid columns="2">
 								
-									<p:outputLabel value="User Role:"/>
+									<p:outputLabel value="#{msg['user.role']}:"/>
 									
 							        <p:selectOneMenu value="#{userList.lazyModel.userRole}">
 							        	<f:selectItems value="#{referenceData.userRoles}" var="role" itemValue="#{role}" itemLabel="#{role.label}"/>
-							        	<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
+							        	<f:selectItem itemValue="#{null}" itemLabel=" - #{msg['all']} - "/>
 							        	<p:ajax event="change" update=":form:userList" 
 							        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 							        </p:selectOneMenu>
@@ -101,11 +101,11 @@
 								
 								<h:panelGrid columns="2">
 								
-									<p:outputLabel value="Account Status:"/>
+									<p:outputLabel value="#{msg['account.status']}:"/>
 									
 							        <p:selectOneMenu value="#{userList.lazyModel.accountStatus}">
 							        	<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
-							        	<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
+							        	<f:selectItem itemValue="#{null}" itemLabel=" - #{msg['all']} - "/>
 							        	<p:ajax event="change" update=":form:userList" 
 							        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 							        </p:selectOneMenu>
@@ -116,15 +116,15 @@
 							
 								<h:panelGrid columns="2">
 							
-									<p:inputText id="filterInputText" value="#{userList.searchValue}" placeholder="Enter search value" size="25" maxlength="50"/>
+									<p:inputText id="filterInputText" value="#{userList.searchValue}" placeholder="#{msg['enter.search.value']}" size="25" maxlength="50"/>
 				
-							        <p:splitButton value="For Username" action="#{userList.search('username')}" update=":form:userList"
+							        <p:splitButton value="#{msg['for.username']}" action="#{userList.search('username')}" update=":form:userList"
 							        	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" style="margin-left:2px;">
-							            <p:menuitem value="For First name" action="#{userList.search('person.firstName')}"
+							            <p:menuitem value="#{msg['for.first.name']}" action="#{userList.search('person.firstName')}"
 							            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
-							            <p:menuitem value="For Last name" action="#{userList.search('person.lastName')}"
+							            <p:menuitem value="#{msg['for.last.name']}" action="#{userList.search('person.lastName')}"
 							            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
-							            <p:menuitem value="For Email" action="#{userList.search('person.email')}"
+							            <p:menuitem value="#{msg['for.email']}" action="#{userList.search('person.email')}"
 							            	oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" update=":form:userList"/>
 							        </p:splitButton>
 							
@@ -135,14 +135,14 @@
 								
 								<h:panelGrid columns="2">
 								
-									<p:outputLabel value="Sort By:"/>
+									<p:outputLabel value="#{msg['sort.by']}:"/>
 									
 							        <p:selectOneMenu value="#{userList.lazyModel.sortField}">
 							        	
-							        	<f:selectItem itemValue="username" itemLabel="Username"/>
-							        	<f:selectItem itemValue="person.firstName" itemLabel="First Name"/>
-							        	<f:selectItem itemValue="person.lastName" itemLabel="Last Name"/>
-							        	<f:selectItem itemValue="person.email" itemLabel="Email"/>
+							        	<f:selectItem itemValue="username" itemLabel="#{msg['username']}"/>
+							        	<f:selectItem itemValue="person.firstName" itemLabel="#{msg['first.name']}"/>
+							        	<f:selectItem itemValue="person.lastName" itemLabel="#{msg['last.name']}"/>
+							        	<f:selectItem itemValue="person.email" itemLabel="#{msg['email']}"/>
 							        	
 							        	<p:ajax event="change" update=":form:userList" 
 							        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
@@ -154,12 +154,12 @@
 								
 								<h:panelGrid columns="2">
 								
-									<p:outputLabel value="Sort Direction:"/>
+									<p:outputLabel value="#{msg['sort.direction']}:"/>
 									
 							        <p:selectOneMenu value="#{userList.lazyModel.sortDesc}">
 							        	
-							        	<f:selectItem itemValue="#{false}" itemLabel="Ascending"/>
-							        	<f:selectItem itemValue="#{true}" itemLabel="Descending"/>
+							        	<f:selectItem itemValue="#{false}" itemLabel="#{msg['ascending']}"/>
+							        	<f:selectItem itemValue="#{true}" itemLabel="#{msg['descending']}"/>
 							        	
 							        	<p:ajax event="change" update=":form:userList" 
 							        		oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
@@ -180,7 +180,7 @@
 					    <p:dataGrid var="user" value="#{userList.lazyModel}" columns="3" layout="grid" lazy="true"
 					        rows="15" paginator="true" id="userList"
 					        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					        currentPageReportTemplate="Showing {startRecord}-{endRecord} of {totalRecords} users" emptyMessage="No user found"
+					        currentPageReportTemplate="#{msg['showing']} {startRecord}-{endRecord} #{msg['of']} {totalRecords} #{msg['users']}" emptyMessage="#{msg['no.user.found']}"
 					        rowsPerPageTemplate="15,30,60">
 							
 							<p:ajax event="page" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
@@ -197,11 +197,11 @@
   									#{fn:substring(user.username, 0, 3)}
   								</span>
 									
-								<p class="w3-small">Username: <b>#{user.username}</b></p>
-								<p class="w3-small">Role: <b>#{user.userRole.label}</b></p>
-								<p class="w3-small">Name: <b>#{user.person.firstName} #{user.person.lastName}</b></p>
-								<p class="w3-small">Email: <b>#{user.person.email}</b></p>
-								<p class="w3-small">Account Status: <b>#{user.accountStatus}</b></p>
+								<p class="w3-small">#{msg['username']}: <b>#{user.username}</b></p>
+								<p class="w3-small">#{msg['role']}: <b>#{user.userRole.label}</b></p>
+								<p class="w3-small">#{msg['name']}: <b>#{user.person.firstName} #{user.person.lastName}</b></p>
+								<p class="w3-small">#{msg['email']}: <b>#{user.person.email}</b></p>
+								<p class="w3-small">#{msg['account.status']}: <b>#{user.accountStatus}</b></p>
 		
 								<div class="w3-display-topleft w3-display-hover w3-padding-small">
 								
@@ -296,7 +296,7 @@
 				  			<div class="w3-container w3-border-top">
 				  			
 					  			<h:panelGrid columns="2" cellspacing="10" columnClasses="panelGridCol1 panelGridCol2">	
-			 		  				<h:outputLabel value="Account Status:" for="accountStatus"/>
+			 		  				<h:outputLabel value="#{msg['account.status']}:" for="accountStatus"/>
 									<p:selectOneMenu value="#{userList.selectedRecord.accountStatus}" id="accountStatus">
 										<!-- <f:converter converterId="accountStatusConverter"/> -->
 										<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>

@@ -74,13 +74,13 @@
 			</p:messages>
 			
 			<div class="w3-panel w3-round w3-theme-d5 w3-center">
- 				<h3>#{msg['forumManagement.page.title']}</h3>
+ 				<h3>#{msg['manage.forums']}</h3>
  			</div>
 			
 	   		<div jsf:id="forumMapDiv" class="w3-border w3-round">
 				
 				<header class="w3-container w3-theme-d2 w3-center w3-xlarge">
-					<h4><b><i class="pi pi-sitemap w3-large"/> Forum Map</b></h4>
+					<h4><b><i class="pi pi-sitemap w3-large"/> #{msg['forum.map']}</b></h4>
 				</header>
 				
 				<div style="resize: vertical;height: 400px; overflow: auto;">
@@ -92,11 +92,11 @@
 							<p:treeNode type="Root">
 																	        	
 					        	<span class="w3-large w3-opacity-min">
-					        		<i class="pi pi-sitemap w3-xlarge"/> Home 
+					        		<i class="pi pi-sitemap w3-xlarge"/> #{msg['home']}
 					        		
 					        		<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
 					        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
-					        			[Reorder children <i class="pi pi-sort"/>]
+					        			[#{msg['reorder.children']} <i class="pi pi-sort"/>]
 					        			<f:setPropertyActionListener value="#{null}" target="#{forumAdmin.selectedOrderForumGroup}"/>
 					        		</p:commandLink>
 					        	</span>
@@ -139,7 +139,7 @@
 					        	
 								<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
 				        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
-				        			[Reorder children <i class="pi pi-sort"/>]
+				        			[#{msg['reorder.children']} <i class="pi pi-sort"/>]
 				        			<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedOrderForumGroup}"/>
 				        		</p:commandLink>			        	
 					        	

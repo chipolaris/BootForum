@@ -10,7 +10,7 @@
     template="/WEB-INF/template/layout_admin.xhtml">
 
 	<ui:define name="title">
-		#{msg['displayManagement.page.title']}
+		#{msg['manage.display']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -39,7 +39,7 @@
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 			
 			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
- 				<h3>#{msg['displayManagement.page.title']}</h3>
+ 				<h3>#{msg['manage.display']}</h3>
  			</div>
  			
  			<p:messages id="messages" showDetail="true" closable="true">
@@ -49,7 +49,7 @@
 			<h:form styleClass="w3-theme-light">
 			
 				<div class="w3-container w3-xlarge w3-border-bottom">
-					Set default application themes
+					#{msg['set.default.application.themes']}
 				</div>
 				
 				<p/>
@@ -59,11 +59,11 @@
 					<div class="w3-half w3-container">
 						
 						<p>
-							Current Color Theme is <b>'#{manageDisplay.displayOption.themeColor}'</b>
+							#{msg['current.color.theme.is']} <b>'#{manageDisplay.displayOption.themeColor}'</b>
 						</p>
 					
 						<p>
-							<b>Select a new Color Theme:</b>
+							<b>#{msg['select.a.new.color.theme']}:</b>
 						</p>
 						
 						<p>
@@ -101,11 +101,11 @@
 					<div class="w3-half w3-container">
 						
 						<p>
-							Current Component Theme is <b>'#{manageDisplay.displayOption.themeComponent}'</b>
+							#{msg['current.component.theme.is']} <b>'#{manageDisplay.displayOption.themeComponent}'</b>
 						</p>
 				
 						<p>
-							<b>Select a new Component Theme:</b>
+							<b>#{msg['select.a.new.component.theme']} :</b>
 						</p>
 					
 						<p>
@@ -152,7 +152,7 @@
 				<p/>
 
 				<div class="w3-container w3-xlarge w3-border-bottom">
-					Discussions display on Home Page
+					#{msg['discussions.display.on.home.page']}
 				</div>
 				
 				<p/>
@@ -160,33 +160,33 @@
 				<div class="w3-row-padding">
 				
 					<div class="w3-half container">
-						<h6><b>Show Most Views Discussions</b></h6>
+						<h6><b>#{msg['show.most.views.discussions']}</b></h6>
 						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostViewsDiscussions}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-half container">
-						<h6><b>Number of Most Views Discussions</b></h6>
+						<h6><b>#{msg['number.of.most.views.discussions']}</b></h6>
 						<h:inputText value="#{manageDisplay.displayOption.numMostViewsDiscussions}" styleClass="w3-input w3-border"/>	
 					</div>
 
 					<div class="w3-half container">
-						<h6><b>Show Most Comments Discussions</b></h6>
+						<h6><b>#{msg['show.most.comments.discussions']}</b></h6>
 						<!-- <p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{manageDisplay.displayOption.showMostViewsDiscussions}"/> -->
 						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostCommentsDiscussions}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-half container">
-						<h6><b>Number of Most Comments Discussions</b></h6>
+						<h6><b>#{msg['number.of.most.comments.discussions']}</b></h6>
 						<h:inputText value="#{manageDisplay.displayOption.numMostCommentsDiscussions}" styleClass="w3-input w3-border"/>	
 					</div>
 					
 					<div class="w3-half container">
-						<h6><b>Show Most Recent Discussions</b></h6>
+						<h6><b>#{msg['show.most.recent.discussions']}</b></h6>
 						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostRecentDiscussions}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-half container">
-						<h6><b>Number of Most Recent Discussions</b></h6>
+						<h6><b>#{msg['number.of.most.recent.discussions']}</b></h6>
 						<h:inputText value="#{manageDisplay.displayOption.numMostRecentDiscussions}" styleClass="w3-input w3-border"/>	
 					</div>
 					
@@ -205,7 +205,7 @@
 			<h:form styleClass="w3-theme-light w3-padding-top w3-padding-bottom">
 				
 				<div class="w3-container w3-xlarge w3-border-bottom">
-					Tags display on Home Page
+					#{msg['tags.display.on.home.page']}
 				</div>
 				
 				<p/>
@@ -213,12 +213,12 @@
 				<div class="w3-row-padding">
 
 					<div class="w3-col w3-half w3-container">
-						<h6><b>Show Discussions per tags</b></h6>
+						<h6><b>#{msg['show.discussions.per.tags']}</b></h6>
 						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showDiscussionsForTag}" styleClass="w3-check"/>
 					</div>
 					
 					<div class="w3-col w3-half w3-container">
-						<h6><b>Number of Discussions per Tag</b></h6>
+						<h6><b>#{msg['number.of.discussions.per.tag']}</b></h6>
 						<h:inputText value="#{manageDisplay.displayOption.numDiscussionsPerTag}" styleClass="w3-input w3-border"/>
 					</div>
 					
@@ -230,8 +230,8 @@
 					                itemValue="#{tag}" itemLabel="#{tag.label}" showSourceControls="true"
 					                showTargetControls="true" converter="#{manageDisplay.tagConverter}" responsive="true">
 					 
-					        <f:facet name="sourceCaption">All Tags</f:facet>
-					        <f:facet name="targetCaption">Tags to display</f:facet>
+					        <f:facet name="sourceCaption">#{msg['all.tags']}</f:facet>
+					        <f:facet name="targetCaption">#{msg['tags.to.display']}</f:facet>
 					 
 					        <p:column style="width:15%">
 					            <i class="#{tag.icon} w3-xlarge" style="color: ##{tag.color}"/>

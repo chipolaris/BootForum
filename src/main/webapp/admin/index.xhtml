@@ -6,7 +6,7 @@
 	template="/WEB-INF/template/layout_admin.xhtml">
 	
 	<ui:define name="title">
-		#{msg['application.title']} - Administrator Area
+		#{msg['application.title']} - #{msg['administrator.area']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -14,16 +14,16 @@
 		<div class="w3-panel w3-card-4 w3-margin-top w3-white">
 			
 			<div class="w3-panel w3-theme-dark w3-center w3-round">
- 				<h2>Administrator Area</h2>
+ 				<h2>#{msg['administrator.area']}</h2>
  			</div>
 			
 			<div class="w3-large w3-margin-top">
-				Welcome to administrator area. 
+				#{msg['welcome.to.administrator.area']}.
 				<span class="w3-hide-medium w3-hide-large">
-					Please use top bar menu to manage #{msg['application.title']}
+					#{msg['please.use.top.bar.menu.to.manage']} #{msg['application.title']}
 				</span>
 				<span class="w3-hide-small">
-					Please use side bar menu to manage #{msg['application.title']}
+					#{msg['please.use.side.bar.menu.to.manage']} #{msg['application.title']}
 				</span>
 			</div>			
 			

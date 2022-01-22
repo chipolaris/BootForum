@@ -8,11 +8,11 @@
     template="/WEB-INF/template/layout_secure.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} - My Account Information
+		#{msg['application.title']} - #{msg['my.account.information']}
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<b><i class="pi pi-user"></i> Account Information</b>
+		<b><i class="pi pi-user"></i> #{msg['account.information']}</b>
 	</ui:define>
 
 	<ui:define name="content">
@@ -45,7 +45,7 @@
 			
 				<f:facet name="title">
 					<div class="w3-container w3-large">
-						<i class="pi pi-user"/> Personal Information
+						<i class="pi pi-user"/> #{msg['personal.information']}
 					</div>
 				</f:facet>
 				
@@ -53,7 +53,7 @@
 				
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<b>First Name:</b>
+							<b>#{msg['first.name']}:</b>
 						</div>
 						<div class="w3-col s12 m8 l10">
 							<p:inputText value="#{accountInfo.user.person.firstName}" size="35"/>
@@ -62,7 +62,7 @@
 					
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<b>Last Name:</b>
+							<b>#{msg['last.name']}:</b>
 						</div>
 						<div class="w3-col s12 m8 l10">
 							<p:inputText value="#{accountInfo.user.person.lastName}" size="35"/>
@@ -93,7 +93,7 @@
 			
 				<f:facet name="title">
 					<div class="w3-container w3-large">
-						<i class="pi pi-image"/> Avatar
+						<i class="pi pi-image"/> #{msg['avatar']}
 					</div>
 				</f:facet>				
 			
@@ -101,7 +101,7 @@
 
 					<p/>
 					
-					<b>Current Avatar:</b>
+					<b>#{msg['current.avatar']}:</b>
 					
 					<div class="w3-clear"/> <!-- need this clear because the avatar view below is floated left -->
 					
@@ -123,7 +123,7 @@
 						
 						<p/>
 
-						<p:commandButton id="deleteAvatarButton" value=" Delete Avatar"
+						<p:commandButton id="deleteAvatarButton" value=" #{msg['delete.avatar']}"
 							rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"
 							actionListener="#{fileHandler.deleteAvatar(userSession.user.username)}"
 							icon="pi pi-trash" update="viewAvatarPanel" ajax="true">
@@ -137,7 +137,7 @@
 					<div class="w3-clear"/> <!-- need this clear because the avatar view above is floated left -->
 					
 					<p>
-						<p:commandButton value="Create New Avatar" type="button" icon="pi pi-external-link" onclick="PF('avatarUpload').show()"/>
+						<p:commandButton value="#{msg['create.new.avatar']}" type="button" icon="pi pi-external-link" onclick="PF('avatarUpload').show()"/>
 					</p>
         
 				</h:form>				
@@ -198,7 +198,7 @@
 
 				<f:facet name="title">
 					<div class="w3-container w3-large">
-						<i class="pi pi-key"/> Change Password
+						<i class="pi pi-key"/> #{msg['change.password']}
 					</div>
 				</f:facet>
 							
@@ -206,7 +206,7 @@
 											
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s2 m4 l2">
-							<b>User ID:</b>
+							<b>#{msg['user.id']}:</b>
 						</div>
 						<div class="w3-col s10 m8 l10">
 							<b class="w3-tag w3-theme-l3 w3-large">#{accountInfo.user.username}</b>
@@ -216,7 +216,7 @@
 										
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<b>Current Password:</b>
+							<b>#{msg['current.password']}:</b>
 						</div>
 						<div class="w3-col s12 m8 l10">
 							<p:password value="#{accountInfo.currentPassword}" toggleMask="true"
@@ -226,7 +226,7 @@
 					
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<b>New Password:</b>
+							<b>#{msg['new.password']}:</b>
 						</div>
 						<div class="w3-col s12 m8 l10">
 							<p:password id="newPassword" value="#{accountInfo.newPassword}" toggleMask="true"
@@ -236,7 +236,7 @@
 					
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<b>Confirm New Password:</b>
+							<b>#{msg['confirm.new.password']}:</b>
 						</div>
 						<div class="w3-col s12 m8 l10">
 							<p:password id="confirmNewPassword" value="#{accountInfo.confirmNewPassword}" toggleMask="true"

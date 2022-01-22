@@ -290,7 +290,7 @@
 							</p:dataList>
 							<p:dataList value="#{searchSuggestion.usernames}" var="username" rendered="#{not empty searchSuggestion.usernames}">
 								<f:facet name="header">
-						            Users:
+						            ${msg['users']}:
 						        </f:facet>
 						        
 								<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"

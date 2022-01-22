@@ -9,7 +9,7 @@
     template="/WEB-INF/template/layout_secure.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} - My Signature
+		#{msg['application.title']} - #{msg['my.signature']}
 	</ui:define>
 	
 	<ui:define name="pageTitle">
@@ -44,11 +44,11 @@
 				<div class="w3-row w3-section">
 					
 					<div class="w3-col l5 m6 s12 ">
-						<p:selectBooleanCheckbox value="#{signaturePreference.preferences.useSignatureOnComment}" itemLabel="Use signature on comment"/>
+						<p:selectBooleanCheckbox value="#{signaturePreference.preferences.useSignatureOnComment}" itemLabel="#{msg['use.signature.on.comment']}"/>
 					</div>
 					
 					<div class="w3-col l5 m6 s12 ">
-						<p:selectBooleanCheckbox value="#{signaturePreference.preferences.useSignatureOnMessage}" itemLabel="Use signature on private message"/>
+						<p:selectBooleanCheckbox value="#{signaturePreference.preferences.useSignatureOnMessage}" itemLabel="#{msg['use.signature.on.private.message']}"/>
 					</div>
 				
 					<div class="w3-col l12 s12 m12 w3-margin-top">
@@ -60,7 +60,7 @@
 									'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" widgetVar="messageEditorVar">
 							<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
 						</pe:ckEditor>
-						<span style="font-size:-1;"> *Signature must be 1000 characters or less (including markups)</span>
+						<span style="font-size:-1;"> *#{msg['signature.must.be.1000.characters.or.less.(including.markups)']}</span>
 					</div>
 				</div>
 				

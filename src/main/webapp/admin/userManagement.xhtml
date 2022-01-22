@@ -10,7 +10,7 @@
     template="/WEB-INF/template/layout_admin.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} Administration - Manage Users
+		#{msg['application.title']} #{msg['administration.manage.users']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -157,7 +157,7 @@
 					
 					<p:column sortBy="#{user.accountStatus}" filterBy="#{user.accountStatus}" style="text-align:center;font-weight:bold;" responsivePriority="3">
 						<f:facet name="header">
-							<h:outputText value="Account Status" style="font-weight:bold;"/>
+							<h:outputText value="#{msg['account.status']}" style="font-weight:bold;"/>
 						</f:facet>
 
 						<f:facet name="filter">
@@ -259,7 +259,7 @@
 				  				<h:outputText value="Reputation:"/>
 				  				<h:outputText value="#{userManagement.selectedRecord.stat.reputation}" style="font-weight:bold;"/>
 				  				
-		 		  				<h:outputLabel value="Account Status" for="accountStatus"/>						
+		 		  				<h:outputLabel value="#{msg['account.status']}" for="accountStatus"/>						
 								<p:selectOneMenu value="#{userManagement.selectedRecord.accountStatus}" id="accountStatus">
 									<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
 									<!-- If we want ajax update, can use the p:ajax event="change" as below to initiate call to server side action -->

@@ -76,27 +76,27 @@
 		    	
 		    <div class="w3-col s9 w3-bar w3-text-theme">
 		      <div class="w3-center"><strong>#{empty userSession.user.person.firstName and empty userSession.user.person.lastName ? 'Username: ' += userSession.user.username : userSession.user.person.firstName += ' ' += userSession.user.person.lastName}</strong></div>
-		      <div class="w3-center">Role: #{userSession.user.userRole.label}</div>
+		      <div class="w3-center">#{msg['role']}: #{userSession.user.userRole.label}</div>
 		    </div>
 		    
 		    <sec:authorize url="/admin">
 		    	<div class="w3-col s12 w3-center w3-large w3-margin-top">
-		    		<h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-theme-d4"><i class="pi pi-briefcase"/> Administration</h:link>
+		    		<h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-theme-d4"><i class="pi pi-briefcase"/> #{msg['administration']}</h:link>
 	  			</div>
 	  		</sec:authorize>
 		    
 		  </div>
 		  <hr/>
 		  <div class="w3-bar-block">
-		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="close menu"><i class="pi pi-times"></i>  Close Menu</a>
+		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="close menu"><i class="pi pi-times"></i>  #{msg['close.menu']}</a>
 		    
-		    <h:link outcome="/secure/index" styleClass="w3-bar-item w3-button w3-padding"><b>Dashboard</b></h:link>
-		    <h:link outcome="/secure/accountInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-user"/> Account</h:link>
-		    <h:link outcome="/secure/myComments" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comment"/> My Comments</h:link>
-		    <h:link outcome="/secure/privateMessages" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope"/> Messages</h:link>
-		  	<h:link outcome="/secure/signaturePreference" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-pencil"/> Signature</h:link>
-		  	<h:link outcome="/secure/switchTheme" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-palette"/> UI Themes</h:link>
-		  	<h:link outcome="/chat/index" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments"/> Chat Rooms</h:link>
+		    <h:link outcome="/secure/index" styleClass="w3-bar-item w3-button w3-padding"><b>#{msg['dashboard']}</b></h:link>
+		    <h:link outcome="/secure/accountInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-user"/> #{msg['account']}</h:link>
+		    <h:link outcome="/secure/myComments" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comment"/> #{msg['my.comments']}</h:link>
+		    <h:link outcome="/secure/privateMessages" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope"/> #{msg['messages']}</h:link>
+		  	<h:link outcome="/secure/signaturePreference" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-pencil"/> #{msg['signature']}</h:link>
+		  	<h:link outcome="/secure/switchTheme" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-palette"/> #{msg['ui.themes']}</h:link>
+		  	<h:link outcome="/chat/index" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments"/> #{msg['chat.rooms']}</h:link>
 		  </div>
 		</nav>
 
