@@ -88,7 +88,6 @@
 		  </div>
 		  <hr/>
 		  <div class="w3-bar-block">
-		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="close menu"><i class="pi pi-times"></i>  #{msg['close.menu']}</a>
 		    
 		    <h:link outcome="/secure/index" styleClass="w3-bar-item w3-button w3-padding"><b>#{msg['dashboard']}</b></h:link>
 		    <h:link outcome="/secure/accountInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-user"/> #{msg['account']}</h:link>
@@ -97,6 +96,8 @@
 		  	<h:link outcome="/secure/signaturePreference" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-pencil"/> #{msg['signature']}</h:link>
 		  	<h:link outcome="/secure/switchTheme" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-palette"/> #{msg['ui.themes']}</h:link>
 		  	<h:link outcome="/chat/index" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments"/> #{msg['chat.rooms']}</h:link>
+		  	
+		  	<a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="close menu"><i class="pi pi-times"></i>  #{msg['close.menu']}</a>
 		  </div>
 		</nav>
 

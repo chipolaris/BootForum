@@ -60,12 +60,6 @@
 				}
 			//]]>	
 		</script>
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="forumGroupId" value="#{forumManagement.forumGroupId}"/>
-			<f:viewAction action="#{forumManagement.onLoad}"/>
-		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 		
@@ -76,94 +70,8 @@
 			<div class="w3-panel w3-round w3-theme-d5 w3-center">
  				<h3>#{msg['manage.forums']}</h3>
  			</div>
-			
-	   		<div jsf:id="forumMapDiv" class="w3-border w3-round">
-				
-				<header class="w3-container w3-theme-d2 w3-center w3-xlarge">
-					<h4><b><i class="pi pi-sitemap w3-large"/> #{msg['forum.map']}</b></h4>
-				</header>
-				
-				<div style="resize: vertical;height: 400px; overflow: auto;">
-				
-					<h:form id="forumMapForm">
-						<p:tree id="forumMapTree" value="#{forumMap.managementRootTreeNode}" var="data" 
-							style="margin: 0 auto;width:100%;border:0;scroll:auto;height:200px;">
-							
-							<p:treeNode type="Root">
-																	        	
-					        	<span class="w3-large w3-opacity-min">
-					        		<i class="pi pi-sitemap w3-xlarge"/> #{msg['home']}
-					        		
-					        		<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
-					        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
-					        			[#{msg['reorder.children']} <i class="pi pi-sort"/>]
-					        			<f:setPropertyActionListener value="#{null}" target="#{forumAdmin.selectedOrderForumGroup}"/>
-					        		</p:commandLink>
-					        	</span>
-					        	
-					        </p:treeNode>
-							
-							<p:treeNode type="Forum">
-								<p:commandLink update=":editForumDiv" oncomplete="toggleDiv('editForumDiv');customizePrimefaceButtons()">
-									
-									<span class="w3-tag" style="line-height:30px;width:30px;height:30px;border-radius:2px;color:#fff;background-color:##{data.iconColor};">
-					        			<i class="#{data.icon}"/>
-					        		</span>
-					        		
-					        		<b>#{data.title}</b>					        		
-					        		
-					        		<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForum}"/>
-				        		</p:commandLink>
-				        		
-				        	</p:treeNode>
-				        	
-				        	<p:treeNode type="AddForum">
-				        		<p:commandLink update=":addForumDiv" action="#{forumAdmin.createEmptyForum}"
-				        			oncomplete="toggleDiv('addForumDiv');customizePrimefaceButtons()">
-						        	<span class="w3-text-orange">
-						        		<i class="pi pi-plus w3-large"/> Add Forum
-						        	</span>
-						        	
-						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
-						        	
-					        	</p:commandLink>
-							</p:treeNode>
-				        	
-				        	<p:treeNode type="ForumGroup">
-				        		<p:commandLink update=":editForumGroupDiv" oncomplete="toggleDiv('editForumGroupDiv');customizePrimefaceButtons()">				        	
-						        	<span class="w3-large w3-opacity-min">
-						        		<i class="pi pi-sitemap w3-xlarge"/> #{data.title}
-						        	</span>
-						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
-					        	</p:commandLink>
-					        	
-								<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
-				        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
-				        			[#{msg['reorder.children']} <i class="pi pi-sort"/>]
-				        			<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedOrderForumGroup}"/>
-				        		</p:commandLink>			        	
-					        	
-					        </p:treeNode>
-					        
-					        <p:treeNode type="AddForumGroup">
-					        	<p:commandLink update=":addForumGroupDiv" action="#{forumAdmin.createEmptyForumGroup}" 
-					        		oncomplete="toggleDiv('addForumGroupDiv');customizePrimefaceButtons()">
-						        	<span class="w3-text-orange">
-						        		<i class="pi pi-plus w3-large"/> Add Forum Group
-						        	</span>
-						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
-					        	</p:commandLink>
-					        </p:treeNode>
-					        
-						</p:tree>
-					</h:form>
-				</div>
-	   			
-	   		</div>
-
-	   		<p/>
-	   		
-			<div jsf:id="editForumDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
+				   		
+			<div jsf:id="editForumDiv" class="toggleDiv w3-animate-top" style="display:none;">
 				
 				<h4><i class="pi pi-pencil"/> Edit Forum</h4>
 				
@@ -271,7 +179,7 @@
 	   		
 	   		<p/>
 
-			<div jsf:id="addForumDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
+			<div jsf:id="addForumDiv" class="toggleDiv w3-animate-top" style="display:none;">
 				
 				<h4><i class="pi pi-plus"/> Add Forum for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
 				
@@ -370,7 +278,7 @@
 	   		
 	   		<p/>
 	   		
-			<div jsf:id="editForumGroupDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
+			<div jsf:id="editForumGroupDiv" class="toggleDiv w3-animate-top" style="display:none;">
 				
 				<h4><i class="pi pi-pencil"/> Edit Forum Group</h4>
 				
@@ -452,7 +360,7 @@
 				
 			</div>
 		
-			<div jsf:id="addForumGroupDiv" class="toggleDiv w3-animate-top" style="display:none;border-top: 2px solid gray;">
+			<div jsf:id="addForumGroupDiv" class="toggleDiv w3-animate-top" style="display:none;">
 			
 				<h4><i class="pi pi-plus"/> Add Forum Group for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
 			
@@ -461,7 +369,7 @@
 					<span onclick="$('#addForumGroupDiv').hide();" class="w3-button w3-display-topright">X</span>
 				
 					<h:form>
-						<div class="w3-row-padding" style="margin:0 -16px;"> <!-- responsive -->
+						<div class="w3-row-padding"> <!-- responsive -->
 							
 							<div class="w3-row w3-section"><p/></div> <!-- vertical spacer -->
 						
@@ -510,7 +418,7 @@
 			  				
 			  				<div class="w3-row">
 	
-				  				<p:commandButton id="createForumGroup" ajax="true" action="#{forumManagement.createForumGroup}"
+				  				<p:commandButton id="createForumGroup" ajax="true" action="#{forumAdmin.createForumGroup}"
 					            	value="#{msg['save']}" update=":messages :forumMapForm:forumMapTree"
 					            	oncomplete="$('.toggleDiv').hide();" icon="pi pi-plus"/>
 					            	
@@ -526,6 +434,92 @@
   				
   				</div>
 			</div>
+
+			<p/>
+
+	   		<div jsf:id="forumMapDiv" class="w3-border w3-round">
+				
+				<header class="w3-container w3-theme-d2 w3-center w3-xlarge">
+					<h4><b><i class="pi pi-sitemap w3-large"/> #{msg['forum.map']}</b></h4>
+				</header>
+				
+				<div style="resize: vertical; overflow: auto;">
+				
+					<h:form id="forumMapForm">
+						<p:tree id="forumMapTree" value="#{forumMap.managementRootTreeNode}" var="data" 
+							style="margin: 0 auto;width:100%;border:0;scroll:auto;height:650px;">
+							
+							<p:treeNode type="Root">
+																	        	
+					        	<span class="w3-large w3-opacity-min">
+					        		<i class="pi pi-sitemap w3-xlarge"/> #{msg['home']}
+					        		
+					        		<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
+					        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
+					        			[#{msg['reorder.children']} <i class="pi pi-sort"/>]
+					        			<f:setPropertyActionListener value="#{null}" target="#{forumAdmin.selectedOrderForumGroup}"/>
+					        		</p:commandLink>
+					        	</span>
+					        	
+					        </p:treeNode>
+							
+							<p:treeNode type="Forum">
+								<p:commandLink update=":editForumDiv" oncomplete="toggleDiv('editForumDiv');customizePrimefaceButtons()">
+									
+									<span class="w3-tag" style="line-height:30px;width:30px;height:30px;border-radius:2px;color:#fff;background-color:##{data.iconColor};">
+					        			<i class="#{data.icon}"/>
+					        		</span>
+					        		
+					        		<b>#{data.title}</b>					        		
+					        		
+					        		<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForum}"/>
+				        		</p:commandLink>
+				        		
+				        	</p:treeNode>
+				        	
+				        	<p:treeNode type="AddForum">
+				        		<p:commandLink update=":addForumDiv" action="#{forumAdmin.createEmptyForum}"
+				        			oncomplete="toggleDiv('addForumDiv');customizePrimefaceButtons()">
+						        	<span class="w3-text-orange">
+						        		<i class="pi pi-plus w3-large"/> Add Forum
+						        	</span>
+						        	
+						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
+						        	
+					        	</p:commandLink>
+							</p:treeNode>
+				        	
+				        	<p:treeNode type="ForumGroup">
+				        		<p:commandLink update=":editForumGroupDiv" oncomplete="toggleDiv('editForumGroupDiv');customizePrimefaceButtons()">				        	
+						        	<span class="w3-large w3-opacity-min">
+						        		<i class="pi pi-sitemap w3-xlarge"/> #{data.title}
+						        	</span>
+						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
+					        	</p:commandLink>
+					        	
+								<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
+				        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
+				        			[#{msg['reorder.children']} <i class="pi pi-sort"/>]
+				        			<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedOrderForumGroup}"/>
+				        		</p:commandLink>			        	
+					        	
+					        </p:treeNode>
+					        
+					        <p:treeNode type="AddForumGroup">
+					        	<p:commandLink update=":addForumGroupDiv" action="#{forumAdmin.createEmptyForumGroup}" 
+					        		oncomplete="toggleDiv('addForumGroupDiv');customizePrimefaceButtons()">
+						        	<span class="w3-text-orange">
+						        		<i class="pi pi-plus w3-large"/> Add Forum Group
+						        	</span>
+						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
+					        	</p:commandLink>
+					        </p:treeNode>
+					        
+						</p:tree>
+					</h:form>
+				</div>
+	   			
+	   		</div>
 		
 		</div>
 
@@ -604,13 +598,12 @@
 			</div>
 			
 		</div>
-
-		
+				
 		<!-- global confirm dialog -->
 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-   		</p:confirmDialog>		
+   		</p:confirmDialog>
 		
 	</ui:define>
     
