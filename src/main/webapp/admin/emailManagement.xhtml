@@ -36,14 +36,14 @@
 			
 			<h:form id="form" styleClass="w3-theme-light">
 				<div class="w3-container w3-xlarge w3-border-bottom">
-					Email Configuration
+					#{msg['email.configuration']}
 				</div>
 				
 				<div class="w3-row-padding">
 				
 					<div class="w3-half container">
 						<p/>
-						<p:outputLabel for="host" value="Host" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+						<p:outputLabel for="host" value="#{msg['host']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpHost"/>
 						<p:overlayPanel for="helpHost" style="width:240px" styleClass="w3-black">
 							Host name for SMTP server.<br/>Example: <b>smtp.gmail.com</b>
@@ -60,7 +60,7 @@
 						<p/>
 						<div class="w3-quarter container">
 							
-							<p:outputLabel for="port" value="Port" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/> 
+							<p:outputLabel for="port" value="#{msg['port']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/> 
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPort"/>
 							<p:overlayPanel for="helpPort" style="width:240px" styleClass="w3-black">
 								Port number for SMTP server.<br/>Example: <b>587</b>
@@ -78,10 +78,10 @@
 						</div>
 
 						<div class="w3-half container w3-right-align">
-							<p:outputLabel for="authentication" value="Authentication" styleClass="w3-medium" style="font-weight:bold;"/>
+							<p:outputLabel for="authentication" value="#{msg['authentication']}" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpAuthentication"/>
 							<p:overlayPanel for="helpAuthentication" style="width:240px" styleClass="w3-black w3-left-align">
-								Whether email server uses authentication
+								#{msg['whether.email.server.uses.authentication']}
 							</p:overlayPanel>
 							<p/>
 							<p:selectBooleanCheckbox id="authentication" value="#{manageEmail.emailOption.authentication}"/>
@@ -91,7 +91,7 @@
 							<p:outputLabel for="tls" value="TLS" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpTLS"/>
 							<p:overlayPanel for="helpTLS" style="width:240px" styleClass="w3-black w3-left-align">
-								Whether email server uses TLS
+								#{msg['whether.email.server.uses.TLS']}
 							</p:overlayPanel>
 							<p/>
 							<p:selectBooleanCheckbox id="tls" value="#{manageEmail.emailOption.tlsEnable}"/>
@@ -100,10 +100,10 @@
 														
 					<div class="w3-half container">
 						
-						<p:outputLabel for="username" value="Username" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+						<p:outputLabel for="username" value="#{msg['username']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpUsername"/>
 						<p:overlayPanel for="helpUsername" style="width:240px" styleClass="w3-black">
-							Username to login SMTP server
+							#{msg['username.to.login.SMTP.server']}
 						</p:overlayPanel>
 						<p/>
 						<p:inputText id="username" value="#{manageEmail.emailOption.username}" styleClass="w3-input" maxlength="80" 
@@ -114,10 +114,10 @@
 					</div>
 					
 					<div class="w3-half container">
-						<p:outputLabel for="username" value="Password" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+						<p:outputLabel for="username" value="#{msg['password']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPassword"/>
 						<p:overlayPanel for="helpPassword" style="width:240px" styleClass="w3-black">
-							Password to login SMTP server
+							#{msg['password.to.login.SMTP.server']}
 						</p:overlayPanel>
 						<p/>
 						<p:password id="password" value="#{manageEmail.emailOption.password}" styleClass="w3-input" maxlength="80" 
@@ -134,11 +134,11 @@
 						
 						<span class="w3-margin-left" onclick="$('#form\\:testConfigurationDiv').toggle();"
 							style="cursor:pointer;color:purple;font-weight:bold;">
-							Test Configuration
+							#{msg['test.configuration']}
 						</span>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpTestConfiguration"/>
 						<p:overlayPanel for="helpTestConfiguration" style="width:240px" styleClass="w3-black w3-left-align">
-							Send a test email to validate the configuration
+							#{msg['send.a.test.email.to.validate.the.configuration']}
 						</p:overlayPanel>
 					</div>                	
 					
@@ -158,13 +158,13 @@
 						
 						<div class="w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-margin-top">
 							<p>
-							Enter the input fields below to test email configuration. If configuration are OK, an email will be sent to the "To Email".
+							#{msg['enter.the.input.fields.below.to.test.email.configuration.if.configuration.are.OK.an.email.will.be.sent.to.the.to.email']}
 							</p>
 						</div>
 						
 						<div jsf:id="testResultDiv" class="w3-card w3-container w3-margin-top">
 							
-							<h4><b>Test Result:</b></h4>
+							<h4><b>#{msg['test.result']}:</b></h4>
 							<h4 jsf:rendered="#{manageEmail.testRan and manageEmail.testSuccess}" class="w3-green"> Test Email Sent</h4>
 							<h4 jsf:rendered="#{manageEmail.testRan and not manageEmail.testSuccess}" class="w3-red"> Failed</h4>
 						</div>
@@ -173,7 +173,7 @@
 						
 						<div class="w3-row-padding container">
 							
-							<p:outputLabel for="testToEmail" value="To Email" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							<p:outputLabel for="testToEmail" value="#{msg['to.email']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 							<br/>
 							<p:inputText id="testToEmail" value="#{manageEmail.testToEmail}" styleClass="w3-input"
 								maxlength="80" required="true" requiredMessage="Must specify 'To Email'"/>
@@ -182,7 +182,7 @@
 							</h:message>
 							
 							<p/>
-							<p:outputLabel for="testEmailSubject" value="Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							<p:outputLabel for="testEmailSubject" value="#{msg['email.subject']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 							<br/>
 							<p:inputText id="testEmailSubject" value="#{manageEmail.testEmailSubject}" styleClass="w3-input"
 								maxlength="100" required="true" requiredMessage="Must specify 'Test Email Subject'"/>
@@ -191,7 +191,7 @@
 							</h:message>
 							
 							<p/>
-							<p:outputLabel for="testEmailContent" value="Email Content" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							<p:outputLabel for="testEmailContent" value="#{msg['email.content']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 							<br/>
 							
 							<!-- 
@@ -220,7 +220,7 @@
 							</h:message>
 							
 							<p/>
-							<p:commandButton value="Send Test Email" action="#{manageEmail.testEmailConfiguration}" ajax="true" icon="pi pi-send" update="testResultDiv"
+							<p:commandButton value="#{msg['send.test.email']}" action="#{manageEmail.testEmailConfiguration}" ajax="true" icon="pi pi-send" update="testResultDiv"
 								styleClass="w3-btn w3-theme-dark w3-border-0"/>				
 							<p/>
 						</div>

@@ -10,7 +10,7 @@
     template="/WEB-INF/template/layout_admin.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} - System Information
+		#{msg['application.title']} - #{msg['system.information']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -61,10 +61,10 @@
 			<p/>
 
 			<div class="w3-panel w3-theme-d5 w3-center w3-round">
- 				<h3 id="title">System Information</h3>
+ 				<h3 id="title">#{msg['system.information']}</h3>
  			</div>
 		
-			<p:fieldset id="systemStatistics" legend="System Statistics" toggleable="true">
+			<p:fieldset id="systemStatistics" legend="#{msg['system.statistics']}" toggleable="true">
 			
 				<h:form id="systemStatForm">
 			
@@ -72,7 +72,7 @@
 
 						<p:row styleClass="ui-widget-content ui-datatable-odd">
 							<p:column style="width:50%;">
-								<h:outputText value="Comments" />
+								<h:outputText value="#{msg['comments']}" />
 							</p:column>
 							<p:column style="font-weight:bold" >
 								<h:outputText value="#{systemInfo.statistics.commentCount}"/>
@@ -81,7 +81,7 @@
 
 						<p:row styleClass="ui-widget-content ui-datatable-even">
 							<p:column>
-								<h:outputText value="Discussions" />
+								<h:outputText value="#{msg['discussions']}" />
 							</p:column>
 							<p:column style="font-weight:bold">
 								<h:outputText value="#{systemInfo.statistics.discussionCount}"/>
@@ -91,7 +91,7 @@
 
 						<p:row styleClass="ui-widget-content ui-datatable-odd">
 							<p:column>
-								<h:outputText value="Forums" />
+								<h:outputText value="#{msg['forums']}" />
 							</p:column>
 							<p:column style="font-weight:bold">
 								<h:outputText value="#{systemInfo.statistics.forumCount}"/>
@@ -100,7 +100,7 @@
 
 						<p:row styleClass="ui-widget-content ui-datatable-even">
 							<p:column>
-								<h:outputText value="Forum Groups" />
+								<h:outputText value="#{msg['forum.groups']}" />
 							</p:column>
 							<p:column style="font-weight:bold">
 								<h:outputText value="#{systemInfo.statistics.forumGroupCount}"/>
@@ -109,7 +109,7 @@
 
 						<p:row styleClass="ui-widget-content ui-datatable-odd">
 							<p:column>
-								<h:outputText value="Registered Users" />
+								<h:outputText value="#{msg['registered.users']}" />
 							</p:column>
 							<p:column style="font-weight:bold">
 								<h:outputText value="#{systemInfo.statistics.userCount}"/>
@@ -119,7 +119,7 @@
 						<p:row styleClass="ui-widget-content ui-datatable-even">
 							
 							<p:column>
-								<h:outputText value="Last Registered User" />
+								<h:outputText value="#{msg['last.registered.user']}" />
 							</p:column>
 							
 							<p:column>
@@ -132,7 +132,7 @@
 						<p:row styleClass="ui-widget-content ui-datatable-odd">
 							
 							<p:column>
-								<h:outputText value="Last Comment" />
+								<h:outputText value="#{msg['last.comment']}" />
 							</p:column>
 							
 							<p:column>
@@ -144,7 +144,7 @@
 
 						<p:row styleClass="ui-widget-content ui-datatable-even">
 							<p:column>
-								<h:outputText value="Logged On Users" />
+								<h:outputText value="#{msg['logged.on.users']}" />
 							</p:column>
 							<p:column style="font-weight:bold">
 								<h:outputText value="#{fn:length(systemInfo.loggedOnUsers)}" />
@@ -154,7 +154,7 @@
 						<p:row styleClass="ui-widget-content ui-datatable-odd">
 						
 							<p:column>
-								<h:outputText value="Anonymous Users" />
+								<h:outputText value="#{msg['anonymous.users']}" />
 							</p:column>
 							<p:column style="font-weight:bold">
 								<h:outputText value="#{systemInfo.sessionCount - fn:length(systemInfo.loggedOnUsers)}"/>
@@ -168,7 +168,7 @@
 		    		
 		    		<h:panelGrid columns="2"> <!-- use h:panelGrid to make the buttons row responsive -->
 			    		<p:commandButton action="#{systemInfo.synchSystemStat}" icon="pi pi-refresh" 
-			    			value="Synchronize System Statistics" update=":systemStatForm" oncomplete="customizePrimefaceButtons();"/>
+			    			value="#{msg['synchronize.system.statistics']}" update=":systemStatForm" oncomplete="customizePrimefaceButtons();"/>
 			    		
 			    		<!-- not supported for now -->	
 			    		<!-- <p:commandButton action="#{systemInfo.synchForumStats}" icon="fa fa-refresh" 
@@ -179,7 +179,7 @@
 			 
 			 <p/>
 			 
-			 <p:fieldset id="configuredProperties" legend="Configured Application Properties" toggleable="true" collapsed="true">
+			 <p:fieldset id="configuredProperties" legend="#{msg['configured.application.properties']}" toggleable="true" collapsed="true">
 			 
 			 	<h:form>
 
@@ -188,14 +188,14 @@
 						
 						<p:column sortBy="#{configuredProperty.key}" style="text-align:left;">
 							<f:facet name="header">
-								Key
+								#{msg['key']}
 							</f:facet>
 							#{configuredProperty.key}
 						</p:column>
 
 						<p:column style="text-align:left;">
 							<f:facet name="header">
-								Value
+								#{msg['value']}
 							</f:facet>
 							<b>#{configuredProperty.value}</b>
 						</p:column>
@@ -208,7 +208,7 @@
 			 
 			 <p/>
 			 
-			 <p:fieldset id="serverInformation" legend="Server System Properties" toggleable="true" collapsed="true">
+			 <p:fieldset id="serverInformation" legend="#{msg['server.system.properties']}" toggleable="true" collapsed="true">
 
 				<h:form>
 					<p:dataTable var="systemProperty" value="#{systemInfo.systemProperties}" style="margin: 0 auto;table-layout:fixed;word-wrap:break-word;"
@@ -216,14 +216,14 @@
 						
 						<p:column sortBy="#{systemProperty.key}" style="text-align:left;">
 							<f:facet name="header">
-								Key
+								#{msg['key']}
 							</f:facet>
 							#{systemProperty.key}
 						</p:column>
 
 						<p:column style="text-align:left;">
 							<f:facet name="header">
-								Value
+								#{msg['value']}
 							</f:facet>
 							<b>#{systemProperty.value}</b>
 						</p:column>

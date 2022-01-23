@@ -52,7 +52,7 @@
 					<p:tab>
 						<f:facet name="title">
 							<div class="w3-container w3-large">
-								<i class="pi pi-users w3-large"/> User Registration Option
+								<i class="pi pi-users w3-large"/> #{msg['user.registration.option']}
 							</div>
 						</f:facet>
 						
@@ -61,24 +61,24 @@
 							<div>
 								<h:selectBooleanCheckbox id="enableCaptcha" value="#{registrationManagement.registrationOption.enableCaptcha}" 
 									styleClass="w3-check"/>&nbsp;&nbsp;					
-								<p:outputLabel for="enableCaptcha" value="Enable Captcha on registration page" styleClass="w3-medium" style="font-weight:bold;"/>
+								<p:outputLabel for="enableCaptcha" value="#{msg['enable.captcha.on.registration.page']}" styleClass="w3-medium" style="font-weight:bold;"/>
 								
 							</div>
 											
 							<div class="w3-margin-top">
 								<h:selectBooleanCheckbox id="enableEmailConfirm" value="#{registrationManagement.registrationOption.enableEmailConfirm}" 
 									styleClass="w3-check" onchange="updateRegistrationEmailInputs();"/>&nbsp;&nbsp;
-								<p:outputLabel for="enableEmailConfirm" value="Enable Email Confirm" styleClass="w3-medium" style="font-weight:bold;"/>
+								<p:outputLabel for="enableEmailConfirm" value="${msg['enable.email.confirm']}" styleClass="w3-medium" style="font-weight:bold;"/>
 							</div>
 							
 							<div class="w3-margin-top w3-padding">
 								<p/>
-								<p:outputLabel for="registrationEmailSubject" value="Registration Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+								<p:outputLabel for="registrationEmailSubject" value="#{msg['registration.email.subject']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailSubject"/>
 								<p:overlayPanel for="helpRegistrationEmailSubject" style="width:240px" styleClass="w3-black">
-									<h5>Example:</h5>
+									<h5>#{msg['example']}:</h5>
 									<hr/> 
-									Confirm account registration at <b>BootForum</b>
+									#{msg['confirm.account.registration.at']} <b>BootForum</b>
 								</p:overlayPanel>
 								<p/>
 								<p:inputText id="registrationEmailSubject" value="#{registrationManagement.registrationOption.registrationEmailSubject}" styleClass="w3-input" maxlength="200" 
@@ -90,28 +90,27 @@
 							
 							<div jsf:id="registrationEmailTemplateDiv" class="w3-margin-top w3-padding">
 		
-								<p:outputLabel for="registrationEmailTemplate" value="Registration Email Template" styleClass="w3-medium" 
+								<p:outputLabel for="registrationEmailTemplate" value="#{msg['registration.email.template']}" styleClass="w3-medium" 
 									style="font-weight:bold;" indicateRequired="false"/>
 								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailTemplate"/>
 								<p/>
 								<p:overlayPanel for="helpRegistrationEmailTemplate" style="width:350px" styleClass="w3-black">
-									<h5>Sample email to send when user register for account:</h5>
+									<h5>#{msg['sample.email.to.send.when.user.register.for.account']}:</h5>
 									<hr/>
-									<b>Hi #username</b>,
+									<b>#{msg['hi']} #username</b>,
 									<p>
-									This email <b>#email</b> has been used for account registration on BootForum.
+									#{msg['this.email']} <b>#email</b> #{msg['has.been.used.for.account.registration.on.BootForum']}.
 									</p>
 									<p>
-									If that wasn't your intention, kindly ignore this email. 
-									Otherwise, please lick on this link #confirm-url to activate your account.
+									#{msg['if.that.was.not.your.intention.kindly.ignore.this.email.otherwise.please.click.on.this.link']} #confirm-url #{msg['to.activate.your.account']}.
 									</p>
 									<p>
-									Regards,
+									#{msg['regards']},
 									</p>
 									<hr/>
 									<p>
-									<b>Note:</b> #username, #email, and #confirm-url
-									will be replaced by the system on the actual email
+									<b>#{msg['note']}:</b> #username, #email, #{msg['and']} #confirm-url
+									#{msg['will.be.replaced.by.the.actual.values.on.the.email']}
 									</p>
 								</p:overlayPanel>
 		
@@ -130,12 +129,12 @@
 							
 							<div class="w3-margin-top w3-padding">
 								<p/>
-								<p:outputLabel for="passwordResetEmailSubject" value="Password Reset Email Subject" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+								<p:outputLabel for="passwordResetEmailSubject" value="#{msg['password.reset.email.subject']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailSubject"/>
 								<p:overlayPanel for="helpPasswordResetEmailSubject" style="width:240px" styleClass="w3-black">
-									<h5>Example:</h5>
+									<h5>#{msg['example']}:</h5>
 									<hr/> 
-									Password reset requested at <b>BootForum</b>
+									#{msg['password.reset.requested.at']} <b>BootForum</b>
 								</p:overlayPanel>
 								<p/>
 								<p:inputText id="passwordResetEmailSubject" value="#{registrationManagement.registrationOption.passwordResetEmailSubject}" 
@@ -147,26 +146,26 @@
 		
 							<div jsf:id="passwordResetEmailTemplateDiv" class="w3-margin-top w3-padding">
 		
-								<p:outputLabel for="passwordResetEmailTemplate" value="Password Reset Email Template" styleClass="w3-medium" 
+								<p:outputLabel for="passwordResetEmailTemplate" value="#{msg['password.reset.email.template']}" styleClass="w3-medium" 
 									style="font-weight:bold;" indicateRequired="false"/>
 								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailTemplate"/>
 								<p/>
 								<p:overlayPanel for="helpPasswordResetEmailTemplate" style="width:350px" styleClass="w3-black">
-									<h5>Sample email to send when user requests password reset:</h5>
+									<h5>#{msg['sample.email.to.send.when.user.requests.password.reset']}:</h5>
 									<hr/>
-									<b>Hi #username</b>,
+									<b>#{msg['hi']} #username</b>,
 									<p>
-									Here is the #reset-url to reset your password in <b>BootForum</b>
+									#{msg['here.is.the']} #reset-url #{msg['to.reset.your.password.in']} <b>BootForum</b>
 									</p>
 									<p> 
-									If you didn't request this, kindly ignore this email.
+									#{msg['if.you.did.not.request.this.kindly.ignore.this.email']}.
 									</p>
 									<p>
-									Regards,
+									#{msg['regards']},
 									</p>
 									<hr/>
 									<p>
-									<b>Note:</b> #username, #email, and #reset-url will be replaced by the actual values on the email
+									<b>#{msg['note']}:</b> #username, #email, #{msg['and']} #reset-url #{msg['will.be.replaced.by.the.actual.values.on.the.email']}
 									</p>
 								</p:overlayPanel>
 		
@@ -197,7 +196,7 @@
 					<p:tab id="registrationTab">
 						<f:facet name="title">
 							<div class="w3-container w3-large">
-								<i class="pi pi-book w3-large"/> User Registrations
+								<i class="pi pi-book w3-large"/> #{msg['user.registrations']}
 							</div>
 						</f:facet>
 						
@@ -206,14 +205,14 @@
 							<p:dataTable var="registration" value="#{registrationManagement.registrationLazyModel}" style="margin: 0 auto;" styleClass="borderless"
 								widgetVar="registrationTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-								currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} registrations"
+								currentPageReportTemplate="{startRecord}-{endRecord} #{msg['of']} {totalRecords} #{msg['registrations']}"
 								rows="10" lazy="true" id="registrationTable" draggableColumns="true">
 							
 								<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
 			
 								<p:column sortBy="#{registration.email}" style="text-align:left;width:25%;" responsivePriority="1">
 									<f:facet name="header">
-										<h:outputText value="Email" style="font-weight:bold;"/>
+										<h:outputText value="#{msg['email']}" style="font-weight:bold;"/>
 									</f:facet>
 									
 									<b>#{registration.email}</b>
@@ -222,7 +221,7 @@
 			
 								<p:column sortBy="#{registration.username}" style="text-align:left;width:25%;" responsivePriority="3">
 									<f:facet name="header">
-										<h:outputText value="Username" style="font-weight:bold;"/>
+										<h:outputText value="#{msg['username']}" style="font-weight:bold;"/>
 									</f:facet>
 									
 									<b>#{registration.username}</b>
@@ -231,7 +230,7 @@
 								
 								<p:column sortBy="#{registration.registrationKey}" style="text-align:left;width:25%;" responsivePriority="4">
 									<f:facet name="header">
-										<h:outputText value="Registration Key" style="font-weight:bold;"/>
+										<h:outputText value="#{msg['registration.key']}" style="font-weight:bold;"/>
 									</f:facet>
 									
 									#{registration.registrationKey}
@@ -240,7 +239,7 @@
 								
 								<p:column sortBy="#{registration.createDate}" style="text-align:left;width:15%;" responsivePriority="5">
 									<f:facet name="header">
-										<h:outputText value="Create Date" style="font-weight:bold;"/>
+										<h:outputText value="#{msg['create.date']}" style="font-weight:bold;"/>
 									</f:facet>
 									
 									<h:outputText value="#{registration.createDate}" title="#{registration.createDate}">
@@ -252,7 +251,7 @@
 								<p:column exportable="false" style="vertical-align:middle;width:10%;text-align:center;" responsivePriority="2">
 								
 									<f:facet name="header">
-										<h:outputText value="Delete" style="font-weight:bold;"/>
+										<h:outputText value="#{msg['delete']}" style="font-weight:bold;"/>
 									</f:facet>
 									
 									<p:commandButton oncomplete="PF('confirmDeleteRegistrationDialogVar').show()" icon="pi pi-times" title="Delete" styleClass="w3-btn w3-theme-dark w3-border-0">
@@ -269,15 +268,15 @@
 					<p:tab id="passwordResetTab">
 						<f:facet name="title">
 							<div class="w3-container w3-large">
-								<i class="pi pi-lock-open w3-large"/> Password Resets
+								<i class="pi pi-lock-open w3-large"/> #{msg['password.resets']}
 							</div>
 						</f:facet>
 						
 						<div class="w3-row-padding">
 							<p:dataTable var="passwordReset" value="#{registrationManagement.passwordResetLazyModel}" style="margin: 0 auto;" styleClass="borderless"
-								widgetVar="passwordResetTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
+								widgetVar="passwordResetTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending" emptyMessage="#{msg['no.records.found']}"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-								currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} Password Reset Requests"
+								currentPageReportTemplate="{startRecord}-{endRecord} #{msg['of']} {totalRecords} #{msg['password.reset.requests']}"
 								rows="10" lazy="true" id="passwordResetTable" draggableColumns="true">
 							
 								<p:ajax event="page" oncomplete="customizeDatatableStyle();"/>
@@ -293,7 +292,7 @@
 			
 								<p:column sortBy="#{passwordReset.resetKey}" style="text-align:left;width:28%;" responsivePriority="3">
 									<f:facet name="header">
-										<h:outputText value="Reset Key" style="font-weight:bold;"/>
+										<h:outputText value="#{msg['reset.key']}" style="font-weight:bold;"/>
 									</f:facet>
 									
 									#{passwordReset.resetKey}
@@ -302,7 +301,7 @@
 								
 								<p:column sortBy="#{passwordReset.createDate}" style="text-align:left;width:28%;" responsivePriority="4">
 									<f:facet name="header">
-										<h:outputText value="Create Date" style="font-weight:bold;"/>
+										<h:outputText value="#{msg['create.date']}" style="font-weight:bold;"/>
 									</f:facet>
 									
 									<h:outputText value="#{passwordReset.createDate}" title="#{passwordReset.createDate}">
@@ -314,7 +313,7 @@
 								<p:column exportable="false" style="vertical-align:middle;width:16%;text-align:center;" responsivePriority="2">
 								
 									<f:facet name="header">
-										<h:outputText value="Delete" style="font-weight:bold;"/>
+										<h:outputText value="#{msg['delete']}" style="font-weight:bold;"/>
 									</f:facet>
 									
 									<p:commandButton oncomplete="PF('confirmDeletePasswordResetDialogVar').show()" icon="pi pi-times" title="Delete" styleClass="w3-btn w3-theme-dark w3-border-0">
