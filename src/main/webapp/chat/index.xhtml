@@ -11,11 +11,11 @@
     template="/WEB-INF/template/layout_chat.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} - Live Chat
+		#{msg['application.title']} - #{msg['live.chat']} 
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<h3><b><i class="pi pi-comments"/> Chat Rooms</b></h3>
+		<h3><b><i class="pi pi-comments"/> #{msg['chat.rooms']}</b></h3>
 	</ui:define>
 
 	<ui:define name="content">
@@ -101,7 +101,7 @@
 			<div class="w3-panel w3-center">
 				<div  jsf:rendered="#{fn:length(chatPage.chatRooms) eq 0}">No chat room available</div>
 				<form class="w3-container" jsf:rendered="#{fn:length(chatPage.chatRooms) gt 0}">
-					<div>Click on a chat room to join live conversation</div>
+					<div>#{msg['click.on.a.chat.room.to.join.live.conversation']}</div>
 	                <div>
 	                	<ui:repeat var="chatRoom" value="#{chatPage.chatRooms}">
 	                    	<button id="toggleRoom#{chatRoom.id}" class="w3-btn toggleRoomButton" type="submit" 

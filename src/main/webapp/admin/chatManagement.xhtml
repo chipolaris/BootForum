@@ -46,7 +46,7 @@
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 			
 			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
- 				<h3>#{msg['chatManagement.page.title']}</h3>
+ 				<h3>#{msg['manage.chat.channels']}</h3>
  			</div>
  			
  			<p:messages id="messages" showDetail="true" closable="true">
@@ -55,7 +55,7 @@
 			
 			<div jsf:id="newChatRoomDiv" class="toggleDiv w3-animate-bottom" style="display: none;border-bottom: 2px solid gray;">
 			
-				<h3><i class="pi pi-plus"/> Add New Chat Room</h3>
+				<h3><i class="pi pi-plus"/> #{msg['add.a.new.chat.room']}</h3>
 				
 				<div class="w3-panel w3-border w3-round w3-display-container">
 					<span onclick="$('#newChatRoomDiv').hide();" class="w3-button w3-display-topright">X</span>
@@ -215,13 +215,13 @@
 			
 			<div class="w3-panel w3-round w3-theme-light w3-center">
 			
-				<h3>Chat Room List</h3>
+				<h3>#{msg['chat.room.list']}</h3>
 				
 				<button onclick="toggleDiv('newChatRoomDiv');return;" class="w3-button w3-left-align w3-border">
-					<i class="pi pi-plus"/> Add New Chat Room
+					<i class="pi pi-plus"/> #{msg['add.a.new.chat.room']}
 				</button>
 				<button onclick="$('#chatRoomOrderModal').show();return;" class="w3-button w3-left-align w3-border" style="margin-left:5px;">
-					<i class="pi pi-sort"/> Order Chat Rooms
+					<i class="pi pi-sort"/> #{msg['order.chat.rooms']}
 				</button>
 				<p/>
 			</div>	

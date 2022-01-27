@@ -13,9 +13,9 @@
 			<div style="max-width:1680px;margin:auto;">
 				<a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-text-white" href="javascript:void(0);" onclick="openNav()"><span style="font-size:48px;"><i class="fa fa-ellipsis-v w3-opacity"/></span></a>
 				<a href="#{request.contextPath}" class="w3-bar-item w3-button w3-theme-gradient-d5"><i class="fa fa-home fa-lg"></i><br/><span><b>#{msg['application.title']}</b></span></a>
-				<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-sign-out fa-lg"/><br/><span class="w3-medium ">Logout</span></a>				
-				<a href="#{request.contextPath}/secure/accountInfo.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-user fa-lg"/><br/><span class="w3-medium">My Account</span></a>
-				<a href="#{request.contextPath}/secure/privateMessages.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-envelope fa-lg"/><br/><span class="w3-medium">Messages</span></a>
+				<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-sign-out fa-lg"/><br/><span class="w3-medium ">#{msg['logout']}</span></a>				
+				<a href="#{request.contextPath}/secure/accountInfo.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-user fa-lg"/><br/><span class="w3-medium">#{msg['my.account']}</span></a>
+				<a href="#{request.contextPath}/secure/privateMessages.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-border-right"><i class="fa fa-envelope fa-lg"/><br/><span class="w3-medium">#{msg['messages']}</span></a>
 				<a href="#" onclick="aboutOverlay.open();return false;" class="w3-bar-item w3-button w3-hide-small w3-right w3-theme-gradient-d5" title="About"><i class="fa fa-info-circle fa-lg"/><br/><span>About</span></a>
 				
 				<sec:authorize url="/admin">
@@ -28,13 +28,13 @@
 	
 	  <!-- Navbar on small screens -->
 	  <div id="navSmall" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium">
-	    <a href="#{request.contextPath}/logout" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-sign-out"/> Logout</a>
-	    <a href="#{request.contextPath}/secure/accountInfo.xhtml" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-user"/> My Account</a>
-	    <a href="#{request.contextPath}/secure/privateMessages.xhtml" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-envelope"/> Private Messages</a>
+	    <a href="#{request.contextPath}/logout" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-sign-out"/> #{msg['logout']}</a>
+	    <a href="#{request.contextPath}/secure/accountInfo.xhtml" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-user"/> #{msg['My Account']}</a>
+	    <a href="#{request.contextPath}/secure/privateMessages.xhtml" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-envelope"/> #{msg['Private Messages<']}/a>
 	  	<sec:authorize url="/admin">
-	  		<a href="#{request.contextPath}/admin/userManagement.xhtml" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-institution"/> ADMINISTRATION</a>
+	  		<a href="#{request.contextPath}/admin/userManagement.xhtml" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-institution"/> #{msg['ADMINISTRATION']}</a>
 	  	</sec:authorize>
-	    <a href="javascript:void(0);" onclick="aboutOverlay.open();return false;" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-info-circle"/> About</a>
+	    <a href="javascript:void(0);" onclick="aboutOverlay.open();return false;" class="w3-bar-item w3-button w3-text-white"><i class="fa fa-info-circle"/> #{msg['About']}</a>
 	  </div>
 	  <!-- end Navbar on small screens -->
 	</div>
