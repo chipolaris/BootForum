@@ -22,9 +22,7 @@ import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 
 /**
- * 
  * Main backing bean for /admin/chatManagement.xhtml page
- *
  */
 @Component
 @Scope("view")
@@ -161,7 +159,7 @@ public class ChatManagement {
 		public ChatRoom getAsObject(FacesContext context, UIComponent component, String idStr) {
 			Long id;
 			try {
-				id = new Long(idStr);
+				id = Long.valueOf(idStr);
 			} 
 			catch (NumberFormatException e) {
 				return null;

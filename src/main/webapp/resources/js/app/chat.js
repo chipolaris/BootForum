@@ -21,14 +21,21 @@ function connect() {
 function disconnect() {
     if (stompClient !== null) {
     	
+    	/* comment this out for now, it is handled on the server
     	// unsubscribe all rooms
     	roomSubscriptions.forEach(function(roomSubscription) {
+			console.log("about to unsubscribe " + roomSubscription)
     		roomSubscription.unsubscribe();
     	});
-    	// clear subscriptions map
+    	*/
+    
+        stompClient.disconnect();
+        
+        // clear subscriptions map
     	roomSubscriptions.clear();
     	
-        stompClient.disconnect();
+    	// clear all userListDiv
+    	$('.userListDiv').empty();
     }
     setConnected(false);
     console.log("Disconnected");
@@ -44,7 +51,7 @@ function postMessage(roomId) {
 	
     stompClient.send(contextPath + "/chat/postMessage/" + roomId, {}, JSON.stringify({'messageText': messageText.trim()}));
     $("#messageText" + roomId).val(''); // clear the input field
-    //$("#counterMessage" + roomId).text(origCounterMessageText);
+    $("#counterMessage" + roomId).text($("#messageText" + roomId).attr('maxlength'));
 }
 
 function postImage(roomId) {
@@ -77,19 +84,23 @@ function handleRoomMessage(roomId, messageObj) {
 			 + new Date(messageObj.timeMillis).toLocaleTimeString() 
 			 + "</span></td></tr>");
 	 
-	if(messageObj.action == 'left') {
+	if(messageObj.action == 'leave') {
 		$('#user' + roomId + messageObj.username).remove();
 	}
-	else if(messageObj.action == 'entered') {
+	else if(messageObj.action == 'enter') {
 		
-		var newUserDiv = "<div class=\'w3-bar-item w3-button w3-row\' id=\'user" + roomId + messageObj.username + "\'>"
-			+ "<div class=\'w3-col s3 w3-padding-small\'>"
-			+ buildAvatarContent30(messageObj)
-			+ "</div><div class=\'w3-col s9 w3-padding-small\'><span class=\'w3-small\'><b>"
-			+ messageObj.username
-			+ "</b></span></div></div>";
-		
-		$('#userList' + roomId).append(newUserDiv);
+		// if user is not already exist
+		if($('#user' + roomId + messageObj.username).length == 0) {
+			
+			var newUserDiv = "<div class=\'w3-bar-item w3-button w3-row\' id=\'user" + roomId + messageObj.username + "\'>"
+				+ "<div class=\'w3-col s3 w3-padding-small\'>"
+				+ buildAvatarContent30(messageObj)
+				+ "</div><div class=\'w3-col s9 w3-padding-small\'><span class=\'w3-small\'><b>"
+				+ messageObj.username
+				+ "</b></span></div></div>";
+			
+			$('#userList' + roomId).append(newUserDiv);
+		}
 	}
 }
 
@@ -142,7 +153,7 @@ function showUserImage(roomId, messageObj) {
 	
 	if(messageObj.avatarExists) {
 		avatar = "<img src='../avatar/" + messageObj.username 
-			+ "' class='chatAvatarImage w3-circle' title='" + messageObj.username + "'/>";
+			+ "' class='chatAvatarImage36 w3-circle' title='" + messageObj.username + "'/>";
 	}
 	else {
 		avatar = "<span class='chatAvatarSpan w3-circle' style='background-color:" 
@@ -264,6 +275,14 @@ $(function () {
     	$('#fieldSet' + roomId).prop("disabled", false);
     });
     
+    $( ".clearRoomContent" ).click(function() {
+		// retrieve roomId from the button, note: use lowercase dataset.roomid
+    	var roomId = this.dataset.roomid;
+    	
+    	// clear room content
+    	$("#roomContent" + roomId).html("");
+	});
+    
     $( ".leaveRoom" ).click(function(){
     	
     	// retrieve roomId from the button, note: use lowercase dataset.roomid
@@ -282,8 +301,8 @@ $(function () {
     	// disable post message form fieldset
     	$('#fieldSet' + roomId).prop("disabled", true);
     	
-    	// clear room content
-    	$("#roomContent" + roomId).html("");
+    	// clear room content, comment out for now
+    	// $("#roomContent" + roomId).html("");
     	
     	// clear room users
     	$("#userList" + roomId).empty();

@@ -6,6 +6,7 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     template="/WEB-INF/template/layout_chat.xhtml">
 
@@ -14,7 +15,7 @@
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<b><i class="pi pi-comments"/> Live Chat</b>
+		<h3><b><i class="pi pi-comments"/> Chat Rooms</b></h3>
 	</ui:define>
 
 	<ui:define name="content">
@@ -98,7 +99,9 @@
 			<p/>
 			
 			<div class="w3-panel w3-center">
-				<form class="w3-container">
+				<div  jsf:rendered="#{fn:length(chatPage.chatRooms) eq 0}">No chat room available</div>
+				<form class="w3-container" jsf:rendered="#{fn:length(chatPage.chatRooms) gt 0}">
+					<div>Click on a chat room to join live conversation</div>
 	                <div>
 	                	<ui:repeat var="chatRoom" value="#{chatPage.chatRooms}">
 	                    	<button id="toggleRoom#{chatRoom.id}" class="w3-btn toggleRoomButton" type="submit" 
@@ -127,13 +130,16 @@
 						</div>
 						<div class="w3-cell" style="padding-right:5px; text-align: right;vertical-align: middle;">
 							<form>
-								<button id="joinRoom#{chatRoom.id}" class="w3-btn joinRoom" type="submit" data-roomid="#{chatRoom.id}">
-									<b><i class="pi pi-sign-in"/> Join</b>
-								</button>
-		                    	<button id="usersRoom#{chatRoom.id}" class="w3-btn usersRoom" type="submit" data-roomid="#{chatRoom.id}">
+								<button id="clearRoomContent#{chatRoom.id}" class="w3-btn clearRoomContent" type="submit" data-roomid="#{chatRoom.id}" title="Clear chat content">
+		                    		<b><i class="pi pi-times-circle"/> Clear chat</b>
+		                    	</button>
+		                    	<button id="usersRoom#{chatRoom.id}" class="w3-btn usersRoom" type="submit" data-roomid="#{chatRoom.id}" title="Show/hide user list">
 		                    		<b><i class="pi pi-users"/> Users</b>
 		                    	</button>
-		                    	<button id="leaveRoom#{chatRoom.id}" class="w3-btn leaveRoom" type="submit" data-roomid="#{chatRoom.id}">
+		                    	<button id="joinRoom#{chatRoom.id}" class="w3-btn joinRoom" type="submit" data-roomid="#{chatRoom.id}" title="Join chat room">
+									<b><i class="pi pi-sign-in"/> Join</b>
+								</button>
+		                    	<button id="leaveRoom#{chatRoom.id}" class="w3-btn leaveRoom" type="submit" data-roomid="#{chatRoom.id}" title="Leave chat room">
 		                    		<b><i class="pi pi-sign-out"/> Leave</b>
 		                    	</button>
 		                    </form>
@@ -160,10 +166,11 @@
 				        <div jsf:id="roomUsersDiv#{chatRoom.id}" class="w3-margin-top w3-margin-right w3-border"
 				        	style="width:250px; height: 500px;">
 				        	<div class="w3-container w3-center w3-theme-d1">
-				        		<h6><b><i class="pi pi-users"/> Joined Users</b></h6>
+				        		<h6><b><i class="pi pi-users"/> Current Users</b></h6>
 				        	</div>
 				        	
-				        	<div id="userList#{chatRoom.id}" class="w3-bar-block w3-theme-light" style="overflow: auto;height: 456px;"/>
+				        	<!-- Note: use the class userListDiv for ease of clear it when user disconnect -->
+				        	<div id="userList#{chatRoom.id}" class="w3-bar-block w3-theme-light w3-card userListDiv" style="overflow: auto;height: 454px;"/>
 			        		
 				        </div>
 				        
@@ -171,8 +178,8 @@
 			        
 		            <form class="w3-container w3-padding">
 		            	<fieldset style="border:0;padding: 0;" id="fieldSet#{chatRoom.id}" disabled="disabled">
-			            	<h:outputText id="counterMessage#{chatRoom.id}" styleClass="w3-opacity"/>
-		                	<p:inputTextarea rows="2" maxlength="200" counter="counterMessage#{chatRoom.id}" counterTemplate="{0} characters remaining"
+			            	<h:outputText id="counterMessage#{chatRoom.id}" styleClass="w3-opacity"/><h:outputText value=" characters remaining" styleClass="w3-opacity"/>
+		                	<p:inputTextarea rows="2" maxlength="200" counter="counterMessage#{chatRoom.id}" counterTemplate="{0}"
 		                		autoResize="false" id="messageText#{chatRoom.id}" style="overflow-x: hidden;" styleClass="w3-input" placeholder="Type your message.."/>
 		                	
 			                <button id="postMessage#{chatRoom.id}" class="w3-btn w3-theme-dark postMessage" data-roomid="#{chatRoom.id}" type="submit" style="margin-top: 5px;">

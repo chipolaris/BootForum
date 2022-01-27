@@ -68,6 +68,35 @@ public class WebSocketEventsListener {
 		
 		this.template.convertAndSend("/system",
 				new SystemMessage(String.format("User \"%s\" disconnected", username), System.currentTimeMillis()));
+		
+		
+		
+		// remove subscriptions to each chat room if exists
+		Message<byte[]> message = event.getMessage();
+		
+		SimpMessageHeaderAccessor simpMessageHeaderAccessor = SimpMessageHeaderAccessor.wrap(message);
+		
+		Map<String, Object> sessionAttributes = simpMessageHeaderAccessor.getSessionAttributes();
+		
+		if(sessionAttributes.size() > 0) {
+			
+			for(String key : sessionAttributes.keySet()) {
+				
+				String simpDestination = (String)sessionAttributes.get(key);
+				
+				boolean removeResult = chatManager.removeSubscribedUser(simpDestination, username);
+				
+				if(removeResult) {
+					logger.info(String.format("User %s unsubscribes from simpDestination: %s", username, simpDestination));
+					
+					this.template.convertAndSend(simpDestination,
+							new RoomMessage(username, "leave", System.currentTimeMillis(), null));
+				}
+				else {
+					logger.info(String.format("A session from user %s unsubscribes to simpDestination: %s", username, simpDestination));
+				}
+			}
+		}
 	}
 	
 	@EventListener
@@ -97,8 +126,18 @@ public class WebSocketEventsListener {
 			
 			Boolean avatarExists = fileHandler.isAvatarExists(username);
 			
+			// A work around:
+			// sleep for .5 seconds to give browser a chance to fully establish websocket connection
+			// so the first message sent below have better chance to reach the newly established connection
+			try {
+				Thread.sleep(500);
+			} 
+			catch (InterruptedException e) {	
+				e.printStackTrace();
+			}
+			
 			this.template.convertAndSend(simpDestination,
-					new RoomMessage(username, "entered", System.currentTimeMillis(), avatarExists));
+					new RoomMessage(username, "enter", System.currentTimeMillis(), avatarExists));
 		}
 		else {
 			logger.info(String.format("Another session from user: %s subscribes to simpDestination: %s", username, simpDestination));
@@ -128,7 +167,7 @@ public class WebSocketEventsListener {
 			logger.info(String.format("User %s unsubscribes from simpDestination: %s", username, simpDestination));
 			
 			this.template.convertAndSend(simpDestination,
-					new RoomMessage(username, "left", System.currentTimeMillis(), null));
+					new RoomMessage(username, "leave", System.currentTimeMillis(), null));
 		}
 		else {
 			logger.info(String.format("A session from user %s unsubscribes to simpDestination: %s", username, simpDestination));
