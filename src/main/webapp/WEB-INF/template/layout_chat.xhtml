@@ -93,9 +93,13 @@
 				<!-- disable the manual connect/disconnect feature for now -->
 				<form class="w3-small">
 					<button id="connect" class="w3-btn" type="submit"><i class="pi pi-sitemap"/> #{msg['connect']}</button>
-					<button id="disconnect" class="w3-btn" type="submit"><i class="pi pi-power-off"/> #{msg['disconnect']}</button>
-				</form> 
-				
+					<button id="disconnect" class="w3-btn" onclick="PF('cp').show();"><i class="pi pi-power-off"/> #{msg['disconnect']}</button>
+					
+				    <p:confirmDialog message="Disconnect and leave all chat rooms?" header="Disconnect" severity="alert" widgetVar="cp" appendTo="@(body)">
+				        <p:button value="Yes" onclick="PF('cp').hide();disconnect();return false;" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+				        <p:button value="No" onclick="PF('cp').hide();return false;" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+				    </p:confirmDialog>
+				</form>				
 							
 		    </div>
 			
@@ -161,6 +165,11 @@
 			
 			<!-- End page content -->         	
 		</div>
+
+        <p:confirmPopup global="true">
+            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirm-popup-yes" />
+        </p:confirmPopup>
 		
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:25px;bottom:25px">
             <f:facet name="start">

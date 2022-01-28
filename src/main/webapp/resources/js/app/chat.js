@@ -237,7 +237,7 @@ $(function () {
         e.preventDefault();
     });
     $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
+    /*$( "#disconnect" ).click(function() { disconnect(); });*/
     
     $( ".toggleRoomButton" ).click(function(){
     	
