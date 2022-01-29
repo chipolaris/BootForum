@@ -478,6 +478,27 @@
 								<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
+								<p:inputText id="captchaInput" placeholder="#{msg['enter.captcha']} &#xe91e;" styleClass="w3-input" title="#{msg['captcha']}" 
+									style="font-family:Arial, PrimeIcons;text-align:center;">
+									<f:validator validatorId="captchaValidator"/>
+								</p:inputText>
+								<h:message for="captchaInput" id="captchaInputMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+							</p>
+							<p>
+											
+								<h:graphicImage value="data:image/png;base64,#{captchaImage.randomCaptchaBase64}" id="captchaImage"/>
+								
+								<!-- 
+									note: it's important to have process="@this" and partialSubmit="true", meaning only process this component (button).
+									this would avoid the whole form submit (and the form input validation on the server side):
+									
+									https://stackoverflow.com/questions/25339056/understanding-primefaces-process-update-and-jsf-fajax-execute-render-attributes
+								-->
+					  			<p:commandButton update="registerForm:captchaImage" process="@this" partialSubmit="true"
+					  				icon="pi pi-refresh" ajax="true" style="margin-left:5px;" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" title="#{msg['refresh.captcha']}"/>
+							
+							</p>							
+							<p>
 								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xe909; #{msg['submit']}" 
 									onclick="return validateRegistration()"	id="submitButton" style="font-family:Arial, PrimeIcons;" action="#{publicBackingBean.register}" update=":registerForm"/>
 							</p>
