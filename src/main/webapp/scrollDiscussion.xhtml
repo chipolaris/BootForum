@@ -153,7 +153,7 @@
 	 					<span class="w3-tag w3-theme-light w3-padding" onclick="$('#discussionInfo').toggle(300);$('#discussionInfoToggleIcon').toggleClass('down')" style="cursor: pointer;">
 							Comments: <b>#{viewDiscussion.discussion.stat.commentCount}</b>,
 							Views: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
-							&#160;&#160;<i class="pi pi-chevron-right rotate" id="discussionInfoToggleIcon"/>
+							&#160;&#160;<i class="pi pi-angle-double-right rotate" id="discussionInfoToggleIcon"/>
 						</span>
 					</p>
 					
@@ -246,9 +246,9 @@
 				
 				<div class="w3-center w3-section">
 					
-					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
+					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-round w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
 						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
-						<i class="pi pi-comment"/> Add new Comment
+						<i class="pi pi-comment"/> #{msg['add.new.comment']}
 					</h:link>
 					
 					<span jsf:rendered="#{viewDiscussion.discussion.closed}" class="w3-tag w3-red"><b>Discussion is closed</b></span>
@@ -420,20 +420,20 @@
 						    <!-- large screen and tablet -->
 						    <div class="w3-bar w3-hide-small">
 						        
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light"
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-round w3-border w3-theme-light"
 									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
 									<i class="pi pi-reply"/> Reply
 								</h:link>
 								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
+								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-round w3-border w3-theme-light" style="margin-left:5px;"
 									rendered="#{not viewDiscussion.discussion.closed}">
 									<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
 									<i class="pi pi-chevron-circle-right"/> #{msg['quote']}
 								</h:link>
 					        	
-					        	<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" style="margin-left:5px;"
+					        	<h:link outcome="/secure/editComment" styleClass="w3-button w3-round w3-border w3-theme-light" style="margin-left:5px;"
 					        		rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}" >
 									<f:param name="id" value="#{comment.id}"/>
 									<i class="pi pi-pencil"/> #{msg['edit']}
@@ -441,7 +441,7 @@
 					        	
 					        	<!-- right side: like buttons -->
 					        	<p:outputLabel value="#{comment.commentVote.voteDownCount}"
-				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-l2 w3-right w3-round" id="voteDownScore"/>
+				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-l4 w3-right w3-round" id="voteDownScore"/>
 				        			
 				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="Dislike" action="#{voteManager.voteDown(comment)}" process="@this" 
 				        			update="growl voteDownScore" styleClass="w3-right"><i class="pi pi-thumbs-down w3-xlarge w3-opacity"/></p:commandLink>					        	

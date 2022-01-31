@@ -111,7 +111,7 @@ public class SystemInfo {
 	
 	public DisplayOption getDisplayOption() {
 		
-		return genericService.getEntity(DisplayOption.class, 1L).getDataObject();
+		return genericService.findEntity(DisplayOption.class, 1L).getDataObject();
 	}
 
 	/**

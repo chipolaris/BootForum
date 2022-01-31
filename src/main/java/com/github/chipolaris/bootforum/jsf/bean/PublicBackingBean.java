@@ -3,6 +3,7 @@ package com.github.chipolaris.bootforum.jsf.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -22,10 +23,10 @@ import com.github.chipolaris.bootforum.enumeration.UserRole;
 import com.github.chipolaris.bootforum.event.UserRegistrationEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
-import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.PasswordResetService;
 import com.github.chipolaris.bootforum.service.RegistrationService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 import com.github.chipolaris.bootforum.service.UserService;
 
 @Component
@@ -35,7 +36,7 @@ public class PublicBackingBean {
 	private static final Logger logger = LoggerFactory.getLogger(PublicBackingBean.class);
 	
 	@Resource
-	private GenericService genericService;
+	private SystemConfigService systemConfigService;
 	
 	@Resource
 	private UserService userService;
@@ -49,7 +50,20 @@ public class PublicBackingBean {
 	@Resource
 	private ApplicationEventPublisher applicationEventPublisher;
 	
-	public PublicBackingBean() {
+	private RegistrationOption registrationOption;
+	
+	public RegistrationOption getRegistrationOption() {
+		return registrationOption;
+	}
+	public void setRegistrationOption(RegistrationOption registrationOption) {
+		this.registrationOption = registrationOption;
+	}
+
+	@PostConstruct
+	private void postContruct() {
+		
+		this.registrationOption = systemConfigService.getRegistrationOption().getDataObject();
+		
 		initializeUser();
 	}
 
@@ -75,8 +89,6 @@ public class PublicBackingBean {
 	public void register() {
 		
 		logger.info(String.format("Registration for user '%s'", user.getUsername()));
-		
-		RegistrationOption registrationOption = genericService.getEntity(RegistrationOption.class, 1L).getDataObject();
 		
 		if(registrationOption.getEnableEmailConfirm()) {
 			

@@ -6,18 +6,13 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 
 @Entity
 @Table(name="EMAIL_OPTION_T")
-@TableGenerator(name="EmailOptionIdGenerator", table="ENTITY_ID_T", pkColumnName="GEN_KEY", 
-	pkColumnValue="REGISTRATION_OPTION_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
 public class EmailOption extends BaseEntity {
 	
 	@PrePersist
@@ -36,7 +31,6 @@ public class EmailOption extends BaseEntity {
 	
 	// persisted attributes
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="EmailOptionIdGenerator")
 	private Long id;
 	
 	@Column(name="HOST", length=80)

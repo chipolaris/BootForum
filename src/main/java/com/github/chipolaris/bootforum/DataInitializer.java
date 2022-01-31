@@ -7,8 +7,9 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
@@ -19,10 +20,13 @@ import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.RegistrationOption;
+import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption;
+import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption.FilterType;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
+import com.github.chipolaris.bootforum.event.RemoteIPFilterOptionLoadEvent;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.DiscussionService;
 import com.github.chipolaris.bootforum.service.ForumService;
@@ -33,7 +37,7 @@ import com.github.chipolaris.bootforum.service.SystemInfoService;
 import com.github.chipolaris.bootforum.service.UserService;
 
 @Component
-public class DataInitializer implements ApplicationListener<ContextRefreshedEvent> {
+public class DataInitializer implements ApplicationRunner {
 
 	private static final String REGISTRATION_EMAIL_TEMPLATE = 
 			"<p>Thank you <b>&lt;username&gt;</b> for registration with &lt;app-name&gt;</p>"
@@ -65,9 +69,11 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 	@Value("${Application.name}")
 	private String applicationName;
 	
+	@Resource
+	private ApplicationEventPublisher applicationEventPublisher;
+	
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
-		
+	public void run(ApplicationArguments args) throws Exception {
 		logger.info("Checking application initial data...");
 		
 		createAdminUser();
@@ -75,6 +81,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		createDisplayOption();
 		createEmailOption();
 		createRegistrationOption();
+		createRemoteIPFilterOption();
 		
 		systemInfoService.refreshStatistics();
 	}
@@ -130,7 +137,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 	
 	private void createDisplayOption() {
 		
-		DisplayOption displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
+		DisplayOption displayOption = genericService.findEntity(DisplayOption.class, 1L).getDataObject();
 		
 		if(displayOption != null) {
 			logger.info("Display Option's already initialized");
@@ -164,7 +171,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 	
 	private void createEmailOption() {
 
-		EmailOption emailOption = genericService.getEntity(EmailOption.class, 1L).getDataObject();
+		EmailOption emailOption = genericService.findEntity(EmailOption.class, 1L).getDataObject();
 		
 		if(emailOption != null) {
 			logger.info("Email Option's already initialized");
@@ -189,7 +196,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 	
 	private void createRegistrationOption() {
 		
-		RegistrationOption registrationOption = genericService.getEntity(RegistrationOption.class, 1L).getDataObject();
+		RegistrationOption registrationOption = genericService.findEntity(RegistrationOption.class, 1L).getDataObject();
 		
 		if(registrationOption != null) {
 			logger.info("Registration Option's already initialized");
@@ -237,4 +244,27 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 		
 		discussionService.addDiscussion(discussion, comment, admin, Collections.emptyList(), Collections.emptyList());
 	}
+	
+	private void createRemoteIPFilterOption() {
+		
+		RemoteIPFilterOption remoteIPFilterOption = genericService.findEntity(RemoteIPFilterOption.class, 1L).getDataObject();
+		
+		if(remoteIPFilterOption != null) {
+			logger.info("Remote IP Filter Option's already initialized");
+		}
+		else {
+			
+			logger.info("Remote IP Filter Option is NOT initialized. Creating..");
+			
+			remoteIPFilterOption = new RemoteIPFilterOption();
+			
+			remoteIPFilterOption.setId(1L);
+			remoteIPFilterOption.setFilterType(FilterType.NONE);
+			
+			genericService.saveEntity(remoteIPFilterOption);
+		}
+		
+		applicationEventPublisher.publishEvent(new RemoteIPFilterOptionLoadEvent(this, remoteIPFilterOption));
+	}
+
 }

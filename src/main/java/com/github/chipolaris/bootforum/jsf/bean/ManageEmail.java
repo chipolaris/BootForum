@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.github.chipolaris.bootforum.domain.EmailOption;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
-import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 import com.github.chipolaris.bootforum.util.EmailSender;
 
 @Component
@@ -21,8 +21,8 @@ public class ManageEmail {
 	private static final Logger logger = LoggerFactory.getLogger(ManageEmail.class);
 	
 	@Resource
-	private GenericService genericService;
-	
+	private SystemConfigService systemConfigService;
+
 	private EmailOption emailOption;
 	
 	public EmailOption getEmailOption() {
@@ -33,15 +33,15 @@ public class ManageEmail {
 	}
 	
 	public void onLoad() {
-		this.emailOption = genericService.getEntity(EmailOption.class, 1L).getDataObject();
+		this.emailOption = systemConfigService.getEmailOption().getDataObject();
 	}
 
-	public void save() {
+	public void update() {
 		
 		logger.info("Updating email options ");
 		
 	    // 
-    	ServiceResponse<EmailOption> response = genericService.updateEntity(this.emailOption);
+    	ServiceResponse<EmailOption> response = systemConfigService.updateEmailOption(this.emailOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {
     		JSFUtils.addInfoStringMessage(null, String.format("Email option updated"));

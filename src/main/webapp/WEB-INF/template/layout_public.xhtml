@@ -477,7 +477,7 @@
 								</p:password>
 								<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
-							<p>
+							<p jsf:rendered="#{publicBackingBean.registrationOption.enableCaptcha}">
 								<p:inputText id="captchaInput" placeholder="#{msg['enter.captcha']} &#xe91e;" styleClass="w3-input" title="#{msg['captcha']}" 
 									style="font-family:Arial, PrimeIcons;text-align:center;">
 									<f:validator validatorId="captchaValidator"/>

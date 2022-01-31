@@ -36,9 +36,9 @@ import com.github.chipolaris.bootforum.service.ServiceResponse;
  */
 @Component
 @Scope("view")
-public class ForumAdmin {
+public class ForumManagement {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ForumAdmin.class);
+	private static final Logger logger = LoggerFactory.getLogger(ForumManagement.class);
 	
 	@Resource
 	private GenericService genericService;

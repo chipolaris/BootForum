@@ -16,6 +16,7 @@ import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 
 @Component
 @Scope("view")
@@ -25,6 +26,9 @@ public class RegistrationManagement {
 	
 	@Resource
 	private GenericService genericService;
+	
+	@Resource
+	private SystemConfigService systemConfigService;
 	
 	private RegistrationOption registrationOption;
 	
@@ -36,7 +40,7 @@ public class RegistrationManagement {
 	}
 	
 	public void onLoad() {
-		this.registrationOption = genericService.getEntity(RegistrationOption.class, 1L).getDataObject();
+		this.registrationOption = systemConfigService.getRegistrationOption().getDataObject();
 		this.registrationLazyModel = new GenericLazyModel<>(Registration.class, genericService);
 		this.passwordResetLazyModel = new GenericLazyModel<>(PasswordReset.class, genericService);
 	}
@@ -76,7 +80,7 @@ public class RegistrationManagement {
 		logger.info("Updating registration options ");
 		
 	    // 
-    	ServiceResponse<RegistrationOption> response = genericService.updateEntity(this.registrationOption);
+    	ServiceResponse<RegistrationOption> response = systemConfigService.updateRegistrationOption(this.registrationOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {
     		JSFUtils.addInfoStringMessage(null, String.format("Registration Option updated"));

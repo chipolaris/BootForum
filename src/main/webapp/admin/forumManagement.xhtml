@@ -68,14 +68,14 @@
 			</p:messages>
 			
 			<div class="w3-panel w3-round w3-theme-d5 w3-center">
- 				<h3>#{msg['manage.forums']}</h3>
+ 				<h3><b>#{msg['manage.forums']}</b></h3>
  			</div>
 				   		
 			<div jsf:id="editForumDiv" class="toggleDiv w3-animate-top" style="display:none;">
 				
 				<h4><i class="pi pi-pencil"/> Edit Forum</h4>
 				
-				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.selectedForum}">
+				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumManagement.selectedForum}">
 				
 					<span onclick="$('#editForumDiv').hide();" class="w3-button w3-display-topright">X</span>
 					
@@ -89,7 +89,7 @@
 							</div>
 						
 							<div class="w3-col m8 l9">
-				  				<p:inputText id="title" value="#{forumAdmin.selectedForum.title}" validatorMessage="Forum title is required"
+				  				<p:inputText id="title" value="#{forumManagement.selectedForum.title}" validatorMessage="Forum title is required"
 				  					styleClass="w3-input">
 				  					<f:validateLength minimum="1" maximum="100"/>
 				  				</p:inputText>
@@ -102,7 +102,7 @@
 							</div>
 						
 							<div class="w3-col m8 l9">
-				  				<p:inputText id="description" value="#{forumAdmin.selectedForum.description}" validatorMessage="Forum description is required"
+				  				<p:inputText id="description" value="#{forumManagement.selectedForum.description}" validatorMessage="Forum description is required"
 				  					styleClass="w3-input">
 				  					<f:validateLength minimum="1" maximum="255"/>
 				  				</p:inputText>
@@ -114,7 +114,7 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.icon']}:" for="icon"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:selectOneMenu id="icon" value="#{forumAdmin.selectedForum.icon}" panelStyle="width:250px" style="width:270px;"
+				  				<p:selectOneMenu id="icon" value="#{forumManagement.selectedForum.icon}" panelStyle="width:250px" style="width:270px;"
 				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 				  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 				  					
@@ -136,7 +136,7 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.iconColor']}:" for="color"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:colorPicker id="color" value="#{forumAdmin.selectedForum.iconColor}"/>
+				  				<p:colorPicker id="color" value="#{forumManagement.selectedForum.iconColor}"/>
 			  				</div>
 
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -145,23 +145,23 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForum.form.active']}:" for="active"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<h:selectBooleanCheckbox id="active" value="#{forumAdmin.selectedForum.active}" styleClass="w3-check"/>
+				  				<h:selectBooleanCheckbox id="active" value="#{forumManagement.selectedForum.active}" styleClass="w3-check"/>
 			  				</div>
 			  				
 			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->							
 			  			
 			  				<div class="w3-row">
-				  				<p:commandButton id="editForum" ajax="true" action="#{forumAdmin.editForum}"
+				  				<p:commandButton id="editForum" ajax="true" action="#{forumManagement.editForum}"
 					            	value="#{msg['userAction.save']}" update=":messages :forumMapForm:forumMapTree"
 					            	oncomplete="$('.toggleDiv').hide();" icon="pi pi-save"/>
 					            <p:commandButton type="button" onclick="$('.toggleDiv').hide();" 
 					            	value="#{msg['userAction.cancel']}" icon="pi pi-times" style="margin-left:5px;"/>
 
 								<p:commandButton value="Delete" icon="pi pi-trash" title="Delete this Forum" style="margin-left:5px;"
-									action="#{forumAdmin.deleteForum}" update=":messages :forumMapForm:forumMapTree"
+									action="#{forumManagement.deleteForum}" update=":messages :forumMapForm:forumMapTree"
 		        					oncomplete="$('.toggleDiv').hide();">
 				        			
-				        			<p:confirm header="Confirm Delete" message="Delete Forum '#{forumAdmin.selectedForum.title}'?" icon="pi pi-exclamation-triangle"/>
+				        			<p:confirm header="Confirm Delete" message="Delete Forum '#{forumManagement.selectedForum.title}'?" icon="pi pi-exclamation-triangle"/>
 				        			
 				        		</p:commandButton>
 
@@ -181,9 +181,9 @@
 
 			<div jsf:id="addForumDiv" class="toggleDiv w3-animate-top" style="display:none;">
 				
-				<h4><i class="pi pi-plus"/> Add Forum for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
+				<h4><i class="pi pi-plus"/> Add Forum for <b>"#{empty forumManagement.selectedForumGroup ? 'Home' : forumManagement.selectedForumGroup.title}"</b></h4>
 				
-				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.newForum}">
+				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumManagement.newForum}">
 
 					<span onclick="$('#addForumDiv').hide();" class="w3-button w3-display-topright">X</span>
 					
@@ -197,7 +197,7 @@
 							</div>
 						
 							<div class="w3-col m8 l9">
-				  				<p:inputText id="title" value="#{forumAdmin.newForum.title}" validatorMessage="Forum title is required"
+				  				<p:inputText id="title" value="#{forumManagement.newForum.title}" validatorMessage="Forum title is required"
 				  					styleClass="w3-input">
 				  					<f:validateLength  minimum="1" maximum="100"/>
 				  				</p:inputText>
@@ -210,7 +210,7 @@
 							</div>
 						
 							<div class="w3-col m8 l9">
-				  				<p:inputText id="description" value="#{forumAdmin.newForum.description}" validatorMessage="Forum description is required"
+				  				<p:inputText id="description" value="#{forumManagement.newForum.description}" validatorMessage="Forum description is required"
 				  					styleClass="w3-input">
 				  					<f:validateLength  minimum="1" maximum="255"/>
 				  				</p:inputText>
@@ -222,7 +222,7 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.icon']}:" for="icon"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:selectOneMenu id="icon" value="#{forumAdmin.newForum.icon}" panelStyle="width:250px" style="width:270px;"
+				  				<p:selectOneMenu id="icon" value="#{forumManagement.newForum.icon}" panelStyle="width:250px" style="width:270px;"
 				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 				  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 				  					
@@ -244,7 +244,7 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.iconColor']}:" for="color"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:colorPicker id="color" value="#{forumAdmin.newForum.iconColor}"/>
+				  				<p:colorPicker id="color" value="#{forumManagement.newForum.iconColor}"/>
 			  				</div>
 
 							<div class="w3-row w3-section"/> <!-- vertical spacer -->
@@ -253,13 +253,13 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForum.form.active']}:" for="active"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<h:selectBooleanCheckbox id="active" value="#{forumAdmin.newForum.active}" styleClass="w3-check"/>
+				  				<h:selectBooleanCheckbox id="active" value="#{forumManagement.newForum.active}" styleClass="w3-check"/>
 			  				</div>
 			  				
 			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
 			  			
 			  				<div class="w3-row">
-				  				<p:commandButton id="addForum" ajax="true" action="#{forumAdmin.createForum}"
+				  				<p:commandButton id="addForum" ajax="true" action="#{forumManagement.createForum}"
 					            	value="#{msg['userAction.save']}" update=":messages :forumMapForm:forumMapTree"
 					            	oncomplete="$('.toggleDiv').hide();" icon="pi pi-save"/>
 					            <p:commandButton type="button" onclick="$('.toggleDiv').hide();" 
@@ -282,7 +282,7 @@
 				
 				<h4><i class="pi pi-pencil"/> Edit Forum Group</h4>
 				
-				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.selectedForumGroup}">
+				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumManagement.selectedForumGroup}">
 				
 					<span onclick="$('#editForumGroupDiv').hide();" class="w3-button w3-display-topright">X</span>
 				
@@ -295,7 +295,7 @@
 								<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.title']}:" for="title"/>
 							</div>
 							<div class="w3-col m8 l9">
-				  				<p:inputText id="title" value="#{forumAdmin.selectedForumGroup.title}" validatorMessage="Forum Group title is required"
+				  				<p:inputText id="title" value="#{forumManagement.selectedForumGroup.title}" validatorMessage="Forum Group title is required"
 				  					styleClass="w3-input">
 				  					<f:validateLength  minimum="1" maximum="100"/>
 				  				</p:inputText>
@@ -307,7 +307,7 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.icon']}:" for="icon"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:selectOneMenu id="icon" value="#{forumAdmin.selectedForumGroup.icon}" panelStyle="width:250px" style="width:270px;"
+				  				<p:selectOneMenu id="icon" value="#{forumManagement.selectedForumGroup.icon}" panelStyle="width:250px" style="width:270px;"
 				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 				  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 				  					
@@ -329,23 +329,23 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.iconColor']}:" for="color"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:colorPicker id="color" value="#{forumAdmin.selectedForumGroup.iconColor}"/>
+				  				<p:colorPicker id="color" value="#{forumManagement.selectedForumGroup.iconColor}"/>
 			  				</div>
 			  			
 			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
 			  			
 			  				<div class="w3-row">
-				  				<p:commandButton id="editForumGroup" ajax="true" action="#{forumAdmin.editForumGroup}"
+				  				<p:commandButton id="editForumGroup" ajax="true" action="#{forumManagement.editForumGroup}"
 					            	value="#{msg['userAction.save']}" update=":messages :forumMapForm:forumMapTree"
 					            	oncomplete="$('.toggleDiv').hide();" icon="pi pi-save"/>
 					            <p:commandButton type="button" onclick="$('.toggleDiv').hide();" 
 					            	value="#{msg['userAction.cancel']}" icon="pi pi-times" style="margin-left:5px;"/>
 
 								<p:commandButton value="Delete" icon="pi pi-trash" title="Delete this Forum Group" style="margin-left:5px;"
-									action="#{forumAdmin.deleteForumGroup}" update=":messages :forumMapForm:forumMapTree"
+									action="#{forumManagement.deleteForumGroup}" update=":messages :forumMapForm:forumMapTree"
 		        					oncomplete="$('.toggleDiv').hide();">
 				        			
-				        			<p:confirm header="Confirm Delete" message="Delete Forum Group '#{forumAdmin.selectedForumGroup.title}' and associated sub Forum Groups?" icon="pi pi-exclamation-triangle"/>
+				        			<p:confirm header="Confirm Delete" message="Delete Forum Group '#{forumManagement.selectedForumGroup.title}' and associated sub Forum Groups?" icon="pi pi-exclamation-triangle"/>
 				        			
 				        		</p:commandButton>
 
@@ -362,9 +362,9 @@
 		
 			<div jsf:id="addForumGroupDiv" class="toggleDiv w3-animate-top" style="display:none;">
 			
-				<h4><i class="pi pi-plus"/> Add Forum Group for <b>"#{empty forumAdmin.selectedForumGroup ? 'Home' : forumAdmin.selectedForumGroup.title}"</b></h4>
+				<h4><i class="pi pi-plus"/> Add Forum Group for <b>"#{empty forumManagement.selectedForumGroup ? 'Home' : forumManagement.selectedForumGroup.title}"</b></h4>
 			
-				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumAdmin.newForumGroup}">
+				<div class="w3-panel w3-border w3-round w3-display-container" jsf:rendered="#{not empty forumManagement.newForumGroup}">
 			
 					<span onclick="$('#addForumGroupDiv').hide();" class="w3-button w3-display-topright">X</span>
 				
@@ -378,7 +378,7 @@
 							</div>
 							
 							<div class="w3-col m8 l9">
-				  				<p:inputText id="title" value="#{forumAdmin.newForumGroup.title}" validatorMessage="Forum Group Title is required" styleClass="w3-input">
+				  				<p:inputText id="title" value="#{forumManagement.newForumGroup.title}" validatorMessage="Forum Group Title is required" styleClass="w3-input">
 				  					<f:validateLength  minimum="1" maximum="100"/>
 				  				</p:inputText>
 				  			</div>
@@ -389,7 +389,7 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.icon']}:" for="icon"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:selectOneMenu id="icon" value="#{forumAdmin.newForumGroup.icon}" panelStyle="width:250px" style="width:270px;"
+				  				<p:selectOneMenu id="icon" value="#{forumManagement.newForumGroup.icon}" panelStyle="width:250px" style="width:270px;"
 				  					effect="fade" filter="true" filterMatchMode="startsWith" filterPlaceholder="search" var="f">
 				  					<f:selectItems value="#{primeIcons.list}" var="font" itemLabel="#{font}" itemValue="pi pi-#{font}"/>
 				  					
@@ -411,14 +411,14 @@
 				  				<h:outputLabel value="#{msg['forumManagement.createForumGroup.form.iconColor']}:" for="color"/>
 				  			</div>
 				  			<div class="w3-col m8 l9">
-				  				<p:colorPicker id="color" value="#{forumAdmin.newForumGroup.iconColor}" widgetVar="colorPickerButton"/>
+				  				<p:colorPicker id="color" value="#{forumManagement.newForumGroup.iconColor}" widgetVar="colorPickerButton"/>
 			  				</div>
 			  				
 			  				<div class="w3-row w3-section"/> <!-- vertical spacer -->
 			  				
 			  				<div class="w3-row">
 	
-				  				<p:commandButton id="createForumGroup" ajax="true" action="#{forumAdmin.createForumGroup}"
+				  				<p:commandButton id="createForumGroup" ajax="true" action="#{forumManagement.createForumGroup}"
 					            	value="#{msg['save']}" update=":messages :forumMapForm:forumMapTree"
 					            	oncomplete="$('.toggleDiv').hide();" icon="pi pi-plus"/>
 					            	
@@ -454,10 +454,10 @@
 					        	<span class="w3-large w3-opacity-min">
 					        		<i class="pi pi-sitemap w3-xlarge"/> #{msg['home']}
 					        		
-					        		<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
+					        		<p:commandLink action="#{forumManagement.populateOrderLists}" update=":orderContent" 
 					        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
 					        			[#{msg['reorder.children']} <i class="pi pi-sort"/>]
-					        			<f:setPropertyActionListener value="#{null}" target="#{forumAdmin.selectedOrderForumGroup}"/>
+					        			<f:setPropertyActionListener value="#{null}" target="#{forumManagement.selectedOrderForumGroup}"/>
 					        		</p:commandLink>
 					        	</span>
 					        	
@@ -472,19 +472,19 @@
 					        		
 					        		<b>#{data.title}</b>					        		
 					        		
-					        		<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForum}"/>
+					        		<f:setPropertyActionListener value="#{data}" target="#{forumManagement.selectedForum}"/>
 				        		</p:commandLink>
 				        		
 				        	</p:treeNode>
 				        	
 				        	<p:treeNode type="AddForum">
-				        		<p:commandLink update=":addForumDiv" action="#{forumAdmin.createEmptyForum}"
+				        		<p:commandLink update=":addForumDiv" action="#{forumManagement.createEmptyForum}"
 				        			oncomplete="toggleDiv('addForumDiv');customizePrimefaceButtons()">
 						        	<span class="w3-text-orange">
 						        		<i class="pi pi-plus w3-large"/> Add Forum
 						        	</span>
 						        	
-						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
+						        	<f:setPropertyActionListener value="#{data}" target="#{forumManagement.selectedForumGroup}"/>
 						        	
 					        	</p:commandLink>
 							</p:treeNode>
@@ -494,24 +494,24 @@
 						        	<span class="w3-large w3-opacity-min">
 						        		<i class="pi pi-sitemap w3-xlarge"/> #{data.title}
 						        	</span>
-						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
+						        	<f:setPropertyActionListener value="#{data}" target="#{forumManagement.selectedForumGroup}"/>
 					        	</p:commandLink>
 					        	
-								<p:commandLink action="#{forumAdmin.populateOrderLists}" update=":orderContent" 
+								<p:commandLink action="#{forumManagement.populateOrderLists}" update=":orderContent" 
 				        			oncomplete="$('#orderModal').show();customizePrimefaceButtons();">
 				        			[#{msg['reorder.children']} <i class="pi pi-sort"/>]
-				        			<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedOrderForumGroup}"/>
+				        			<f:setPropertyActionListener value="#{data}" target="#{forumManagement.selectedOrderForumGroup}"/>
 				        		</p:commandLink>			        	
 					        	
 					        </p:treeNode>
 					        
 					        <p:treeNode type="AddForumGroup">
-					        	<p:commandLink update=":addForumGroupDiv" action="#{forumAdmin.createEmptyForumGroup}" 
+					        	<p:commandLink update=":addForumGroupDiv" action="#{forumManagement.createEmptyForumGroup}" 
 					        		oncomplete="toggleDiv('addForumGroupDiv');customizePrimefaceButtons()">
 						        	<span class="w3-text-orange">
 						        		<i class="pi pi-plus w3-large"/> Add Forum Group
 						        	</span>
-						        	<f:setPropertyActionListener value="#{data}" target="#{forumAdmin.selectedForumGroup}"/>
+						        	<f:setPropertyActionListener value="#{data}" target="#{forumManagement.selectedForumGroup}"/>
 					        	</p:commandLink>
 					        </p:treeNode>
 					        
@@ -529,19 +529,19 @@
    				<span onclick="$('#orderModal').hide();" class="w3-button w3-xlarge w3-transparent w3-text-white w3-display-topright" title="Close">&#215;</span>
 	
 				<header class="w3-container w3-padding w3-theme-dark w3-center">
-					<span class="w3-xlarge"><i class="pi pi-sitemap"/> Order Forum Group '#{forumAdmin.selectedOrderForumGroup.title}' Children</span>
+					<span class="w3-xlarge"><i class="pi pi-sitemap"/> Order Forum Group '#{forumManagement.selectedOrderForumGroup.title}' Children</span>
 				</header>
 				
 				<p/>
 				
 				<p:messages id="orderMessages" for="orderActionMessage" showDetail="true" closable="true"/>
 				
-				<div class="w3-container" jsf:rendered="#{not empty forumAdmin.orderForumList}">
+				<div class="w3-container" jsf:rendered="#{not empty forumManagement.orderForumList}">
 				
 					<h4>Order Forums</h4>
 				
 					<h:form>
-						<p:orderList value="#{forumAdmin.orderForumList}" var="forum" itemValue="#{forum}" converter="#{forumAdmin.forumConverter}" 
+						<p:orderList value="#{forumManagement.orderForumList}" var="forum" itemValue="#{forum}" converter="#{forumManagement.forumConverter}" 
 							controlsLocation="right" responsive="true" >
 							
 							<p:column style="width:60px;text-align:center;">
@@ -556,7 +556,7 @@
 						
 						<p/>
 						
-						<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{forumAdmin.forumOrderSubmit}" 
+						<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{forumManagement.forumOrderSubmit}" 
 							update=":forumMapForm:forumMapTree :orderMessages"/>
 						
 					</h:form>
@@ -567,12 +567,12 @@
 
 				<p/>
 
-				<div class="w3-container" jsf:rendered="#{not empty forumAdmin.orderForumGroupList}">
+				<div class="w3-container" jsf:rendered="#{not empty forumManagement.orderForumGroupList}">
 				
 					<h4>Order Forum Groups</h4>
 				
 					<h:form>
-						<p:orderList value="#{forumAdmin.orderForumGroupList}" var="forumGroup" itemValue="#{forumGroup}" converter="#{forumAdmin.forumGroupConverter}" 
+						<p:orderList value="#{forumManagement.orderForumGroupList}" var="forumGroup" itemValue="#{forumGroup}" converter="#{forumManagement.forumGroupConverter}" 
 							controlsLocation="right" responsive="true" >
 							
 							<p:column style="width:60px;text-align:center;">
@@ -587,7 +587,7 @@
 						
 						<p/>
 						
-						<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{forumAdmin.forumGroupOrderSubmit}" 
+						<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-check" action="#{forumManagement.forumGroupOrderSubmit}" 
 							update=":forumMapForm:forumMapTree :orderMessages"/>
 						
 					</h:form>

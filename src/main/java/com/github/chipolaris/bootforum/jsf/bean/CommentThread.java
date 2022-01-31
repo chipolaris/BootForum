@@ -62,7 +62,7 @@ public class CommentThread {
 	public void onLoad() {
 		
 		if(this.commentId != null) {
-			this.comment = genericService.getEntity(Comment.class, commentId).getDataObject();
+			this.comment = genericService.findEntity(Comment.class, commentId).getDataObject();
 		}
 		
 		if(this.comment != null) {

@@ -73,17 +73,14 @@
 			</p:messages>
 			
 			<div class="w3-panel w3-round w3-theme-d5 w3-center">
- 				<h3>#{msg['manage.discussions']}</h3>
+ 				<h3><b>#{msg['manage.discussions']}</b></h3>
+ 				<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
+ 					#{msg['all.discussions']}
+ 				</h:link>
  				<button class="w3-button w3-border" onclick="$('#forumMapModal').show();return false;">
  					<i class="pi pi-sitemap"/> #{msg['filter.discussions.by.forum']}
  				</button>
- 				<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
- 					<i class="pi pi-comments"/> #{msg['discussions.with.no.associated.forum']}
- 					<f:param name="forumId" value="0"/>
- 				</h:link>
- 				<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
- 					#{msg['all.discussions']}
- 				</h:link><p/>
+ 				<p/>
  			</div>
  			
 			<h:form>
@@ -189,6 +186,10 @@
 						
 						<div class="w3-margin w3-center w3-large">
 							Select a Forum below to view Discussions.
+							<h:link styleClass="w3-button w3-border" style="margin-left:5px;">
+ 								<i class="pi pi-comments"/> #{msg['discussions.with.no.associated.forum']}
+ 								<f:param name="forumId" value="0"/>
+ 							</h:link>
 						</div>
 					
 						<p:tree id="forumMapTree" value="#{forumMap.forumRootTreeNode}" var="data" nodeVar="forumNode" style="margin: 0 auto;width:100%;">

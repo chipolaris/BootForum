@@ -23,7 +23,7 @@
 			<f:viewAction action="#{commentThread.onLoad}"/>
 		</f:metadata>
 	
-		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">
+		<div class="w3-panel w3-card-4 w3-theme-l5" jsf:id="mainContentDiv">
 			
 			<div jsf:id="commentThreadDiv" >
 				
@@ -58,7 +58,7 @@
 	 						
 	 						<div class="#{status.index mod 2 eq 0 ? 'container left' : 'container right'}">
 	 						
-								<div class="w3-round-large w3-padding" style="background-color:lightgray">
+								<div class="w3-round-large w3-padding" style="background-color:white">
 									
 									<p>
 										
@@ -238,9 +238,9 @@
 			  width: 0;
 			  z-index: 1;
 			  right: 30px;
-			  border: medium solid lightgray;
+			  border: medium solid white;
 			  border-width: 10px 0 10px 10px;
-			  border-color: transparent transparent transparent lightgray;
+			  border-color: transparent transparent transparent white;
 			}
 			
 			/* Add arrows to the right container (pointing left) */
@@ -252,9 +252,9 @@
 			  width: 0;
 			  z-index: 1;
 			  left: 30px;
-			  border: medium solid lightgray;
+			  border: medium solid white;
 			  border-width: 10px 10px 10px 0;
-			  border-color: transparent lightgray transparent transparent;
+			  border-color: transparent white transparent transparent;
 			}
 			
 			/* Fix the circle for containers on the right side */
@@ -289,7 +289,7 @@
 			  	left: 40px; /* orig: 60px */
 			  	border: medium solid white;
 			  	border-width: 10px 10px 10px 0;
-			  	border-color: transparent lightgray transparent transparent;
+			  	border-color: transparent white transparent transparent;
 			  }
 			
 			  /* Make sure all circles are at the same spot */

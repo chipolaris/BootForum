@@ -70,7 +70,7 @@ public class ThumbnailServletHandler implements HttpRequestHandler {
 		
 		Long fileInfoId = null;
 		try {
-			fileInfoId = new Long(pathInfo);
+			fileInfoId = Long.valueOf(pathInfo);
 		}
 		catch(NumberFormatException e) {
 			logger.warn("Bad requested pathInfo, not a valid number: " + pathInfo);
@@ -78,7 +78,7 @@ public class ThumbnailServletHandler implements HttpRequestHandler {
 			return;
 		}
 		
-		FileInfo fileInfo = genericService.getEntity(FileInfo.class, fileInfoId).getDataObject();
+		FileInfo fileInfo = genericService.findEntity(FileInfo.class, fileInfoId).getDataObject();
 		
 		// make sure this is a valid fileInfoId
 		if(fileInfo == null) {

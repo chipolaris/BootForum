@@ -120,10 +120,10 @@
  				</div>
  				
  				<div class="w3-border-top">
- 					<h4>#{msg['recent.comments']}:</h4>
+ 					<h4>#{msg['recent.comments']}:<span jsf:rendered="#{empty memberProfile.latestComments}"> #{msg['none']}</span></h4>
  				</div>
  				
- 				<div id="latestComments" class="w3-container">
+ 				<div id="latestComments" class="w3-container" jsf:rendered="#{not empty memberProfile.latestComments}">
  					<p:repeat var="comment" value="#{memberProfile.latestComments}">
  						
 						<div class="w3-panel w3-round-large w3-padding w3-theme-l5">

@@ -12,6 +12,7 @@ import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.service.DiscussionService;
 import com.github.chipolaris.bootforum.service.GenericService;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 import com.github.chipolaris.bootforum.service.TagService;
 
 @Component
@@ -20,6 +21,9 @@ public class HomePage {
 
 	@Resource
 	private GenericService genericService;
+	
+	@Resource
+	private SystemConfigService systemConfigService;
 	
 	@Resource
 	private TagService tagService;
@@ -76,7 +80,7 @@ public class HomePage {
 		
 		this.allTags = tagService.getActiveTags().getDataObject();
 		
-		this.displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
+		this.displayOption = systemConfigService.getDisplayOption().getDataObject();
 		
 		if(displayOption.isShowDiscussionsForTag()) {
 			this.displayTags = displayOption.getDisplayTags();

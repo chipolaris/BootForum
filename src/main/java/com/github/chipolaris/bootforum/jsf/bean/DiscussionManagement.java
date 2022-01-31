@@ -50,7 +50,7 @@ public class DiscussionManagement {
 		}
 		else {
 			if(forumId > 0) {
-				this.forum = genericService.getEntity(Forum.class, forumId).getDataObject();
+				this.forum = genericService.findEntity(Forum.class, forumId).getDataObject();
 			}
 
 			this.lazyModel = new ForumDiscussionsLazyModel(genericService, this.forum);

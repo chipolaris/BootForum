@@ -39,7 +39,7 @@
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 			
 			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
- 				<h3>#{msg['manage.display']}</h3>
+ 				<h3><b>#{msg['manage.display']}</b></h3>
  			</div>
  			
  			<p:messages id="messages" showDetail="true" closable="true">
@@ -109,7 +109,7 @@
 						</p>
 					
 						<p>
-							<p:selectOneMenu id="themeSelectMenu" value="#{switchTheme.themeComponent}" panelStyle="width:300px;" style="width:400px;">
+							<p:selectOneMenu id="themeSelectMenu" value="#{switchTheme.themeComponent}" style="width:100%;">
 						         <p:ajax process="@this" oncomplete="PrimeFaces.changeTheme($('#frmTheme\\:themeSelectMenu_label').text());"/>
 						         <f:selectItem itemValue="saga" itemLabel="Saga" />
 								 <f:selectItem itemValue="vela" itemLabel="Vela" />

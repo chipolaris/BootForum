@@ -21,6 +21,7 @@ import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 
 @Component
 @Scope("view")
@@ -30,6 +31,9 @@ public class ManageDisplay {
 	
 	@Resource
 	private GenericService genericService;
+	
+	@Resource
+	private SystemConfigService systemConfigService;
 	
 	@Resource 
 	private CacheManager cacheManager;
@@ -48,7 +52,7 @@ public class ManageDisplay {
 	}
 	
 	public void onLoad() {
-		this.displayOption = genericService.getEntity(DisplayOption.class, 1L).getDataObject();
+		this.displayOption = systemConfigService.getDisplayOption().getDataObject();
 		this.tags = genericService.getAllEntities(Tag.class).getDataObject();
 		this.chatRooms = genericService.getAllEntities(ChatRoom.class).getDataObject();
 		
@@ -68,7 +72,7 @@ public class ManageDisplay {
 		logger.info("Updating display options ");
 		
 	    // 
-    	ServiceResponse<DisplayOption> response = genericService.updateEntity(this.displayOption);
+    	ServiceResponse<DisplayOption> response = systemConfigService.updateDisplayOption(this.displayOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {
     		JSFUtils.addInfoStringMessage(null, String.format("Display Options updated"));
@@ -84,7 +88,7 @@ public class ManageDisplay {
 		this.displayOption.setDisplayTags(tagDualList.getTarget());
 		
 	    // 
-    	ServiceResponse<DisplayOption> response = genericService.updateEntity(this.displayOption);
+    	ServiceResponse<DisplayOption> response = systemConfigService.updateDisplayOption(this.displayOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {
     		JSFUtils.addInfoStringMessage(null, String.format("Display Tags updated"));

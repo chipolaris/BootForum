@@ -1,7 +1,6 @@
 package com.github.chipolaris.bootforum.security;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 import javax.annotation.Resource;
 
@@ -26,10 +25,7 @@ public class AppUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		
-		Map<String, Object> equalAttrs = new HashMap<String, Object>();
-		equalAttrs.put("username", username);
-		
-		User user = genericDAO.getEntity(User.class, equalAttrs);
+		User user = genericDAO.getEntity(User.class, Collections.singletonMap("username", username));
 		
 		if(user == null) {
 			throw new UsernameNotFoundException("Can't find username: " + username);

@@ -104,7 +104,7 @@ public class ReplyComment {
 		
 		if(commentId != null) { // reply to a comment
 		
-			this.comment = genericService.getEntity(Comment.class, commentId).getDataObject();
+			this.comment = genericService.findEntity(Comment.class, commentId).getDataObject();
 			
 			if(this.comment != null) {
 			
@@ -133,7 +133,7 @@ public class ReplyComment {
 		}
 		else if(discussionId != null) { // reply to main discussion
 			
-			Discussion discussion = genericService.getEntity(Discussion.class, discussionId).getDataObject();
+			Discussion discussion = genericService.findEntity(Discussion.class, discussionId).getDataObject();
 			
 			if(discussion != null) {
 				

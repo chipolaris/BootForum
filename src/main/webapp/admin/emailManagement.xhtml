@@ -27,7 +27,7 @@
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 			
 			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
- 				<h3>#{msg['email.configuration']}</h3>
+ 				<h3><b>#{msg['email.configuration']}</b></h3>
  			</div>
  			
  			<p:messages id="messages" showDetail="true" closable="true">
@@ -41,7 +41,7 @@
 				
 				<div class="w3-row-padding">
 				
-					<div class="w3-half container">
+					<div class="w3-half w3-container">
 						<p/>
 						<p:outputLabel for="host" value="#{msg['host']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpHost"/>
@@ -56,9 +56,9 @@
 						</h:message>
 					</div>					
 
-					<div class="w3-half container">
+					<div class="w3-half w3-container">
 						<p/>
-						<div class="w3-quarter container">
+						<div class="w3-quarter w3-container">
 							
 							<p:outputLabel for="port" value="#{msg['port']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/> 
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPort"/>
@@ -77,7 +77,7 @@
 							</h:message>
 						</div>
 
-						<div class="w3-half container w3-right-align">
+						<div class="w3-half w3-container w3-right-align">
 							<p:outputLabel for="authentication" value="#{msg['authentication']}" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpAuthentication"/>
 							<p:overlayPanel for="helpAuthentication" style="width:240px" styleClass="w3-black w3-left-align">
@@ -87,7 +87,7 @@
 							<p:selectBooleanCheckbox id="authentication" value="#{manageEmail.emailOption.authentication}"/>
 						</div>
 	
-						<div class="w3-quarter container w3-right-align">
+						<div class="w3-quarter w3-container w3-right-align">
 							<p:outputLabel for="tls" value="TLS" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpTLS"/>
 							<p:overlayPanel for="helpTLS" style="width:240px" styleClass="w3-black w3-left-align">
@@ -98,7 +98,7 @@
 						</div>
 					</div>
 														
-					<div class="w3-half container">
+					<div class="w3-half w3-container">
 						
 						<p:outputLabel for="username" value="#{msg['username']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpUsername"/>
@@ -113,7 +113,7 @@
 						</h:message>
 					</div>
 					
-					<div class="w3-half container">
+					<div class="w3-half w3-container">
 						<p:outputLabel for="username" value="#{msg['password']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPassword"/>
 						<p:overlayPanel for="helpPassword" style="width:240px" styleClass="w3-black">
@@ -127,9 +127,9 @@
 						</h:message>
 					</div>
 
-					<div class="w3-threequarter container w3-margin-top">
+					<div class="w3-threequarter w3-container w3-margin-top">
 						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['save']}" type="button" icon="pi pi-check" onclick="submitForm();"
+						<p:commandButton value="#{msg['update']}" type="button" icon="pi pi-check" onclick="submitForm();"
 							styleClass="w3-btn w3-theme-dark w3-border-0"/>
 						
 						<span class="w3-margin-left" onclick="$('#form\\:testConfigurationDiv').toggle();"
@@ -144,7 +144,7 @@
 					
 				</div>
 				
-				<p:remoteCommand name="submitForm" action="#{manageEmail.save}"/>
+				<p:remoteCommand name="submitForm" action="#{manageEmail.update}"/>
 
 				<p/>
 				
@@ -171,7 +171,7 @@
 						
 						<p/>
 						
-						<div class="w3-row-padding container">
+						<div class="w3-row-padding  w3-container">
 							
 							<p:outputLabel for="testToEmail" value="#{msg['to.email']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 							<br/>

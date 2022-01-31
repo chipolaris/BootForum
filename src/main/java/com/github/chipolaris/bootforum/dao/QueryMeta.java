@@ -123,7 +123,7 @@ public class QueryMeta<E> {
 		
 		public Builder<T> filterMeta(String field, Object value, MatchMode matchMode) {
 			
-			if(field != null && value != null && matchMode != null) {
+			if(field != null && matchMode != null) {
 				
 				List<QueryFilterMeta> filterMeta = queryMeta.filters.get(field);
 				
