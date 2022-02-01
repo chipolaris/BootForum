@@ -1,8 +1,9 @@
 package com.github.chipolaris.bootforum.service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,10 @@ import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.domain.EmailOption;
 import com.github.chipolaris.bootforum.domain.RegistrationOption;
 import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption;
+import com.github.chipolaris.bootforum.event.DisplayOptionLoadEvent;
+import com.github.chipolaris.bootforum.event.EmailOptionLoadEvent;
+import com.github.chipolaris.bootforum.event.RegistrationOptionLoadEvent;
+import com.github.chipolaris.bootforum.event.RemoteIPFilterOptionLoadEvent;
 
 @Service @Transactional
 public class SystemConfigService {
@@ -23,13 +28,25 @@ public class SystemConfigService {
 	private RegistrationOption registrationOption;
 	private EmailOption emailOption;
 	private RemoteIPFilterOption remoteIPFilterOption;
-
-	@PostConstruct
-	private void init() {
-		this.displayOption = genericDAO.find(DisplayOption.class, 1L);
-		this.registrationOption = genericDAO.find(RegistrationOption.class, 1L);
-		this.emailOption = genericDAO.find(EmailOption.class, 1L);
-		this.remoteIPFilterOption = genericDAO.find(RemoteIPFilterOption.class, 1L);
+	
+	@EventListener // note: visibility can not be private for EventListener
+	protected void displayOptionLoadListener(DisplayOptionLoadEvent event) {
+		this.displayOption = event.getDisplayOption();
+	}
+	
+	@EventListener // note: visibility can not be private for EventListener
+	protected void registrationOptionLoadListener(RegistrationOptionLoadEvent event) {
+		this.registrationOption = event.getRegistrationOption();
+	}
+	
+	@EventListener // note: visibility can not be private for EventListener
+	protected void emailOptionLoadListener(EmailOptionLoadEvent event) {
+		this.emailOption = event.getEmailOption();
+	}
+	
+	@EventListener // note: visibility can not be private for EventListener
+	protected void remoteIPFilterOptionLoadListener(RemoteIPFilterOptionLoadEvent event) {
+		this.remoteIPFilterOption = event.getRemoteIPFilterOption();
 	}
 	
 	/*

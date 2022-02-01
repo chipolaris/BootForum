@@ -33,7 +33,12 @@ public class RemoteIPFilter extends OncePerRequestFilter {
 			this.ipAddressMatchers = new HashSet<>();
 			
 			for(String ipAddressSubnet : remoteIPFilterOption.getIpAddresses()) {
-				this.ipAddressMatchers.add(new IpAddressMatcher(ipAddressSubnet));
+				try {
+					this.ipAddressMatchers.add(new IpAddressMatcher(ipAddressSubnet));
+				} 
+				catch (Exception e) {
+					// not a valid IP address
+				}
 			}
 		}
 	}
@@ -42,6 +47,8 @@ public class RemoteIPFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
 			throws IOException, ServletException {
 		
+		boolean allowed = true;
+		
 		/*
 		 * If filterType is DENY, loop through and find a match
 		 * if found, stop. Otherwise, not allow the request to continue
@@ -49,38 +56,41 @@ public class RemoteIPFilter extends OncePerRequestFilter {
 		if(this.remoteIPFilterOption.getFilterType() == FilterType.DENY) {
 			
 			for(IpAddressMatcher matcher : ipAddressMatchers) {
+				
 				if(matcher.matches(request)) {
 					
-					// found a DENY entry, stop the request
-					response.sendError(HttpServletResponse.SC_FORBIDDEN);
+					// found a DENY entry
+					allowed = false;
 					
-					return;
+					break;
 				}
 			}
-			
-			// no DENY entry found, allow the request to continue
-			filterChain.doFilter(request, response);
 		}
 		/*
 		 * If filterType is ALLOW, loop through and find a match
 		 * if found, allow the request to continue. Otherwise, stop the request
 		 */
 		else if(this.remoteIPFilterOption.getFilterType() == FilterType.ALLOW) {
+			
+			allowed = false;
+			
 			for(IpAddressMatcher matcher : ipAddressMatchers) {
+				
 				if(matcher.matches(request)) {
 					
-					// found an ALLOW entry, allow the request to continue
-					filterChain.doFilter(request, response);
+					// found a ALLOW entry
+					allowed = true;
 					
-					return;
+					break;
 				}
 			}
-			
-			// no ALLOW entry found, stop the request
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
 		}
-		else { // default
+		
+		if(allowed) {
 			filterChain.doFilter(request, response);
+		}
+		else {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
 		}
 	}
 }

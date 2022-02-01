@@ -26,6 +26,9 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
+import com.github.chipolaris.bootforum.event.DisplayOptionLoadEvent;
+import com.github.chipolaris.bootforum.event.EmailOptionLoadEvent;
+import com.github.chipolaris.bootforum.event.RegistrationOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.RemoteIPFilterOptionLoadEvent;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.DiscussionService;
@@ -167,6 +170,8 @@ public class DataInitializer implements ApplicationRunner {
 			
 			genericService.saveEntity(displayOption);
 		}
+		
+		applicationEventPublisher.publishEvent(new DisplayOptionLoadEvent(this, displayOption));
 	}
 	
 	private void createEmailOption() {
@@ -192,6 +197,8 @@ public class DataInitializer implements ApplicationRunner {
 			
 			genericService.saveEntity(emailOption);
 		}
+		
+		applicationEventPublisher.publishEvent(new EmailOptionLoadEvent(this, emailOption));
 	}
 	
 	private void createRegistrationOption() {
@@ -213,6 +220,8 @@ public class DataInitializer implements ApplicationRunner {
 			
 			genericService.saveEntity(registrationOption);
 		}
+		
+		applicationEventPublisher.publishEvent(new RegistrationOptionLoadEvent(this, registrationOption));
 	}
 	
 	private Forum createAnouncementsForum(User user) {

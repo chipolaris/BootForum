@@ -10,7 +10,7 @@
     template="/WEB-INF/template/layout_admin.xhtml">
 
 	<ui:define name="title">
-		#{msg['email.management']}
+		#{msg['ip.filter.management']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -30,49 +30,67 @@
  				<h3><b>#{msg['ip.filter.management']}</b></h3>
  			</div>
  			
- 			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000">
+ 			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
 				<p:autoUpdate/>
 			</p:growl>
 			
 			<h:form id="form" styleClass="w3-theme-light">
 				
 				<div class="w3-row-padding">
-					<div class="w3-half w3-container w3-padding-large">
+					<div class="w3-quarter w3-container w3-padding-large">
 						<p:outputLabel for="filterType" value="#{msg['ip.filter.type']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 					</div>
-					<div class="w3-half w3-container w3-padding-large">	
+					<div class="w3-threequarter w3-container w3-padding-large">	
 						<p:selectOneRadio id="filterType" value="#{manageRemoteIPFilter.remoteIPFilterOption.filterType}" unselectable="true">
 							<f:selectItems value="#{referenceData.remoteIPFilterTypes}" var="filterType" itemValue="#{filterType}"/>
 	        			</p:selectOneRadio>
 					</div>
 					<div class="w3-container w3-margin-top">
-						<p:dataTable id="ipAddressTable" widgetVar="ipAddressTableVar" var="ipAddress" value="#{manageRemoteIPFilter.remoteIPFilterOption.ipAddresses}"
+						<p:dataTable id="ipAddressTable" widgetVar="ipAddressTableVar" var="ipNetMask" value="#{manageRemoteIPFilter.ipNetMasks}"
 							editable="true">
 							
 							<f:facet name="header">
                 				<center><h3><b>IP Subnet Address List</b></h3></center>
             				</f:facet>
             				
-            				<p:column headerText="IP Subnet Address Mask" style="width:75%;">
+            				<p:ajax event="rowEdit" listener="#{manageRemoteIPFilter.editIPNetMask}" update=":growl ipAddressTable"/>
+            				<!-- <p:ajax event="rowEditCancel" listener="#{dtAddRowView.onRowCancel}" update=":form:msgs"/> -->
+            				
+            				<p:column headerText="IP Subnet Address Mask" style="width:100%;">
             					<p:cellEditor>
 	            					<f:facet name="output">
-	            						<h:outputText value="#{ipAddress}"/>
+	            						<h:outputText value="#{ipNetMask.value}"/>
 	            					</f:facet>            					
 	            					
 	            					<f:facet name="input">
-	            						<p:inputText value="#{ipAddress}" style="width:100%" label="IP Address"/>
+	            						<p:inputText value="#{ipNetMask.value}" style="width:100%" label="IP Subnet Mask"/>
 	            					</f:facet>
 	            				</p:cellEditor>
             				</p:column>
             				
-            			    <p:column style="width:25%" headerText="Edit">
+            			    <p:column style="width:6em;text-align:center;" headerText="Edit">
                 				<p:rowEditor/>
+            				</p:column>
+            				
+            				<p:column style="width:4em;text-align:center;" headerText="Valid?">
+                				<p:button icon="pi pi-check" styleClass="rounded-button ui-button-success" rendered="#{ipNetMask.valid}" onclick="return false;"/>
+                				<p:button icon="pi pi-times" styleClass="rounded-button ui-button-warning" rendered="#{not ipNetMask.valid}" onclick="return false;"/>
+            				</p:column>
+            				
+            				<p:column style="width:6em;text-align:center;" headerText="Delete">
+ 
+						    	<p:commandButton value="Delete" action="#{manageRemoteIPFilter.deleteIPNetMask}" update=":growl ipAddressTable" 
+						    		styleClass="ui-button-danger rounded-button" icon="pi pi-trash">
+						    		<f:setPropertyActionListener value="#{ipSubnetMask}" target="#{manageRemoteIPFilter.selectedIPNetMask}"/>
+						            <p:confirm type="popup" header="Confirmation" message="Do you want to delete this record?" icon="pi pi-info-circle"/>
+						        </p:commandButton> 
+            					
             				</p:column>
             				
             				<f:facet name="footer">
                 				<center>
-									<p:commandButton value="Add IP Subnet Address Mask" process="@this" update=":growl" styleClass="w3-btn w3-theme-dark w3-border-0"
-                        				action="#{manageRemoteIPFilter.addIPAddress()}" oncomplete="PF('ipAddressTableVar').addRow();"/>
+									<p:commandButton value="Add IP Subnet Address Mask" process="@this" update=":growl ipAddressTable"
+                        				action="#{manageRemoteIPFilter.addIPNetMask()}" icon="pi pi-plus"/>
 								</center>
             				</f:facet>
             				
@@ -80,17 +98,22 @@
 					</div>
 					
 					<div class="w3-container w3-margin-top w3-border-top w3-padding">
-						<p:commandButton ajax="true" value="#{msg['update']}" icon="pi pi-check" onclick="submitForm();" action="#{manageRemoteIPFilter.update}"
-							styleClass="w3-btn w3-theme-dark w3-border-0"/>
+						<p:commandButton ajax="true" value="#{msg['update']}" icon="pi pi-check" onclick="submitForm();" 
+							action="#{manageRemoteIPFilter.update}" styleClass="ui-button-raised"/>
 							
 					</div>		
 				</div>
 
 				<p/>
 				
-			</h:form>		
+			</h:form>
 		
  		</div>
+ 		
+        <p:confirmPopup global="true">
+            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirm-popup-yes" />
+        </p:confirmPopup>
  		
 		<script>
 			//<![CDATA[//------
