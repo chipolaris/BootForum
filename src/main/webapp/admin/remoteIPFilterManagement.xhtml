@@ -39,6 +39,19 @@
 				<div class="w3-row-padding">
 					<div class="w3-quarter w3-container w3-padding-large">
 						<p:outputLabel for="filterType" value="#{msg['ip.filter.type']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpIPFilter"/>
+	        			<p:overlayPanel for="helpIPFilter" style="width:400px" styleClass="w3-black">
+	        				<p>
+								Here we can choose to block IP Addresses from accessing the system. Options are:
+								<ul>
+									<li>NONE: all IP addresses are allowed</li>
+									<li>ALLOW: allow only IP addresses in the list below</li>
+									<li>DENY: deny all IP addresses in the list below</li>
+								</ul>
+								<i>*Note: IP addresses are defined as single IP address (e.g., 192.168.0.11) or range of IP address using subnet mask: e.g., 192.168.0.10/8.
+									Both IPv4 and IPv6 formats are supported</i>
+							</p>
+						</p:overlayPanel>
 					</div>
 					<div class="w3-threequarter w3-container w3-padding-large">	
 						<p:selectOneRadio id="filterType" value="#{manageRemoteIPFilter.remoteIPFilterOption.filterType}" unselectable="true">
