@@ -17,10 +17,18 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.DisplayOption;
+import com.github.chipolaris.bootforum.domain.EmailOption;
+import com.github.chipolaris.bootforum.domain.RegistrationOption;
+import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
+import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.GenericService;
+import com.github.chipolaris.bootforum.service.IndexService;
+import com.github.chipolaris.bootforum.service.ServiceResponse;
 import com.github.chipolaris.bootforum.service.StatService;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
 
 @Component
@@ -32,6 +40,12 @@ public class SystemInfo {
 	
 	@Resource
 	private GenericService genericService;
+	
+	@Resource
+	private IndexService indexService;
+	
+	@Resource
+	private SystemConfigService systemConfigService;
 	
 	@Resource
 	private SystemInfoService systemInfoService;
@@ -111,16 +125,59 @@ public class SystemInfo {
 	
 	public DisplayOption getDisplayOption() {
 		
-		return genericService.findEntity(DisplayOption.class, 1L).getDataObject();
+		return systemConfigService.getDisplayOption().getDataObject();
 	}
 
+	public EmailOption getEmailOption() {
+		
+		return systemConfigService.getEmailOption().getDataObject();
+	}
+	
+	public RegistrationOption getRegistrationOption() {
+		
+		return systemConfigService.getRegistrationOption().getDataObject();
+	}
+	
+	public RemoteIPFilterOption getRemoteIPFilterOption() {
+		
+		return systemConfigService.getRemoteIPFilterOption().getDataObject();
+	}
+	
 	/**
 	 * synch System Stat
 	 */
 	public void synchSystemStat() {
 		systemInfoService.refreshStatistics();
 		
-		JSFUtils.addInfoStringMessage("messages", "Complete System Statistics Synchronized");
+		JSFUtils.addInfoStringMessage("systemStatForm:synchSystemStatButton", "System statistics synchronization completed");
+	}
+	
+	public void synchCommentSearchIndex() {
+		
+		boolean success = false;
+		
+		ServiceResponse<Void> backupResponse = indexService.backupIndexDirectory();
+		
+		if(backupResponse.getAckCode() == AckCodeType.SUCCESS) {
+			
+			ServiceResponse<Void> deleteResponse = indexService.deleteAllIndexes();
+			
+			if(deleteResponse.getAckCode() == AckCodeType.SUCCESS) {
+				
+				List<Comment> allComments = genericService.getAllEntities(Comment.class).getDataObject();
+				
+				indexService.addCommentIndexes(allComments);
+				
+				success = true;
+			}
+		}
+		
+		if(success) {
+			JSFUtils.addInfoStringMessage("refreshSearchIndexButton", "Search index synchronized");
+		}
+		else {
+			JSFUtils.addErrorStringMessage("refreshSearchIndexButton", "Unable to synchronize search index");
+		}
 	}
 
 	public class Property implements Comparable<Property>{

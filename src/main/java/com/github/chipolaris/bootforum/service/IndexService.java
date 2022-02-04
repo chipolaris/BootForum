@@ -1,7 +1,10 @@
 package com.github.chipolaris.bootforum.service;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +21,7 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -43,6 +47,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.util.ZipUtil;
 
 import net.htmlparser.jericho.Source;
 import net.htmlparser.jericho.TextExtractor;
@@ -72,7 +77,7 @@ public class IndexService {
 		logger.info("Initialize IndexService");
 		
 		try {
-			indexWriter = initIndexWriter();
+			indexWriter = initIndexWriter(OpenMode.CREATE_OR_APPEND);
 			
 			/**
 			 * from the Javadoc of SearcherManager constructor:
@@ -125,12 +130,68 @@ public class IndexService {
 	 * @return
 	 * @throws IOException
 	 */
-	private IndexWriter initIndexWriter() throws IOException {
+	private IndexWriter initIndexWriter(OpenMode openMode) throws IOException {
 		
 		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+		indexWriterConfig.setOpenMode(openMode);
 		Directory directory = new SimpleFSDirectory(Paths.get(indexDirectory));
 		
 		return new IndexWriter(directory, indexWriterConfig);
+	}
+	
+	/**
+	 * Backup and zip directory
+	 */
+	public ServiceResponse<Void> backupIndexDirectory() {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+		
+		boolean backupSuccess = false;
+		
+		try {
+			indexWriter.close();
+
+			// zip and save indexDirectory
+			Path indexDirectoryPath = Paths.get(indexDirectory);
+
+			// get parent directory of indexDirectory, then add timestamp and ".zip"
+			// extension
+			Path zipFilePath = indexDirectoryPath.getParent().resolve(indexDirectoryPath.getFileName().toString()
+					+ DateTimeFormatter.ofPattern("-yyyy.MM.dd.HH.mm.ss").format(LocalDateTime.now()) + ".zip");
+
+			backupSuccess = ZipUtil.zipDirectory(indexDirectoryPath.toFile(), zipFilePath.toFile());
+		} 
+		catch (IOException e) {
+			logger.error(e.toString());
+			backupSuccess = false;
+		}
+		
+		if(!backupSuccess) {
+			response.setAckCode(AckCodeType.FAILURE);
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * clear/delete all indexes. It's advisable call {@link #backupIndexDirectory()} first
+	 */
+	public ServiceResponse<Void> deleteAllIndexes() {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+
+		try {
+			indexWriter = initIndexWriter(OpenMode.CREATE);
+
+			boolean applyAllDeletes = true;
+			boolean writeAllDeletes = true;
+			searcherManager = new SearcherManager(indexWriter, applyAllDeletes, writeAllDeletes, null);
+		} 
+		catch (IOException e) {
+			logger.error("Unable to build indexWriter", e);
+		}
+
+		return response;
 	}
 	
 	/**
@@ -140,7 +201,7 @@ public class IndexService {
 	 */
 	public ServiceResponse<Void> addCommentIndex(Comment comment) {
 		
-		ServiceResponse<Void> response = new ServiceResponse<Void>();
+		ServiceResponse<Void> response = new ServiceResponse<>();
 		
 		Document document = createCommentDocument(comment);
 		
@@ -151,6 +212,28 @@ public class IndexService {
 		catch (IOException e) {
 			logger.error("Unable to index comment with id: " + comment.getId(), e);
 			response.setAckCode(AckCodeType.FAILURE);
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * Index all comments, designed to be called with 
+	 */
+	public ServiceResponse<Void> addCommentIndexes(List<Comment> comments) {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+		
+		for(Comment comment : comments) {
+			Document document = createCommentDocument(comment);
+			
+			try {
+				indexWriter.addDocument(document);
+				indexWriter.commit();
+			} 
+			catch (IOException e) {
+				logger.error("Unable to index comment with id: " + comment.getId(), e);
+			}
 		}
 		
 		return response;
@@ -386,7 +469,6 @@ public class IndexService {
 	}
 	
 	class CustomSimilarity extends SimilarityBase {
-
 
 		@Override
 		protected double score(BasicStats stats, double freq, double docLen) {

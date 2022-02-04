@@ -118,6 +118,7 @@ public class SystemInfoService {
 		
 		return response;
 	}
+	
 	public ServiceResponse<Void> removeLoggedOnUser(String username) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();

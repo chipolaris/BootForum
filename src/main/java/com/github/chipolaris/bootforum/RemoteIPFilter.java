@@ -50,7 +50,7 @@ public class RemoteIPFilter extends OncePerRequestFilter {
 		boolean allowed = true;
 		
 		/*
-		 * If filterType is DENY, loop through and find a match
+		 * If filterType is DENY, loop through to find a match
 		 * if found, stop. Otherwise, not allow the request to continue
 		 */
 		if(this.remoteIPFilterOption.getFilterType() == FilterType.DENY) {
@@ -59,7 +59,7 @@ public class RemoteIPFilter extends OncePerRequestFilter {
 				
 				if(matcher.matches(request)) {
 					
-					// found a DENY entry
+					// found an DENY entry
 					allowed = false;
 					
 					break;
@@ -67,7 +67,7 @@ public class RemoteIPFilter extends OncePerRequestFilter {
 			}
 		}
 		/*
-		 * If filterType is ALLOW, loop through and find a match
+		 * If filterType is ALLOW, loop through to find a match
 		 * if found, allow the request to continue. Otherwise, stop the request
 		 */
 		else if(this.remoteIPFilterOption.getFilterType() == FilterType.ALLOW) {
@@ -78,7 +78,7 @@ public class RemoteIPFilter extends OncePerRequestFilter {
 				
 				if(matcher.matches(request)) {
 					
-					// found a ALLOW entry
+					// found an ALLOW entry
 					allowed = true;
 					
 					break;

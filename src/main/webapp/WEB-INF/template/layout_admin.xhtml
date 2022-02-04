@@ -27,11 +27,18 @@
         <h:outputStylesheet library="css" name="w3.css"/>
         
         <!-- color themes -->
-        <!-- read from cookie name 'theme.color', if empty, set to default value 'w3-theme-light-blue' -->
+        <!-- read from cookie name 'theme.color', if empty read from #{systemInfo.displayOption.themeColor}, 
+        	if still empty, set to default value 'w3-theme-light-blue' -->
         <c:set var = "theme_color" value = "#{cookie['theme.color'].value}"/>
+        
         <c:if test = "#{empty theme_color}">
-        	<c:set var = "theme_color" value = "w3-theme-light-blue"/>
-      	</c:if>      	
+        	
+        	<c:set var = "theme_color" value = "#{systemInfo.displayOption.themeColor}"/>
+        	        	
+        	<c:if test = "#{empty theme_color}">
+        		<c:set var = "theme_color" value = "w3-theme-light-blue"/>
+      		</c:if> 
+      	</c:if>     	
         <h:outputStylesheet library="css" name="w3-theme/#{theme_color}.css"/>
         
         <style>
