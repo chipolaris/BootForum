@@ -152,31 +152,25 @@ public class SystemInfo {
 		JSFUtils.addInfoStringMessage("systemStatForm:synchSystemStatButton", "System statistics synchronization completed");
 	}
 	
-	public void synchCommentSearchIndex() {
+	public void synchCommentIndex() {
 		
-		boolean success = false;
+		ServiceResponse<Void> clearCommentIndexResponse = indexService.clearCommentIndex(true);
 		
-		ServiceResponse<Void> backupResponse = indexService.backupIndexDirectory();
-		
-		if(backupResponse.getAckCode() == AckCodeType.SUCCESS) {
+		if(clearCommentIndexResponse.getAckCode() != AckCodeType.SUCCESS) {
 			
-			ServiceResponse<Void> deleteResponse = indexService.deleteAllIndexes();
-			
-			if(deleteResponse.getAckCode() == AckCodeType.SUCCESS) {
-				
-				List<Comment> allComments = genericService.getAllEntities(Comment.class).getDataObject();
-				
-				indexService.addCommentIndexes(allComments);
-				
-				success = true;
-			}
-		}
-		
-		if(success) {
-			JSFUtils.addInfoStringMessage("refreshSearchIndexButton", "Search index synchronized");
+			JSFUtils.addErrorStringMessage("commentIndexForm:synchCommentIndexButton", 
+					"Unable to clear existing comment data to re-index");
 		}
 		else {
-			JSFUtils.addErrorStringMessage("refreshSearchIndexButton", "Unable to synchronize search index");
+			ServiceResponse<Void> indexCommentStreamResponse = 
+					indexService.indexCommentStream(genericService.streamEntities(Comment.class).getDataObject());
+				
+			if(indexCommentStreamResponse.getAckCode() == AckCodeType.SUCCESS) {
+				JSFUtils.addInfoStringMessage("commentIndexForm:synchCommentIndexButton", "Comment data re-indexed");
+			}
+			else {
+				JSFUtils.addErrorStringMessage("commentIndexForm:synchCommentIndexButton", "Unable to re-index comment data");
+			}			
 		}
 	}
 

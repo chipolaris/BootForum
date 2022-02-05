@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -140,57 +141,99 @@ public class IndexService {
 	}
 	
 	/**
-	 * Backup and zip directory
+	 * 
+	 * @param performBackup: whether to perform backup before clearing the index
+	 * @return
 	 */
-	public ServiceResponse<Void> backupIndexDirectory() {
+	public ServiceResponse<Void> clearCommentIndex(boolean performBackup) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
 		
-		boolean backupSuccess = false;
+		boolean okToClear = true;
 		
-		try {
-			indexWriter.close();
-
-			// zip and save indexDirectory
-			Path indexDirectoryPath = Paths.get(indexDirectory);
-
-			// get parent directory of indexDirectory, then add timestamp and ".zip"
-			// extension
-			Path zipFilePath = indexDirectoryPath.getParent().resolve(indexDirectoryPath.getFileName().toString()
-					+ DateTimeFormatter.ofPattern("-yyyy.MM.dd.HH.mm.ss").format(LocalDateTime.now()) + ".zip");
-
-			backupSuccess = ZipUtil.zipDirectory(indexDirectoryPath.toFile(), zipFilePath.toFile());
-		} 
-		catch (IOException e) {
-			logger.error(e.toString());
-			backupSuccess = false;
+		if(performBackup) {
+			try {
+				
+				/* 1. close existing indexing resources */
+				this.indexWriter.close();
+				logger.info("indexWriter closed");
+				this.searcherManager.close();
+				logger.info("searcherManager closed");
+							
+				/* 2. backup: zip and save indexDirectory */
+				Path indexDirectoryPath = Paths.get(indexDirectory);
+	
+				// get parent directory of indexDirectory, then add timestamp and ".zip" extension
+				Path zipFilePath = indexDirectoryPath.getParent().resolve(indexDirectoryPath.getFileName().toString()
+						+ DateTimeFormatter.ofPattern("-yyyy.MM.dd.HH.mm.ss").format(LocalDateTime.now()) + ".zip");
+				
+				if(!ZipUtil.zipDirectory(indexDirectoryPath.toFile(), zipFilePath.toFile())) {
+					
+					okToClear = false;
+					
+					String errorMessage = "Unable to backup existing index";
+					response.addMessage(errorMessage);
+					response.setAckCode(AckCodeType.FAILURE);
+				}
+			} 
+			catch (IOException e) {
+				
+				okToClear = false;
+				
+				String errorMessage = "Unable to re-index comments" + e.toString();
+				logger.error(errorMessage);
+				response.addMessage(errorMessage);
+				response.setAckCode(AckCodeType.FAILURE);
+			}
 		}
 		
-		if(!backupSuccess) {
-			response.setAckCode(AckCodeType.FAILURE);
+		if(okToClear) {
+			try {
+				// OpenMode.CREATE will clear the index directory
+				indexWriter = initIndexWriter(OpenMode.CREATE);
+	
+				boolean applyAllDeletes = true;
+				boolean writeAllDeletes = true;
+				searcherManager = new SearcherManager(indexWriter, applyAllDeletes, writeAllDeletes, null);
+			} 
+			catch (IOException e) {
+				logger.error("Unable to build indexWriter", e);
+			}
 		}
 		
 		return response;
 	}
 	
-	/**
-	 * clear/delete all indexes. It's advisable call {@link #backupIndexDirectory()} first
-	 */
-	public ServiceResponse<Void> deleteAllIndexes() {
+	public ServiceResponse<Void> indexCommentStream(Stream<Comment> commentStream) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
-
-		try {
-			indexWriter = initIndexWriter(OpenMode.CREATE);
-
-			boolean applyAllDeletes = true;
-			boolean writeAllDeletes = true;
-			searcherManager = new SearcherManager(indexWriter, applyAllDeletes, writeAllDeletes, null);
-		} 
-		catch (IOException e) {
-			logger.error("Unable to build indexWriter", e);
+		
+		/*
+		 * use try-with-resources to ensure stream is closed after done processing
+		 */
+		try(Stream<Comment> workingStream = commentStream) {
+			
+			workingStream.forEach(comment -> {
+				
+				Document document = createCommentDocument(comment);
+				
+				try {
+					indexWriter.addDocument(document);
+				} 
+				catch (IOException e) {
+					logger.error("Unable to index comment with id: " + comment.getId(), e);
+				}
+			});
+			
+			try {
+				indexWriter.commit();
+			} 
+			catch (IOException e) {
+			
+				logger.error("Unable to commit after indexing: ", e);
+			}
 		}
-
+				
 		return response;
 	}
 	
@@ -212,28 +255,6 @@ public class IndexService {
 		catch (IOException e) {
 			logger.error("Unable to index comment with id: " + comment.getId(), e);
 			response.setAckCode(AckCodeType.FAILURE);
-		}
-		
-		return response;
-	}
-	
-	/**
-	 * Index all comments, designed to be called with 
-	 */
-	public ServiceResponse<Void> addCommentIndexes(List<Comment> comments) {
-		
-		ServiceResponse<Void> response = new ServiceResponse<>();
-		
-		for(Comment comment : comments) {
-			Document document = createCommentDocument(comment);
-			
-			try {
-				indexWriter.addDocument(document);
-				indexWriter.commit();
-			} 
-			catch (IOException e) {
-				logger.error("Unable to index comment with id: " + comment.getId(), e);
-			}
 		}
 		
 		return response;

@@ -246,10 +246,10 @@
 				
 				<div class="w3-center w3-section">
 					
-					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-round w3-border w3-theme-light" rendered="#{not viewDiscussion.discussion.closed}" >
-						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
-						<i class="pi pi-comment"/> #{msg['add.new.comment']}
-					</h:link>
+					<p:linkButton outcome="/secure/replyComment" value=" #{msg['add.new.comment']}" icon="pi pi-comment" 
+						styleClass="ui-button-raised ui-button-flat" style="font-weight:bold;" rendered="#{not viewDiscussion.discussion.closed}">
+        				<f:param name="discussionId" value="#{viewDiscussion.id}"/>
+    				</p:linkButton>
 					
 					<span jsf:rendered="#{viewDiscussion.discussion.closed}" class="w3-tag w3-red"><b>Discussion is closed</b></span>
 					
@@ -418,72 +418,73 @@
 					       	<hr style="border: 1px solid; opacity: 0.25"/>
 						    
 						    <!-- large screen and tablet -->
-						    <div class="w3-bar w3-hide-small">
-						        
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-round w3-border w3-theme-light"
-									rendered="#{not viewDiscussion.discussion.closed}">
-									<f:param name="id" value="#{comment.id}"/>
-									<i class="pi pi-reply"/> Reply
-								</h:link>
-								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-round w3-border w3-theme-light" style="margin-left:5px;"
-									rendered="#{not viewDiscussion.discussion.closed}">
-									<f:param name="id" value="#{comment.id}"/>
+						    <div class="w3-bar w3-hide-small w3-padding-small">
+
+								<p:linkButton outcome="/secure/replyComment" value=" #{msg['reply']}" icon="pi pi-reply" 
+									styleClass="ui-button-raised ui-button-flat" style="font-weight:bold;" rendered="#{not viewDiscussion.discussion.closed}">
+			        				<f:param name="id" value="#{comment.id}"/>
+			    				</p:linkButton>
+			    				
+			    				<p:linkButton outcome="/secure/replyComment" value=" #{msg['quote']}" icon="pi pi-chevron-circle-right" 
+									styleClass="ui-button-raised ui-button-flat ui-button-help" style="font-weight:bold;margin-left:5px;" rendered="#{not viewDiscussion.discussion.closed}">
+			        				<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
-									<i class="pi pi-chevron-circle-right"/> #{msg['quote']}
-								</h:link>
-					        	
-					        	<h:link outcome="/secure/editComment" styleClass="w3-button w3-round w3-border w3-theme-light" style="margin-left:5px;"
-					        		rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}" >
-									<f:param name="id" value="#{comment.id}"/>
-									<i class="pi pi-pencil"/> #{msg['edit']}
-								</h:link>		
+			    				</p:linkButton>
+			    				
+			    				<p:linkButton outcome="/secure/editComment" value=" #{msg['edit']}" icon="pi pi-pencil" 
+			    					styleClass="ui-button-raised ui-button-flat ui-button-danger" style="font-weight:bold;margin-left:5px;" 
+									rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}">
+			        				<f:param name="id" value="#{comment.id}"/>
+			    				</p:linkButton>
+			    				
 					        	
 					        	<!-- right side: like buttons -->
-					        	<p:outputLabel value="#{comment.commentVote.voteDownCount}"
-				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-l4 w3-right w3-round" id="voteDownScore"/>
-				        			
-				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="Dislike" action="#{voteManager.voteDown(comment)}" process="@this" 
-				        			update="growl voteDownScore" styleClass="w3-right"><i class="pi pi-thumbs-down w3-xlarge w3-opacity"/></p:commandLink>					        	
 					        	
-				        		<p:outputLabel value="#{comment.commentVote.voteUpCount}" 
-				        			style="margin: 0px 15px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d2 w3-right w3-round" id="voteUpScore"/>					        	
-					        							    
-				        		<p:commandLink title="Like" action="#{voteManager.voteUp(comment)}" process="@this" 
-				        			update="growl voteUpScore" styleClass="w3-right"><i class="pi pi-thumbs-up w3-xlarge w3-opacity"/></p:commandLink>
+					        	<p:badge value="#{comment.commentVote.voteDownCount}" severity="danger" id="voteDownScore" styleClass="w3-right" style="margin-top:5px;"/>
+					        	
+					        	<p:commandButton action="#{voteManager.voteDown(comment)}" process="@this" icon="pi pi-thumbs-down w3-large" 
+					        		styleClass="rounded-button ui-button-flat ui-button-danger w3-right"
+					        		title="#{msg['dislike']}" update="growl voteDownScore"/>
+					        	
+					        	<p:badge value="#{comment.commentVote.voteUpCount}" severity="success" id="voteUpScore" styleClass="w3-right" style="margin-top:5px;"/>
+					        	
+					        	<p:commandButton action="#{voteManager.voteUp(comment)}" process="@this" icon="pi pi-thumbs-up w3-large" 
+					        		styleClass="rounded-button ui-button-flat ui-button-success w3-right" title="#{msg['like']}" update="growl voteUpScore"/>
+					        		
 						    </div>
 
 							<!-- mobile screen -->
-							<div class="w3-bar w3-hide-medium w3-hide-large">
+							<div class="w3-bar w3-hide-medium w3-hide-large w3-padding-small">
 								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Reply"
-									rendered="#{not viewDiscussion.discussion.closed}">
-									<f:param name="id" value="#{comment.id}"/>
-									<i class="pi pi-reply"/>
-								</h:link>
-								
-								<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border w3-theme-light" title="Quote"
-									rendered="#{not viewDiscussion.discussion.closed}">
-									<f:param name="id" value="#{comment.id}"/>
+								<p:linkButton outcome="/secure/replyComment" icon="pi pi-reply" title="Reply" 
+									styleClass="ui-button-raised ui-button-flat" style="font-weight:bold;" rendered="#{not viewDiscussion.discussion.closed}">
+			        				<f:param name="id" value="#{comment.id}"/>
+			    				</p:linkButton>
+			    				
+			    				<p:linkButton outcome="/secure/replyComment" icon="pi pi-chevron-circle-right" title="Quote"
+									styleClass="ui-button-raised ui-button-flat ui-button-help" style="font-weight:bold;margin-left:5px;" rendered="#{not viewDiscussion.discussion.closed}">
+			        				<f:param name="id" value="#{comment.id}"/>
 									<f:param name="quote" value="true"/>
-									<i class="pi pi-chevron-circle-right"/>
-								</h:link>
-								
-								<h:link outcome="/secure/editComment" styleClass="w3-button w3-border w3-theme-light" title="Edit"
+			    				</p:linkButton>
+			    				
+			    				<p:linkButton outcome="/secure/editComment" icon="pi pi-pencil" title="Edit"
+			    					styleClass="ui-button-raised ui-button-flat ui-button-danger" style="font-weight:bold;margin-left:5px;" 
 									rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}">
-									<f:param name="id" value="#{comment.id}"/>
-									<i class="pi pi-pencil"/>
-								</h:link>
+			        				<f:param name="id" value="#{comment.id}"/>
+			    				</p:linkButton>
+				        			
+				        			
+				        		<!-- right side: like buttons -->	
 					        	
-					        	<!-- right side: like buttons -->
-				        		<p:commandLink style="margin: 0px 0px 0px 5px;" title="Dislike" action="#{voteManager.voteDown(comment)}" process="@this" 
-				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-down w3-xlarge w3-opacity"/></p:commandLink>					        	
+					        	<p:commandButton action="#{voteManager.voteDown(comment)}" process="@this" icon="pi pi-thumbs-down w3-large" 
+					        		styleClass="rounded-button ui-button-flat ui-button-danger w3-right"
+					        		title="#{msg['dislike']}" update="growl voteScoreMobile"/>
 					        	
-				        		<p:outputLabel value="#{comment.commentVote.voteUpCount - comment.commentVote.voteDownCount}" id="voteScoreMobile" 
-				        			style="margin: 0px 0px 0px 5px; font-weight:bold;padding:5px;" styleClass="w3-theme-d1 w3-right w3-round"/>					        	
-					        							    
-				        		<p:commandLink title="Like" action="#{voteManager.voteUp(comment)}" process="@this" 
-				        			update="growl voteScoreMobile" styleClass="w3-right"><i class="pi pi-thumbs-up w3-xlarge w3-opacity"/></p:commandLink>
+					        	<p:badge value="#{comment.commentVote.voteUpCount}" severity="info" id="voteScoreMobile" styleClass="w3-right" style="margin-top:5px;"/>
+					        	
+					        	<p:commandButton action="#{voteManager.voteUp(comment)}" process="@this" icon="pi pi-thumbs-up w3-large" 
+					        		styleClass="rounded-button ui-button-flat ui-button-success w3-right" title="#{msg['like']}" update="growl voteScoreMobile"/>				        			
+				        			
 						    </div>
 				        					        					        
 				        </div>
@@ -495,10 +496,10 @@
 			    
 			    <div class="w3-section w3-center">
 			    
-					<h:link outcome="/secure/replyComment" styleClass="w3-button w3-border"	rendered="#{not viewDiscussion.discussion.closed}">
-						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
-						<i class="pi pi-comment"/> #{msg['add.new.comment']}
-					</h:link>
+					<p:linkButton outcome="/secure/replyComment" value=" #{msg['add.new.comment']}" icon="pi pi-comment" 
+						styleClass="ui-button-raised ui-button-flat" style="font-weight:bold;" rendered="#{not viewDiscussion.discussion.closed}">
+        				<f:param name="discussionId" value="#{viewDiscussion.id}"/>
+    				</p:linkButton>
 		            <h:outputText value="This discussion is closed" rendered="#{viewDiscussion.discussion.closed}" style="font-size:16pt; color:red;"/>
 			    
 			    </div>

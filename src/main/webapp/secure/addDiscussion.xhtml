@@ -40,10 +40,6 @@
 		</script>
 	
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
-	
-			<!-- <div class="w3-panel w3-round w3-theme-d5 w3-center">
- 				<h2>#{msg['addDiscussion.page.title']}</h2>
- 			</div> -->
 			
 			<p/>
 			
@@ -64,8 +60,8 @@
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(addDiscussion.forum)}"/>
 				</div>
 				
-				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2>#{msg['add.new.discussion.for.forum']} '#{addDiscussion.forum.title}'</h2>
+				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h3>#{msg['add.new.discussion.for.forum']} '#{addDiscussion.forum.title}'</h3>
  				</div>
 				
 				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="pi pi-comment"/> #{msg['comment']}</button> <!-- accordion button  -->

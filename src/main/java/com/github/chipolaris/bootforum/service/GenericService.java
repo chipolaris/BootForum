@@ -3,6 +3,7 @@ package com.github.chipolaris.bootforum.service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
@@ -221,13 +222,21 @@ public class GenericService {
 		
 		return response;
 	}
-	
-	
+		
 	public <E> ServiceResponse<List<E>> getEntities2(QueryMeta<E> queryMeta) {
 		
 		ServiceResponse<List<E>> response = new ServiceResponse<List<E>>();
 		
 		response.setDataObject(genericQuery.getEntities(queryMeta));
+		
+		return response;
+	}
+	
+	public <E> ServiceResponse<Stream<E>> streamEntities(Class<E> entityClass) {
+		
+		ServiceResponse<Stream<E>> response = new ServiceResponse<>();
+		
+		response.setDataObject(genericDAO.getEntityStream(entityClass));
 		
 		return response;
 	}

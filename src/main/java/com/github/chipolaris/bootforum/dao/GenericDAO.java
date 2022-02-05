@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -1148,5 +1149,14 @@ public class GenericDAO {
 		}
 		
 		return topLevelMap;
+	}
+
+	public <E> Stream<E> getEntityStream(Class<E> entityClass) {
+		
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<E> criteriaQuery = builder.createQuery(entityClass);
+		TypedQuery<E> typedQuery = entityManager.createQuery(criteriaQuery);
+		
+		return typedQuery.getResultStream();
 	}
 }

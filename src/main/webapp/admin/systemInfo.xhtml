@@ -42,13 +42,9 @@
  				
  				/* set table header's background color */
  				$(document).ready(function(){
- 					customizePrimefaceButtons();
 					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'});
  				});
  				
- 				function customizePrimefaceButtons() {
- 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
- 				}
 			//]]>	
 		</script>
 		
@@ -63,21 +59,6 @@
 			<div class="w3-panel w3-theme-d5 w3-center w3-round">
  				<h3 id="title"><b>#{msg['system.information']}</b></h3>
  			</div>
-		
-			<p:fieldset id="commentSearchIndex" legend="Comment Search Index" toggleable="true">
-				
-				<h:form id="commentSearchIndexForm">
-					
-					<p:commandButton value="Re-index Comment Search Data" icon="pi pi-refresh" id="synchCommentSearchIndexButton"
-						action="#{systemInfo.synchCommentSearchIndex}" widgetVar="synchCommentSearchIndexVar" update="synchCommentSearchIndexMessage"
-						onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchCommentSearchIndexVar').disable();"
-						oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchCommentSearchIndexVar').enable();customizePrimefaceButtons();"/>
-					<p:message for="synchCommentSearchIndexButton" id="synchCommentSearchIndexMessage"/>
-				</h:form>
-				
-			</p:fieldset>
-		
-			<p/>
 		
 			<p:fieldset id="systemStatistics" legend="#{msg['system.statistics']}" toggleable="true">
 			
@@ -182,10 +163,13 @@
 		    		<p/>
 		    		
 		    		<h:panelGrid columns="2"> <!-- use h:panelGrid to make the buttons row responsive -->
-			    		<p:commandButton action="#{systemInfo.synchSystemStat}" icon="pi pi-refresh" id="synchSystemStatButton" 
+			    		<p:commandButton action="#{systemInfo.synchSystemStat}" icon="pi pi-refresh" id="synchSystemStatButton" styleClass="ui-button-raised ui-button-flat"
 			    			value="#{msg['synchronize.system.statistics']}" update=":systemStatForm" widgetVar="synchSystemStatVar"
 			    			onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchSystemStatVar').disable();"
-							oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchSystemStatVar').enable();customizePrimefaceButtons();"/>
+							oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchSystemStatVar').enable();">
+						
+							<p:confirm type="popup" header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+						</p:commandButton>
 						
 			    		<h:message for="synchSystemStatButton" id="synchSystemStatMessage" styleClass="w3-pale-red w3-border w3-padding"/>
 			    		<!-- not supported for now -->	
@@ -197,6 +181,25 @@
 			 
 			 <p/>
 			 
+			<p:fieldset id="commentIndexFieldset" legend="Comment Search Index" toggleable="true" collapsed="true">
+				
+				<h:form id="commentIndexForm">
+					
+					<p:commandButton value="Re-index Comment Data" icon="pi pi-refresh" id="synchCommentIndexButton" styleClass="ui-button-raised ui-button-flat"
+						action="#{systemInfo.synchCommentIndex}" widgetVar="synchCommentIndexVar" update=":commentIndexForm"
+						onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchCommentIndexVar').disable();"
+						oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchCommentIndexVar').enable();">
+						
+						<p:confirm type="popup" header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+					</p:commandButton>
+					
+					<h:message for="synchCommentIndexButton" id="synchCommentIndexMessage" styleClass="w3-pale-red w3-border w3-padding"/>
+				</h:form>
+				
+			</p:fieldset>
+		
+			<p/>
+			
 			 <p:fieldset id="configuredProperties" legend="#{msg['configured.application.properties']}" toggleable="true" collapsed="true">
 			 
 			 	<h:form>
@@ -251,6 +254,12 @@
 				</h:form>
 			 </p:fieldset>
 		</div>
+		
+		<p:confirmPopup global="true">
+            <p:commandButton value="#{msg['no']}" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+            <p:commandButton value="#{msg['yes']}" type="button" styleClass="ui-confirm-popup-yes" />
+        </p:confirmPopup>
+		
 	</ui:define>
 	
 </ui:composition>

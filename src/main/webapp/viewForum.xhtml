@@ -101,10 +101,10 @@
 				<p/>
 				
 				<div class="w3-center">
-					<h:link outcome="/secure/addDiscussion" styleClass="w3-button w3-border" rendered="#{viewForum.forum.active}">
- 						<i class="pi pi-plus"/> #{msg['start.new.discussion']}
- 						<f:param name="forumId" value="#{viewForum.forumId}"/>
- 					</h:link>
+				    <p:linkButton outcome="/secure/addDiscussion" value=" #{msg['start.new.discussion']}" icon="pi pi-plus" 
+				    	styleClass="ui-button-raised ui-button-flat" rendered="#{viewForum.forum.active}">
+        				<f:param name="forumId" value="#{viewForum.forumId}"/>
+    				</p:linkButton>
  					
  					<p/>
 				</div>
