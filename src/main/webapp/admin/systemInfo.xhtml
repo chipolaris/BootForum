@@ -5,6 +5,7 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     template="/WEB-INF/template/layout_admin.xhtml">
@@ -35,6 +36,11 @@
 				    border: none;
 			}
 			
+			/* remove border from fieldset */
+			body .ui-fieldset {
+				border-style: none;
+			}
+			
 		</style>
 
 		<script type="text/javascript">
@@ -49,10 +55,6 @@
 		</script>
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white">
-
-			<!-- <p:messages id="messages" showDetail="true">
-				<p:autoUpdate/>
-			</p:messages> -->
 			
 			<p/>
 
@@ -70,7 +72,7 @@
 							<p:column style="width:50%;">
 								<h:outputText value="#{msg['comments']}" />
 							</p:column>
-							<p:column style="font-weight:bold" >
+							<p:column style="font-weight:bold;" >
 								<h:outputText value="#{systemInfo.statistics.commentCount}"/>
 							</p:column>
 						</p:row>
@@ -83,7 +85,6 @@
 								<h:outputText value="#{systemInfo.statistics.discussionCount}"/>
 							</p:column>
 						</p:row>
-
 
 						<p:row styleClass="ui-widget-content ui-datatable-odd">
 							<p:column>
@@ -119,7 +120,7 @@
 							</p:column>
 							
 							<p:column>
-								<h:outputText value="#{systemInfo.statistics.lastRegisteredUser} "  style="font-weight:bold;"/>
+								<h:outputText value="#{systemInfo.statistics.lastRegisteredUser} " style="font-weight:bold;"/>
 								<pe:timeAgo	value="#{systemInfo.statistics.lastUserRegisteredDate}"/>
 							</p:column>
 							
@@ -136,7 +137,6 @@
 								<pe:timeAgo	value="#{systemInfo.statistics.lastComment.updateDate}"/>
 							</p:column>
 						</p:row>
-
 
 						<p:row styleClass="ui-widget-content ui-datatable-even">
 							<p:column>
@@ -162,32 +162,35 @@
 		    		
 		    		<p/>
 		    		
-		    		<h:panelGrid columns="2"> <!-- use h:panelGrid to make the buttons row responsive -->
+		    		<div>
 			    		<p:commandButton action="#{systemInfo.synchSystemStat}" icon="pi pi-refresh" id="synchSystemStatButton" styleClass="ui-button-raised ui-button-flat"
 			    			value="#{msg['synchronize.system.statistics']}" update=":systemStatForm" widgetVar="synchSystemStatVar"
 			    			onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchSystemStatVar').disable();"
 							oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchSystemStatVar').enable();">
 						
 							<p:confirm type="popup" header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
-						</p:commandButton>
-						
-			    		<h:message for="synchSystemStatButton" id="synchSystemStatMessage" styleClass="w3-pale-red w3-border w3-padding"/>
-			    		<!-- not supported for now -->	
-			    		<!-- <p:commandButton action="#{systemInfo.synchForumStats}" icon="pi pi-refresh" 
-			    			value="Synchronize Forum Statistics" update=":systemStatForm"/> -->
-		    		</h:panelGrid>	    		
-		    		
+						</p:commandButton> &#160;
+			    		<i class="pi pi-question-circle w3-large" jsf:id="helpSystemStatistics"/>
+			    		<p:overlayPanel for="helpSystemStatistics" style="width:500px;">
+			    			#{msg['system.statistics.help.text']}
+			    		</p:overlayPanel>
+			    		
+			    		<h:message for="synchSystemStatButton" id="synchSystemStatMessage" styleClass="w3-margin-left w3-pale-green w3-border w3-round w3-padding"/>
+		    		</div>
 		    	</h:form>
 			</p:fieldset>
 			 
 			 <p/>
 			 
-			<p:fieldset id="commentIndexFieldset" legend="Comment Search Index" toggleable="true" collapsed="true">
-				
-	    		<p>
-				Users, Forums and Discussions statistics
+			<p:fieldset id="forumMaintenanceFieldset" legend="Forum Maintenance" toggleable="true" collapsed="true">
+				<p:divider/>
+				<p>
+					#{msg['forum.statistics.label']} 
+					<i class="pi pi-question-circle w3-large" jsf:id="helpForumStatistics"/>
+			    	<p:overlayPanel for="helpForumStatistics" style="width:500px;">
+			    		#{msg['forum.statistics.help.text']}
+			    	</p:overlayPanel>
 				</p>
-				
 				<h:form id="forumStatForm">
 					<p:commandButton value="Synchronize Forum Statistics" icon="pi pi-refresh" id="synchForumStatButton" styleClass="ui-button-raised ui-button-flat"
 						action="#{systemInfo.synchForumStats}" widgetVar="synchForumStatVar" update=":forumStatForm"
@@ -196,13 +199,19 @@
 						
 						<p:confirm type="popup" header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
 					</p:commandButton>
-					&#160;
-					<h:message for="synchForumStatButton" id="synchforumStatMessage" styleClass="w3-pale-red w3-border w3-padding"/>				
-				
+						
+					<h:message for="synchForumStatButton" id="synchforumStatMessage" styleClass="w3-margin-left w3-pale-green w3-border w3-round w3-padding"/>				
+					
 				</h:form>					
 				
+				<p:divider/>
+				
 				<p>
-				Comment Search Data powers comment search feature. Re-index periodically to reset search data.
+					#{msg['comment.search.label']}
+					<i class="pi pi-question-circle w3-large" jsf:id="helpCommentSearch"/>
+					<p:overlayPanel for="helpCommentSearch" style="width:500px;">
+			    		#{msg['search.data.help.text']}
+			    	</p:overlayPanel>
 				</p>
 				
 				<h:form id="commentIndexForm">
@@ -215,9 +224,9 @@
 						<p:confirm type="popup" header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
 					</p:commandButton>
 					
-					<h:message for="synchCommentIndexButton" id="synchCommentIndexMessage" styleClass="w3-pale-red w3-border w3-padding"/>
+					<h:message for="synchCommentIndexButton" id="synchCommentIndexMessage" styleClass="w3-margin-left w3-pale-green w3-border w3-round w3-padding"/>
 				</h:form>
-				
+				<p:divider/>
 			</p:fieldset>
 		
 			<p/>

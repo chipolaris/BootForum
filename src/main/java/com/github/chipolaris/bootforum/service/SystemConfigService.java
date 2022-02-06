@@ -2,7 +2,6 @@ package com.github.chipolaris.bootforum.service;
 
 import javax.annotation.Resource;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

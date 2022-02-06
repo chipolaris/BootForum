@@ -45,7 +45,7 @@
 						<p/>
 						<p:outputLabel for="host" value="#{msg['host']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpHost"/>
-						<p:overlayPanel for="helpHost" style="width:240px" styleClass="w3-black">
+						<p:overlayPanel for="helpHost" style="width:240px">
 							Host name for SMTP server.<br/>Example: <b>smtp.gmail.com</b>
 						</p:overlayPanel>
 						<p/>
@@ -62,7 +62,7 @@
 							
 							<p:outputLabel for="port" value="#{msg['port']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/> 
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPort"/>
-							<p:overlayPanel for="helpPort" style="width:240px" styleClass="w3-black">
+							<p:overlayPanel for="helpPort" style="width:240px">
 								Port number for SMTP server.<br/>Example: <b>587</b>
 							</p:overlayPanel>
 							
@@ -80,7 +80,7 @@
 						<div class="w3-half w3-container w3-right-align">
 							<p:outputLabel for="authentication" value="#{msg['authentication']}" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpAuthentication"/>
-							<p:overlayPanel for="helpAuthentication" style="width:240px" styleClass="w3-black w3-left-align">
+							<p:overlayPanel for="helpAuthentication" style="width:240px" styleClass="w3-left-align">
 								#{msg['whether.email.server.uses.authentication']}
 							</p:overlayPanel>
 							<p/>
@@ -90,7 +90,7 @@
 						<div class="w3-quarter w3-container w3-right-align">
 							<p:outputLabel for="tls" value="TLS" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpTLS"/>
-							<p:overlayPanel for="helpTLS" style="width:240px" styleClass="w3-black w3-left-align">
+							<p:overlayPanel for="helpTLS" style="width:240px" styleClass="w3-left-align">
 								#{msg['whether.email.server.uses.TLS']}
 							</p:overlayPanel>
 							<p/>
@@ -102,7 +102,7 @@
 						
 						<p:outputLabel for="username" value="#{msg['username']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpUsername"/>
-						<p:overlayPanel for="helpUsername" style="width:240px" styleClass="w3-black">
+						<p:overlayPanel for="helpUsername" style="width:240px">
 							#{msg['username.to.login.SMTP.server']}
 						</p:overlayPanel>
 						<p/>
@@ -116,7 +116,7 @@
 					<div class="w3-half w3-container">
 						<p:outputLabel for="username" value="#{msg['password']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPassword"/>
-						<p:overlayPanel for="helpPassword" style="width:240px" styleClass="w3-black">
+						<p:overlayPanel for="helpPassword" style="width:240px">
 							#{msg['password.to.login.SMTP.server']}
 						</p:overlayPanel>
 						<p/>
@@ -137,7 +137,7 @@
 							#{msg['test.configuration']}
 						</span>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpTestConfiguration"/>
-						<p:overlayPanel for="helpTestConfiguration" style="width:240px" styleClass="w3-black w3-left-align">
+						<p:overlayPanel for="helpTestConfiguration" style="width:240px" styleClass="w3-left-align">
 							#{msg['send.a.test.email.to.validate.the.configuration']}
 						</p:overlayPanel>
 					</div>                	

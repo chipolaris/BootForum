@@ -156,26 +156,6 @@ public class StatService {
 					contentAbbr.substring(0, 97) + "..." : contentAbbr);
 		}
 	}
-
-	@Transactional(readOnly = false, propagation=Propagation.MANDATORY)
-	private UserStat synchUserStat(User user) {
-		
-		UserStat userStat = user.getStat();
-		
-		String username = user.getUsername();
-		
-		userStat.setDiscussionCount(statDAO.countDiscussion(username).longValue());
-		userStat.setCommentCount(statDAO.countComment(username).longValue());
-		userStat.setCommentAttachmentCount(statDAO.countCommentAttachments(username).longValue());
-		userStat.setCommentThumbnailCount(statDAO.countCommentThumbnails(username).longValue());
-		userStat.setReputation(voteDAO.getReputation4User(username).longValue());
-		
-		setCommentInfo(userStat, statDAO.getLatestComment(user.getUsername()));
-		
-		genericDAO.merge(userStat);
-		
-		return userStat;
-	}
 	
 	@Transactional(readOnly =  false)
 	public ServiceResponse<UserStat> synUserStat(String username) {
@@ -199,38 +179,87 @@ public class StatService {
 		
 		return response;
 	}
+	
+	/**
+	 * Note that this method is similar to {@link #synUserStat(String)} 
+	 * is designed to be used internally from within this class  
+	 */
+	@Transactional(readOnly = false, propagation=Propagation.MANDATORY)
+	private UserStat synchUserStat(User user) {
+		
+		UserStat userStat = user.getStat();
+		
+		String username = user.getUsername();
+		
+		userStat.setDiscussionCount(statDAO.countDiscussion(username).longValue());
+		userStat.setCommentCount(statDAO.countComment(username).longValue());
+		userStat.setCommentAttachmentCount(statDAO.countCommentAttachments(username).longValue());
+		userStat.setCommentThumbnailCount(statDAO.countCommentThumbnails(username).longValue());
+		userStat.setReputation(voteDAO.getReputation4User(username).longValue());
+		
+		setCommentInfo(userStat, statDAO.getLatestComment(user.getUsername()));
+		
+		genericDAO.merge(userStat);
+		
+		return userStat;
+	}
 
 	@Transactional(readOnly =  false)
 	public ServiceResponse<Void> synchForumStats() {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
 
+		/*
+		 * Note: split up the process to three processes so those can be committed separately 
+		 * and therefore putting less stress on the database
+		 */
 		// Discussions
+		synchDiscussions();
+		
+		// Forums
+		synchForums();
+		
+		// Users
+		synchUsers();		
+		
+		return response;
+	}
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	private void synchDiscussions() {
+		logger.warn("Start synchronize discussion stats");
 		try(Stream<Discussion> discussionStream = genericDAO.getEntityStream(Discussion.class)) {
 			
 			discussionStream.forEach(discussion -> {
 				synchDiscussionStat(discussion);
 			});
 		}
-		
-		// Forums
+		logger.warn("End synchronize discussion stats");
+	}
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	private void synchForums() {
+		logger.warn("Start synchronize forum stats");
 		try(Stream<Forum> forumStream = genericDAO.getEntityStream(Forum.class)) {
-			forumStream.forEach(forum -> {
-				
+			
+			forumStream.forEach(forum -> {	
 				synchForumStat(forum);
 			});
 			
 		}
-		
-		// Users
+		logger.warn("End synchronize forum stats");
+	}
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	private void synchUsers() {
+		logger.warn("Start synchronize user stats");
 		try(Stream<User> userStream = genericDAO.getEntityStream(User.class)) {
 			
-			userStream.forEach(user -> {
-				
+			userStream.forEach(user -> {		
 				synchUserStat(user);
 			});
-		}		
+		}
 		
-		return response;
+		logger.warn("End synchronize user stats");
 	}
 }
