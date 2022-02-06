@@ -91,7 +91,7 @@ public class StatDAO {
 		
 		query.select(builder.max(root.get("createDate")));*/
 		
-		TypedQuery<CommentInfo> typedQuery = entityManager.createQuery("FROM CommentInfo ci ORDER BY ci.createDate DESC", CommentInfo.class);
+		TypedQuery<CommentInfo> typedQuery = entityManager.createQuery("FROM CommentInfo ci ORDER BY ci.commentDate DESC", CommentInfo.class);
 		
 		/*
 		 * A note about TypedQuery.getSingleResult() vs.Typedquery.getResultList(0):

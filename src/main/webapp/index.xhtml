@@ -279,10 +279,10 @@
 							<p>
 								#{msg['latest.comments']}:
 								<h:link outcome="commentThread"> 
-									<b>#{systemInfo.statistics.lastComment.updateBy}</b>
+									<b>#{systemInfo.statistics.lastComment.commentor}</b>
 									<f:param name="id" value="#{systemInfo.statistics.lastComment.commentId}"/>
 								</h:link>
-								- <pe:timeAgo value="#{systemInfo.statistics.lastComment.updateDate}" styleClass="w3-small"/>
+								- <pe:timeAgo value="#{systemInfo.statistics.lastComment.commentDate}" styleClass="w3-small"/>
 							</p>
 							
 							<p>

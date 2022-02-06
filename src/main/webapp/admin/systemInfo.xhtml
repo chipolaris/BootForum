@@ -133,8 +133,8 @@
 							</p:column>
 							
 							<p:column>
-								<h:outputText value="By #{systemInfo.statistics.lastComment.updateBy} " style="font-weight:bold"/>
-								<pe:timeAgo	value="#{systemInfo.statistics.lastComment.updateDate}"/>
+								<h:outputText value="#{systemInfo.statistics.lastComment.commentor} " style="font-weight:bold"/>
+								<pe:timeAgo	value="#{systemInfo.statistics.lastComment.commentDate}"/>
 							</p:column>
 						</p:row>
 
@@ -168,7 +168,7 @@
 			    			onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchSystemStatVar').disable();"
 							oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchSystemStatVar').enable();">
 						
-							<p:confirm type="popup" header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+							<p:confirm type="popup" header="#{msg['confirmation']}" message="#{msg['are.you.sure.you.want.to.proceed']}" icon="pi pi-exclamation-triangle"/>
 						</p:commandButton> &#160;
 			    		<i class="pi pi-question-circle w3-large" jsf:id="helpSystemStatistics"/>
 			    		<p:overlayPanel for="helpSystemStatistics" style="width:500px;">
@@ -182,7 +182,7 @@
 			 
 			 <p/>
 			 
-			<p:fieldset id="forumMaintenanceFieldset" legend="Forum Maintenance" toggleable="true" collapsed="true">
+			<p:fieldset id="forumMaintenanceFieldset" legend="#{msg['forum.maintenance']}" toggleable="true" collapsed="true">
 				<p:divider/>
 				<p>
 					#{msg['forum.statistics.label']} 
@@ -192,12 +192,12 @@
 			    	</p:overlayPanel>
 				</p>
 				<h:form id="forumStatForm">
-					<p:commandButton value="Synchronize Forum Statistics" icon="pi pi-refresh" id="synchForumStatButton" styleClass="ui-button-raised ui-button-flat"
+					<p:commandButton value="#{msg['synchronize.forum.statistics']}" icon="pi pi-refresh" id="synchForumStatButton" styleClass="ui-button-raised ui-button-flat"
 						action="#{systemInfo.synchForumStats}" widgetVar="synchForumStatVar" update=":forumStatForm"
 						onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchForumStatVar').disable();"
 						oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchForumStatVar').enable();">
 						
-						<p:confirm type="popup" header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+						<p:confirm type="popup" header="#{msg['confirmation']}" message="#{msg['are.you.sure.you.want.to.proceed']}" icon="pi pi-exclamation-triangle"/>
 					</p:commandButton>
 						
 					<h:message for="synchForumStatButton" id="synchforumStatMessage" styleClass="w3-margin-left w3-pale-green w3-border w3-round w3-padding"/>				
@@ -216,12 +216,12 @@
 				
 				<h:form id="commentIndexForm">
 					
-					<p:commandButton value="Re-index Comment Search Data" icon="pi pi-refresh" id="synchCommentIndexButton" styleClass="ui-button-raised ui-button-flat"
+					<p:commandButton value="#{msg['reindex.search.data']}" icon="pi pi-refresh" id="synchCommentIndexButton" styleClass="ui-button-raised ui-button-flat"
 						action="#{systemInfo.synchCommentIndex}" widgetVar="synchCommentIndexVar" update=":commentIndexForm"
 						onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchCommentIndexVar').disable();"
 						oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchCommentIndexVar').enable();">
 						
-						<p:confirm type="popup" header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+						<p:confirm type="popup" header="#{msg['confirmation']}" message="#{msg['are.you.sure.you.want.to.proceed']}" icon="pi pi-exclamation-triangle"/>
 					</p:commandButton>
 					
 					<h:message for="synchCommentIndexButton" id="synchCommentIndexMessage" styleClass="w3-margin-left w3-pale-green w3-border w3-round w3-padding"/>
