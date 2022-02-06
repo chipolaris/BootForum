@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:sec="http://www.springframework.org/security/tags"
+	template="/WEB-INF/template/layout_public.xhtml">
+	
+	<ui:define name="title">
+		#{msg['application.name']} - page not found
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<div class="w3-container w3-content" style="max-width:1680px;margin-top:50px; padding:0px;"> <!-- main content -->
+		  
+		  	<div class="w3-padding-row" style="height: 85vh;">
+		  		
+				<div id="centerDiv" class="w3-card w3-theme-d2 w3-padding w3-round-large w3-display-middle" style="width:550px;height:400px;">
+					<div class="w3-center w3-display-middle" style="font-size:120px;">
+						4<i class="pi pi-question-circle" style="font-size:96px;font-weight:bold;"/>4
+						<div class="w3-center w3-xlarge">Sorry, the page you are looking for does not exist</div>
+					</div>
+					
+				</div>					
+			
+			</div>
+		
+		</div>
+	
+	</ui:define>
+	
+</ui:composition>

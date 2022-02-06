@@ -33,36 +33,9 @@
 			
 		</style>
 		
-		<script type="text/javascript">
- 			//<![CDATA[
- 				
-			$(document).ready(function(){
-				customizeDatatableStyle();
-			});
-			
-			function customizeDatatableStyle() {
-				/* set datatable header's background color */
-				document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'});
-				
-				/* set datatable paginator button color */
-				document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
-					function(el) {
-						el.className += ' w3-button';
-						
-						if(el.className.indexOf('ui-state-active') >= 0) {
-							el.className += ' w3-theme-dark';	
-						}
-						else {
-							el.className += ' w3-white';
-						}
-					}
-				);
-			}
-			//]]>	
-		</script>
 		<!-- set request parameter values from URL to backing bean -->
 		<f:metadata>
-			<f:viewParam name="id" value="#{viewForum.forumId}"/>
+			<f:viewParam name="id" value="#{viewForum.id}"/>
 			<f:viewAction action="#{viewForum.onLoad}"/>
 		</f:metadata>
 	
@@ -74,13 +47,6 @@
 				</p:messages>
 			</div>
 			
-			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty viewForum.forum}">
-			
-				<h3>Error!</h3>
-				<h4>Must specified a valid forum Id</h4>
-			
-			</div>
-			
 			<div jsf:id="viewForumDiv" jsf:rendered="#{not empty viewForum.forum}">
 			
 				<div class="w3-hide-small w3-margin-top">
@@ -88,25 +54,23 @@
 				</div>
 
 				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h3>#{msg['forum']} "#{viewForum.forum.title}"</h3>
- 					
- 					<span class="w3-tag w3-theme-light w3-padding">
- 						#{msg['discussions']}: <b>#{viewForum.forum.stat.discussionCount}</b>,
- 						#{msg['comments']}: <b>#{viewForum.forum.stat.commentCount}</b>
- 					</span>
- 					&#160;
+ 					<h3>#{msg['forum']} "#{viewForum.forum.title}"</h3> 					
  					<span class="w3-tag w3-black w3-padding" jsf:rendered="#{not viewForum.forum.active}">Forum is not active</span>
  				</div>
 				
 				<p/>
 				
 				<div class="w3-center">
+				 	<span class="w3-tag w3-theme-light w3-padding">
+ 						#{msg['discussions']}: <b>#{viewForum.forum.stat.discussionCount}</b>,
+ 						#{msg['comments']}: <b>#{viewForum.forum.stat.commentCount}</b>
+ 					</span>
+ 					&#160;
 				    <p:linkButton outcome="/secure/addDiscussion" value=" #{msg['start.new.discussion']}" icon="pi pi-plus" 
-				    	styleClass="ui-button-raised ui-button-flat" rendered="#{viewForum.forum.active}">
-        				<f:param name="forumId" value="#{viewForum.forumId}"/>
+				    	styleClass="ui-button-raised ui-button-flat" rendered="#{viewForum.forum.active}" style="font-weight:bold;">
+        				<f:param name="forumId" value="#{viewForum.id}"/>
     				</p:linkButton>
  					
- 					<p/>
 				</div>
 				
 				<h:form>
@@ -115,8 +79,8 @@
 						widgetVar="discussionTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
 						rows="10" lazy="true" id="discussionTable" draggableColumns="true">
 						
-						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
-						<p:ajax event="sort" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						<p:ajax event="page" oncomplete="changeAvatarBackgrounds();"/>
+						<p:ajax event="sort" oncomplete="changeAvatarBackgrounds();"/>
 						
 						<p:column sortBy="#{discussion.title}" style="text-align:left;" responsivePriority="1">
 							<f:facet name="header">
@@ -194,6 +158,14 @@
 						</p:column>
 					
 					</p:dataTable>
+					
+					<div class="w3-container w3-center w3-padding">
+						<p:linkButton outcome="/secure/addDiscussion" value=" #{msg['start.new.discussion']}" icon="pi pi-plus" 
+				    		styleClass="ui-button-raised ui-button-flat" rendered="#{viewForum.forum.active}" style="font-weight:bold;">
+        				<f:param name="forumId" value="#{viewForum.id}"/>
+    				</p:linkButton>					
+					
+					</div>
 
 			    </h:form>
 			    

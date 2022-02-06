@@ -7,14 +7,14 @@
    
   <display-name>BootForum Web Application</display-name>
   <welcome-file-list>
-    <welcome-file>index.xhtml</welcome-file>
+    <welcome-file>login.xhtml</welcome-file>
   </welcome-file-list>
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>
   <error-page>
     <exception-type>java.lang.Throwable</exception-type>
-    <location>/error.xhtml</location>
+    <location>/error/500.xhtml</location>
   </error-page>
   
 </web-app> 

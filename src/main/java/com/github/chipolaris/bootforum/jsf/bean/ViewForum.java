@@ -1,7 +1,13 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
-import javax.annotation.Resource;
+import java.io.IOException;
 
+import javax.annotation.Resource;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -12,16 +18,18 @@ import com.github.chipolaris.bootforum.service.GenericService;
 @Scope("view")
 public class ViewForum {
 
+	private static final Logger logger = LoggerFactory.getLogger(ViewForum.class);
+	
 	@Resource
 	private GenericService genericService;
 
-	private Long forumId;
+	private Long id;
 	
-	public Long getForumId() {
-		return forumId;
+	public Long getId() {
+		return id;
 	}
-	public void setForumId(Long forumId) {
-		this.forumId = forumId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	private Forum forum;
@@ -44,12 +52,27 @@ public class ViewForum {
 	
 	public void onLoad() {
 		
-		if(this.forumId != null) {
+		boolean valid = false;
+		
+		if(this.id != null) {
 			
-			this.forum = genericService.findEntity(Forum.class, forumId).getDataObject();
+			this.forum = genericService.findEntity(Forum.class, id).getDataObject();
 			
 			if(forum != null) {
 				this.discussionsLazyModel = new ForumDiscussionsLazyModel(genericService, this.forum);
+				
+				valid = true;
+			}
+		}
+		
+		if(!valid) {
+			try {
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
+				context.responseComplete();
+			} 
+			catch (IOException e) {
+				logger.error("Unable to set response 404 on forum's id: " + this.id + ". Error: " + e);
 			}
 		}
 	}

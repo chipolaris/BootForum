@@ -152,6 +152,16 @@ public class SystemInfo {
 		JSFUtils.addInfoStringMessage("systemStatForm:synchSystemStatButton", "System statistics synchronization completed");
 	}
 	
+	/**
+	 * synchForumStats
+	 */
+	public void synchForumStats() {
+		
+		statService.synchForumStats();
+		
+		JSFUtils.addInfoStringMessage("forumStatForm:synchForumStatButton", "Forum statistics synchronization completed");
+	}
+	
 	public void synchCommentIndex() {
 		
 		ServiceResponse<Void> clearCommentIndexResponse = indexService.clearCommentIndex(true);

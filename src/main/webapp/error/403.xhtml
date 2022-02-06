@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"> 
+	
+    <h:head>
+        <f:facet name="first">        
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title><ui:insert name="title">#{msg['application.title']} - 403</ui:insert></title>
+        
+        <!-- *Note: favicon generated and setup instruction taken from https://favicon.io/favicon-generator/ -->
+ 		<link rel="apple-touch-icon" sizes="180x180" href="#{request.contextPath}/favicon_io/apple-touch-icon.png"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="#{request.contextPath}/favicon_io/favicon-32x32.png"/>
+		<link rel="icon" type="image/png" sizes="16x16" href="#{request.contextPath}/favicon_io/favicon-16x16.png"/>
+		<link rel="manifest" href="#{request.contextPath}/favicon_io/site.webmanifest"/>       
+        
+        <h:outputStylesheet library="css" name="w3.css"/>
+        
+        <!-- color themes -->
+        <!-- read from cookie name 'theme.color', if empty read from #{systemInfo.displayOption.themeColor}, 
+        	if still empty, set to default value 'w3-theme-light-blue' -->
+        <c:set var = "theme_color" value = "#{cookie['theme.color'].value}"/>
+        
+        <c:if test = "#{empty theme_color}">
+        	
+        	<c:set var = "theme_color" value = "#{systemInfo.displayOption.themeColor}"/>
+        	        	
+        	<c:if test = "#{empty theme_color}">
+        		<c:set var = "theme_color" value = "w3-theme-light-blue"/>
+      		</c:if> 
+      	</c:if>     	
+        <h:outputStylesheet library="css" name="w3-theme/#{theme_color}.css"/>
+        
+        <style>
+        
+			html, body, h1, h2, h3, h4, h5 {font-family: Arial, sans-serif}
+
+		</style>
+    </h:head>
+	
+	<h:body class="w3-theme-light" style="margin:0px;">
+		
+		<div class="w3-container w3-content" style="max-width:1680px;margin-top:50px; padding:0px;"> <!-- main content -->
+		  
+		  	<div class="w3-row-padding">
+		  	
+				<!-- Forgot Password div -->
+				<div id="centerDiv" class="w3-display-middle w3-card w3-padding w3-round-large w3-theme-dark">
+					<div  style="text-align: center;font-size:120px;font-weight:bold;">
+						4<i class="pi pi-ban" style="font-size:96px;font-weight:bold;"/>3
+					</div>
+					
+					<p>Sorry, you are not authorized to view this page</p>
+				</div>					
+			
+			</div>
+		
+		</div>
+	
+	</h:body>
+	
+</ui:composition>

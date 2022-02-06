@@ -1,7 +1,13 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
-import javax.annotation.Resource;
+import java.io.IOException;
 
+import javax.annotation.Resource;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -13,19 +19,21 @@ import com.github.chipolaris.bootforum.service.TagService;
 @Scope("view")
 public class ViewTag {
 
+	private static final Logger logger = LoggerFactory.getLogger(ViewTag.class);
+	
 	@Resource
 	private GenericService genericService;
 	
 	@Resource
 	private TagService tagService;
 
-	private Long tagId;
+	private Long id;
 	
-	public Long getTagId() {
-		return tagId;
+	public Long getId() {
+		return id;
 	}
-	public void setTagId(Long tagId) {
-		this.tagId = tagId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	private Tag tag;
@@ -57,13 +65,28 @@ public class ViewTag {
 	
 	public void onLoad() {
 		
-		if(this.tagId != null) {
+		boolean valid = false;
+		
+		if(this.id != null) {
 			
-			this.tag = genericService.findEntity(Tag.class, tagId).getDataObject();
+			this.tag = genericService.findEntity(Tag.class, id).getDataObject();
 			
 			if(tag != null) {
 				this.tagDiscussionsLazyModel = new TagDiscussionsLazyModel(tagService, this.tag);
 				this.commentCount = tagService.countCommentsForTag(tag).getDataObject();
+				
+				valid = true;
+			}
+		}
+		
+		if(!valid) {
+			try {
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
+				context.responseComplete();
+			} 
+			catch (IOException e) {
+				logger.error("Unable to set response 404 on tag's id: " + this.id + ". Error: " + e);
 			}
 		}
 	}

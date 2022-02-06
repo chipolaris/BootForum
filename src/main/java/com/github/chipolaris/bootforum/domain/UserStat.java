@@ -35,7 +35,7 @@ public class UserStat extends BaseEntity {
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="UserStatIdGenerator")
 	private Long id;
 	
-	@OneToOne(fetch=FetchType.EAGER)
+	@OneToOne(fetch=FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="LAST_COMMENT_ID", foreignKey = @ForeignKey(name="FK_USER_STAT_LAST_COMMEN"))
 	private CommentInfo lastComment; // info about last comment, used for display
 	

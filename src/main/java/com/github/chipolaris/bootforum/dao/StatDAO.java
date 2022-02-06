@@ -144,6 +144,14 @@ public class StatDAO {
 		
 		return typedQuery.getSingleResult();
 	}
+	
+	public Number countComment(Discussion discussion, String username) {
+		
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.discussion = :discussion AND c.createBy = :username", Number.class);
+		typedQuery.setParameter("discussion", discussion).setParameter("username", username);
+		
+		return typedQuery.getSingleResult();
+	}
 
 	/**
 	 * 
@@ -213,8 +221,8 @@ public class StatDAO {
 	}
 	
 	public Number countComment(String username) {
-		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.createBy = :createBy", Number.class);
-		typedQuery.setParameter("createBy", username);
+		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.createBy = :username", Number.class);
+		typedQuery.setParameter("username", username);
 		
 		return typedQuery.getSingleResult();
 	}
@@ -237,16 +245,31 @@ public class StatDAO {
 	}
 	
 	/**
-	 * get last comment for the given commentor name
-	 * @param commentor
+	 * Get last comment for the given username name
+	 * @param username
 	 * @return
 	 */
-	public Comment getLatestComment(String commentor) {
-		TypedQuery<Comment> typedQuery = entityManager.createQuery("SELECT c FROM Comment c WHERE c.createBy = :commentor ORDER BY c.createDate DESC", Comment.class);
-		typedQuery.setParameter("commentor", commentor);
+	public Comment getLatestComment(String username) {
+		TypedQuery<Comment> typedQuery = entityManager.createQuery("SELECT c FROM Comment c WHERE c.createBy = :username ORDER BY c.createDate DESC", Comment.class);
+		typedQuery.setParameter("username", username);
 		
 		List<Comment> resultList = typedQuery.setMaxResults(1).getResultList();
 		
 		return resultList.isEmpty() ? null : resultList.get(0);
+	}
+
+	/**
+	 * Get first maxResult distinct createBy (commentor) on the given discussion
+	 * @param discussion
+	 * @param maxResult
+	 * @return
+	 */
+	public List<String> getFirstCommentors(Discussion discussion, int maxResult) {
+		
+		TypedQuery<String> typedQuery = entityManager.createQuery("SELECT DISTINCT c.createBy FROM Comment c WHERE c.discussion = :discussion"
+				+ " GROUP BY c.createBy ORDER BY min(c.createDate) ASC, c.createBy", String.class);
+		typedQuery.setParameter("discussion", discussion);
+		
+		return typedQuery.setMaxResults(maxResult).getResultList();
 	}
 }

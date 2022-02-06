@@ -173,9 +173,10 @@
 						
 			    		<h:message for="synchSystemStatButton" id="synchSystemStatMessage" styleClass="w3-pale-red w3-border w3-padding"/>
 			    		<!-- not supported for now -->	
-			    		<!-- <p:commandButton action="#{systemInfo.synchForumStats}" icon="fa fa-refresh" 
+			    		<!-- <p:commandButton action="#{systemInfo.synchForumStats}" icon="pi pi-refresh" 
 			    			value="Synchronize Forum Statistics" update=":systemStatForm"/> -->
-		    		</h:panelGrid>	
+		    		</h:panelGrid>	    		
+		    		
 		    	</h:form>
 			</p:fieldset>
 			 
@@ -183,9 +184,30 @@
 			 
 			<p:fieldset id="commentIndexFieldset" legend="Comment Search Index" toggleable="true" collapsed="true">
 				
+	    		<p>
+				Users, Forums and Discussions statistics
+				</p>
+				
+				<h:form id="forumStatForm">
+					<p:commandButton value="Synchronize Forum Statistics" icon="pi pi-refresh" id="synchForumStatButton" styleClass="ui-button-raised ui-button-flat"
+						action="#{systemInfo.synchForumStats}" widgetVar="synchForumStatVar" update=":forumStatForm"
+						onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchForumStatVar').disable();"
+						oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchForumStatVar').enable();">
+						
+						<p:confirm type="popup" header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+					</p:commandButton>
+					&#160;
+					<h:message for="synchForumStatButton" id="synchforumStatMessage" styleClass="w3-pale-red w3-border w3-padding"/>				
+				
+				</h:form>					
+				
+				<p>
+				Comment Search Data powers comment search feature. Re-index periodically to reset search data.
+				</p>
+				
 				<h:form id="commentIndexForm">
 					
-					<p:commandButton value="Re-index Comment Data" icon="pi pi-refresh" id="synchCommentIndexButton" styleClass="ui-button-raised ui-button-flat"
+					<p:commandButton value="Re-index Comment Search Data" icon="pi pi-refresh" id="synchCommentIndexButton" styleClass="ui-button-raised ui-button-flat"
 						action="#{systemInfo.synchCommentIndex}" widgetVar="synchCommentIndexVar" update=":commentIndexForm"
 						onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchCommentIndexVar').disable();"
 						oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchCommentIndexVar').enable();">

@@ -37,35 +37,9 @@
 			}			
 		</style>
 		
-		<script type="text/javascript">
- 			//<![CDATA[
- 			$(document).ready(function(){
-				customizeDatatableStyle();
-			});
-			
-			function customizeDatatableStyle() {
-				/* set datatable header's background color */
-				document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'});
-				
-				/* set datatable paginator button color */
-				document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
-					function(el) {
-						el.className += ' w3-button';
-						
-						if(el.className.indexOf('ui-state-active') >= 0) {
-							el.className += ' w3-theme-dark';	
-						}
-						else {
-							el.className += ' w3-white';
-						}
-					}
-				);
-			} 				
-			//]]>	
-		</script>
 		<!-- set request parameter values from URL to backing bean -->
 		<f:metadata>
-			<f:viewParam name="id" value="#{viewTag.tagId}"/>
+			<f:viewParam name="id" value="#{viewTag.id}"/>
 			<f:viewAction action="#{viewTag.onLoad}"/>
 		</f:metadata>
 	
@@ -75,13 +49,6 @@
 				<p:messages id="messages" showDetail="true" showSummary="false">
 					<p:autoUpdate/>
 				</p:messages>
-			</div>
-			
-			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{empty viewTag.tag}">
-			
-				<h3>Error!</h3>
-				<h4>Must specified a valid tag Id</h4>
-			
 			</div>
 			
 			<div jsf:id="viewForumDiv" jsf:rendered="#{not empty viewTag.tag}">
@@ -95,21 +62,22 @@
 				
 				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					<h3>#{msg['tag']} <span class="w3-tag" style="background-color: ##{viewTag.tag.color};font-weight:bold;">#{viewTag.tag.label} <i class="#{viewTag.tag.icon} w3-xlarge"/></span></h3>
- 					<span class="w3-tag w3-theme-light w3-padding">
+ 				</div>
+				
+				<div class="w3-center">
+				 	<span class="w3-tag w3-theme-light w3-padding">
  						#{msg['discussions']}: <b>#{viewTag.tagDiscussionsLazyModel.discussionCount}</b>,
  						#{msg['comments']}: <b>#{viewTag.commentCount}</b>
  					</span>
  				</div>
-				
-				<p/>
 				
 				<h:form>
 					<p:dataTable var="discussion" value="#{viewTag.tagDiscussionsLazyModel}" style="margin: 0 auto;" styleClass="borderless"
 						widgetVar="discussionTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
 						rows="10" lazy="true" id="discussionTable" draggableColumns="true">
 						
-						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
-						<p:ajax event="sort" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						<p:ajax event="page" oncomplete="changeAvatarBackgrounds();"/>
+						<p:ajax event="sort" oncomplete="changeAvatarBackgrounds();"/>
 						
 						<p:column sortBy="#{discussion.title}" style="text-align:left;" responsivePriority="1">
 							<f:facet name="header">

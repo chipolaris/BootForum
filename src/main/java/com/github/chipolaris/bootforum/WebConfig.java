@@ -10,11 +10,15 @@ import javax.servlet.ServletException;
 import org.primefaces.webapp.filter.FileUploadFilter;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.context.support.HttpRequestHandlerServlet;
@@ -82,6 +86,20 @@ public class WebConfig implements ServletContextInitializer {
         return registration;
     }
 	
+    /**
+     * Add error pages for embedded Tomcat, as the <error-page> config in web.xml file won't work in emmbedded Tomcat
+     * https://blog.actorsfit.com/a?ID=01250-d2f1f185-403b-43a0-93d8-b0b92c4b2fc1
+     */
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer() {
+    	return (container -> {
+	    	ErrorPage error403Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/error/403.xhtml");
+	    	ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.xhtml");
+	    	//ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500.xhtml");
+	    	container.addErrorPages(error403Page, error404Page);
+    	});
+     } 
+    
     /*
      *  https://stackoverflow.com/questions/22544214/spring-boot-and-jsf-primefaces-richfaces
      *  

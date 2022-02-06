@@ -1,5 +1,10 @@
 package com.github.chipolaris.bootforum.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -19,6 +24,7 @@ import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumStat;
+import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 
 import net.htmlparser.jericho.Source;
@@ -100,9 +106,75 @@ public class StatService {
 		commentInfo.setCommentDate(lastComment.getCreateDate());
 		commentInfo.setCommentor(lastComment.getCreateBy());
 		
+		discussionStat.setFirstCommentors(getFirstCommentors(discussion));
+		
 		genericDAO.merge(discussionStat);
 		
 		return discussionStat;
+	}
+
+	/**
+	 * Helper method
+	 * @param discussionStat
+	 */
+	private Map<String, Integer> getFirstCommentors(Discussion discussion) {
+
+		Map<String, Integer> firstCommentorMap = new HashMap<>();
+		
+		// get first 10 commentors of the discussion
+		List<String> firstCommentors = statDAO.getFirstCommentors(discussion, 10);
+		
+		// for each commentor, count number of posts in the discussion
+		for(String commentor : firstCommentors) {
+			firstCommentorMap.put(commentor, statDAO.countComment(discussion, commentor).intValue());
+		}
+				
+		return firstCommentorMap;
+	}
+	
+	private void setCommentInfo(UserStat userStat, Comment comment) {
+		
+		if(comment == null) {
+			userStat.setLastComment(null);
+		}
+		else {
+			CommentInfo commentInfo = userStat.getLastComment();
+			
+			// create if not currently exist
+			if(commentInfo == null) {
+				commentInfo = new CommentInfo();
+				userStat.setLastComment(commentInfo);
+			}
+			
+			commentInfo.setCommentor(comment.getCreateBy());
+			commentInfo.setCommentId(comment.getId());
+			commentInfo.setCommentDate(comment.getCreateDate());
+			commentInfo.setTitle(comment.getTitle());
+			
+			String contentAbbr = new TextExtractor(new Source(comment.getContent())).toString();
+			commentInfo.setContentAbbr(contentAbbr.length() > 100 ? 
+					contentAbbr.substring(0, 97) + "..." : contentAbbr);
+		}
+	}
+
+	@Transactional(readOnly = false, propagation=Propagation.MANDATORY)
+	private UserStat synchUserStat(User user) {
+		
+		UserStat userStat = user.getStat();
+		
+		String username = user.getUsername();
+		
+		userStat.setDiscussionCount(statDAO.countDiscussion(username).longValue());
+		userStat.setCommentCount(statDAO.countComment(username).longValue());
+		userStat.setCommentAttachmentCount(statDAO.countCommentAttachments(username).longValue());
+		userStat.setCommentThumbnailCount(statDAO.countCommentThumbnails(username).longValue());
+		userStat.setReputation(voteDAO.getReputation4User(username).longValue());
+		
+		setCommentInfo(userStat, statDAO.getLatestComment(user.getUsername()));
+		
+		genericDAO.merge(userStat);
+		
+		return userStat;
 	}
 	
 	@Transactional(readOnly =  false)
@@ -119,16 +191,45 @@ public class StatService {
 		userStat.setReputation(voteDAO.getReputation4User(username).longValue());
 		
 		// latest commentInfo for user
-		Comment lastComment = statDAO.getLatestComment(username);
-		
-		if(lastComment != null) {
-			CommentInfo commentInfo = lastComment.getDiscussion().getStat().getLastComment();
-			userStat.setLastComment(commentInfo);
-		}
+		setCommentInfo(userStat, statDAO.getLatestComment(username));
 		
 		genericDAO.merge(userStat);
 		
 		response.setDataObject(userStat);
+		
+		return response;
+	}
+
+	@Transactional(readOnly =  false)
+	public ServiceResponse<Void> synchForumStats() {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+
+		// Discussions
+		try(Stream<Discussion> discussionStream = genericDAO.getEntityStream(Discussion.class)) {
+			
+			discussionStream.forEach(discussion -> {
+				synchDiscussionStat(discussion);
+			});
+		}
+		
+		// Forums
+		try(Stream<Forum> forumStream = genericDAO.getEntityStream(Forum.class)) {
+			forumStream.forEach(forum -> {
+				
+				synchForumStat(forum);
+			});
+			
+		}
+		
+		// Users
+		try(Stream<User> userStream = genericDAO.getEntityStream(User.class)) {
+			
+			userStream.forEach(user -> {
+				
+				synchUserStat(user);
+			});
+		}		
 		
 		return response;
 	}

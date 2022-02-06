@@ -1,7 +1,13 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
-import javax.annotation.Resource;
+import java.io.IOException;
 
+import javax.annotation.Resource;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,6 +24,8 @@ import com.github.chipolaris.bootforum.service.ServiceResponse;
 @Scope("view")
 public class ViewDiscussion {
 
+	private static final Logger logger = LoggerFactory.getLogger(ViewDiscussion.class);
+	
 	@Resource
 	private GenericService genericService;
 	
@@ -55,7 +63,9 @@ public class ViewDiscussion {
 	}
 	
 	public void onLoad() {
-
+		
+		boolean valid = false;
+		
 		if(this.id != null) {
 					
 			this.discussion = genericService.findEntity(Discussion.class, this.id).getDataObject();
@@ -66,6 +76,19 @@ public class ViewDiscussion {
 				
 				// publish this event so discussionViewEventListener can update the discussion's viewCount
 				applicationEventPublisher.publishEvent(new DiscussionViewEvent(this, discussion));
+				
+				valid = true;
+			}
+		}
+		
+		if(!valid) {
+			try {
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
+				context.responseComplete();
+			} 
+			catch (IOException e) {
+				logger.error("Unable to set response 404 on discussion's id: " + this.id + ". Error: " + e);
 			}
 		}
 	}
