@@ -147,13 +147,13 @@
 						
 					</p:column>
 
-					<p:column sortBy="#{discussion.stat.lastComment.updateDate}" style="text-align:right;" responsivePriority="3">
+					<p:column sortBy="#{discussion.stat.lastComment.commentDate}" style="text-align:right;" responsivePriority="3">
 						<f:facet name="header">
 							<h:outputText value="#{msg['latest.comment']}" />
 						</f:facet>
 						
 						<span>
-							<pe:timeAgo value="#{discussion.stat.lastComment.updateDate}" titlePattern="MMMMM dd yyyy" />
+							<pe:timeAgo value="#{discussion.stat.lastComment.commentDate}" titlePattern="MMMMM dd yyyy" />
 							by <b>#{discussion.stat.lastComment.commentor} </b>
 							
 							<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(discussion.stat.lastComment.commentor)}" class="w3-circle"

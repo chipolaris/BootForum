@@ -86,7 +86,7 @@ public class StatService {
 		return forumStat;
 	}
 
-	@Transactional(readOnly =  false, propagation=Propagation.MANDATORY)
+	@Transactional(readOnly = false, propagation=Propagation.MANDATORY)
 	private DiscussionStat synchDiscussionStat(Discussion discussion) {
 		
 		DiscussionStat discussionStat = discussion.getStat();
@@ -107,6 +107,11 @@ public class StatService {
 		commentInfo.setCommentor(lastComment.getCreateBy());
 		
 		discussionStat.setFirstCommentors(getFirstCommentors(discussion));
+		
+		// note: even though discussionStat.lastComment is configured as Cascade.ALL
+		// we still need this explicit merge (save) here because discussionStat
+		// might not call saved itself because of dirty-tracking (if it's not updated)
+		genericDAO.merge(commentInfo);		
 		
 		genericDAO.merge(discussionStat);
 		

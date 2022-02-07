@@ -196,7 +196,7 @@
 							</span>
 							<f:param name="username" value="#{viewDiscussion.discussion.stat.lastComment.commentor}"/>
 						</h:link><br/>
-						<pe:timeAgo value="#{viewDiscussion.discussion.stat.lastComment.updateDate}" titlePattern="MMM dd, yyyy"/>
+						<pe:timeAgo value="#{viewDiscussion.discussion.stat.lastComment.commentDate}" titlePattern="MMM dd, yyyy"/>
 					</span>
 					
 					<p:repeat var="username" value="#{viewDiscussion.discussion.stat.firstCommentors.keySet().toArray()}">

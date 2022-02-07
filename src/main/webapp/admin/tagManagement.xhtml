@@ -207,23 +207,20 @@
 								<div class="w3-row w3-section"/> <!-- vertical spacer -->
 								
 							</div>
-													
+							
 						</h:form>
 					</div>
 				</div>
 			</div> <!-- end editTagDiv -->
 			
-			<div class="w3-panel w3-round w3-theme-light w3-center">
-				
-				<h3>#{msg['tag.list']}</h3>
-				
+			<div class="w3-panel w3-round w3-center">
+				<p><i class="pi pi-question-circle w3-large"/> #{msg['tag.help.text']}</p>
 				<button onclick="toggleDiv('newTagDiv');return;" class="w3-button w3-left-align w3-border">
 					<i class="pi pi-plus"/> #{msg['add.new.tag']}
 				</button>
 				<button onclick="$('#tagOrderModal').show();return;" class="w3-button w3-left-align w3-border" style="margin-left:5px;">
 					<i class="pi pi-sort"/> #{msg['order.tags']}
 				</button>
-				<p/>
 				
 			</div>	
 			

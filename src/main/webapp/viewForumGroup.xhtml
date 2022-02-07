@@ -107,7 +107,7 @@
 								
 								<h:link outcome="memberProfile">
 									<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(data.stat.lastComment.commentor)}" class="w3-circle"
-											id="commentorAvatar" height="36" width="36" style="border:3px;margin-right:15px;" title="#{data.stat.lastComment.updateBy}"/> -->
+											id="commentorAvatar" height="36" width="36" style="border:3px;margin-right:15px;" title="#{data.stat.lastComment.commentor}"/> -->
 									<h:graphicImage value="#{requestContext}/avatar/#{data.stat.lastComment.commentor}" class="w3-circle"
 											id="commentorAvatar" height="36" width="36" title="#{data.stat.lastComment.commentor}"
 											rendered="#{fileHandler.isAvatarExists(data.stat.lastComment.commentor)}"/>

@@ -33,33 +33,6 @@
 			}			
 		</style>
 	
-		<script>
-			//<![CDATA[
-				$(document).ready(function(){
-					customizeDatatableStyle();
-				});
-				
-				function customizeDatatableStyle() {
-					/* set datatable header's background color */
-					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
-					
-					/* set datatable paginator button color */
-					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
-						function(el) {
-							el.className += ' w3-button';
-							
-							if(el.className.indexOf('ui-state-active') >= 0) {
-								el.className += ' w3-theme-dark';	
-							}
-							else {
-								el.className += ' w3-white';
-							}
-						}
-					);
-				}	
-			//]]>
-		</script>
-	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
 						
 			<div>
@@ -91,9 +64,9 @@
 						currentPageReportTemplate="#{msg['showing']} {startRecord}-{endRecord} #{msg['of']} {totalRecords} #{msg['members']}"
 						rows="10" rowsPerPageTemplate="10,20,50" lazy="true" id="membersTable" draggableColumns="true">
 						
-						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
-						<p:ajax event="sort" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
-						<p:ajax event="filter" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						<p:ajax event="page" oncomplete="changeAvatarBackgrounds();"/>
+						<p:ajax event="sort" oncomplete="changeAvatarBackgrounds();"/>
+						<p:ajax event="filter" oncomplete="changeAvatarBackgrounds();"/>
 						
 						<p:column sortBy="#{user.username}" filterBy="#{user.username}">
 						

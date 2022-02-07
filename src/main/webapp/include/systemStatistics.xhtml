@@ -76,8 +76,8 @@
 				</p:column>
 				
 				<p:column style="font-weight:bold">
-					<h:outputText value="By #{systemInfo.statistics.lastComment.updateBy} "/>
-					<span class="w3-opacity"> <i class="fa fa-clock-o fa-lg"/>&#160;<pe:timeAgo value="#{systemInfo.statistics.lastComment.updateDate}"/></span>
+					<h:outputText value="By #{systemInfo.statistics.lastComment.commentor} "/>
+					<span class="w3-opacity"> <i class="fa fa-clock-o fa-lg"/>&#160;<pe:timeAgo value="#{systemInfo.statistics.lastComment.commentDate}"/></span>
 				</p:column>
 			</p:row>
 

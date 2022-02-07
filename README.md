@@ -68,7 +68,7 @@ Head to [**Running Instructions**](Running.md "Running Instructions") to downloa
 For developers, the followings are recommended
 * **JDK 11** or later
 * **Maven 3** or later
-* IDE: recommend tools with Spring deveopment plugin such as Eclipse based **Spring Tool Suite**
+* IDE: recommend tools with Spring development plugin such as Eclipse based **Spring Tool Suite**
 
 ### Note
 
