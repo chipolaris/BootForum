@@ -37,29 +37,7 @@
 		<script type="text/javascript">
 			//<![CDATA[
 				
-				function customizeDatatableStyle() {
-					
-					/* set table header's background color */
-					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'})
-					
-					/* set datatable paginator button color */
-					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
-						function(el) {
-							el.className += ' w3-button';
-							
-							if(el.className.indexOf('ui-state-active') >= 0) {
-								el.className += ' w3-theme-dark';	
-							}
-							else {
-								el.className += ' w3-white';
-							}
-						}
-					);
-				}
-				
 				$(document).ready(function(){
-					
-					customizeDatatableStyle();
 					
 					// mark the search result
 					$('.commentTitle').mark($('#searchForm\\:keywords').val())
@@ -112,7 +90,7 @@
 							<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xe908; #{msg['search']}"
 								style="font-family:Arial, PrimeIcons;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
 								onclick="PF('searchResultDatatable').getPaginator().setPage(0);" update=":searchResultDiv"
-								oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();changeAvatarBackgrounds();"/>
+								oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());changeAvatarBackgrounds();"/>
 						</div>
 					</div>
 				
@@ -134,7 +112,7 @@
 					        type="none" rendered="#{not empty searchComment.commentSearchLazyModel}">
 
 						<p:ajax event="rowToggle" oncomplete="$('.commentContent').mark($('#searchForm\\:keywords').val());"/>
-						<p:ajax event="page" oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						<p:ajax event="page" oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());changeAvatarBackgrounds();"/>
 
 					  	<f:facet name="header">
 	           				 <h4 class="w3-opacity-min">#{msg['found']} #{searchComment.commentSearchLazyModel.rowCount} #{msg['comments.for']} '#{searchComment.keywords}'</h4>

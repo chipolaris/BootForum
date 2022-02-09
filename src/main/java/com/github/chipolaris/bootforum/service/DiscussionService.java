@@ -3,6 +3,7 @@ package com.github.chipolaris.bootforum.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -20,11 +21,16 @@ import com.github.chipolaris.bootforum.dao.DiscussionDAO;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.StatDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.CommentVote;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.User;
+
+import net.htmlparser.jericho.Source;
+import net.htmlparser.jericho.TextExtractor;
 
 @Service
 @Transactional
@@ -97,6 +103,10 @@ public class DiscussionService {
 		comment.setDiscussion(newDiscussion);
 		genericDAO.persist(comment);
 		
+		// important, make sure to call this after comment is persisted
+		// so all DB managed fields (id, createDate, ect) are available
+		populateDiscussionStat(comment, newDiscussion, user);
+		
 		// merge discussion's forum
 		Forum forum = newDiscussion.getForum();
 		forum.getDiscussions().add(newDiscussion);
@@ -108,6 +118,38 @@ public class DiscussionService {
 		response.setDataObject(newDiscussion);
 		
 		return response;
+	}
+	
+	private DiscussionStat populateDiscussionStat(Comment comment, Discussion discussion, User user) {
+		
+		String username = user.getUsername();
+		
+		/*
+		 * discussion stat
+		 */
+		CommentInfo lastComment = new CommentInfo();
+		lastComment.setCreateBy(username);
+		lastComment.setCommentor(username);
+		lastComment.setCommentDate(comment.getCreateDate());
+		lastComment.setTitle(comment.getTitle());
+		
+		String contentAbbr = new TextExtractor(new Source(comment.getContent())).toString();
+		lastComment.setContentAbbr(contentAbbr.length() > 100 ? 
+				contentAbbr.substring(0, 97) + "..." : contentAbbr);
+		lastComment.setCommentId(comment.getId());
+		
+		DiscussionStat discussionStat = discussion.getStat();
+		discussionStat.setFirstCommentors(new HashMap<>());
+		discussionStat.setCommentCount(1);
+		discussionStat.setLastComment(lastComment);
+		discussionStat.getFirstCommentors().put(username, 1);
+		discussionStat.setThumbnailCount(comment.getThumbnails().size());
+		discussionStat.setAttachmentCount(comment.getAttachments().size());
+		
+		// no need to merge
+		// genericDAO.merge(discussionStat);
+		
+		return discussionStat;
 	}
 	
 	@Transactional(readOnly = false)

@@ -69,6 +69,28 @@ public class StatDAO {
 		return typedQuery.getSingleResult();
 	}
 	
+	/**
+	 * Get latest comment of the given forum
+	 * @param forum
+	 * @return
+	 */
+	public Comment latestComment(Forum forum) {
+		
+		String queryStr = "SELECT c FROM Comment c WHERE c.discussion.forum = :forum ORDER BY c.createDate DESC";
+		
+		TypedQuery<Comment> typedQuery = entityManager.createQuery(queryStr, Comment.class);
+		typedQuery.setParameter("forum", forum);
+		
+		List<Comment> resultList = typedQuery.setMaxResults(1).getResultList();
+		
+		return resultList.isEmpty() ? null : resultList.get(0);
+	}
+	
+	/**
+	 * get commentInfo from the latest discussion (one with the latest commentDate) of the given forum
+	 * @param forum
+	 * @return
+	 */
 	public CommentInfo latestCommentInfo(Forum forum) {
 		
 		String queryStr = "SELECT d.stat.lastComment FROM Discussion d WHERE d.forum = :forum ORDER BY d.stat.lastComment.commentDate DESC";

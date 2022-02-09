@@ -91,6 +91,8 @@ public class ViewDiscussion {
 				logger.error("Unable to set response 404 on discussion's id: " + this.id + ". Error: " + e);
 			}
 		}
+		
+		logger.warn("Finish onLoad");
 	}
 	
 	// 

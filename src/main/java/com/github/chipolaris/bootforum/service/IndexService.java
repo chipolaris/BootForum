@@ -39,7 +39,7 @@ import org.apache.lucene.search.similarities.BasicStats;
 import org.apache.lucene.search.similarities.SimilarityBase;
 import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.SimpleFSDirectory;
+import org.apache.lucene.store.NIOFSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -135,7 +135,7 @@ public class IndexService {
 		
 		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
 		indexWriterConfig.setOpenMode(openMode);
-		Directory directory = new SimpleFSDirectory(Paths.get(indexDirectory));
+		Directory directory = new NIOFSDirectory(Paths.get(indexDirectory));
 		
 		return new IndexWriter(directory, indexWriterConfig);
 	}

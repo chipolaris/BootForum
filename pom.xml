@@ -10,14 +10,14 @@
 	</parent>
 	<groupId>com.github.chipolaris</groupId>
 	<artifactId>BootForum</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>BootForum</name>
 	<description>BootForum - Forum Software using Java and Spring Boot</description>
 
 	<properties>
 		<java.version>11</java.version>
-		<lucene.version>8.0.0</lucene.version>
+		<lucene.version>9.0.0</lucene.version>
 		<velocity.version>2.1</velocity.version>
 		<primefaces.version>11.0.0</primefaces.version>
 		<primefaces-extensions.version>11.0.0</primefaces-extensions.version>
@@ -95,7 +95,7 @@
 		<!-- Lucence -->
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-analyzers-common</artifactId>
+			<artifactId>lucene-analysis-common</artifactId>
 			<version>${lucene.version}</version>
 		</dependency>
 

@@ -16,7 +16,7 @@ import org.apache.lucene.search.spell.LuceneDictionary;
 import org.apache.lucene.search.suggest.Lookup.LookupResult;
 import org.apache.lucene.search.suggest.analyzing.AnalyzingInfixSuggester;
 import org.apache.lucene.store.MMapDirectory;
-import org.apache.lucene.store.SimpleFSDirectory;
+import org.apache.lucene.store.NIOFSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,7 +66,7 @@ public class AutoSuggestService {
 			
 			if(Files.exists(indexPath)) {
 				analyzingInfixSuggester = new AnalyzingInfixSuggester(new MMapDirectory(Paths.get(mmapDirectory)), new StandardAnalyzer());
-				analyzingInfixSuggester.build(new LuceneDictionary(DirectoryReader.open(new SimpleFSDirectory(Paths.get(indexDirectory))), "title"));
+				analyzingInfixSuggester.build(new LuceneDictionary(DirectoryReader.open(new NIOFSDirectory(Paths.get(indexDirectory))), "title"));
 			}
 		} 
 		catch (IOException e) {

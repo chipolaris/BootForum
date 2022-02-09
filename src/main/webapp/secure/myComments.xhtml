@@ -33,9 +33,9 @@
 					currentPageReportTemplate="#{msg['comment.count']}: ({totalRecords})"
 					rowsPerPageTemplate="10,25,100" editable="true" draggableColumns="true">
 				
-					<p:ajax event="page" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
-					<p:ajax event="sort" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
-					<p:ajax event="filter" oncomplete="customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+					<p:ajax event="page" oncomplete="customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+					<p:ajax event="sort" oncomplete="customizePrimefaceButtons();changeAvatarBackgrounds();"/>
+					<p:ajax event="filter" oncomplete="customizePrimefaceButtons();changeAvatarBackgrounds();"/>
 				
 					<p:column sortBy="#{comment.createDate}" responsivePriority="3" style="width:16%;">
 						<f:facet name="header">
@@ -106,29 +106,9 @@
  				
  				/* set table header's background color */
  				$(document).ready(function(){
- 					customizeDatatableStyle();
  					customizePrimefaceButtons();
  					changeAvatarBackgrounds();
  				});
- 				
-				function customizeDatatableStyle() {
-					/* set datatable header's background color */
-					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l5'})
-					
-					/* set datatable paginator button color */
-					document.querySelectorAll('span.ui-paginator-pages > a.ui-paginator-page').forEach(
-						function(el) {
-							el.className += ' w3-button';
-							
-							if(el.className.indexOf('ui-state-active') >= 0) {
-								el.className += ' w3-theme-dark';	
-							}
-							else {
-								el.className += ' w3-white';
-							}
-						}
-					);
-				}
 				
 				function customizePrimefaceButtons() {
  					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")

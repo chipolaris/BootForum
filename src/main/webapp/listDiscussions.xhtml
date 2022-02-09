@@ -105,7 +105,9 @@
 						rowIndexVar="rowIndex" chunkSize="#{listDiscussions.pageSize}"> 
 												
 						<f:facet name="loader">
-							<input type="button" value="#{msg['view.more']} &#xf078;" class="w3-btn w3-theme-l1" style="font-family:Open Sans, FontAwesome;"/>
+							<div class="w3-center">
+								<p:commandButton type="button" value="#{msg['view.more']}" icon="pi pi-angle-down"/>
+							</div>
 						</f:facet>
 						
 						<p>

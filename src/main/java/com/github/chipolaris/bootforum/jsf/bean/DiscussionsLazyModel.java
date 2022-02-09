@@ -47,8 +47,14 @@ public class DiscussionsLazyModel extends LazyDataModel<Discussion> {
     	}
 		
 		this.count = this.genericService.countEntities(Discussion.class).getDataObject().intValue();
+		this.setRowCount(count);
 	}
 
+	/*
+	 * Note that this class DiscussionLazyModel is used in discussionList's dataScroller component
+	 * It is noticed that it does NOT call the count() method defined here. 
+	 * For now, call this.setRowCount() method in the constructor is sufficient
+	 */
 	@Override
 	public int count(Map<String, FilterMeta> filterBy) {
 		return count;

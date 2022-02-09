@@ -3,6 +3,7 @@ package com.github.chipolaris.bootforum.domain;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,8 +36,8 @@ public class UserStat extends BaseEntity {
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="UserStatIdGenerator")
 	private Long id;
 	
-	@OneToOne(fetch=FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name="LAST_COMMENT_ID", foreignKey = @ForeignKey(name="FK_USER_STAT_LAST_COMMEN"))
+	@OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name="LAST_COMMENT_INFO_ID", foreignKey = @ForeignKey(name="FK_USER_STAT_LAST_COMMEN"))
 	private CommentInfo lastComment; // info about last comment, used for display
 	
 	@Column(name="COMMENT_THUMBNAIL_COUNT")

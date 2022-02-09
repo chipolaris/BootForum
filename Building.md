@@ -4,4 +4,4 @@
 
 ### Build
 Change to the project's root directory
-> mvn package
+> mvn clean package

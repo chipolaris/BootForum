@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    template="/WEB-INF/template/layout_admin.xhtml">
+
+	<ui:define name="title">
+		#{msg['application.title']} -#{msg['system.information']}
+	</ui:define>
+	
+	<ui:define name="content">
+	
+		<style type="text/css">	
+			 
+			 /* borderless datatable: https://stackoverflow.com/questions/18880208/remove-all-borders-on-a-specific-datatable */
+			
+			.ui-datatable.borderless thead th,
+			.ui-datatable.borderless tbody,
+			.ui-datatable.borderless tbody tr,
+			.ui-datatable.borderless tbody td {
+			    border-style: none;
+			}
+			
+			body .ui-paginator {
+				 border-style: none;
+			}
+			
+			.companyHeaderGrid.ui-panelgrid>*>tr,
+				.companyHeaderGrid.ui-panelgrid .ui-panelgrid-cell {
+				    border: none;
+			}
+			
+			/* remove border from fieldset */
+			body .ui-fieldset {
+				border-style: none;
+			}
+			
+		</style>
+
+		<script type="text/javascript">
+ 			//<![CDATA[	
+ 				
+ 				/* set table header's background color */
+ 				$(document).ready(function(){
+					document.querySelectorAll('.ui-datatable.borderless thead th').forEach(function(el) {el.className += ' w3-theme-l3'});
+ 				});
+ 				
+			//]]>	
+		</script>
+		
+		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white">
+			
+			<p/>
+
+			<div class="w3-panel w3-theme-d5 w3-center w3-round">
+ 				<h3 id="title"><b>#{msg['system.maintenance']}</b></h3>
+ 			</div>
+		
+			<p:fieldset id="systemStatistics" legend="#{msg['system.statistics']}" toggleable="true">
+			
+				<h:form id="systemStatForm">
+			
+			    	<p:panelGrid style="width:100%;">
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+							<p:column style="width:50%;">
+								<h:outputText value="#{msg['comments']}" />
+							</p:column>
+							<p:column style="font-weight:bold;" >
+								<h:outputText value="#{systemMaintenance.statistics.commentCount}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-even">
+							<p:column>
+								<h:outputText value="#{msg['discussions']}" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemMaintenance.statistics.discussionCount}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+							<p:column>
+								<h:outputText value="#{msg['forums']}" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemMaintenance.statistics.forumCount}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-even">
+							<p:column>
+								<h:outputText value="#{msg['forum.groups']}" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemMaintenance.statistics.forumGroupCount}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+							<p:column>
+								<h:outputText value="#{msg['registered.users']}" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemMaintenance.statistics.userCount}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-even">
+							
+							<p:column>
+								<h:outputText value="#{msg['last.registered.user']}" />
+							</p:column>
+							
+							<p:column>
+								<h:outputText value="#{systemMaintenance.statistics.lastRegisteredUser} " style="font-weight:bold;"/>
+								<pe:timeAgo	value="#{systemMaintenance.statistics.lastUserRegisteredDate}"/>
+							</p:column>
+							
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+							
+							<p:column>
+								<h:outputText value="#{msg['last.comment']}" />
+							</p:column>
+							
+							<p:column>
+								<h:outputText value="#{systemMaintenance.statistics.lastComment.commentor} " style="font-weight:bold"/>
+								<pe:timeAgo	value="#{systemMaintenance.statistics.lastComment.commentDate}"/>
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-even">
+							<p:column>
+								<h:outputText value="#{msg['logged.on.users']}" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{fn:length(systemMaintenance.loggedOnUsers)}" />
+							</p:column>
+						</p:row>
+
+						<p:row styleClass="ui-widget-content ui-datatable-odd">
+						
+							<p:column>
+								<h:outputText value="#{msg['anonymous.users']}" />
+							</p:column>
+							<p:column style="font-weight:bold">
+								<h:outputText value="#{systemMaintenance.sessionCount - fn:length(systemMaintenance.loggedOnUsers)}"/>
+							</p:column>
+							
+						</p:row>
+
+					</p:panelGrid>
+		    		
+		    		<p/>
+		    		
+		    		<div>
+			    		<p:commandButton action="#{systemMaintenance.synchSystemStatistics}" icon="pi pi-refresh" id="synchSystemStatButton" styleClass="ui-button-raised ui-button-flat"
+			    			value="#{msg['synchronize.system.statistics']}" update=":systemStatForm" widgetVar="synchSystemStatVar"
+			    			onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchSystemStatVar').disable();"
+							oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchSystemStatVar').enable();">
+						
+							<p:confirm type="popup" header="#{msg['confirmation']}" message="#{msg['are.you.sure.you.want.to.proceed']}" icon="pi pi-exclamation-triangle"/>
+						</p:commandButton> &#160;
+			    		<i class="pi pi-question-circle w3-large" jsf:id="helpSystemStatistics"/>
+			    		<p:overlayPanel for="helpSystemStatistics" style="width:500px;">
+			    			#{msg['system.statistics.help.text']}
+			    		</p:overlayPanel>
+			    		
+			    		<h:message for="synchSystemStatButton" id="synchSystemStatMessage" styleClass="w3-margin-left w3-pale-green w3-border w3-round w3-padding"/>
+		    		</div>
+		    	</h:form>
+			</p:fieldset>
+			 
+			 <p/>
+			 
+			<p:fieldset id="forumMaintenanceFieldset" legend="#{msg['statistics.maintenance']}" toggleable="true" collapsed="true">
+				
+				<p>
+					#{msg['forum.statistics.label']} 
+					<i class="pi pi-question-circle w3-large" jsf:id="helpForumStatistics"/>
+			    	<p:overlayPanel for="helpForumStatistics" style="width:500px;">
+			    		#{msg['forum.statistics.help.text']}
+			    	</p:overlayPanel>
+				</p>
+				<h:form id="forumStatForm">
+					<p:commandButton value="#{msg['synchronize.forum.statistics']}" icon="pi pi-refresh" id="synchForumStatButton" styleClass="ui-button-raised ui-button-flat"
+						action="#{systemMaintenance.synchAllStatistics}" widgetVar="synchForumStatVar" update=":forumStatForm"
+						onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchForumStatVar').disable();"
+						oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchForumStatVar').enable();">
+						
+						<p:confirm type="popup" header="#{msg['confirmation']}" message="#{msg['are.you.sure.you.want.to.proceed']}" icon="pi pi-exclamation-triangle"/>
+					</p:commandButton>
+						
+					<h:message for="synchForumStatButton" id="synchforumStatMessage" styleClass="w3-margin-left w3-pale-green w3-border w3-round w3-padding"/>				
+					
+				</h:form>					
+				
+			</p:fieldset>
+			
+			<p/>
+			
+			<p:fieldset id="searchIndexFieldset" legend="#{msg['search.index.maintenance']}" toggleable="true" collapsed="true">	
+				
+				<p>
+					#{msg['comment.search.label']}
+					<i class="pi pi-question-circle w3-large" jsf:id="helpCommentSearch"/>
+					<p:overlayPanel for="helpCommentSearch" style="width:500px;">
+			    		#{msg['search.data.help.text']}
+			    	</p:overlayPanel>
+				</p>
+				
+				<h:form id="commentIndexForm">
+					
+					<p:commandButton value="#{msg['reindex.search.data']}" icon="pi pi-refresh" id="synchCommentIndexButton" styleClass="ui-button-raised ui-button-flat"
+						action="#{systemMaintenance.synchCommentIndex}" widgetVar="synchCommentIndexVar" update=":commentIndexForm"
+						onclick="$(this).children('span').eq(0).addClass('pi-spin pi-spinner');PF('synchCommentIndexVar').disable();"
+						oncomplete="$(this).children('span').eq(0).removeClass('pi-spin pi-spinner');PF('synchCommentIndexVar').enable();">
+						
+						<p:confirm type="popup" header="#{msg['confirmation']}" message="#{msg['are.you.sure.you.want.to.proceed']}" icon="pi pi-exclamation-triangle"/>
+					</p:commandButton>
+					
+					<h:message for="synchCommentIndexButton" id="synchCommentIndexMessage" styleClass="w3-margin-left w3-pale-green w3-border w3-round w3-padding"/>
+				</h:form>
+				<p:divider/>
+			</p:fieldset>
+		
+		</div>
+		
+		<p:confirmPopup global="true">
+            <p:commandButton value="#{msg['no']}" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+            <p:commandButton value="#{msg['yes']}" type="button" styleClass="ui-confirm-popup-yes" />
+        </p:confirmPopup>
+		
+	</ui:define>
+	
+</ui:composition>

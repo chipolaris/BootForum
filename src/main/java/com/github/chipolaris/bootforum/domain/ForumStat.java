@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +23,7 @@ public class ForumStat extends BaseEntity {
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="ForumStatIdGenerator")
 	private Long id;
 	
-	@OneToOne(fetch=FetchType.EAGER)
+	@OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="LAST_COMMENT_INFO_ID", foreignKey = @ForeignKey(name="FK_FORUM_STAT_LAST_COMMEN"))
 	private CommentInfo lastComment; // info about last comment, used for display
 	

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.CachingConfig;
+import com.github.chipolaris.bootforum.dao.CommentDAO;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.StatDAO;
 import com.github.chipolaris.bootforum.dao.VoteDAO;
@@ -37,6 +38,9 @@ public class StatService {
 	
 	@Resource
 	private GenericDAO genericDAO;
+	
+	@Resource
+	private CommentDAO commentDAO;
 	
 	@Resource
 	private StatDAO statDAO;
@@ -64,49 +68,116 @@ public class StatService {
 		
 		return response;
 	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<Void> synchForumStats() {
 
-	@Transactional(readOnly =  false, propagation=Propagation.MANDATORY)
-	private ForumStat synchForumStat(Forum forum) {
+		ServiceResponse<Void> response = new ServiceResponse<>();
 		
-		for(Discussion discussion : forum.getDiscussions()) {
-			@SuppressWarnings("unused")
-			DiscussionStat discussionStat = synchDiscussionStat(discussion);
+		try(Stream<Forum> forumStream = genericDAO.getEntityStream(Forum.class)) {
+			
+			forumStream.forEach(forum -> {	
+				refreshForumStatFromDB(forum);
+			});
+			
 		}
 		
-		CommentInfo lastComment = statDAO.latestCommentInfo(forum);
-		Long commentCount = statDAO.countComment(forum).longValue();
+		return response;
+	}
+	
+	/**
+	 * 
+	 * @param forum
+	 * @return
+	 */
+	// Note about transaction propagation: 
+	// by default Spring @Transactional has propagation of REQUIRED
+	// Specify it here anyway for clarity as this method will be invoked
+	// with both: 1) an existing transaction (on DiscussionEventListener)
+	// as well as 2) from JSF Backing bean (no transaction exist yet)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public ServiceResponse<ForumStat> synchForumStat(Forum forum) {
+		
+		ServiceResponse<ForumStat> response = new ServiceResponse<>();
+		
+		response.setDataObject(refreshForumStatFromDB(forum));
+		
+		return response;
+	}
+	
+	private ForumStat refreshForumStatFromDB(Forum forum) {
 		
 		ForumStat forumStat = forum.getStat();
-		forumStat.setCommentCount(commentCount);
 		forumStat.setDiscussionCount(forum.getDiscussions().size());
-		forumStat.setLastComment(lastComment);
+		forumStat.setCommentCount(statDAO.countComment(forum).longValue());
+				
+		Comment latestComment = statDAO.latestComment(forum);
+		CommentInfo latestCommentInfo = forumStat.getLastComment();
+		
+		if(latestComment != null) {
+			
+			if(latestCommentInfo == null) {
+				latestCommentInfo = new CommentInfo();
+				genericDAO.persist(latestCommentInfo);
+				forumStat.setLastComment(latestCommentInfo);
+			}
+			
+			copyToCommentInfo(latestComment, latestCommentInfo);
+		}
+		else { // this could happen if the forum has no discussion, therefore no last CommentInfo
+			if(latestCommentInfo != null) {
+				// cleanup forumCommentInfo if it's not null
+				forumStat.setLastComment(null);
+				genericDAO.remove(latestCommentInfo);
+			}
+		}
 		
 		genericDAO.merge(forumStat);
 		
 		return forumStat;
 	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<Void> synchDiscussionStats() {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+		
+		try(Stream<Discussion> discussionStream = genericDAO.getEntityStream(Discussion.class)) {
+			
+			discussionStream.forEach(discussion -> {
+				refreshDiscussionStatFromDB(discussion);
+			});
+		}
+		
+		return response;
+	}
+	
+	// Note about transaction propagation: 
+	// by default Spring @Transactional has propagation of REQUIRED
+	// Specify it here anyway for clarity as this method will be invoked
+	// with both: 1) an existing transaction (on DiscussionEventListener)
+	// as well as 2) from JSF Backing bean (no transaction exist yet)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public ServiceResponse<DiscussionStat> syncDiscussionStat(Discussion discussion) {
+		
+		ServiceResponse<DiscussionStat> response = new ServiceResponse<>();
+		
+		response.setDataObject(refreshDiscussionStatFromDB(discussion));
+		
+		return response;
+	}
 
-	@Transactional(readOnly = false, propagation=Propagation.MANDATORY)
-	private DiscussionStat synchDiscussionStat(Discussion discussion) {
+	private DiscussionStat refreshDiscussionStatFromDB(Discussion discussion) {
 		
 		DiscussionStat discussionStat = discussion.getStat();
 		
 		discussionStat.setCommentCount(statDAO.countComment(discussion).longValue());
+		discussionStat.setFirstCommentors(getFirstCommentors(discussion));
 		
 		Comment lastComment = statDAO.getLatestComment(discussion);
-		
 		CommentInfo commentInfo = discussionStat.getLastComment();
 		
-		commentInfo.setCommentId(lastComment.getId());
-		commentInfo.setTitle(lastComment.getTitle());
-		
-		String contentAbbr = new TextExtractor(new Source(lastComment.getContent())).toString();
-		commentInfo.setContentAbbr(contentAbbr.length() > 100 ? 
-				contentAbbr.substring(0, 97) + "..." : contentAbbr);
-		commentInfo.setCommentDate(lastComment.getCreateDate());
-		commentInfo.setCommentor(lastComment.getCreateBy());
-		
-		discussionStat.setFirstCommentors(getFirstCommentors(discussion));
+		copyToCommentInfo(lastComment, commentInfo);
 		
 		// note: even though discussionStat.lastComment is configured as Cascade.ALL
 		// we still need this explicit merge (save) here because discussionStat
@@ -137,35 +208,37 @@ public class StatService {
 		return firstCommentorMap;
 	}
 	
-	private void setCommentInfo(UserStat userStat, Comment comment) {
+	@Transactional(readOnly = false)
+	public ServiceResponse<Void> synchUserStats() {
+
+		ServiceResponse<Void> response = new ServiceResponse<>();
 		
-		if(comment == null) {
-			userStat.setLastComment(null);
+		try(Stream<User> userStream = genericDAO.getEntityStream(User.class)) {
+			
+			userStream.forEach(user -> {		
+				refreshUserStatFromDB(user.getUsername());
+			});
 		}
-		else {
-			CommentInfo commentInfo = userStat.getLastComment();
-			
-			// create if not currently exist
-			if(commentInfo == null) {
-				commentInfo = new CommentInfo();
-				userStat.setLastComment(commentInfo);
-			}
-			
-			commentInfo.setCommentor(comment.getCreateBy());
-			commentInfo.setCommentId(comment.getId());
-			commentInfo.setCommentDate(comment.getCreateDate());
-			commentInfo.setTitle(comment.getTitle());
-			
-			String contentAbbr = new TextExtractor(new Source(comment.getContent())).toString();
-			commentInfo.setContentAbbr(contentAbbr.length() > 100 ? 
-					contentAbbr.substring(0, 97) + "..." : contentAbbr);
-		}
+		
+		return response;
 	}
 	
-	@Transactional(readOnly =  false)
-	public ServiceResponse<UserStat> synUserStat(String username) {
+	// Note about transaction propagation: 
+	// by default Spring @Transactional has propagation of REQUIRED
+	// Specify it here anyway for clarity as this method will be invoked
+	// with both: 1) an existing transaction (on DiscussionEventListener)
+	// as well as 2) from JSF Backing bean (no transaction exist yet)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public ServiceResponse<UserStat> syncUserStat(String username) {
 		
 		ServiceResponse<UserStat> response = new ServiceResponse<>();
+		
+		response.setDataObject(refreshUserStatFromDB(username));
+		
+		return response;
+	}
+
+	private UserStat refreshUserStatFromDB(String username) {
 		
 		UserStat userStat = statDAO.getUserStat(username);
 		
@@ -175,96 +248,47 @@ public class StatService {
 		userStat.setDiscussionCount(statDAO.countDiscussion(username).longValue());
 		userStat.setReputation(voteDAO.getReputation4User(username).longValue());
 		
-		// latest commentInfo for user
-		setCommentInfo(userStat, statDAO.getLatestComment(username));
+		Comment latestComment = null;
+		List<Comment> comments = commentDAO.getLatestCommentsForUser(username, 1);
+		
+		if(comments.size() > 0) {
+			latestComment = comments.get(0);
+		}
+		
+		CommentInfo latestCommentInfo = userStat.getLastComment();
+		
+		if(latestComment != null) {
+			
+			if(latestCommentInfo == null) {
+				latestCommentInfo = new CommentInfo();
+				userStat.setLastComment(latestCommentInfo);
+				
+				genericDAO.persist(latestCommentInfo);
+			}
+			
+			copyToCommentInfo(latestComment, latestCommentInfo);
+		}
+		else { // this could happen if the forum has no discussion, therefore no last CommentInfo
+			if(latestCommentInfo != null) {
+				// cleanup forumCommentInfo if it's not null
+				userStat.setLastComment(null);
+				genericDAO.remove(latestCommentInfo);
+			}
+		}
 		
 		genericDAO.merge(userStat);
-		
-		response.setDataObject(userStat);
-		
-		return response;
-	}
-	
-	/**
-	 * Note that this method is similar to {@link #synUserStat(String)} 
-	 * is designed to be used internally from within this class  
-	 */
-	@Transactional(readOnly = false, propagation=Propagation.MANDATORY)
-	private UserStat synchUserStat(User user) {
-		
-		UserStat userStat = user.getStat();
-		
-		String username = user.getUsername();
-		
-		userStat.setDiscussionCount(statDAO.countDiscussion(username).longValue());
-		userStat.setCommentCount(statDAO.countComment(username).longValue());
-		userStat.setCommentAttachmentCount(statDAO.countCommentAttachments(username).longValue());
-		userStat.setCommentThumbnailCount(statDAO.countCommentThumbnails(username).longValue());
-		userStat.setReputation(voteDAO.getReputation4User(username).longValue());
-		
-		setCommentInfo(userStat, statDAO.getLatestComment(user.getUsername()));
-		
-		genericDAO.merge(userStat);
-		
 		return userStat;
 	}
-
-	@Transactional(readOnly =  false)
-	public ServiceResponse<Void> synchForumStats() {
-		
-		ServiceResponse<Void> response = new ServiceResponse<>();
-
-		/*
-		 * Note: split up the process to three processes so those can be committed separately 
-		 * and therefore putting less stress on the database
-		 */
-		// Discussions
-		synchDiscussions();
-		
-		// Forums
-		synchForums();
-		
-		// Users
-		synchUsers();		
-		
-		return response;
-	}
-
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	private void synchDiscussions() {
-		logger.warn("Start synchronize discussion stats");
-		try(Stream<Discussion> discussionStream = genericDAO.getEntityStream(Discussion.class)) {
-			
-			discussionStream.forEach(discussion -> {
-				synchDiscussionStat(discussion);
-			});
-		}
-		logger.warn("End synchronize discussion stats");
-	}
-
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	private void synchForums() {
-		logger.warn("Start synchronize forum stats");
-		try(Stream<Forum> forumStream = genericDAO.getEntityStream(Forum.class)) {
-			
-			forumStream.forEach(forum -> {	
-				synchForumStat(forum);
-			});
-			
-		}
-		logger.warn("End synchronize forum stats");
-	}
 	
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	private void synchUsers() {
-		logger.warn("Start synchronize user stats");
-		try(Stream<User> userStream = genericDAO.getEntityStream(User.class)) {
-			
-			userStream.forEach(user -> {		
-				synchUserStat(user);
-			});
-		}
+	private void copyToCommentInfo(Comment comment, CommentInfo commentInfo) {
 		
-		logger.warn("End synchronize user stats");
+		commentInfo.setCommentor(comment.getCreateBy());
+		commentInfo.setCommentId(comment.getId());
+		commentInfo.setCommentDate(comment.getCreateDate());
+		commentInfo.setTitle(comment.getTitle());
+		
+		String contentAbbr = new TextExtractor(new Source(comment.getContent())).toString();
+		commentInfo.setContentAbbr(contentAbbr.length() > 100 ? 
+				contentAbbr.substring(0, 97) + "..." : contentAbbr);
 	}
 }

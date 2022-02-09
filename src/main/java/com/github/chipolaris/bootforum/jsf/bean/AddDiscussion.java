@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
@@ -103,6 +104,7 @@ public class AddDiscussion {
 			}
 
 			this.discussion = new Discussion();
+			this.discussion.setStat(new DiscussionStat());
 			this.discussion.setForum(forum);
 			forum.getDiscussions().add(discussion);
 
