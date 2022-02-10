@@ -139,10 +139,10 @@ public class DiscussionService {
 		lastComment.setCommentId(comment.getId());
 		
 		DiscussionStat discussionStat = discussion.getStat();
-		discussionStat.setFirstCommentors(new HashMap<>());
+		discussionStat.setCommentors(new HashMap<>());
 		discussionStat.setCommentCount(1);
 		discussionStat.setLastComment(lastComment);
-		discussionStat.getFirstCommentors().put(username, 1);
+		discussionStat.getCommentors().put(username, 1);
 		discussionStat.setThumbnailCount(comment.getThumbnails().size());
 		discussionStat.setAttachmentCount(comment.getAttachments().size());
 		

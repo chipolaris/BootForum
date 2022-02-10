@@ -184,7 +184,7 @@
 						<pe:timeAgo value="#{viewDiscussion.discussion.stat.lastComment.commentDate}" titlePattern="MMM dd, yyyy"/>
 					</span>
 					
-					<p:repeat var="username" value="#{viewDiscussion.discussion.stat.firstCommentors.keySet().toArray()}">
+					<p:repeat var="username" value="#{viewDiscussion.discussion.stat.commentors.keySet().toArray()}">
 						<span class="w3-tag w3-white">
 							&#160;<br/>
 							<h:link outcome="memberProfile" style="position: relative"> 
@@ -198,7 +198,7 @@
 								</span>
 								<f:param name="username" value="#{username}"/>
 								<span class="w3-badge w3-theme-dark w3-tiny" style="position:absolute; top: -12px; right:-8px;">
-									<b>#{viewDiscussion.discussion.stat.firstCommentors[username]}</b>
+									<b>#{viewDiscussion.discussion.stat.commentors[username]}</b>
 								</span>
 							</h:link><br/>
 							&#160;

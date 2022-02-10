@@ -52,20 +52,16 @@ public class ViewForum {
 	
 	public void onLoad() {
 		
-		boolean valid = false;
-		
 		if(this.id != null) {
 			
 			this.forum = genericService.findEntity(Forum.class, id).getDataObject();
 			
 			if(forum != null) {
 				this.discussionsLazyModel = new ForumDiscussionsLazyModel(genericService, this.forum);
-				
-				valid = true;
 			}
 		}
 		
-		if(!valid) {
+		if(this.forum == null) {
 			try {
 				FacesContext context = FacesContext.getCurrentInstance();
 				context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Not found");

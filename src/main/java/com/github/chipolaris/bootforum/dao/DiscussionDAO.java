@@ -151,4 +151,13 @@ public class DiscussionDAO {
 		
 		return query.setParameter("forum", forum).setParameter("discussions", discussions).executeUpdate();
 	}
+	
+	public List<String> getCommentors(Discussion discussion) {
+		
+		TypedQuery<String> typedQuery = entityManager.createQuery("SELECT DISTINCT c.createBy FROM Comment c WHERE c.discussion = :discussion"
+				, String.class);
+		typedQuery.setParameter("discussion", discussion);
+		
+		return typedQuery.getResultList();
+	}
 }

@@ -102,9 +102,7 @@
  						
  						<p:ajax event="save" listener="#{viewDiscussion.saveDiscussionTitle}" update="growl discussionTitleInplace" partialSubmit="true"/>
  						<f:facet name="output">
-                			<span class="w3-xlarge">#{viewDiscussion.discussion.title}</span>
-                			<br/>
-                			<span class="w3-tag w3-light-grey w3-text-deep-orange">*Note: you started this discussion, click to edit the discussion title</span>
+                			<span class="w3-xlarge" title="*Note: click to edit the discussion title">#{viewDiscussion.discussion.title} <i class="pi pi-pencil w3-large"/></span>
             			</f:facet>
             			
             			<f:facet name="input">
@@ -153,7 +151,7 @@
 							</span>
 							<f:param name="username" value="#{viewDiscussion.discussion.createBy}"/>
 						</h:link><br/>
-						<pe:timeAgo value="#{viewDiscussion.discussion.createDate}" titlePattern="MMM dd, yyyy"/>
+						<pe:timeAgo value="#{viewDiscussion.discussion.createDate}" titlePattern="MMM dd, yyyy 'at' h:mm:ss a"/>
 					</span>
 					<span class="w3-tag w3-theme-light">
 						#{msg['latest.comment']}<br/>
@@ -169,10 +167,10 @@
 							</span>
 							<f:param name="username" value="#{viewDiscussion.discussion.stat.lastComment.commentor}"/>
 						</h:link><br/>
-						<pe:timeAgo value="#{viewDiscussion.discussion.stat.lastComment.commentDate}" titlePattern="MMM dd, yyyy"/>
+						<pe:timeAgo value="#{viewDiscussion.discussion.stat.lastComment.commentDate}" titlePattern="MMM dd, yyyy 'at' h:mm:ss a"/>
 					</span>
 					 
-					<p:repeat var="username" value="#{viewDiscussion.discussion.stat.firstCommentors.keySet().toArray()}">
+					<p:repeat var="username" value="#{viewDiscussion.discussion.stat.commentors.keySet().toArray()}">
 						<span class="w3-tag w3-white">
 							&#160;<br/>
 							<h:link outcome="memberProfile" style="position: relative"> 
@@ -186,7 +184,7 @@
 								</span>
 								<f:param name="username" value="#{username}"/>
 								<span class="w3-badge w3-theme-dark w3-tiny" style="position:absolute; top: -12px; right:-8px;">
-									<b>#{viewDiscussion.discussion.stat.firstCommentors[username]}</b>
+									<b>#{viewDiscussion.discussion.stat.commentors[username]}</b>
 								</span>
 							</h:link><br/>
 							&#160;
@@ -199,7 +197,7 @@
 						
 						<p:repeat var="tag" value="#{viewDiscussion.discussion.tags}">
 							<h:link outcome="viewTag">
-								<span class="w3-tag w3-padding" style="margin-top:4px;background-color:##{tag.color};">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
+								<span class="w3-tag w3-padding" style="margin-top:4px;background-color:##{tag.color};">#{tag.label} <i class="#{tag.icon} w3-large"/></span>
 								<f:param name="id" value="#{tag.id}"/>
 							</h:link>
 						</p:repeat>
@@ -309,7 +307,7 @@
 						        		</div>
 						        	</div>
 						        
-						        	<div jsf:id="commentIsShownDiv" jsf:rendered="#{!comment.hidden}" >
+						        	<div jsf:id="commentIsShownDiv" jsf:rendered="#{not comment.hidden}" >
 						        	
 							        	<div class="w3-panel w3-round-large w3-padding w3-theme-l4">
 							        		
@@ -349,18 +347,18 @@
 													</p:repeat>
 								    				
 								    			</div>
-								    					    			
+
 								    		</div>
 											
 										</p:fieldset>
 									
 									</div>
 									
-									<div class="w3-right-align" style="margin-top:-15px;">
-					        		
-						        		<h:outputText value="#{comment.createDate}">
-											<f:convertDateTime pattern="MMMM dd, yyyy"/>
-										</h:outputText>				        		
+									<div class="w3-right-align" style="margin-top:-15px;font-size: small;">
+					        			#{msg['created']} <pe:timeAgo value="#{comment.createDate}" titlePattern="MMMM dd, yyyy 'at' h:mm:ss a" style="font-size:small;"/>
+					        			<span jsf:rendered="#{not empty comment.updateDate}">.
+					        				#{msg['edited']} <pe:timeAgo value="#{comment.updateDate}" titlePattern="MMMM dd, yyyy 'at' h:mm:ss a" style="font-size:small;"/>
+					        			</span>			        		
 						        		
 						        		<h:outputText value=" [#{rowIndex + 1}]" style="font-weight:bold;"/>
 					        		</div>    
@@ -375,7 +373,7 @@
 				        				<f:param name="id" value="#{comment.id}"/>
 				    				</p:linkButton>
 				    				
-				    				<p:linkButton outcome="/secure/replyComment" value=" #{msg['quote']}" icon="pi pi-chevron-circle-right" 
+				    				<p:linkButton outcome="/secure/replyComment" value=" #{msg['quote']}" icon="pi pi-code" 
 										styleClass="ui-button-raised ui-button-flat ui-button-help" style="font-weight:bold;margin-left:5px;" rendered="#{not viewDiscussion.discussion.closed}">
 				        				<f:param name="id" value="#{comment.id}"/>
 										<f:param name="quote" value="true"/>
@@ -445,7 +443,7 @@
        						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
    						</p:linkButton>
 			            <h:outputText value="This discussion is closed" rendered="#{viewDiscussion.discussion.closed}" style="font-size:16pt; color:red;"/>
-			       </div>         
+			        </div>         
 
 			    </h:form>
 			    

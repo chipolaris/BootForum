@@ -65,8 +65,6 @@ public class ViewTag {
 	
 	public void onLoad() {
 		
-		boolean valid = false;
-		
 		if(this.id != null) {
 			
 			this.tag = genericService.findEntity(Tag.class, id).getDataObject();
@@ -74,12 +72,10 @@ public class ViewTag {
 			if(tag != null) {
 				this.tagDiscussionsLazyModel = new TagDiscussionsLazyModel(tagService, this.tag);
 				this.commentCount = tagService.countCommentsForTag(tag).getDataObject();
-				
-				valid = true;
 			}
 		}
 		
-		if(!valid) {
+		if(this.tag == null) {
 			try {
 				FacesContext context = FacesContext.getCurrentInstance();
 				context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Not found");

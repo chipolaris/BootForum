@@ -50,11 +50,11 @@ public class DiscussionStat extends BaseEntity {
 	private long attachmentCount;
 	
 	@ElementCollection
-	@CollectionTable(name = "DISC_STAT_FIRST_COMMENTOR", 
+	@CollectionTable(name = "DISC_STAT_COMMENTOR_T", 
 		joinColumns = {@JoinColumn(name = "DISC_STAT_ID")})
 	@MapKeyColumn(name = "COMMENTOR") 
 	@Column(name = "COMMENT_COUNT")
-	private Map<String, Integer> firstCommentors;
+	private Map<String, Integer> commentors;
 
 	@Override
 	public Long getId() {
@@ -117,11 +117,11 @@ public class DiscussionStat extends BaseEntity {
 		this.attachmentCount += number;
 	}
 	
-	public Map<String, Integer> getFirstCommentors() {
-		return this.firstCommentors;
+	public Map<String, Integer> getCommentors() {
+		return this.commentors;
 	}
-	public void setFirstCommentors(Map<String, Integer> commentors) {
-		this.firstCommentors = commentors;
+	public void setCommentors(Map<String, Integer> commentors) {
+		this.commentors = commentors;
 	}
 }
 

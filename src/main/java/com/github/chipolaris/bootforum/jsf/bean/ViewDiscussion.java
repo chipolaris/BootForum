@@ -1,6 +1,10 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.faces.context.FacesContext;
@@ -53,6 +57,15 @@ public class ViewDiscussion {
 		this.discussion = discussion;
 	}
 	
+	private LinkedHashMap<String, Integer> sortedCommentors;
+	
+	public LinkedHashMap<String, Integer> getSortedCommentors() {
+		return sortedCommentors;
+	}
+	public void setSortedCommentors(LinkedHashMap<String, Integer> sortedCommentors) {
+		this.sortedCommentors = sortedCommentors;
+	}
+	
 	private CommentListLazyModel commentListLazyModel;
 	
 	public CommentListLazyModel getCommentListLazyModel() {
@@ -64,24 +77,27 @@ public class ViewDiscussion {
 	
 	public void onLoad() {
 		
-		boolean valid = false;
-		
 		if(this.id != null) {
 					
 			this.discussion = genericService.findEntity(Discussion.class, this.id).getDataObject();
 			
 			if(this.discussion != null) {
 				
+				// https://stackoverflow.com/questions/8119366/sorting-hashmap-by-values
+				
+				this.sortedCommentors =
+						discussion.getStat().getCommentors().entrySet().stream()
+					       .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(20)
+					       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+				
 				this.commentListLazyModel = new CommentListLazyModel(genericService, discussion);			
 				
 				// publish this event so discussionViewEventListener can update the discussion's viewCount
 				applicationEventPublisher.publishEvent(new DiscussionViewEvent(this, discussion));
-				
-				valid = true;
 			}
 		}
 		
-		if(!valid) {
+		if(this.discussion == null) {
 			try {
 				FacesContext context = FacesContext.getCurrentInstance();
 				context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Not found");

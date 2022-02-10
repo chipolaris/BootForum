@@ -1,8 +1,6 @@
 package com.github.chipolaris.bootforum.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import javax.annotation.Resource;
@@ -16,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.CommentDAO;
+import com.github.chipolaris.bootforum.dao.DiscussionDAO;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.StatDAO;
 import com.github.chipolaris.bootforum.dao.VoteDAO;
@@ -41,6 +40,9 @@ public class StatService {
 	
 	@Resource
 	private CommentDAO commentDAO;
+	
+	@Resource
+	private DiscussionDAO discussionDAO;
 	
 	@Resource
 	private StatDAO statDAO;
@@ -172,12 +174,17 @@ public class StatService {
 		DiscussionStat discussionStat = discussion.getStat();
 		
 		discussionStat.setCommentCount(statDAO.countComment(discussion).longValue());
-		discussionStat.setFirstCommentors(getFirstCommentors(discussion));
+		
+		/* refresh commentors map */
+		discussion.getStat().setCommentors(statDAO.getCommentorMap(discussion));
 		
 		Comment lastComment = statDAO.getLatestComment(discussion);
 		CommentInfo commentInfo = discussionStat.getLastComment();
 		
 		copyToCommentInfo(lastComment, commentInfo);
+		
+		discussionStat.setThumbnailCount(statDAO.countThumbnails(discussion).longValue());
+		discussionStat.setAttachmentCount(statDAO.countAttachments(discussion).longValue());
 		
 		// note: even though discussionStat.lastComment is configured as Cascade.ALL
 		// we still need this explicit merge (save) here because discussionStat
@@ -187,25 +194,6 @@ public class StatService {
 		genericDAO.merge(discussionStat);
 		
 		return discussionStat;
-	}
-
-	/**
-	 * Helper method
-	 * @param discussionStat
-	 */
-	private Map<String, Integer> getFirstCommentors(Discussion discussion) {
-
-		Map<String, Integer> firstCommentorMap = new HashMap<>();
-		
-		// get first 10 commentors of the discussion
-		List<String> firstCommentors = statDAO.getFirstCommentors(discussion, 10);
-		
-		// for each commentor, count number of posts in the discussion
-		for(String commentor : firstCommentors) {
-			firstCommentorMap.put(commentor, statDAO.countComment(discussion, commentor).intValue());
-		}
-				
-		return firstCommentorMap;
 	}
 	
 	@Transactional(readOnly = false)

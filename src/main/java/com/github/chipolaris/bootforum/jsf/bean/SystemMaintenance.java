@@ -101,7 +101,7 @@ public class SystemMaintenance {
 		
 		statService.synchDiscussionStats();
 		  
-		statService.synchUserStats();
+		//statService.synchUserStats();
 				
 		JSFUtils.addInfoStringMessage("forumStatForm:synchForumStatButton", "Forum statistics synchronization completed");
 	}

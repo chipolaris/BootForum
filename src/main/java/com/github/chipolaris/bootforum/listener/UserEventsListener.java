@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,7 @@ public class UserEventsListener {
 	private CacheManager cacheManager;
 	
 	@EventListener
+	@Async
 	public void handleUserRegistrationEvent(UserRegistrationEvent userRegistrationEvent) {
 		
 		logger.info("Handling UserRegistrationEvent"); 
@@ -45,7 +47,9 @@ public class UserEventsListener {
 		systemStat.addUserCount(1);
 	}
 	
-	@EventListener @Transactional(readOnly = false)
+	@EventListener 
+	@Transactional(readOnly = false)
+	@Async
 	public void handleUserProfileViewEvent(UserProfileViewEvent userProfileViewEvent) {
 		
 		logger.info("Handling UserProfileViewEvent");

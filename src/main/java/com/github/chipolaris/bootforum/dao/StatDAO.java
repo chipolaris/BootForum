@@ -1,7 +1,9 @@
 package com.github.chipolaris.bootforum.dao;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,11 +33,29 @@ public class StatDAO {
 	 * @deprecated This method will not work with SQL Server due to SUM(SIZE()) usage
 	 */
 	@Deprecated
-	public Number countThumbnail(Discussion discussion) {
+	public Number countThumbnail_deprecated(Discussion discussion) {
 		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.thumbnails)), 0) FROM Comment c WHERE c.discussion = :discussion", Number.class);
 		typedQuery.setParameter("discussion", discussion);
 		
 		return typedQuery.getSingleResult();
+	}
+	
+	/**
+	 * This method identical as the method above, using native SQL query to avoid SQL Server issue as noted above
+	 */
+	public Number countThumbnails(Discussion discussion) {
+		
+		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_THUMBNAIL_T CT"
+				+ " LEFT JOIN COMMENT_T C ON CT.COMMENT_ID = C.ID"
+				+ " WHERE C.DISCUSSION_ID = ?1";
+		
+		Query query = entityManager.createNativeQuery(nativeQuery).setParameter(1, discussion.getId());
+		
+		/* 
+		 * Note: the query above returns Long in Postgresql and BigInteger in SQL Server 
+		 * So, the compromise is to downcast to Number first,
+		 */
+		return (Number) query.getSingleResult();
 	}
 	
 	/**
@@ -46,11 +66,29 @@ public class StatDAO {
 	 * @deprecated This method will not work with SQL Server due to SUM(SIZE()) usage
 	 */
 	@Deprecated
-	public Number countAttachment(Discussion discussion) {
+	public Number countAttachment_deprecated(Discussion discussion) {
 		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.discussion = :discussion", Number.class);
 		typedQuery.setParameter("discussion", discussion);
 		
 		return typedQuery.getSingleResult().longValue();
+	}
+	
+	/**
+	 * This method identical as the method above, using native SQL query to avoid SQL Server issue as noted above
+	 */
+	public Number countAttachments(Discussion discussion) {
+		
+		String nativeQuery = "SELECT COUNT(1) FROM COMMENT_ATTACHMENT_T CA"
+				+ " LEFT JOIN COMMENT_T C ON CA.COMMENT_ID = C.ID"
+				+ " WHERE C.DISCUSSION_ID = ?1";
+		
+		Query query = entityManager.createNativeQuery(nativeQuery).setParameter(1, discussion.getId());
+		
+		/* 
+		 * Note: the query above returns Long in Postgresql and BigInteger in SQL Server 
+		 * So, the compromise is to downcast to Number first
+		 */
+		return (Number) query.getSingleResult();
 	}
 	
 	public Number countComment(Forum forum) {
@@ -210,12 +248,13 @@ public class StatDAO {
 	}	
 	
 	/**
-	 * 
+	 *  @deprecated: this method does not work with SQL Server due to SUM(SIZE()) call
 	 * @param username
 	 * @return
 	 * 
-	 * @deprecated: this method does not work with SQL Server due to SUM(SIZE()) call
+	 *
 	 */
+	@Deprecated
 	public Number countCommentAttachments_Deprecated(String username) {
 		
 		TypedQuery<Number> typedQuery = entityManager.createQuery("SELECT COALESCE(SUM(SIZE(c.attachments)), 0) FROM Comment c WHERE c.createBy = :createBy", Number.class);
@@ -281,6 +320,7 @@ public class StatDAO {
 	}
 
 	/**
+	 * Not used, keep here for reference
 	 * Get first maxResult distinct createBy (commentor) on the given discussion
 	 * @param discussion
 	 * @param maxResult
@@ -293,5 +333,23 @@ public class StatDAO {
 		typedQuery.setParameter("discussion", discussion);
 		
 		return typedQuery.setMaxResults(maxResult).getResultList();
+	}
+	
+	public Map<String, Integer> getCommentorMap(Discussion discussion) {
+		
+		Map<String, Integer> commentors = new HashMap<>();
+		
+		Query query = entityManager.createQuery("SELECT c.createBy, count(c) FROM Comment c WHERE c.discussion = :discussion"
+				+ " GROUP BY c.createBy");
+		query.setParameter("discussion", discussion);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			commentors.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return commentors;
 	}
 }
