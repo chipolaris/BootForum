@@ -374,7 +374,7 @@
 				        <!-- discussion info -->
 						<div class="w3-card">
 							<header class="w3-container w3-theme-l1 w3-center">
-							  <h4>#{msg['discussion.info']}</h4>
+							  <h4><i class="pi pi-info-circle w3-large"/> #{msg['discussion.info']}</h4>
 							</header>
 							
 							<div class="w3-container w3-small">
@@ -417,21 +417,24 @@
 								</p>
 								
 								<p>
-									#{msg['comments']}: <b>#{viewDiscussion.discussion.stat.commentCount}</b>
+									<i class="pi pi-comments"/> #{msg['comments']}: <b>#{viewDiscussion.discussion.stat.commentCount}</b>
 								</p>
 								
 								<p>
-									#{msg['thumbnails']}: <b>#{viewDiscussion.discussion.stat.thumbnailCount}</b>
+									<i class="pi pi-image"/> #{msg['thumbnails']}: <b>#{viewDiscussion.discussion.stat.thumbnailCount}</b>
 								</p>
 								
 								<p>
-									#{msg['attachments']}: <b>#{viewDiscussion.discussion.stat.attachmentCount}</b>
+									<i class="pi pi-paperclip"/> #{msg['attachments']}: <b>#{viewDiscussion.discussion.stat.attachmentCount}</b>
 								</p>
 																
 								<p>
-									#{msg['views']}: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
+									<i class="pi pi-eye"/> #{msg['views']}: <b>#{viewDiscussion.discussion.stat.viewCount}</b>
 								</p>
 								
+								<p>
+									<i class="pi pi-users"/> #{msg['total.participants']}: <b>#{fn:length(viewDiscussion.discussion.stat.commentors)}</b>
+								</p>
 							</div>
 						</div>
 						
@@ -440,7 +443,7 @@
 						<!-- participants -->
 						<div class="w3-card">
 							<header class="w3-container w3-theme-l1 w3-center">
-							  <h4>#{msg['participants']} (#{fn:length(viewDiscussion.discussion.stat.commentors)})</h4>
+							  <h4><i class="pi pi-users w3-large"/> #{msg['top.participants']}</h4>
 							</header>
 							
 							<div class="w3-container w3-small">
@@ -473,7 +476,7 @@
 						
 						<div class="w3-card" jsf:rendered="#{not empty viewDiscussion.discussion.tags}">
 							<header class="w3-container w3-theme-l1 w3-center">
-							  <h4>#{msg['discussion.tags']}</h4>
+							  <h4><i class="pi pi-tags w3-large"/> #{msg['discussion.tags']}</h4>
 							</header>
 							<br/>
 							<div class="w3-container w3-small">	
