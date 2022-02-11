@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
+import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Tag;
@@ -88,6 +89,20 @@ public class DiscussionDAO {
 		 * So, the compromise is to downcast to Number first, then return longValue
 		 */
 		return (Number) query.getSingleResult();
+	}
+	
+	public CommentInfo getLatestCommentInfo(Tag tag) {
+		
+		String queryStr = "SELECT d.stat.lastComment FROM Discussion d WHERE :tag MEMBER OF d.tags"
+				+ " ORDER BY d.stat.lastComment.createDate DESC";
+		
+		TypedQuery<CommentInfo> typedQuery = entityManager.createQuery(queryStr, CommentInfo.class);
+		
+		typedQuery.setParameter("tag", tag);
+		
+		List<CommentInfo> resultList = typedQuery.setMaxResults(1).getResultList(); 
+		
+		return resultList.isEmpty() ? null : resultList.get(0); 
 	}
 	
 	public Number countDiscusionsForTag(Tag tag) {

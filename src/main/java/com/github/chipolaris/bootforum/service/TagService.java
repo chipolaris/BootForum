@@ -13,6 +13,7 @@ import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.DiscussionDAO;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.SortSpec;
+import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Tag;
 
@@ -93,6 +94,15 @@ public class TagService {
 		ServiceResponse<Long> response = new ServiceResponse<>();
 		
 		response.setDataObject(discussionDAO.countDiscusionsForTag(tag).longValue());
+		
+		return response;
+	}
+	
+	public ServiceResponse<CommentInfo> getLatestCommentInfo(Tag tag) {
+		
+		ServiceResponse<CommentInfo> response = new ServiceResponse<>();
+		
+		response.setDataObject(discussionDAO.getLatestCommentInfo(tag));
 		
 		return response;
 	}

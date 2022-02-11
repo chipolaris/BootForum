@@ -138,16 +138,16 @@
 					             					<p:commandLink update=":userDetailsForm:userStatOutputPanel" action="#{userStatManager.loadUserStat(comment.createBy)}" 
 														oncomplete="PF('userStatOverlayPanel').show('#{component.clientId}')">
 					               						
-					               						<div class="w3-display-container" style="width:65px">
+					               						<div class="w3-display-container" style="width:50px">
 					               						
 						               						<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
-																id="commentorAvatar" height="65" width="65" style="float:left;" 
+																id="commentorAvatar" height="50" width="50" style="float:left;" 
 																title="click to view #{comment.createBy} profile"
 																rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
 															
 															<span jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" class="w3-circle avatarSpan"
 																title="#{comment.createBy}"
-							  									style="display:inline-block;font-size:1.7rem;line-height:65px;width:65px;text-align:center;text-transform: uppercase;color:white;">
+							  									style="display:inline-block;font-size:1.7rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;color:white;">
 							  									#{fn:substring(comment.createBy, 0, 3)}
 							  								</span>
 															
@@ -161,12 +161,12 @@
 												</td>
 												
 												<td>
-													<h:outputText value="#{comment.title} " style="font-size:1.5rem;" styleClass="w3-opacity-min" 
-											        	title="[by #{comment.createBy} on #{comment.createDate}. Last edited on #{comment.updateDate}]"/>
+													<h:outputText value="#{comment.title} " style="font-size:1.3rem;" styleClass="w3-opacity-min"/>
 												    
 												    <p:commandLink rendered="#{not empty comment.replyTo}" 
 												    	onclick="$('#replyTo_#{rowIndex}_Div').toggle(300); return false;">
-												    	<i class="pi pi-arrow-right"/>
+												    	<br/>
+												    	<i class="pi pi-reply"/>
 												    	<span>@#{comment.replyTo.createBy}: </span>
 												    	<h:outputText value=" #{comment.replyTo.title}" style="font-weight:bold;font-style:italic;" />
 												    </p:commandLink>
@@ -181,11 +181,11 @@
 								        		<p/>
 								        	
 								        		<h:graphicImage value="#{requestContext}/avatar/#{comment.replyTo.createBy}" class="w3-circle"
-													height="50" width="50" title="#{comment.replyTo.createBy}" rendered="#{fileHandler.isAvatarExists(comment.replyTo.createBy)}"/>
+													height="36" width="36" title="#{comment.replyTo.createBy}" rendered="#{fileHandler.isAvatarExists(comment.replyTo.createBy)}"/>
 													
 												<span jsf:rendered="#{!fileHandler.isAvatarExists(comment.replyTo.createBy)}" class="w3-circle avatarSpan"
 													title="#{comment.replyTo.createBy}"
-													style="display:inline-block;font-size:1.2rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;color:white;">
+													style="display:inline-block;font-size:1.1rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
 													#{fn:substring(comment.replyTo.createBy, 0, 3)}
 												</span>
 													
@@ -227,7 +227,7 @@
 								        
 								        	<div jsf:id="commentIsShownDiv" jsf:rendered="#{not comment.hidden}" >
 								        	
-									        	<div class="w3-panel w3-round-large w3-padding w3-theme-l4">
+									        	<div class="w3-panel w3-round-large w3-padding w3-theme-l5">
 									        		
 									        		<h:outputText value="#{comment.content}" escape="false"/>
 												</div>
@@ -273,9 +273,9 @@
 											</div>
 											
 											<div class="w3-right-align" style="margin-top:-15px;font-size: small;">
-							        			#{msg['created']} <pe:timeAgo value="#{comment.createDate}" titlePattern="MMMM dd, yyyy, h:mm:ss a" style="font-size:small;"/>
+							        			#{msg['created']} <pe:timeAgo value="#{comment.createDate}" titlePattern="MMMM dd, yyyy 'at' h:mm:ss a" style="font-size:small;"/>
 							        			<span jsf:rendered="#{not empty comment.updateDate}">.
-							        				#{msg['edited']} <pe:timeAgo value="#{comment.updateDate}" titlePattern="MMMM dd, yyyy, h:mm:ss a" style="font-size:small;"/>
+							        				#{msg['edited']} <pe:timeAgo value="#{comment.updateDate}" titlePattern="MMMM dd, yyyy 'at' h:mm:ss a" style="font-size:small;"/>
 							        			</span>			        		
 								        		
 								        		<h:outputText value=" [#{rowIndex + 1}]" style="font-weight:bold;"/>

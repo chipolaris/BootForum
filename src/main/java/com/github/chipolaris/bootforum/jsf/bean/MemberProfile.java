@@ -1,8 +1,11 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,19 +68,32 @@ public class MemberProfile {
 	
 	public void onLoad() {
 		
-		ServiceResponse<User> userResponse = userService.getUserByUsername(username);
+		if(this.username != null) {
 		
-		if(userResponse.getAckCode() != AckCodeType.FAILURE) {
-			this.user = userResponse.getDataObject();
+			ServiceResponse<User> userResponse = userService.getUserByUsername(username);
+			
+			if(userResponse.getAckCode() != AckCodeType.FAILURE) {
+				this.user = userResponse.getDataObject();
+				applicationEventPublisher.publishEvent(new UserProfileViewEvent(this, user));
+			}
+			
+			ServiceResponse<List<Comment>> latestCommentResponse = commentService.getLatestCommentsForUser(username, LATEST_COMMENT_MAX_RESULT);
+			
+			if(userResponse.getAckCode() != AckCodeType.FAILURE) {
+				this.latestComments = latestCommentResponse.getDataObject();
+			}
 		}
 		
-		ServiceResponse<List<Comment>> latestCommentResponse = commentService.getLatestCommentsForUser(username, LATEST_COMMENT_MAX_RESULT);
-		
-		if(userResponse.getAckCode() != AckCodeType.FAILURE) {
-			this.latestComments = latestCommentResponse.getDataObject();
+		if(this.user == null) {
+			try {
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
+				context.responseComplete();
+			} 
+			catch (IOException e) {
+				logger.error("Unable to set response 404 on username: " + this.username + ". Error: " + e);
+			}			
 		}
-		
-		applicationEventPublisher.publishEvent(new UserProfileViewEvent(this, user));
 	}
 	
 }

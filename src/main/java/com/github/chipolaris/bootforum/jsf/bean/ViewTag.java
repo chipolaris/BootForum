@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.TagService;
@@ -63,6 +64,15 @@ public class ViewTag {
 		this.commentCount = commentCount;
 	}
 	
+	private CommentInfo latestComment;
+	
+	public CommentInfo getLatestComment() {
+		return latestComment;
+	}
+	public void setLatestComment(CommentInfo latestComment) {
+		this.latestComment = latestComment;
+	}
+	
 	public void onLoad() {
 		
 		if(this.id != null) {
@@ -72,6 +82,7 @@ public class ViewTag {
 			if(tag != null) {
 				this.tagDiscussionsLazyModel = new TagDiscussionsLazyModel(tagService, this.tag);
 				this.commentCount = tagService.countCommentsForTag(tag).getDataObject();
+				this.latestComment = tagService.getLatestCommentInfo(this.tag).getDataObject();
 			}
 		}
 		

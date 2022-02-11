@@ -243,8 +243,7 @@
 										</td>
 										
 										<td>
-											<h:outputText value="#{comment.title} " style="font-size:1.5rem;" styleClass="w3-opacity-min" 
-									        	title="[by #{comment.createBy} on #{comment.createDate}. Last edited on #{comment.updateDate}]"/>
+											<h:outputText value="#{comment.title} " style="font-size:1.5rem;" styleClass="w3-opacity-min"/>
 										    
 										    <p:commandLink rendered="#{not empty comment.replyTo}" 
 										    	onclick="$('#replyTo_#{rowIndex}_Div').toggle(300); return false;">

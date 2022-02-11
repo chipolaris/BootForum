@@ -11,7 +11,7 @@
     template="/WEB-INF/template/layout_public.xhtml">
 	
 	<ui:define name="title">
-		View Forum
+		View Tag
 	</ui:define>
 	
 	<ui:define name="content">
@@ -107,7 +107,7 @@
 							
 							<p:repeat var="tag" value="#{discussion.tags}">
 								<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
-									<span class="w3-tag" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
+									<span class="w3-tag" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} w3-large"/></span>
 								</h:outputLink>
 							</p:repeat>
 						</p:column>
