@@ -135,7 +135,7 @@ public class AddDiscussion {
 			// publish DiscussionAddEvent for listeners to process
 			applicationEventPublisher.publishEvent(new DiscussionAddEvent(this, this.discussion, userSession.getUser()));
 			
-			return "/viewDiscussion?faces-redirect=true&id=" + discussion.getId();
+			return "/discussion?faces-redirect=true&id=" + discussion.getId();
 		}
 		else {
 		

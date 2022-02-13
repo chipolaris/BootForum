@@ -744,25 +744,31 @@ public class IndexService {
 		IndexSearcher indexSearcher = null;	
 		
 		try {
-			indexSearcher = discussionSearcherManager.acquire();
 			
-			Query titleQuery = new QueryParser("title", discussionAnalyzer).parse(discussion.getTitle());
-			Query isClosedQuery = new QueryParser("closed", discussionAnalyzer).parse(String.valueOf(Boolean.TRUE));
-					
-			String tagSearchString = "none";
+			indexSearcher = discussionSearcherManager.acquire();
+
+			BoostQuery boostTagQuery = null;
+			
+			String tagSearchString = "";
 			for(Tag tag : discussion.getTags()) {
 				tagSearchString += tag.getLabel() + " ";
 			}
-			Query tagQuery = new QueryParser("tag", discussionAnalyzer).parse(tagSearchString);
+			
+			if(!"".equals(tagSearchString)) {
+				Query tagQuery = new QueryParser("tag", discussionAnalyzer).parse(tagSearchString);
+			
+				// tag match will get scoring boost of 0.35
+				boostTagQuery = new BoostQuery(tagQuery, 0.35f);
+			}
+			
+			Query titleQuery = new QueryParser("title", discussionAnalyzer).parse(discussion.getTitle());
+			Query notClosedQuery = new QueryParser("closed", discussionAnalyzer).parse(String.valueOf(Boolean.FALSE));
 						
-			// title match will get scoring boost of 0.50
-			BoostQuery boostTitleQuery = new BoostQuery(titleQuery, 0.50f);
+			// title match will get scoring boost of 0.50 if tag is available, otherwise, it would get .85
+			BoostQuery boostTitleQuery = new BoostQuery(titleQuery, boostTagQuery != null ? 0.50f : 0.85f);
 			
-			// closed match will get scoring boost of 0.15
-			BoostQuery boostClosedQuery = new BoostQuery(isClosedQuery, 0.15f);
-			
-			// tag match will get scoring boost of 0.35
-			BoostQuery boostTagQuery = new BoostQuery(tagQuery, 0.35f);
+			// not closed match will get scoring boost of 0.15
+			BoostQuery boostNotClosedQuery = new BoostQuery(notClosedQuery, 0.15f);
 			
 			/*
 			 * Give a small boost (0.001f) to the "MoreRecent" feature based on "Id" attribute of the comment record.
@@ -777,11 +783,14 @@ public class IndexService {
 			 * For a BooleanQuery with no MUST clauses one or more SHOULD clauses must match 
 			 * a document for the BooleanQuery to match.
 			 */
-			Query matchedQuery = new BooleanQuery.Builder()
-					.add(boostTitleQuery, Occur.SHOULD)
-					.add(boostClosedQuery, Occur.SHOULD)
-					.add(boostTagQuery, Occur.SHOULD)
-					.build();
+			BooleanQuery.Builder builder = new BooleanQuery.Builder();
+			builder.add(boostTitleQuery, Occur.MUST).add(boostNotClosedQuery, Occur.SHOULD);
+			
+			if(boostTagQuery != null) {
+				builder.add(boostTagQuery, Occur.SHOULD);
+			}
+			
+			Query matchedQuery = builder.build();
 			
 			/*
 			 * Combine the matchedQuery with the boostedQuery

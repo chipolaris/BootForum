@@ -27,7 +27,7 @@
 
 					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 98vw;">
 					
-						<header class="w3-container w3-padding-16 w3-theme-dark w3-center">
+						<header class="w3-container w3-padding-16 w3-center">
 							<span class="w3-xlarge"><i class="pi pi-lock w3-xlarge"/> #{msg['login.to']} <h:outputLink value="#{request.contextPath}" style="color:inherit">#{msg['application.title']}</h:outputLink></span>
 						</header>
 
@@ -61,7 +61,7 @@
 					
 					    <div class="w3-container w3-border-top w3-padding-16 w3-theme-light">
 					      	<span class="w3-left">#{msg['no.account']}? <a href="#" onclick="toggleMiddleDivs('registerDiv'); return false;">#{msg['register']}</a></span>
-					      	<span class="w3-right">#{msg['forgot.password']}? <a href="#" onclick="toggleMiddleDivs('passwordResetDiv'); return false;">#{msg['reset']}</a></span>
+					      	<span class="w3-right">#{msg['forgot.password']} <a href="#" onclick="toggleMiddleDivs('passwordResetDiv'); return false;">#{msg['reset']}</a></span>
 					    </div>
 			
 			 		</div>
@@ -73,7 +73,7 @@
 					
 					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 98vw;">
 				
-						<header class="w3-container w3-padding w3-theme-dark w3-center">
+						<header class="w3-container w3-padding w3-center">
 							<span class="w3-xlarge"><i class="pi pi-book w3-xlarge"/> #{msg['register.account']}</span>
 						</header>
 						
@@ -182,7 +182,7 @@
 				<div id="passwordResetDiv" class="w3-display-middle" style="display:none">
 					<div class="w3-card-4 w3-white w3-animate-zoom" style="width:500px;max-width: 98vw;">
 					
-						<header class="w3-container w3-padding w3-theme-dark w3-center">
+						<header class="w3-container w3-padding w3-center">
 							<span class="w3-xlarge"><i class="pi pi-lock-open w3-xlarge"/> #{msg['reset.your.password']}</span>
 						</header>
 	

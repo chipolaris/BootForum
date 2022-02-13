@@ -108,7 +108,7 @@
 						<p:commandButton value="#{msg['save.and.go.to.discussion']}" ajax="true" icon="pi pi-check" 
 							action="#{editComment.submit(false)}" styleClass="w3-btn w3-theme-dark w3-border-0" style="margin-left:3px;"/>
 
-						<p:linkButton outcome="/viewDiscussion" value="#{msg['cancel']}" icon="pi pi-times" styleClass="w3-btn w3-theme-dark w3-border-0" style="margin-left:3px;">
+						<p:linkButton outcome="/discussion" value="#{msg['cancel']}" icon="pi pi-times" styleClass="w3-btn w3-theme-dark w3-border-0" style="margin-left:3px;">
 							<f:param name="id" value="#{editComment.comment.discussion.id}"/>
 						</p:linkButton>
 							

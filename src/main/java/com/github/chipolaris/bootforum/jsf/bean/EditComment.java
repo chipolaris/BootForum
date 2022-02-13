@@ -114,7 +114,7 @@ public class EditComment {
 				return null;
 			}
 			
-			return "/viewDiscussion?faces-redirect=true&id=" + this.comment.getDiscussion().getId(); 
+			return "/discussion?faces-redirect=true&id=" + this.comment.getDiscussion().getId(); 
 		}
 	}
 	

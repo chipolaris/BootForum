@@ -4,6 +4,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     template="/WEB-INF/template/layout_public.xhtml">
@@ -62,112 +63,169 @@
   						<p:menuitem value="#{msg['search.comments']}" url="#{request.requestURI}" />
 				</p:breadCrumb>
 			</div>
-		
-			<div>
-				<p:messages id="messages" showDetail="true" showSummary="false">
-					<p:autoUpdate/>
-				</p:messages>
+
+			<div class="w3-padding-16 w3-theme-d3 w3-center" style="margin: 16px -16px;">
+				<h3>#{msg['search.comments']}</h3>
 			</div>
+
+
+			<div class="w3-row">
+		
+				<div class="w3-col l9 m12 s12 w3-container">
 			
-			<div jsf:id="searchFormDiv" >
-				
-				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h3>#{msg['search.comments']}</h3>
- 				</div>
-			
-				<h:form id="searchForm">
+					<div jsf:id="searchFormDiv">
 					
-					<div class="w3-row" style="width: 500px;margin: auto;">
+						<h:form id="searchForm">
+							
+							<div class="w3-row" style="width: 500px;margin: auto;">
+								
+								<div class="w3-col w3-margin-top">
+									<p:inputText value="#{searchComment.keywords}" placeholder="Enter keywords" styleClass="w3-block" id="keywords"/>
+								</div>
+								
+								<div class="w3-col w3-margin-top w3-margin-bottom">
+									<!-- Note: since this search page is AJAX submitted/refreshed, make sure to clear the resultTable, so the display between
+										searches is displayed properly: use the paginator.setPage(0) on the onclick event
+										ref: https://stackoverflow.com/questions/18441847/primefaces-datatable-reset-pagination -->
+									<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xe908; #{msg['search']}"
+										style="font-family:Arial, PrimeIcons;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
+										onclick="PF('searchResultDatatable').getPaginator().setPage(0);" update=":searchResultDiv"
+										oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());changeAvatarBackgrounds();"/>
+								</div>
+							</div>
 						
-						<div class="w3-col w3-margin-top">
-							<p:inputText value="#{searchComment.keywords}" placeholder="Enter keywords" styleClass="w3-block" id="keywords"/>
-						</div>
+						</h:form>
+					
+					</div>
+
+					<div jsf:id="searchResultDiv">
 						
-						<div class="w3-col w3-margin-top w3-margin-bottom">
-							<!-- Note: since this search page is AJAX submitted/refreshed, make sure to clear the resultTable, so the display between
-								searches is displayed properly: use the paginator.setPage(0) on the onclick event
-								ref: https://stackoverflow.com/questions/18441847/primefaces-datatable-reset-pagination -->
-							<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xe908; #{msg['search']}"
-								style="font-family:Arial, PrimeIcons;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
-								onclick="PF('searchResultDatatable').getPaginator().setPage(0);" update=":searchResultDiv"
-								oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());changeAvatarBackgrounds();"/>
+						<div jsf:rendered="#{not empty searchComment.keywords}">
+							
+							<!-- note: paginator position can be top/bottom/both (default) -->
+							<p:dataTable value="#{searchComment.commentSearchLazyModel}" var="comment" id="results" emptyMessage="#{msg['no.records.found']}"
+									widgetVar="searchResultDatatable" style="margin: 0 auto;" styleClass="borderless"
+							        paginator="true" rows="#{applicationProperties['Lucene.search.pageSize']}" lazy="true" paginatorPosition="both"
+							        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+							        type="none" rendered="#{not empty searchComment.commentSearchLazyModel}">
+		
+								<p:ajax event="rowToggle" oncomplete="$('.commentContent').mark($('#searchForm\\:keywords').val());"/>
+								<p:ajax event="page" oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());changeAvatarBackgrounds();"/>
+		
+							  	<f:facet name="header">
+			           				 <h4 class="w3-opacity-min">#{msg['found']} #{searchComment.commentSearchLazyModel.rowCount} #{msg['comments.for']} '#{searchComment.keywords}'</h4>
+			        			</f:facet>
+			 
+			 					<p:column style="width:40px;">
+			 					
+			 						<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
+										height="40" width="40" style="border:3px;margin-right:15px;" 
+										title="#{comment.createBy}" rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
+		
+									<span jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" class="w3-circle avatarSpan"
+										title="#{comment.createBy}"
+										style="display:inline-block;font-size:1.2rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;">
+										#{fn:substring(comment.createBy, 0, 3)}
+									</span>
+									
+								</p:column>
+			
+								<p:column style="text-align:left">
+									<f:facet name="header">
+										<h:outputText value="#{msg['comment']}"/>
+									</f:facet>
+						            
+						            <span class="commentTitle">#{comment.title}</span>
+						            
+						            <p:rowToggler />
+						            
+						      	</p:column>
+			
+			 					<p:column style="text-align:left">
+									<f:facet name="header">
+										<h:outputText value="#{msg['discussion']}"/>
+									</f:facet>
+									<h:link value="#{searchComment.getDiscussion(comment.discussion.id).title}" outcome="discussion" 
+										styleClass="w3-text-theme" style="font-weight:bold;">
+										<f:param name="id" value="#{comment.discussion.id}" />
+									</h:link>
+								</p:column>
+								
+								<p:column style="text-align:right; width:220px;">
+									<f:facet name="header">
+										<h:outputText value="#{msg['posted.on']}"/>
+									</f:facet>
+									<h:outputText value="#{comment.createDate}"/>					
+								</p:column>
+								
+								<p:rowExpansion>
+									<div class="w3-panel w3-round-large w3-padding w3-theme-light">
+										<h:outputText value="#{comment.content}" escape="false" styleClass="commentContent"/>
+									</div>
+								</p:rowExpansion>
+							  	
+							 </p:dataTable>
 						</div>
 					</div>
-				
-				</h:form>
-			
-			</div>
-
-			<div jsf:id="searchResultDiv">
-				
-				<div jsf:rendered="#{not empty searchComment.keywords}">
-				
-					<hr style="border: 1px dashed; opacity: 0.25"/>
 					
-					<!-- note: paginator position can be top/bottom/both (default) -->
-					<p:dataTable value="#{searchComment.commentSearchLazyModel}" var="comment" id="results" emptyMessage="#{msg['no.records.found']}"
-							widgetVar="searchResultDatatable" style="margin: 0 auto;" styleClass="borderless"
-					        paginator="true" rows="#{applicationProperties['Lucene.search.pageSize']}" lazy="true" paginatorPosition="both"
-					        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
-					        type="none" rendered="#{not empty searchComment.commentSearchLazyModel}">
-
-						<p:ajax event="rowToggle" oncomplete="$('.commentContent').mark($('#searchForm\\:keywords').val());"/>
-						<p:ajax event="page" oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());changeAvatarBackgrounds();"/>
-
-					  	<f:facet name="header">
-	           				 <h4 class="w3-opacity-min">#{msg['found']} #{searchComment.commentSearchLazyModel.rowCount} #{msg['comments.for']} '#{searchComment.keywords}'</h4>
-	        			</f:facet>
-	 
-	 					<p:column width="50px;">
-	 					
-	 						<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
-								height="50" width="50" style="border:3px;margin-right:15px;" 
-								title="#{comment.createBy}" rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
-
-							<span jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" class="w3-circle avatarSpan"
-								title="#{comment.createBy}"
-								style="display:inline-block;font-size:1.2rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;color:white;">
-								#{fn:substring(comment.createBy, 0, 3)}
-							</span>
-							
-						</p:column>
-	
-						<p:column style="text-align:left">
-							<f:facet name="header">
-								<h:outputText value="#{msg['comment']}"/>
-							</f:facet>
-				            
-				            <span class="commentTitle">#{comment.title}</span>
-				            
-				            <p:rowToggler />
-				            
-				      	</p:column>
-	
-	 					<p:column style="text-align:left">
-							<f:facet name="header">
-								<h:outputText value="#{msg['discussion']}"/>
-							</f:facet>
-							<h:link value="#{searchComment.getDiscussion(comment.discussion.id).title}" outcome="viewDiscussion" 
-								styleClass="w3-text-theme" style="font-weight:bold;">
-								<f:param name="id" value="#{comment.discussion.id}" />
-							</h:link>
-						</p:column>
-						
-						<p:column style="text-align:right;">
-							<f:facet name="header">
-								<h:outputText value="#{msg['posted.on']}"/>
-							</f:facet>
-							<h:outputText value="#{comment.createDate}"/>					
-						</p:column>
-						
-						<p:rowExpansion>
-							<div class="w3-panel w3-border w3-round-large w3-padding" style="background-color: lightgray;">
-								<h:outputText value="#{comment.content}" escape="false" styleClass="commentContent"/>
-							</div>
-						</p:rowExpansion>
-					  	
-					 </p:dataTable>
 				</div>
+				
+			    <div class="w3-col l3 m12 s12 w3-container" id="infoDiv" style="position: -webkit-sticky; /* Safari */; position: sticky; top: 70px;">					
+					
+					<div class="w3-card w3-cursive" style="margin: 20px 0 16px 0;">
+						<header class="w3-container w3-center">
+						  <h4>#{msg['forum.info']}</h4>
+						</header>
+						
+						<div class="w3-container w3-small">
+						
+							<p>
+								#{msg['forums']}: <b>#{systemInfo.statistics.forumCount}</b>
+							</p>
+							
+							<p>
+								#{msg['discussions']}: <b>#{systemInfo.statistics.discussionCount}</b>
+							</p>
+						
+							<p>
+								#{msg['comments']}: <b>#{systemInfo.statistics.commentCount}</b>
+							</p>							
+						
+							<p>
+								#{msg['latest.comments']}:
+								<h:link outcome="commentThread"> 
+									<b>#{systemInfo.statistics.lastComment.commentor}</b>
+									<f:param name="id" value="#{systemInfo.statistics.lastComment.commentId}"/>
+								</h:link>
+								- <pe:timeAgo value="#{systemInfo.statistics.lastComment.commentDate}" styleClass="w3-small"/>
+							</p>
+							
+							<p>
+								#{msg['members']}: <b>#{systemInfo.statistics.userCount}</b>
+							</p>
+						
+							<p>
+								#{msg['latest.member']}:
+								<h:link outcome="memberProfile"> 
+									<b>#{systemInfo.statistics.lastRegisteredUser}</b>
+									<f:param name="username" value="#{systemInfo.statistics.lastRegisteredUser}"/>
+								</h:link> 
+								- <pe:timeAgo value="#{systemInfo.statistics.lastUserRegisteredDate}" styleClass="w3-small"/>
+							</p>
+						
+							<p>
+								#{msg['logged.on.members']}: <b>#{fn:length(systemInfo.loggedOnUsers)}</b>
+							</p>
+							
+							<p>
+								#{msg['anonymous.users']}: <b>#{systemInfo.sessionCount - fn:length(systemInfo.loggedOnUsers)}</b>
+							</p>
+						</div>
+
+					</div>
+					
+				</div>
+				
 			</div>
 
 		</div>

@@ -130,7 +130,11 @@
 							<p>
 								<b>#{msg['posted']} <pe:timeAgo value="#{comment.createDate}"/>:&#160;</b>
 								<h:outputLink value="commentThread.xhtml?id=#{comment.id}"><span><b>'#{comment.title}'</b></span></h:outputLink>
-								#{msg['in.discussion']} <h:outputLink value="viewDiscussion.xhtml?id=#{comment.discussion.id}"><span class="w3-large">#{comment.discussion.title}</span></h:outputLink>
+								#{msg['in.discussion']} 
+								<h:link outcome="discussion">
+									<span class="w3-large">#{comment.discussion.title}</span>
+									<f:param name="id" value="#{discussion.id}"/>
+								</h:link>
 	 						</p>
 							
 							<p>

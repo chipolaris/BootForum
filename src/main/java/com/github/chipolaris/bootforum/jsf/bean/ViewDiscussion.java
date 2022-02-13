@@ -1,7 +1,9 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.event.DiscussionUpdateEvent;
 import com.github.chipolaris.bootforum.event.DiscussionViewEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
@@ -143,6 +146,8 @@ public class ViewDiscussion {
 		
 		if(serviceResponse.getAckCode() == AckCodeType.SUCCESS) {
 			JSFUtils.addInfoStringMessage(null, JSFUtils.getMessageBundle().getString("discussion.title.updated"));
+			
+			applicationEventPublisher.publishEvent(new DiscussionUpdateEvent(this, this.discussion));
 		}
 		else {
 			JSFUtils.addErrorStringMessage(null, JSFUtils.getMessageBundle().getString("unable.to.save.discussion.title"));
@@ -163,12 +168,27 @@ public class ViewDiscussion {
 		logger.warn("fetchSimilarDiscussions invoked");
 		
 		if(suggestedDiscussions == null) {
+						
+			// earch Lucene index for similar discussions
 			List<Discussion> discussionsSearchResult =
 				indexService.searchSimilarDiscussions(
-					this.discussion, 0, MAX_SIMILAR_DISCUSSIONS).getDataObject().getDiscussions();
+					this.discussion, 0, MAX_SIMILAR_DISCUSSIONS + 1).getDataObject().getDiscussions();
 			
-			// fetch actual data from db
-			this.suggestedDiscussions = discussionService.fetchDiscussions(discussionsSearchResult).getDataObject();
+			// since Lucene result might include the current discussion, filter it out
+			for(Iterator<Discussion> iter = discussionsSearchResult.iterator(); iter.hasNext(); ) {
+				Discussion disc = iter.next();
+				if(disc.getId().equals(this.discussion.getId())) {
+					iter.remove();
+				}
+			}
+			
+			if(!discussionsSearchResult.isEmpty()) {
+				// fetch actual data from db
+				this.suggestedDiscussions = discussionService.fetchDiscussions(discussionsSearchResult).getDataObject();
+			}
+			else {
+				this.suggestedDiscussions = new ArrayList<>();
+			}
 		}
 	}
 }

@@ -46,7 +46,7 @@ public class BreadCrumbBuilder {
 		
 		MenuModel model = buildBreadCrumbModel(discussion.getForum());
 		
-		DefaultMenuItem discussionItem = DefaultMenuItem.builder().value(discussion.getTitle()).outcome("/viewDiscussion")
+		DefaultMenuItem discussionItem = DefaultMenuItem.builder().value(discussion.getTitle()).outcome("/discussion")
 				.params(Collections.singletonMap("id", Arrays.asList(discussion.getId().toString()))).build();
 		
 		model.getElements().add(discussionItem);
@@ -71,7 +71,7 @@ public class BreadCrumbBuilder {
 			
 			while(forumGroup != null) {
 				
-				DefaultMenuItem forumGroupItem = DefaultMenuItem.builder().value(forumGroup.getTitle()).outcome("/viewForumGroup")
+				DefaultMenuItem forumGroupItem = DefaultMenuItem.builder().value(forumGroup.getTitle()).outcome("/forumGroup")
 						.params(Collections.singletonMap("id", Arrays.asList(forumGroup.getId().toString()))).build();
 				menuItems.add(0, forumGroupItem);
 				
@@ -84,7 +84,7 @@ public class BreadCrumbBuilder {
 				model.getElements().add(iter.next());
 			}
 			
-			DefaultMenuItem forumItem = DefaultMenuItem.builder().value(forum.getTitle()).outcome("/viewForum")
+			DefaultMenuItem forumItem = DefaultMenuItem.builder().value(forum.getTitle()).outcome("/forum")
 					.params(Collections.singletonMap("id", Arrays.asList(forum.getId().toString()))).build();
 			model.getElements().add(forumItem);
 		}

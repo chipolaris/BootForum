@@ -19,6 +19,7 @@ import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
 import com.github.chipolaris.bootforum.event.DiscussionMovedEvent;
+import com.github.chipolaris.bootforum.event.DiscussionUpdateEvent;
 import com.github.chipolaris.bootforum.jsf.converter.EntityConverter;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
@@ -118,6 +119,8 @@ public class ModerateDiscussion {
 			for(Tag tag : discussion.getTags()) {
 				cacheManager.getCache(CachingConfig.DISCCUSIONS_FOR_TAG).evict(tag.getId());
 			}
+			
+			applicationEventPublisher.publishEvent(new DiscussionUpdateEvent(this, this.discussion));
 		}
 		else {
 			JSFUtils.addServiceErrorMessage(response);
@@ -131,6 +134,8 @@ public class ModerateDiscussion {
 		if(response.getAckCode() != AckCodeType.FAILURE) {
 			
 			JSFUtils.addInfoStringMessage(null, "Discussion Updated");
+			
+			applicationEventPublisher.publishEvent(new DiscussionUpdateEvent(this, this.discussion));
 		}
 		else {
 			JSFUtils.addServiceErrorMessage(response);

@@ -50,99 +50,161 @@
 					</p:breadCrumb>
 				</div>
 				
-				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-d3 w3-center" style="margin: 16px -16px;">
  					<h3>#{msg['list.members']}</h3>
  				</div>
- 				
-				<p/>
 				
-				<h:form>
+				<div class="w3-row">
 				
-					<p:dataTable var="user" value="#{listMembers.genericLazyModel}" style="margin: 0 auto;" stripedRows="true" showGridlines="false"
-						widgetVar="membersTableVar" rowIndexVar="rowIndex" paginator="true" filterEvent="enter"
-						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						currentPageReportTemplate="#{msg['showing']} {startRecord}-{endRecord} #{msg['of']} {totalRecords} #{msg['members']}"
-						rows="10" rowsPerPageTemplate="10,20,50" lazy="true" id="membersTable" draggableColumns="true">
+					<div class="w3-col l9 m12 s12 w3-container">				
+				
+						<h:form>
 						
-						<p:ajax event="page" oncomplete="changeAvatarBackgrounds();"/>
-						<p:ajax event="sort" oncomplete="changeAvatarBackgrounds();"/>
-						<p:ajax event="filter" oncomplete="changeAvatarBackgrounds();"/>
-						
-						<p:column sortBy="#{user.username}" filterBy="#{user.username}">
-						
-							<f:facet name="header">
-								<h:outputText value="#{msg['username']}" style="font-weight:bold;"/>
-							</f:facet>
-							
-							<span>
-								<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(user.username)}" class="w3-circle"
-									id="commentorAvatar" height="40" width="40" style="border:3px;margin-right:15px;" title="#{user.username}"/> -->
-								<h:graphicImage value="#{requestContext}/avatar/#{user.username}" class="w3-circle"
-									id="commentorAvatar" height="36" width="36" style="border:3px;" title="#{user.username}"
-									rendered="#{fileHandler.isAvatarExists(user.username)}"/>
-										
-								<span jsf:rendered="#{!fileHandler.isAvatarExists(user.username)}" class="w3-circle avatarSpan" title="#{user.username}"
-  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
-  									#{fn:substring(user.username, 0, 3)}
-  								</span>													
+							<p:dataTable var="user" value="#{listMembers.genericLazyModel}" style="margin: 0 auto;" stripedRows="true" showGridlines="false"
+								widgetVar="membersTableVar" rowIndexVar="rowIndex" paginator="true" filterEvent="enter"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="#{msg['showing']} {startRecord}-{endRecord} #{msg['of']} {totalRecords} #{msg['members']}"
+								rows="10" rowsPerPageTemplate="10,20,50" lazy="true" id="membersTable" draggableColumns="true">
 								
-						        <h:link outcome="memberProfile">
-									<span style="margin-left:5px;" title="View '#{user.username}' profile"><b>#{user.username}</b></span>
-									<f:param name="username" value="#{user.username}"/>
-								</h:link> 								
-
-								<!-- if logged in, show the send private message link -->
-								<sec:authorize ifNotGranted="ROLE_ANONYMOUS">								
-									<h:link outcome="/secure/privateMessages">
-										[<i class="pi pi-send w3-small" title="Send private message to '#{user.username}'"></i>]
-										<f:param name="viewTab" value="newTab"/>
-										<f:param name="to" value="#{user.username}"/>
+								<p:ajax event="page" oncomplete="changeAvatarBackgrounds();"/>
+								<p:ajax event="sort" oncomplete="changeAvatarBackgrounds();"/>
+								<p:ajax event="filter" oncomplete="changeAvatarBackgrounds();"/>
+								
+								<p:column sortBy="#{user.username}" filterBy="#{user.username}">
+								
+									<f:facet name="header">
+										<h:outputText value="#{msg['username']}" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<span>
+										<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(user.username)}" class="w3-circle"
+											id="commentorAvatar" height="40" width="40" style="border:3px;margin-right:15px;" title="#{user.username}"/> -->
+										<h:graphicImage value="#{requestContext}/avatar/#{user.username}" class="w3-circle"
+											id="commentorAvatar" height="36" width="36" style="border:3px;" title="#{user.username}"
+											rendered="#{fileHandler.isAvatarExists(user.username)}"/>
+												
+										<span jsf:rendered="#{!fileHandler.isAvatarExists(user.username)}" class="w3-circle avatarSpan" title="#{user.username}"
+		  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+		  									#{fn:substring(user.username, 0, 3)}
+		  								</span>													
+										
+								        <h:link outcome="memberProfile">
+											<span style="margin-left:5px;" title="View '#{user.username}' profile"><b>#{user.username}</b></span>
+											<f:param name="username" value="#{user.username}"/>
+										</h:link> 								
+		
+										<!-- if logged in, show the send private message link -->
+										<sec:authorize ifNotGranted="ROLE_ANONYMOUS">								
+											<h:link outcome="/secure/privateMessages">
+												[<i class="pi pi-send w3-small" title="Send private message to '#{user.username}'"></i>]
+												<f:param name="viewTab" value="newTab"/>
+												<f:param name="to" value="#{user.username}"/>
+											</h:link>
+										</sec:authorize>								
+									</span>
+								</p:column>
+								
+								<p:column sortBy="#{user.stat.discussionCount}" style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="#{msg['discussions.created']}" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<span><b>#{user.stat.discussionCount}</b></span>
+									
+								</p:column>
+		
+								<p:column sortBy="#{user.stat.commentCount}" style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="#{msg['comments']}" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<span><b>#{user.stat.commentCount}</b></span>
+									
+								</p:column>
+								
+								<!-- Note: since user.stat.lastComment is nullable, it's tricky to sort, so leave the sorting off this column for now  -->
+								<p:column style="text-align:center;">
+									<f:facet name="header">
+										<h:outputText value="#{msg['latest.comments']}" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<span jsf:rendered="#{not empty user.stat.lastComment}"><pe:timeAgo value="#{user.stat.lastComment.commentDate}"/></span>
+									<span jsf:rendered="#{empty user.stat.lastComment}">#{msg['none']}</span>
+								</p:column>
+		
+								<p:column sortBy="#{user.createDate}" style="text-align:right;">
+									<f:facet name="header">
+										<h:outputText value="#{msg['joined.date']}" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<h:outputText value="#{user.createDate}">
+										<f:convertDateTime pattern="MMMM dd, yyyy"/>
+									</h:outputText>
+								</p:column>
+							
+							</p:dataTable>
+		
+					    </h:form>
+			    
+			    	</div>
+			    	
+				    <div class="w3-col l3 m12 s12 w3-container" id="infoDiv" style="position: -webkit-sticky; /* Safari */; position: sticky; top: 70px;">					
+						
+						<div class="w3-card w3-cursive" style="margin: 70px 0 16px 0;">
+							<header class="w3-container w3-center">
+							  <h4>#{msg['forum.info']}</h4>
+							</header>
+							
+							<div class="w3-container w3-small">
+							
+								<p>
+									#{msg['forums']}: <b>#{systemInfo.statistics.forumCount}</b>
+								</p>
+								
+								<p>
+									#{msg['discussions']}: <b>#{systemInfo.statistics.discussionCount}</b>
+								</p>
+							
+								<p>
+									#{msg['comments']}: <b>#{systemInfo.statistics.commentCount}</b>
+								</p>							
+							
+								<p>
+									#{msg['latest.comments']}:
+									<h:link outcome="commentThread"> 
+										<b>#{systemInfo.statistics.lastComment.commentor}</b>
+										<f:param name="id" value="#{systemInfo.statistics.lastComment.commentId}"/>
 									</h:link>
-								</sec:authorize>								
-							</span>
-						</p:column>
+									- <pe:timeAgo value="#{systemInfo.statistics.lastComment.commentDate}" styleClass="w3-small"/>
+								</p>
+								
+								<p>
+									#{msg['members']}: <b>#{systemInfo.statistics.userCount}</b>
+								</p>
+							
+								<p>
+									#{msg['latest.member']}:
+									<h:link outcome="memberProfile"> 
+										<b>#{systemInfo.statistics.lastRegisteredUser}</b>
+										<f:param name="username" value="#{systemInfo.statistics.lastRegisteredUser}"/>
+									</h:link> 
+									- <pe:timeAgo value="#{systemInfo.statistics.lastUserRegisteredDate}" styleClass="w3-small"/>
+								</p>
+							
+								<p>
+									#{msg['logged.on.members']}: <b>#{fn:length(systemInfo.loggedOnUsers)}</b>
+								</p>
+								
+								<p>
+									#{msg['anonymous.users']}: <b>#{systemInfo.sessionCount - fn:length(systemInfo.loggedOnUsers)}</b>
+								</p>
+							</div>
+	
+						</div>
 						
-						<p:column sortBy="#{user.stat.discussionCount}" style="text-align:center;">
-							<f:facet name="header">
-								<h:outputText value="#{msg['discussions.created']}" style="font-weight:bold;"/>
-							</f:facet>
-							
-							<span><b>#{user.stat.discussionCount}</b></span>
-							
-						</p:column>
-
-						<p:column sortBy="#{user.stat.commentCount}" style="text-align:center;">
-							<f:facet name="header">
-								<h:outputText value="#{msg['comments']}" style="font-weight:bold;"/>
-							</f:facet>
-							
-							<span><b>#{user.stat.commentCount}</b></span>
-							
-						</p:column>
-						
-						<!-- Note: since user.stat.lastComment is nullable, it's tricky to sort, so leave the sorting off this column for now  -->
-						<p:column style="text-align:center;">
-							<f:facet name="header">
-								<h:outputText value="#{msg['latest.comments']}" style="font-weight:bold;"/>
-							</f:facet>
-							
-							<span jsf:rendered="#{not empty user.stat.lastComment}"><pe:timeAgo value="#{user.stat.lastComment.commentDate}"/></span>
-							<span jsf:rendered="#{empty user.stat.lastComment}">#{msg['none']}</span>
-						</p:column>
-
-						<p:column sortBy="#{user.createDate}" style="text-align:right;">
-							<f:facet name="header">
-								<h:outputText value="#{msg['joined.date']}" style="font-weight:bold;"/>
-							</f:facet>
-							
-							<h:outputText value="#{user.createDate}">
-								<f:convertDateTime pattern="MMMM dd, yyyy"/>
-							</h:outputText>
-						</p:column>
-					
-					</p:dataTable>
-
-			    </h:form>
+					</div>
+			    
+				</div>
 			    
 			    <p/>
 			    

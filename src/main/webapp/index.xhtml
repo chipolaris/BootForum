@@ -22,8 +22,8 @@
 	
 		<div class="w3-panel w3-card-4 w3-white">
 			
-			<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 0 -16px;">
- 				<h2>#{msg['welcome.to.forum']}</h2>
+			<div class="w3-padding-16 w3-theme-d3 w3-center" style="margin: 0 -16px;">
+ 				<h3>#{msg['welcome.to.forum']}</h3>
  			</div>
 			
 			<div class="w3-large w3-margin-top">
@@ -41,7 +41,7 @@
 						</div>
 						<p:repeat var="discussion" value="#{homePage.mostRecentDiscussions}">
 							<p>
-								<h:link outcome="viewDiscussion">
+								<h:link outcome="discussion">
 									<f:param name="id" value="#{discussion.id}"/>
 									<b>#{discussion.title}</b>
 								</h:link>
@@ -52,7 +52,7 @@
 								</h:link>
 								- <pe:timeAgo value="#{discussion.createDate}"/>
 								<p:repeat var="tag" value="#{discussion.tags}">
-									<h:link outcome="viewTag">
+									<h:link outcome="tag">
 										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="pi pi-tag"/> #{tag.label}</span>
 										<f:param name="id" value="#{tag.id}"/>
 									</h:link>
@@ -75,7 +75,7 @@
 					
 						<p:repeat var="discussion" value="#{homePage.mostViewsDiscussions}">
 							<p>
-								<h:link outcome="viewDiscussion">
+								<h:link outcome="discussion">
 									<f:param name="id" value="#{discussion.id}"/>
 									<b>#{discussion.title}</b>
 								</h:link>
@@ -87,7 +87,7 @@
 								</h:link> 
 								- <pe:timeAgo value="#{discussion.createDate}"/>
 								<p:repeat var="tag" value="#{discussion.tags}">
-									<h:link outcome="viewTag">
+									<h:link outcome="tag">
 										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="pi pi-tag"/> #{tag.label}</span>
 										<f:param name="id" value="#{tag.id}"/>
 									</h:link>
@@ -111,7 +111,7 @@
 					
 						<p:repeat var="discussion" value="#{homePage.mostCommentsDiscussions}">
 							<p>
-								<h:link outcome="viewDiscussion">
+								<h:link outcome="discussion">
 									<f:param name="id" value="#{discussion.id}"/>
 									<b>#{discussion.title}</b>
 								</h:link>
@@ -123,7 +123,7 @@
 								</h:link>						
 								- <pe:timeAgo value="#{discussion.createDate}"/>
 								<p:repeat var="tag" value="#{discussion.tags}">
-									<h:link outcome="viewTag">
+									<h:link outcome="tag">
 										<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="pi pi-tag"/> #{tag.label}</span>
 										<f:param name="id" value="#{tag.id}"/>
 									</h:link>
@@ -148,7 +148,7 @@
 								</div>
 								<p:repeat var="discussion" value="#{tag.discussions}">
 									<p>
-										<h:link outcome="viewDiscussion">
+										<h:link outcome="discussion">
 											<f:param name="id" value="#{discussion.id}"/>
 											<b>#{discussion.title}</b>
 										</h:link>
@@ -161,7 +161,7 @@
 									</p>
 								</p:repeat>
 								
-								<h:link outcome="viewTag">
+								<h:link outcome="tag">
 									#{msg['view.more']} #{tag.label}...
 									<f:param name="id" value="#{tag.id}"/>
 								</h:link>
@@ -179,7 +179,7 @@
 					
 					<div class="w3-card">
 						<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-							<header class="w3-container w3-theme-l1 w3-center">
+							<header class="w3-container w3-center">
 						  		<h4>#{msg['welcome']} <b>#{userSession.user.username}</b></h4>
 							</header>
 							<div class="w3-container">
@@ -210,7 +210,7 @@
 						</sec:authorize>
 						<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
 							
-							<header class="w3-container w3-theme-l1 w3-center">
+							<header class="w3-container w3-center">
 						  		<h4>#{msg['login']}</h4>
 							</header>
 			    			
@@ -241,13 +241,13 @@
 					<p/>
 					
 					<div class="w3-card">
-						<header class="w3-container w3-theme-l1 w3-center">
+						<header class="w3-container w3-center">
 						  <h4>#{msg['discussion.tags']}</h4>
 						</header>
 						
 						<div class="w3-container w3-padding-small">
 							<p:repeat var="tag" value="#{homePage.allTags}">
-								<h:link outcome="viewTag">
+								<h:link outcome="tag">
 									<span class="w3-tag" style="font-weight:bold;color:##{tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;margin-top:8px;"><i class="pi pi-tag"/> #{tag.label}</span>
 									<f:param name="id" value="#{tag.id}"/>
 								</h:link>
@@ -258,8 +258,8 @@
 					
 					<p/>
 					
-					<div class="w3-card">
-						<header class="w3-container w3-theme-l1 w3-center">
+					<div class="w3-card w3-cursive">
+						<header class="w3-container w3-center">
 						  <h4>#{msg['forum.info']}</h4>
 						</header>
 						

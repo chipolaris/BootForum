@@ -75,7 +75,7 @@
 										<h:outputText value="#{msg['discussion.title']}" style="font-weight:bold;"/>
 									</f:facet>
 									
-									<h:link outcome="viewDiscussion">
+									<h:link outcome="discussion">
 										<span class="w3-large"><b>#{discussion.title}</b></span>
 										<f:param name="id" value="#{discussion.id}"/>
 									</h:link>
@@ -154,8 +154,8 @@
 					<div class="w3-col l3 m12 s12 w3-container" id="infoDiv" style="position: -webkit-sticky; /* Safari */; position: sticky; top: 70px;">
 
 						<!-- tag info -->
-						<div class="w3-card" style="margin: 65px 0 16px 0;">
-							<header class="w3-container w3-theme-d3 w3-center">
+						<div class="w3-card w3-cursive" style="margin: 65px 0 16px 0;">
+							<header class="w3-container w3-center">
 								
 							  <h4>
 							  	<span class="w3-tag" style="font-weight:bold;color:##{viewTag.tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="pi pi-tag"/> #{viewTag.tag.label}</span>

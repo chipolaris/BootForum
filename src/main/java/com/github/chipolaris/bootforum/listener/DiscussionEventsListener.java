@@ -23,6 +23,7 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
 import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
 import com.github.chipolaris.bootforum.event.DiscussionMovedEvent;
+import com.github.chipolaris.bootforum.event.DiscussionUpdateEvent;
 import com.github.chipolaris.bootforum.event.DiscussionViewEvent;
 import com.github.chipolaris.bootforum.jsf.bean.ForumMap;
 import com.github.chipolaris.bootforum.service.IndexService;
@@ -86,6 +87,15 @@ public class DiscussionEventsListener {
 		updateStats4NewDiscussion(discussionAddEvent.getDiscussion(), discussionAddEvent.getUser());
 		
 		indexService.addCommentIndex(discussionAddEvent.getDiscussion().getComments().get(0));
+	}
+	
+	@EventListener
+	@Async
+	public void handleDiscussionUpdateEvent(DiscussionUpdateEvent discussionUpdateEvent) {
+		
+		logger.info("Handling DiscussionUpdateEvent");
+		
+		indexService.updateDiscussion(discussionUpdateEvent.getDiscussion());
 	}
 	
 	@EventListener

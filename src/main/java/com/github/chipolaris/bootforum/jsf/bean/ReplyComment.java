@@ -178,7 +178,7 @@ public class ReplyComment {
 			// publish CommentAddEvent for listeners to process		
 			applicationEventPublisher.publishEvent(new CommentAddEvent(this, reply, userSession.getUser()));
 			
-			return "/viewDiscussion?faces-redirect=true&id=" + reply.getDiscussion().getId();
+			return "/discussion?faces-redirect=true&id=" + reply.getDiscussion().getId();
 		}		
 		else {
 			

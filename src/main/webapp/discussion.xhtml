@@ -364,7 +364,7 @@
 						<p:outputPanel id="suggestedDiscussionsPanel">
 						
 							<p:dataTable value="#{viewDiscussion.suggestedDiscussions}" var="suggestedDiscussion" lazy="false" stripedRows="true" 
-								rendered="#{not empty viewDiscussion.suggestedDiscussions}">
+								rendered="#{viewDiscussion.suggestedDiscussions != null}" emptyMessage="#{msg['no.suggested.discussion.found']}">
 								
 								<p:ajax event="sort" oncomplete="changeAvatarBackgrounds();"/>
 								
@@ -470,7 +470,7 @@
 				        
 				        <!-- discussion info -->
 						<div class="w3-card w3-cursive">
-							<header class="w3-container w3-theme-d3 w3-center">
+							<header class="w3-container w3-center">
 							  <h4><i class="pi pi-info-circle w3-large"/> #{msg['discussion.info']}</h4>
 							</header>
 							
@@ -534,10 +534,10 @@
 								</p>
 								
 								<p jsf:rendered="#{not empty viewDiscussion.discussion.tags}">
-									<i class="pi pi-tags w3-large"/> #{msg['discussion.tags']}:
+									<i class="pi pi-tags"/> #{msg['discussion.tags']}:
 									<br/>
 									<p:repeat var="tag" value="#{viewDiscussion.discussion.tags}">
-										<h:link outcome="viewTag">
+										<h:link outcome="tag">
 											<!-- add margin-top for small/medium screen so the tags separated vertically -->
 											<span class="w3-tag w3-padding" style="background-color:##{tag.color};margin-top:4px;">
 												#{tag.label} <i class="#{tag.icon}"/></span>
@@ -552,7 +552,7 @@
 
 						<!-- participants -->
 						<div class="w3-card">
-							<header class="w3-container w3-theme-d3 w3-center">
+							<header class="w3-container w3-center">
 							  <h4><i class="pi pi-users w3-large"/> #{msg['top.participants']}</h4>
 							</header>
 							
@@ -585,11 +585,19 @@
 						<p/>
 						
 						<div>
-							<p:commandButton value="&#xe97e; #{msg['suggested.discussions']}" action="#{viewDiscussion.fetchSuggestedDiscussions}"
-								 widgetVar="suggestedDiscussionsButton" update="suggestedDiscussionsPanel" 
-								 oncomplete="PF('suggestedDiscussionsButton').disable();changeAvatarBackgrounds();window.scrollTo(0,document.body.scrollHeight);"
+							<script>
+								/* JS variable to keep track if suggested discussions has been called or not */ 
+								var suggestedDiscussionLoaded = false;
+							</script>
+							
+							<p:commandButton value="&#xe97e; #{msg['suggested.discussions']}" type="button" 
+								onclick="if(window.suggestedDiscussionLoaded == false) { fetchSuggestedDiscussions(); window.suggestedDiscussionLoaded = true; } else { window.scrollTo(0,document.body.scrollHeight); }"
+								widgetVar="suggestedDiscussionsButton"  
 								ajax="true" styleClass="ui-button-raised ui-button-flat" style="width:100%;font-weight:bold;padding:8px 0;font-family:Arial, primeicons"/>
-							<p/>						
+							<p/>
+							
+							<p:remoteCommand name="fetchSuggestedDiscussions" action="#{viewDiscussion.fetchSuggestedDiscussions}"
+								oncomplete="changeAvatarBackgrounds();window.scrollTo(0,document.body.scrollHeight);" update="suggestedDiscussionsPanel"/>						
 						</div>
 				    
 			    	</div>
