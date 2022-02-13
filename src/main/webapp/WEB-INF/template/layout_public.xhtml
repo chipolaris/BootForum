@@ -43,7 +43,9 @@
         <h:outputStylesheet library="css" name="w3-theme/#{theme_color}.css"/>
         
         <style>
-        
+        	
+        	html {scroll-behavior: smooth;}
+        	
 			html, body, h1, h2, h3, h4, h5 {font-family: Arial, sans-serif}
 			a { text-decoration: none }
 			a:link           { color: #339966 } 
@@ -260,21 +262,30 @@
 							</a>
 						
 							<div jsf:id="searchSuggestionResultDiv">
+								<p:dataList value="#{searchSuggestion.discussions}" var="discussion" rendered="#{not empty searchSuggestion.discussions}">
+									<f:facet name="header">
+							            #{msg['discussions']}:
+							        </f:facet>
+							        <h:link outcome="discussion">
+										<span>#{discussion.id}: #{discussion.title}</span>
+										<f:param name="id" value="#{discussion.id}"/>
+									</h:link>
+								</p:dataList>
 								<p:dataList value="#{searchSuggestion.comments}" var="comment" rendered="#{not empty searchSuggestion.comments}">
 									<f:facet name="header">
 							            #{msg['comments']}:
 							        </f:facet>
-							        <h:outputLink value="commentThread.xhtml">
+							        <h:link outcome="commentThread">
 										<span>#{comment.id}: #{comment.title}</span>
 										<f:param name="id" value="#{comment.id}"/>
-									</h:outputLink>
+									</h:link>
 								</p:dataList>
 								<p:dataList value="#{searchSuggestion.usernames}" var="username" rendered="#{not empty searchSuggestion.usernames}">
 									<f:facet name="header">
 							            #{msg['members']}:
 							        </f:facet>
 							        
-							        <h:outputLink value="memberProfile.xhtml">
+							        <h:link outcome="memberProfile">
 										<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
 											id="commentorAvatar" height="36" width="36"	title="#{username}"
 											rendered="#{fileHandler.isAvatarExists(username)}"/>
@@ -287,7 +298,7 @@
 										#{username}
 										
 										<f:param name="username" value="#{username}"/>
-									</h:outputLink>     
+									</h:link>     
 								</p:dataList>
 							</div>
 							

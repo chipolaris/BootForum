@@ -25,7 +25,6 @@ import com.github.chipolaris.bootforum.service.UserService;
 @Scope("view")
 public class MemberProfile {
 	
-	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(MemberProfile.class);
 	
 	private static final int LATEST_COMMENT_MAX_RESULT = 10;

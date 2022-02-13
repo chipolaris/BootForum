@@ -95,7 +95,7 @@
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(viewDiscussion.discussion)}"/>
 				</div>
 				
-				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-d3 w3-center" style="margin: 16px -16px;">
  					
  					<p:inplace id="discussionTitleInplace" editor="true" rendered="#{userSession.user.username eq viewDiscussion.discussion.createBy and not viewDiscussion.discussion.closed}"
  						saveLabel="#{msg['save']}" cancelLabel="#{msg['cancel']}">
@@ -126,7 +126,7 @@
 						
 							<p:dataView var="comment" value="#{viewDiscussion.commentListLazyModel}" rows="15" paginator="true" lazy="true" rowIndexVar="rowIndex" styleClass="headerless">
 		                    
-		                    	<p:ajax event="page" oncomplete="changeAvatarBackgrounds();"/>
+		                    	<p:ajax event="page" oncomplete="changeAvatarBackgrounds();window.scrollTo(0,0);"/>
 						                            	
 		                    	<p:dataViewListItem>
 		
@@ -357,6 +357,103 @@
 		
 					    </h:form>
 
+						<p/>
+						
+						<!-- Suggested discussions -->
+		
+						<p:outputPanel id="suggestedDiscussionsPanel">
+						
+							<p:dataTable value="#{viewDiscussion.suggestedDiscussions}" var="suggestedDiscussion" lazy="false" stripedRows="true" 
+								rendered="#{not empty viewDiscussion.suggestedDiscussions}">
+								
+								<p:ajax event="sort" oncomplete="changeAvatarBackgrounds();"/>
+								
+								<f:facet name="header">
+            						<center><b><i class="pi pi-comments"/> #{msg['suggested.discussions']}</b></center>
+        						</f:facet>
+        						
+								<p:column sortBy="#{suggestedDiscussion.title}" style="text-align:left;" responsivePriority="1">
+									<f:facet name="header">
+										<h:outputText value="#{msg['discussion.title']}" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<h:link outcome="discussion">
+										#{suggestedDiscussion.title}
+										<f:param name="id" value="#{suggestedDiscussion.id}"/>
+									</h:link>
+									<br/>
+		
+									<h:link outcome="memberProfile">
+										<h:graphicImage value="#{requestContext}/avatar/#{suggestedDiscussion.createBy}" class="w3-circle"
+												id="creatorAvatar" height="30" width="30" title="#{suggestedDiscussion.createBy}"
+												rendered="#{fileHandler.isAvatarExists(suggestedDiscussion.createBy)}"/>
+																		
+										<span jsf:rendered="#{!fileHandler.isAvatarExists(suggestedDiscussion.createBy)}" class="w3-circle avatarSpan"
+											 title="#{suggestedDiscussion.createBy}"
+		  									style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white">
+		  									#{fn:substring(suggestedDiscussion.createBy, 0, 3)}
+		  								</span>									
+										<f:param name="username" value="#{suggestedDiscussion.createBy}"/>
+									</h:link>
+			
+									#{msg['started']} <pe:timeAgo value="#{suggestedDiscussion.createDate}" titlePattern="MMMMM dd yyyy" />
+									
+									<p:repeat var="tag" value="#{suggestedDiscussion.tags}">
+										<h:link outcome="tag">
+											<span class="w3-tag" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
+											<f:param name="id" value="#{tag.id}"/>
+										</h:link>
+									</p:repeat>
+								</p:column>
+								
+								<p:column sortBy="#{suggestedDiscussion.stat.commentCount}" style="text-align:center;width:120px;" responsivePriority="3">
+									<f:facet name="header">
+										<h:outputText value="#{msg['comments']}" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<span><b>#{suggestedDiscussion.stat.commentCount}</b></span>
+									
+								</p:column>
+		
+								<p:column sortBy="#{suggestedDiscussion.stat.viewCount}" style="text-align:center;width:120px;" responsivePriority="4">
+									<f:facet name="header">
+										<h:outputText value="#{msg['views']}" style="font-weight:bold;"/>
+									</f:facet>
+									
+									<span><b>#{suggestedDiscussion.stat.viewCount}</b></span>
+									
+								</p:column>
+		
+								<p:column sortBy="#{suggestedDiscussion.stat.lastComment.commentDate}" style="text-align:right;width:160px;" responsivePriority="2">
+									<f:facet name="header">
+										<h:outputText value="#{msg['latest.comment']}" />
+									</f:facet>
+									
+									<div>
+										<pe:timeAgo value="#{suggestedDiscussion.stat.lastComment.commentDate}" titlePattern="MMMMM dd yyyy" /> #{msg['by']}
+										<h:link outcome="memberProfile">
+											<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(suggestedDiscussion.stat.lastComment.commentor)}" class="w3-circle"
+													id="commentorAvatar" height="30" width="30" style="border:3px;margin-right:15px;" title="#{suggestedDiscussion.stat.lastComment.commentor}"/> -->
+											<h:graphicImage value="#{requestContext}/avatar/#{suggestedDiscussion.stat.lastComment.commentor}" class="w3-circle"
+													id="commentorAvatar" height="30" width="30" title="#{suggestedDiscussion.stat.lastComment.commentor}"
+													rendered="#{fileHandler.isAvatarExists(suggestedDiscussion.stat.lastComment.commentor)}"/>
+																			
+											<span jsf:rendered="#{!fileHandler.isAvatarExists(suggestedDiscussion.stat.lastComment.commentor)}" class="w3-circle avatarSpan"
+												 title="#{suggestedDiscussion.stat.lastComment.commentor}"
+			  									style="display:inline-block;font-size:0.9rem;line-height:30px;width:30px;text-align:center;text-transform: uppercase;color:white">
+			  									#{fn:substring(suggestedDiscussion.stat.lastComment.commentor, 0, 3)}
+			  								</span>									
+											<f:param name="username" value="#{suggestedDiscussion.stat.lastComment.commentor}"/>
+										</h:link>
+									</div>
+								</p:column>
+							
+							</p:dataTable>
+						
+						</p:outputPanel>
+						
+						<p/>
+
 			    	</div>
 			    	
 			    	<div class="w3-col l3 m12 s12 w3-container" id="infoDiv" style="position: -webkit-sticky; /* Safari */; position: sticky; top: 70px;">
@@ -372,8 +469,8 @@
 				        <p/>
 				        
 				        <!-- discussion info -->
-						<div class="w3-card">
-							<header class="w3-container w3-theme-l1 w3-center">
+						<div class="w3-card w3-cursive">
+							<header class="w3-container w3-theme-d3 w3-center">
 							  <h4><i class="pi pi-info-circle w3-large"/> #{msg['discussion.info']}</h4>
 							</header>
 							
@@ -435,6 +532,19 @@
 								<p>
 									<i class="pi pi-users"/> #{msg['total.participants']}: <b>#{fn:length(viewDiscussion.discussion.stat.commentors)}</b>
 								</p>
+								
+								<p jsf:rendered="#{not empty viewDiscussion.discussion.tags}">
+									<i class="pi pi-tags w3-large"/> #{msg['discussion.tags']}:
+									<br/>
+									<p:repeat var="tag" value="#{viewDiscussion.discussion.tags}">
+										<h:link outcome="viewTag">
+											<!-- add margin-top for small/medium screen so the tags separated vertically -->
+											<span class="w3-tag w3-padding" style="background-color:##{tag.color};margin-top:4px;">
+												#{tag.label} <i class="#{tag.icon}"/></span>
+											<f:param name="id" value="#{tag.id}"/>
+										</h:link>
+									</p:repeat>
+								</p>
 							</div>
 						</div>
 						
@@ -442,7 +552,7 @@
 
 						<!-- participants -->
 						<div class="w3-card">
-							<header class="w3-container w3-theme-l1 w3-center">
+							<header class="w3-container w3-theme-d3 w3-center">
 							  <h4><i class="pi pi-users w3-large"/> #{msg['top.participants']}</h4>
 							</header>
 							
@@ -474,23 +584,12 @@
 						
 						<p/>
 						
-						<div class="w3-card" jsf:rendered="#{not empty viewDiscussion.discussion.tags}">
-							<header class="w3-container w3-theme-l1 w3-center">
-							  <h4><i class="pi pi-tags w3-large"/> #{msg['discussion.tags']}</h4>
-							</header>
-							<br/>
-							<div class="w3-container w3-small">	
-								<p:repeat var="tag" value="#{viewDiscussion.discussion.tags}">
-									<h:link outcome="viewTag">
-										<!-- add margin-top for small/medium screen so the tags separated vertically -->
-										<span class="w3-tag w3-padding" style="background-color:##{tag.color};margin-top:4px;">
-											#{tag.label} <i class="#{tag.icon}"/></span>
-										<f:param name="id" value="#{tag.id}"/>
-									</h:link>
-								</p:repeat>					
-							</div>
-							<br/>
-						
+						<div>
+							<p:commandButton value="&#xe97e; #{msg['suggested.discussions']}" action="#{viewDiscussion.fetchSuggestedDiscussions}"
+								 widgetVar="suggestedDiscussionsButton" update="suggestedDiscussionsPanel" 
+								 oncomplete="PF('suggestedDiscussionsButton').disable();changeAvatarBackgrounds();window.scrollTo(0,document.body.scrollHeight);"
+								ajax="true" styleClass="ui-button-raised ui-button-flat" style="width:100%;font-weight:bold;padding:8px 0;font-family:Arial, primeicons"/>
+							<p/>						
 						</div>
 				    
 			    	</div>
@@ -509,10 +608,10 @@
 								<h5>#{msg['member']}: <b>#{userStatManager.username}</b></h5>
 							</f:facet>
 							<f:facet name="footer">
-								<h:outputLink value="memberProfile.xhtml">
+								<h:link outcome="memberProfile">
 									<center><h6>#{msg['view.full.profile']}</h6></center>
 									<f:param name="username" value="#{userStatManager.username}"/>
-								</h:outputLink>   
+								</h:link>   
 							</f:facet>
 	
 			                <h:outputText value="#{msg['joined.date']}: " />

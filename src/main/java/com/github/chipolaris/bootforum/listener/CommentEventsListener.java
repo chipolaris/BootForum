@@ -20,6 +20,8 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.event.CommentAddEvent;
 import com.github.chipolaris.bootforum.event.CommentFileEvent;
+import com.github.chipolaris.bootforum.event.CommentEditEvent;
+import com.github.chipolaris.bootforum.service.IndexService;
 import com.github.chipolaris.bootforum.service.StatService;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
 
@@ -39,6 +41,9 @@ public class CommentEventsListener {
 	
 	@Resource 
 	private CacheManager cacheManager;
+	
+	@Resource
+	private IndexService indexService;
 
 	@EventListener 
 	@Transactional(readOnly=false)
@@ -104,5 +109,17 @@ public class CommentEventsListener {
 		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
 		systemStat.addCommentCount(1);
 		systemStat.setLastComment(discussion.getStat().getLastComment());
+		
+		// Lucene index the comment
+		indexService.addCommentIndex(comment);
+	}
+	
+	@EventListener
+	@Async
+	public void handleCommentUpdateEvent(CommentEditEvent commentEditEvent) {
+		
+		logger.info("Handling commentEditEvent");
+		
+		this.indexService.updateComment(commentEditEvent.getComment());
 	}
 }

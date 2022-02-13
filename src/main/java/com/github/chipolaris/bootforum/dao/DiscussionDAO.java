@@ -175,4 +175,12 @@ public class DiscussionDAO {
 		
 		return typedQuery.getResultList();
 	}
+
+	public List<Discussion> fetch(List<Long> discussionIds) {
+
+		TypedQuery<Discussion> typedQuery = entityManager.createQuery("FROM Discussion d WHERE d.id in :discussionIds", Discussion.class);
+		typedQuery.setParameter("discussionIds", discussionIds);
+		
+		return typedQuery.getResultList();
+	}
 }

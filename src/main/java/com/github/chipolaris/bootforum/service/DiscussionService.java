@@ -52,9 +52,6 @@ public class DiscussionService {
 	private FileService fileService;
 	
 	@Resource
-	private IndexService indexService;
-	
-	@Resource
 	private FileInfoHelper fileInfoHelper;
 
 	/**
@@ -112,9 +109,6 @@ public class DiscussionService {
 		forum.getDiscussions().add(newDiscussion);
 		genericDAO.merge(forum);
 		
-		 // lucene index the first comment
-		indexService.addCommentIndex(comment);
-		
 		response.setDataObject(newDiscussion);
 		
 		return response;
@@ -162,10 +156,6 @@ public class DiscussionService {
 		forum.getStat().setLastComment(null);
 		
 		genericDAO.merge(forum);
-		
-		// delete indexes
-		List<Long> commentIds = commentDAO.getCommentIdsForDiscussion(discussion);
-		indexService.deleteCommentIndexes(commentIds);
 		
 		List<String> attachmentPaths = commentDAO.getAttachmentPathsForDiscussion(discussion);
 		List<String> thumbnailPaths = commentDAO.getThumnailPathsForDiscussion(discussion);
@@ -273,6 +263,21 @@ public class DiscussionService {
 		ServiceResponse<List<String>> response = new ServiceResponse<>();
 		
 		response.setDataObject(commentDAO.getCommentorsForDiscussion(discussion));
+		
+		return response;
+	}
+
+	@Transactional(readOnly = true)
+	public ServiceResponse<List<Discussion>> fetchDiscussions(List<Discussion> discussions) {
+
+		ServiceResponse<List<Discussion>> response = new ServiceResponse<>();
+		
+		List<Long> discussionIds = new ArrayList<>();
+		for(Discussion d : discussions) {
+			discussionIds.add(d.getId());
+		}
+		
+		response.setDataObject(discussionDAO.fetch(discussionIds));
 		
 		return response;
 	}

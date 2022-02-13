@@ -18,8 +18,6 @@ public class SearchComment {
 	
 	private Logger logger = LoggerFactory.getLogger(SearchComment.class);
 	
-	enum CommentSearchOption {BOTH, TITLE, CONTENT}
-	
 	@Resource
 	private IndexService indexService;
 	
@@ -33,15 +31,6 @@ public class SearchComment {
 	}
 	public void setCommentSearchLazyModel(CommentSearchLazyModel commentSearchLazyModel) {
 		this.commentSearchLazyModel = commentSearchLazyModel;
-	}
-
-	private CommentSearchOption searchOption = CommentSearchOption.BOTH;
-	
-	public CommentSearchOption getSearchOption() {
-		return searchOption;
-	}
-	public void setSearchOption(CommentSearchOption searchOption) {
-		this.searchOption = searchOption;
 	}
 	
 	private String keywords;
@@ -58,7 +47,7 @@ public class SearchComment {
 		if(this.keywords != null) {
 			
 			this.commentSearchLazyModel = 
-					new CommentSearchLazyModel(this.indexService, this.keywords, this.searchOption);
+					new CommentSearchLazyModel(this.indexService, this.keywords);
 		}
 	}
 	
@@ -72,7 +61,7 @@ public class SearchComment {
 		}
 		
 		this.commentSearchLazyModel = 
-			new CommentSearchLazyModel(this.indexService, this.keywords, this.searchOption);
+			new CommentSearchLazyModel(this.indexService, this.keywords);
 	}
 	
 	public void viewSelectedComment() {

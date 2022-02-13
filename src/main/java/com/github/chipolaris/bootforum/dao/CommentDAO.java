@@ -27,16 +27,6 @@ public class CommentDAO {
 		return typedQuery.getResultList();
 	}
 	
-	public List<Long> getCommentIdsForDiscussion(Discussion discussion) {
-		
-		String queryStr = "SELECT c.id FROM Comment c WHERE c.discussion = :discussion";
-		
-		TypedQuery<Long> typedQuery = entityManager.createQuery(queryStr, Long.class);
-		typedQuery.setParameter("discussion", discussion);
-		
-		return typedQuery.getResultList();
-	}
-	
 	public List<String> getAttachmentPathsForDiscussion(Discussion discussion) {
 		
 		String queryStr = "SELECT f.path FROM FileInfo f, Comment c WHERE f MEMBER OF c.attachments and c.discussion = :discussion";

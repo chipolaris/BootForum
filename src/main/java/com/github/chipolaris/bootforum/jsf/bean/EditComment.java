@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.FileInfo;
 import com.github.chipolaris.bootforum.event.CommentFileEvent;
+import com.github.chipolaris.bootforum.event.CommentEditEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.CommentService;
@@ -106,6 +107,8 @@ public class EditComment {
 		else {
 			JSFUtils.addInfoStringMessage(null, "Comment updated");
 			this.comment = serviceResponse.getDataObject();
+			
+			this.applicationEventPublisher.publishEvent(new CommentEditEvent(this, comment));
 			
 			if(isContinue) {
 				return null;

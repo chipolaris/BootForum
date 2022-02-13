@@ -1,7 +1,6 @@
 package com.github.chipolaris.bootforum.listener;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,11 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.CachingConfig;
-import com.github.chipolaris.bootforum.dao.CommentDAO;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.StatDAO;
-import com.github.chipolaris.bootforum.domain.Comment;
-import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
@@ -29,11 +25,9 @@ import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
 import com.github.chipolaris.bootforum.event.DiscussionMovedEvent;
 import com.github.chipolaris.bootforum.event.DiscussionViewEvent;
 import com.github.chipolaris.bootforum.jsf.bean.ForumMap;
+import com.github.chipolaris.bootforum.service.IndexService;
 import com.github.chipolaris.bootforum.service.StatService;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
-
-import net.htmlparser.jericho.Source;
-import net.htmlparser.jericho.TextExtractor;
 
 @Component
 public class DiscussionEventsListener {
@@ -47,9 +41,6 @@ public class DiscussionEventsListener {
 	private StatDAO statDAO;
 	
 	@Resource
-	private CommentDAO commentDAO;
-	
-	@Resource
 	private SystemInfoService systemInfoService;
 	
 	@Resource
@@ -60,6 +51,9 @@ public class DiscussionEventsListener {
 	
 	@Resource
 	private ForumMap forumMap;
+	
+	@Resource
+	private IndexService indexService;
 	
 	@EventListener
 	@Transactional(readOnly = false)
@@ -90,6 +84,8 @@ public class DiscussionEventsListener {
 		logger.info("Handling DiscussionAddEvent");
 		
 		updateStats4NewDiscussion(discussionAddEvent.getDiscussion(), discussionAddEvent.getUser());
+		
+		indexService.addCommentIndex(discussionAddEvent.getDiscussion().getComments().get(0));
 	}
 	
 	@EventListener
@@ -100,6 +96,9 @@ public class DiscussionEventsListener {
 		
 		updateStats4DeleteDiscussion(discussionDeleteEvent.getDiscussion(), 
 				discussionDeleteEvent.getCommentors(), discussionDeleteEvent.getDeletedCommentCount());
+		
+		// delete indexes
+		indexService.deleteComments(discussionDeleteEvent.getDiscussion().getId());
 	}
 	
 	@EventListener

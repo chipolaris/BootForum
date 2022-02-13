@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.domain.EmailOption;
 import com.github.chipolaris.bootforum.domain.RegistrationOption;
@@ -113,7 +114,7 @@ public class SystemMaintenance {
 		if(clearCommentIndexResponse.getAckCode() != AckCodeType.SUCCESS) {
 			
 			JSFUtils.addErrorStringMessage("commentIndexForm:synchCommentIndexButton", 
-					"Unable to clear existing comment data to re-index");
+					"Unable to clear existing comment data for re-index");
 		}
 		else {
 			ServiceResponse<Void> indexCommentStreamResponse = 
@@ -124,6 +125,28 @@ public class SystemMaintenance {
 			}
 			else {
 				JSFUtils.addErrorStringMessage("commentIndexForm:synchCommentIndexButton", "Unable to re-index comment data");
+			}			
+		}
+	}
+	
+	public void synchDiscussionIndex() {
+		
+		ServiceResponse<Void> clearDiscussionIndexResponse = indexService.clearDiscussionIndex(true);
+		
+		if(clearDiscussionIndexResponse.getAckCode() != AckCodeType.SUCCESS) {
+			
+			JSFUtils.addErrorStringMessage("discussionIndexForm:synchDiscussionIndexButton", 
+					"Unable to clear existing discussion data for re-index");
+		}
+		else {
+			ServiceResponse<Void> indexDiscussionStreamResponse = 
+					indexService.indexDiscussionStream(genericService.streamEntities(Discussion.class).getDataObject());
+				
+			if(indexDiscussionStreamResponse.getAckCode() == AckCodeType.SUCCESS) {
+				JSFUtils.addInfoStringMessage("discussionIndexForm:synchDiscussionIndexButton", "Discussion data re-indexed");
+			}
+			else {
+				JSFUtils.addErrorStringMessage("discussionIndexForm:synchDiscussionIndexButton", "Unable to re-index discussion data");
 			}			
 		}
 	}

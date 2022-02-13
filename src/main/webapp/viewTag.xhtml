@@ -106,9 +106,10 @@
 							#{msg['started']} <pe:timeAgo value="#{discussion.createDate}" titlePattern="MMMMM dd yyyy" />
 							
 							<p:repeat var="tag" value="#{discussion.tags}">
-								<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
+								<h:link outcome="tag">
 									<span class="w3-tag" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} w3-large"/></span>
-								</h:outputLink>
+									<f:param name="id" value="#{tag.id}"/>
+								</h:link>
 							</p:repeat>
 						</p:column>
 						

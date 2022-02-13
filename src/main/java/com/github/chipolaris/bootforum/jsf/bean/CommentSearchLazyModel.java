@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.chipolaris.bootforum.domain.Comment;
-import com.github.chipolaris.bootforum.jsf.bean.SearchComment.CommentSearchOption;
 import com.github.chipolaris.bootforum.service.IndexService;
 import com.github.chipolaris.bootforum.service.SearchCommentResult;
 
@@ -26,8 +25,6 @@ public class CommentSearchLazyModel extends LazyDataModel<Comment> {
 	private IndexService indexService;
 	
 	private String keywords;
-	private boolean searchTitle;
-	private boolean searchContent;
 	
 	public String getKeywords() {
 		return keywords;
@@ -35,43 +32,12 @@ public class CommentSearchLazyModel extends LazyDataModel<Comment> {
 	public void setKeywords(String keywords) {
 		this.keywords = keywords;
 	}
-	public boolean isSearchTitle() {
-		return searchTitle;
-	}
-	public void setSearchTitle(boolean searchTitle) {
-		this.searchTitle = searchTitle;
-	}
-	public boolean isSearchContent() {
-		return searchContent;
-	}
-	public void setSearchContent(boolean searchContent) {
-		this.searchContent = searchContent;
-	}
 	
-	public CommentSearchLazyModel(IndexService indexService, String keywords, 
-			CommentSearchOption commentSearchOption) {	
+	public CommentSearchLazyModel(IndexService indexService, String keywords) {	
 		
 		logger.debug("CommentSearchLazyModel constructor");
 		
 		this.keywords = keywords;
-		
-		switch(commentSearchOption) {
-			case BOTH:
-				searchTitle = true;
-				searchContent = true;
-				break;
-			case TITLE:
-				searchTitle = true;
-				searchContent = false;
-				break;
-			case CONTENT:
-				searchTitle = false;
-				searchContent = true;
-				break;
-			default:
-				searchTitle = true;
-				searchContent = true;
-		}
 		
 		this.indexService = indexService;
 		// this.searchCommentResult = new SearchCommentResult();
@@ -91,7 +57,7 @@ public class CommentSearchLazyModel extends LazyDataModel<Comment> {
 		logger.info("first is " + first + ", pageSize is " + pageSize);
 		
 		SearchCommentResult searchCommentResult = indexService.searchCommentByKeywords(
-				keywords, searchTitle, searchContent, first, pageSize).getDataObject();
+				keywords, first, pageSize).getDataObject();
 		
 		// see https://github.com/primefaces/primefaces/issues/1921
 		this.setRowCount(searchCommentResult.getTotalHits().intValue());

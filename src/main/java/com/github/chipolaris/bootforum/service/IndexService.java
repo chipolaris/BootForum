@@ -23,6 +23,7 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -48,6 +49,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.util.ZipUtil;
 
 import net.htmlparser.jericho.Source;
@@ -55,6 +57,12 @@ import net.htmlparser.jericho.TextExtractor;
 
 @Service
 public class IndexService {
+
+	private static final String DISCUSSION_DIR = "discussion";
+
+	private static final String COMMENT_DIR = "comment";
+	
+	private static final String INDEX_BACKUP_DIR = "index-backup";
 
 	private static final Logger logger = LoggerFactory.getLogger(IndexService.class);
 	
@@ -64,21 +72,39 @@ public class IndexService {
 	@Value("${Lucene.indexDirectory}")
 	private String indexDirectory;
 	
+	/* comment index */
 	@Value("${Lucene.search.maxResults}")
-	private Integer maxSearchResults;
+	private Integer maxCommentSearchResults;
 	
-	private SearcherManager searcherManager;
+	private SearcherManager commentSearcherManager;
 	
-	private IndexWriter indexWriter;
+	private IndexWriter commentIndexWriter;
 	
-	private StandardAnalyzer analyzer = new StandardAnalyzer();
+	private StandardAnalyzer commentAnalyzer = new StandardAnalyzer();
+	
+	/* discussion index */
+	@Value("${Lucene.search.maxResults}")
+	private Integer maxDiscussionSearchResults;
+	
+	private SearcherManager discussionSearcherManager;
+	
+	private IndexWriter discussionIndexWriter;
+	
+	private StandardAnalyzer discussionAnalyzer = new StandardAnalyzer();
+	
+	/* backup directory path */
+	private Path indexBackupDirPath;
+	
 	
 	@PostConstruct
 	public void init() {
+		
 		logger.info("Initialize IndexService");
 		
 		try {
-			indexWriter = initIndexWriter(OpenMode.CREATE_OR_APPEND);
+			commentIndexWriter = initCommentIndexWriter(OpenMode.CREATE_OR_APPEND);
+			
+			discussionIndexWriter = initDiscussionIndexWriter(OpenMode.CREATE_OR_APPEND);
 			
 			/**
 			 * from the Javadoc of SearcherManager constructor:
@@ -102,11 +128,18 @@ public class IndexService {
 			
 			boolean applyAllDeletes = true;
 			boolean writeAllDeletes = true;
-			searcherManager = new SearcherManager(indexWriter, applyAllDeletes, writeAllDeletes, null);
+			
+			commentSearcherManager = new SearcherManager(commentIndexWriter, applyAllDeletes, writeAllDeletes, null);
+			
+			discussionSearcherManager = new SearcherManager(discussionIndexWriter, applyAllDeletes, writeAllDeletes, null);
 		} 
 		catch (IOException e) {
 			logger.error("Unable to build indexWriter", e);
 		}
+		
+		this.indexBackupDirPath = Paths.get(indexDirectory).getParent().resolve(INDEX_BACKUP_DIR);
+		// create backup directory if it's not already exists
+		indexBackupDirPath.toFile().mkdirs();
 	}
 	
 	// starting a thread to periodically called SearcherManager.maybeRefresh() 
@@ -116,7 +149,8 @@ public class IndexService {
 	@Scheduled(fixedDelayString = "#{ ${Lucene.search.refresh} * 1000 }")
 	private void searchIndexRefresh() {
 		try {
-			searcherManager.maybeRefresh();
+			commentSearcherManager.maybeRefresh();
+			discussionSearcherManager.maybeRefresh();
 		}
 		catch(IOException e) {
 			logger.error("Error calling SearcherManager.maybeRefresh()", e);
@@ -131,11 +165,25 @@ public class IndexService {
 	 * @return
 	 * @throws IOException
 	 */
-	private IndexWriter initIndexWriter(OpenMode openMode) throws IOException {
+	private IndexWriter initCommentIndexWriter(OpenMode openMode) throws IOException {
 		
-		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(commentAnalyzer);
 		indexWriterConfig.setOpenMode(openMode);
-		Directory directory = new NIOFSDirectory(Paths.get(indexDirectory));
+		Directory directory = new NIOFSDirectory(Paths.get(indexDirectory).resolve(COMMENT_DIR));
+		
+		return new IndexWriter(directory, indexWriterConfig);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	private IndexWriter initDiscussionIndexWriter(OpenMode openMode) throws IOException {
+		
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(discussionAnalyzer);
+		indexWriterConfig.setOpenMode(openMode);
+		Directory directory = new NIOFSDirectory(Paths.get(indexDirectory).resolve(DISCUSSION_DIR));
 		
 		return new IndexWriter(directory, indexWriterConfig);
 	}
@@ -155,23 +203,24 @@ public class IndexService {
 			try {
 				
 				/* 1. close existing indexing resources */
-				this.indexWriter.close();
-				logger.info("indexWriter closed");
-				this.searcherManager.close();
-				logger.info("searcherManager closed");
+				this.commentIndexWriter.close();
+				logger.info("commentIndexWriter closed");
+				this.commentSearcherManager.close();
+				logger.info("commentSearcherManager closed");
 							
-				/* 2. backup: zip and save indexDirectory */
-				Path indexDirectoryPath = Paths.get(indexDirectory);
+				/* 2. backup: zip and save comment index directory */
+				Path indexDirectoryPath = Paths.get(indexDirectory, COMMENT_DIR);
 	
 				// get parent directory of indexDirectory, then add timestamp and ".zip" extension
-				Path zipFilePath = indexDirectoryPath.getParent().resolve(indexDirectoryPath.getFileName().toString()
+				Path zipFilePath = this.indexBackupDirPath
+						.resolve(indexDirectoryPath.getFileName().toString()
 						+ DateTimeFormatter.ofPattern("-yyyy.MM.dd.HH.mm.ss").format(LocalDateTime.now()) + ".zip");
 				
 				if(!ZipUtil.zipDirectory(indexDirectoryPath.toFile(), zipFilePath.toFile())) {
 					
 					okToClear = false;
 					
-					String errorMessage = "Unable to backup existing index";
+					String errorMessage = "Unable to backup existing Comment index";
 					response.addMessage(errorMessage);
 					response.setAckCode(AckCodeType.FAILURE);
 				}
@@ -180,27 +229,90 @@ public class IndexService {
 				
 				okToClear = false;
 				
-				String errorMessage = "Unable to re-index comments" + e.toString();
+				String errorMessage = "Unable to clear Comment index" + e.toString();
+				logger.error(errorMessage);
+				response.addMessage(errorMessage);
+				response.setAckCode(AckCodeType.FAILURE);
+			}
+		}
+
+		// finally, make sure to open the re-init index directory, whether the above process fail or not
+		try {
+			// OpenMode.CREATE will clear the index directory, OpenMode.APPEND will use existing directory
+			commentIndexWriter = initCommentIndexWriter(okToClear ? OpenMode.CREATE : OpenMode.APPEND);
+
+			boolean applyAllDeletes = true;
+			boolean writeAllDeletes = true;
+			commentSearcherManager = new SearcherManager(commentIndexWriter, applyAllDeletes, writeAllDeletes, null);
+		} 
+		catch (IOException e) {
+			logger.error("Unable to build commentIndexWriter", e);
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * 
+	 * @param performBackup
+	 * @return
+	 */
+	public ServiceResponse<Void> clearDiscussionIndex(boolean performBackup) {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+		
+		boolean okToClear = true;
+		
+		if(performBackup) {
+			try {
+				
+				/* 1. close existing indexing resources */
+				this.discussionIndexWriter.close();
+				logger.info("discussionIndexWriter closed");
+				this.discussionSearcherManager.close();
+				logger.info("discussionSearcherManager closed");
+							
+				/* 2. backup: zip and save discussion index directory */
+				Path indexDirectoryPath = Paths.get(indexDirectory, DISCUSSION_DIR);
+	
+				// get parent directory of indexDirectory, then add timestamp and ".zip" extension
+				Path zipFilePath = this.indexBackupDirPath
+						.resolve(indexDirectoryPath.getFileName().toString()
+						+ DateTimeFormatter.ofPattern("-yyyy.MM.dd.HH.mm.ss").format(LocalDateTime.now()) + ".zip");
+				
+				if(!ZipUtil.zipDirectory(indexDirectoryPath.toFile(), zipFilePath.toFile())) {
+					
+					okToClear = false;
+					
+					String errorMessage = "Unable to backup existing Discussion index";
+					response.addMessage(errorMessage);
+					response.setAckCode(AckCodeType.FAILURE);
+				}
+			} 
+			catch (IOException e) {
+				
+				okToClear = false;
+				
+				String errorMessage = "Unable to clear Discussion index" + e.toString();
 				logger.error(errorMessage);
 				response.addMessage(errorMessage);
 				response.setAckCode(AckCodeType.FAILURE);
 			}
 		}
 		
-		if(okToClear) {
-			try {
-				// OpenMode.CREATE will clear the index directory
-				indexWriter = initIndexWriter(OpenMode.CREATE);
-	
-				boolean applyAllDeletes = true;
-				boolean writeAllDeletes = true;
-				searcherManager = new SearcherManager(indexWriter, applyAllDeletes, writeAllDeletes, null);
-			} 
-			catch (IOException e) {
-				logger.error("Unable to build indexWriter", e);
-			}
+		// finally, make sure to open the re-init index directory, whether the above process fail or not
+		try {
+			// OpenMode.CREATE will clear the index directory, OpenMode.APPEND will use existing directory
+			discussionIndexWriter = initDiscussionIndexWriter(okToClear ? OpenMode.CREATE : OpenMode.APPEND);
+
+			boolean applyAllDeletes = true;
+			boolean writeAllDeletes = true;
+			discussionSearcherManager = new SearcherManager(discussionIndexWriter, applyAllDeletes, writeAllDeletes, null);
+		} 
+		catch (IOException e) {
+			logger.error("Unable to build discussionIndexWriter", e);
 		}
-		
+
 		return response;
 	}
 	
@@ -218,7 +330,7 @@ public class IndexService {
 				Document document = createCommentDocument(comment);
 				
 				try {
-					indexWriter.addDocument(document);
+					commentIndexWriter.addDocument(document);
 				} 
 				catch (IOException e) {
 					logger.error("Unable to index comment with id: " + comment.getId(), e);
@@ -226,11 +338,44 @@ public class IndexService {
 			});
 			
 			try {
-				indexWriter.commit();
+				commentIndexWriter.commit();
 			} 
 			catch (IOException e) {
 			
-				logger.error("Unable to commit after indexing: ", e);
+				logger.error("Unable to commit comments after indexing: ", e);
+			}
+		}
+				
+		return response;
+	}
+	
+	public ServiceResponse<Void> indexDiscussionStream(Stream<Discussion> discussionStream) {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+		
+		/*
+		 * use try-with-resources to ensure stream is closed after done processing
+		 */
+		try(Stream<Discussion> workingStream = discussionStream) {
+			
+			workingStream.forEach(discussion -> {
+				
+				Document document = createDiscussionDocument(discussion);
+				
+				try {
+					discussionIndexWriter.addDocument(document);
+				} 
+				catch (IOException e) {
+					logger.error("Unable to index discussion with id: " + discussion.getId(), e);
+				}
+			});
+			
+			try {
+				discussionIndexWriter.commit();
+			} 
+			catch (IOException e) {
+			
+				logger.error("Unable to commit discussions after indexing: ", e);
 			}
 		}
 				
@@ -249,8 +394,8 @@ public class IndexService {
 		Document document = createCommentDocument(comment);
 		
 		try {
-			indexWriter.addDocument(document);
-			indexWriter.commit();
+			commentIndexWriter.addDocument(document);
+			commentIndexWriter.commit();
 		} 
 		catch (IOException e) {
 			logger.error("Unable to index comment with id: " + comment.getId(), e);
@@ -265,18 +410,18 @@ public class IndexService {
 	 * @param comment
 	 * @return
 	 */
-	public ServiceResponse<Void> updateCommentIndex(Comment comment) {
+	public ServiceResponse<Void> updateComment(Comment comment) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<Void>();
 		
 		Term term = new Term("id", comment.getId() + "");
 		
 		try {
-			indexWriter.updateDocument(term, createCommentDocument(comment));
-			indexWriter.commit();
+			commentIndexWriter.updateDocument(term, createCommentDocument(comment));
+			commentIndexWriter.commit();
 		} 
 		catch (IOException e) {
-			logger.error("Unable to update comment with id: " + comment.getId(), e);
+			logger.error("Unable to update Comment with id: " + comment.getId(), e);
 			response.setAckCode(AckCodeType.FAILURE);
 		}
 		
@@ -284,45 +429,68 @@ public class IndexService {
 	}
 	
 	/**
-	 * delete Comment entries with the given comment.id
-	 * It is expected that at most one is deleted since comment.id is
-	 * unique in the system
-	 * 
-	 * @param comment
+	 * update
+	 * @param discussion
 	 * @return
 	 */
-	public ServiceResponse<Void> deleteCommentIndex(Comment comment) {
+	public ServiceResponse<Void> updateDiscussion(Discussion discussion) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<Void>();
 		
-		Term term = new Term("id", comment.getId() + "");
+		Term term = new Term("id", discussion.getId() + "");
 		
 		try {
-			indexWriter.deleteDocuments(term);
-			indexWriter.commit();
+			discussionIndexWriter.updateDocument(term, createDiscussionDocument(discussion));
+			discussionIndexWriter.commit();
 		} 
 		catch (IOException e) {
-			logger.error("Unable to delete comment with id: " + comment.getId(), e);
+			logger.error("Unable to update Discussion with id: " + discussion.getId(), e);
 			response.setAckCode(AckCodeType.FAILURE);
 		}
 		
 		return response;
 	}
 	
-	public ServiceResponse<Void> deleteCommentIndexes(List<Long> commentIds) {
+	/**
+	 * Delete Discussion doc with the given discussion.id
+	 * It is expected that at most one is deleted since discussion.id is
+	 * unique in the system
+	 * 
+	 * @param discussion
+	 * @return
+	 */
+	public ServiceResponse<Void> deleteDiscussion(Discussion discussion) {
 		
 		ServiceResponse<Void> response = new ServiceResponse<Void>();
 		
-		Term[] terms = new Term[commentIds.size()];
-		
-		for(int i = 0; i < commentIds.size(); i++) {
-
-			terms[i] = new Term("id", commentIds.get(i).toString());
-		}
+		Term term = new Term("id", discussion.getId() + "");
 		
 		try {
-			indexWriter.deleteDocuments(terms);
-			indexWriter.commit();
+			discussionIndexWriter.deleteDocuments(term);
+			discussionIndexWriter.commit();
+		} 
+		catch (IOException e) {
+			logger.error("Unable to delete Discussion with id: " + discussion.getId(), e);
+			response.setAckCode(AckCodeType.FAILURE);
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * Delete comment docs with the given discussionId
+	 * @param discussionId
+	 * @return
+	 */
+	public ServiceResponse<Void> deleteComments(Long discussionId) {
+		
+		ServiceResponse<Void> response = new ServiceResponse<Void>();
+		
+		Term term = new Term("discussionId", discussionId.toString());
+
+		try {
+			commentIndexWriter.deleteDocuments(term);
+			commentIndexWriter.commit();
 		} 
 		catch (IOException e) {
 			logger.error("Unable to delete comments", e);
@@ -359,25 +527,53 @@ public class IndexService {
 		return document;
 	}
 	
+	/**
+	 * utility method to create a Document based on Discussion entity
+	 * @param discussion
+	 * @return
+	 */
+	private Document createDiscussionDocument(Discussion discussion) {
+		
+		Document document = new Document();
+		
+		// store id as a String field
+		document.add(new StringField("id", discussion.getId() + "", Store.YES));
+		// also use id as a FeatureField to be factored in the scoring process during search
+		document.add(new FeatureField("features", "MoreRecent", discussion.getId()));
+		// use StoredField for attributes that do not get queried 
+		document.add(new StoredField("createBy", discussion.getCreateBy()));
+		document.add(new StoredField("createDate", discussion.getCreateDate().getTime()));
+		
+		// note: TextField vs. StringField: the former get tokenized while the later does not
+		document.add(new TextField("title", discussion.getTitle(), Store.YES));
+		document.add(new StringField("closed", String.valueOf(discussion.isClosed()), Store.YES));
+		
+		for(Tag tag : discussion.getTags()) {
+			document.add(new StringField("tag", tag.getLabel(), Store.YES));
+		}
+		
+		return document;
+	}
 	
 	public ServiceResponse<SearchCommentResult> searchCommentByKeywords(String searchString, 
-			boolean includeTitle, boolean includeContent, int first, int pageSize) {
+			int first, int pageSize) {
 		
 		ServiceResponse<SearchCommentResult> response = new ServiceResponse<>();
 		
 		IndexSearcher indexSearcher = null;	
 		
 		try {
-			indexSearcher = searcherManager.acquire();
+			indexSearcher = commentSearcherManager.acquire();
 			
-			Query titleQuery = new QueryParser("title", analyzer).parse(searchString);
-			Query contentQuery = new QueryParser("content", analyzer).parse(searchString);
+			Query titleQuery = new QueryParser("title", commentAnalyzer).parse(searchString);
+			Query contentQuery = new QueryParser("content", commentAnalyzer).parse(searchString);
 			
 			BoostQuery boostTitleQuery = new BoostQuery(titleQuery, 0.75f);
 			BoostQuery boostContentQuery = new BoostQuery(contentQuery, 0.25f);
 			
 			/*
-			 * Give a small boost (0.001f) to the "MoreRecent" feature (based on "Id" attribute of the comment record
+			 * Give a small boost (0.001f) to the "MoreRecent" feature based on "Id" attribute of the comment record.
+			 * That is: greater id (more recent) has a small boost in scoring
 			 */
 			BoostQuery boostedQuery = new BoostQuery(FeatureField.newSaturationQuery("features", "MoreRecent"), 0.001f);
 			
@@ -400,7 +596,7 @@ public class IndexService {
 					.add(matchedQuery, Occur.MUST)
 					.add(boostedQuery, Occur.MUST).build();
 			
-			TopScoreDocCollector collector = TopScoreDocCollector.create(maxSearchResults, maxSearchResults);
+			TopScoreDocCollector collector = TopScoreDocCollector.create(maxCommentSearchResults, maxCommentSearchResults);
 			
 			indexSearcher.search(query, collector);
 			
@@ -434,7 +630,201 @@ public class IndexService {
 		}
 		finally {
 			try {
-				searcherManager.release(indexSearcher);
+				commentSearcherManager.release(indexSearcher);
+				
+				// make sure not to use this indexSearcher again:
+				// 		ref: http://blog.mikemccandless.com/2011/09/lucenes-searchermanager-simplifies.html
+				indexSearcher = null;
+			} 
+			catch (IOException e) {
+				logger.error("Error trying to release indexSearcher", e);
+			}
+		}
+		
+		return response;
+	}
+	
+	public ServiceResponse<SearchDiscussionResult> searchDiscussionByKeywords(String searchString, 
+			int first, int pageSize) {
+		
+		ServiceResponse<SearchDiscussionResult> response = new ServiceResponse<>();
+		
+		IndexSearcher indexSearcher = null;	
+		
+		try {
+			indexSearcher = discussionSearcherManager.acquire();
+			
+			Query titleQuery = new QueryParser("title", discussionAnalyzer).parse(searchString);
+			Query isClosedQuery = new QueryParser("closed", discussionAnalyzer).parse(String.valueOf(Boolean.TRUE));
+						
+			// title match will get scoring boost of 0.65
+			BoostQuery boostTitleQuery = new BoostQuery(titleQuery, 0.65f);
+			
+			// closed match will get scoring boost of 0.35
+			BoostQuery boostClosedQuery = new BoostQuery(isClosedQuery, 0.35f);
+			
+			/*
+			 * Give a small boost (0.001f) to the "MoreRecent" feature based on "Id" attribute of the comment record.
+			 * That is: greater id (more recent) has a small boost in scoring
+			 */
+			BoostQuery boostedQuery = new BoostQuery(FeatureField.newSaturationQuery("features", "MoreRecent"), 0.001f);
+			
+			/*
+			 * First, create a query that the searchString must match
+			 * Note from Lucene Javadoc for {@link org.apache.lucene.search.BooleanClause Occur}
+			 * Use this operator for clauses that should appear in the matching documents. 
+			 * For a BooleanQuery with no MUST clauses one or more SHOULD clauses must match 
+			 * a document for the BooleanQuery to match.
+			 */
+			Query matchedQuery = new BooleanQuery.Builder()
+					.add(boostTitleQuery, Occur.SHOULD)
+					.add(boostClosedQuery, Occur.SHOULD)
+					.build();
+			
+			/*
+			 * Combine the matchedQuery with the boostedQuery
+			 */
+			Query query = new BooleanQuery.Builder()
+					.add(matchedQuery, Occur.MUST)
+					.add(boostedQuery, Occur.MUST).build();
+			
+			TopScoreDocCollector collector = TopScoreDocCollector.create(maxDiscussionSearchResults, maxDiscussionSearchResults);
+			
+			indexSearcher.search(query, collector);
+			
+			TopDocs topDocs = collector.topDocs(first, pageSize);
+			
+			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+			long totalHits = topDocs.totalHits.value;
+			
+			List<Discussion> results = new ArrayList<Discussion>();
+			
+			for(ScoreDoc scoreDoc : scoreDocs) {
+				
+				int docNumber = scoreDoc.doc;
+				Document document = indexSearcher.doc(docNumber);
+				results.add(createDiscussion(document));
+			}
+			
+			SearchDiscussionResult searchResult = new SearchDiscussionResult();
+			searchResult.setTotalHits(totalHits);
+			searchResult.setDiscussions(results);
+			
+			response.setDataObject(searchResult);
+		} 
+		catch (IOException e) {
+			logger.error("Unable to search Discussion with keyword " + searchString, e);
+			response.setAckCode(AckCodeType.FAILURE);
+		} 
+		catch(ParseException e) {
+			logger.error("Unable to search similar to Discussion with keyword " + searchString, e);
+			response.setAckCode(AckCodeType.FAILURE);
+		}
+		finally {
+			try {
+				commentSearcherManager.release(indexSearcher);
+				
+				// make sure not to use this indexSearcher again:
+				// 		ref: http://blog.mikemccandless.com/2011/09/lucenes-searchermanager-simplifies.html
+				indexSearcher = null;
+			} 
+			catch (IOException e) {
+				logger.error("Error trying to release indexSearcher", e);
+			}
+		}
+		
+		return response;		
+	}
+	
+	public ServiceResponse<SearchDiscussionResult> searchSimilarDiscussions(Discussion discussion, 
+			int first, int pageSize) {
+		
+		ServiceResponse<SearchDiscussionResult> response = new ServiceResponse<>();
+		
+		IndexSearcher indexSearcher = null;	
+		
+		try {
+			indexSearcher = discussionSearcherManager.acquire();
+			
+			Query titleQuery = new QueryParser("title", discussionAnalyzer).parse(discussion.getTitle());
+			Query isClosedQuery = new QueryParser("closed", discussionAnalyzer).parse(String.valueOf(Boolean.TRUE));
+					
+			String tagSearchString = "none";
+			for(Tag tag : discussion.getTags()) {
+				tagSearchString += tag.getLabel() + " ";
+			}
+			Query tagQuery = new QueryParser("tag", discussionAnalyzer).parse(tagSearchString);
+						
+			// title match will get scoring boost of 0.50
+			BoostQuery boostTitleQuery = new BoostQuery(titleQuery, 0.50f);
+			
+			// closed match will get scoring boost of 0.15
+			BoostQuery boostClosedQuery = new BoostQuery(isClosedQuery, 0.15f);
+			
+			// tag match will get scoring boost of 0.35
+			BoostQuery boostTagQuery = new BoostQuery(tagQuery, 0.35f);
+			
+			/*
+			 * Give a small boost (0.001f) to the "MoreRecent" feature based on "Id" attribute of the comment record.
+			 * That is: greater id (more recent) has a small boost in scoring
+			 */
+			BoostQuery boostedQuery = new BoostQuery(FeatureField.newSaturationQuery("features", "MoreRecent"), 0.001f);
+			
+			/*
+			 * First, create a query that the searchString must match
+			 * Note from Lucene Javadoc for {@link org.apache.lucene.search.BooleanClause Occur}
+			 * Use this operator for clauses that should appear in the matching documents. 
+			 * For a BooleanQuery with no MUST clauses one or more SHOULD clauses must match 
+			 * a document for the BooleanQuery to match.
+			 */
+			Query matchedQuery = new BooleanQuery.Builder()
+					.add(boostTitleQuery, Occur.SHOULD)
+					.add(boostClosedQuery, Occur.SHOULD)
+					.add(boostTagQuery, Occur.SHOULD)
+					.build();
+			
+			/*
+			 * Combine the matchedQuery with the boostedQuery
+			 */
+			Query query = new BooleanQuery.Builder()
+					.add(matchedQuery, Occur.MUST)
+					.add(boostedQuery, Occur.MUST).build();
+			
+			TopScoreDocCollector collector = TopScoreDocCollector.create(maxDiscussionSearchResults, maxDiscussionSearchResults);
+			
+			indexSearcher.search(query, collector);
+			
+			TopDocs topDocs = collector.topDocs(first, pageSize);
+			
+			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+			long totalHits = topDocs.totalHits.value;
+			
+			List<Discussion> results = new ArrayList<Discussion>();
+			
+			for(ScoreDoc scoreDoc : scoreDocs) {
+				
+				int docNumber = scoreDoc.doc;
+				Document document = indexSearcher.doc(docNumber);
+				results.add(createDiscussion(document));
+			}
+			
+			SearchDiscussionResult searchResult = new SearchDiscussionResult();
+			searchResult.setTotalHits(totalHits);
+			searchResult.setDiscussions(results);
+			
+			response.setDataObject(searchResult);
+		} 
+		catch (IOException e) {
+			logger.error("Unable to search similar to Discussion with id " + discussion.getId(), e);
+			response.setAckCode(AckCodeType.FAILURE);
+		} 
+		catch(ParseException e) {
+			logger.error("Unable to search similar to Discussion with id " + discussion.getId(), e);
+			response.setAckCode(AckCodeType.FAILURE);
+		}
+		finally {
+			try {
+				commentSearcherManager.release(indexSearcher);
 				
 				// make sure not to use this indexSearcher again:
 				// 		ref: http://blog.mikemccandless.com/2011/09/lucenes-searchermanager-simplifies.html
@@ -470,6 +860,33 @@ public class IndexService {
 		
 		return comment;
 	}
+	
+	private Discussion createDiscussion(Document doc) {
+		
+		Discussion discussion = new Discussion();
+		
+		discussion.setId(Long.valueOf(doc.getField("id").stringValue()));
+		discussion.setCreateBy(doc.getField("createBy").stringValue());
+		discussion.setCreateDate(new Date(doc.getField("createDate").numericValue().longValue()));
+		discussion.setTitle(doc.getField("title").stringValue());
+		discussion.setClosed(Boolean.valueOf(doc.getField("closed").stringValue()));
+		
+		/* construct tag list */
+		List<Tag> tags = new ArrayList<>();
+		discussion.setTags(tags);
+		
+		IndexableField[] tagFields = doc.getFields("tag");
+		
+		if(tagFields.length > 0) {
+			for(IndexableField tagField : tagFields) {
+				Tag tag = new Tag();
+				tag.setLabel(tagField.stringValue());
+				tags.add(tag);
+			}
+		}
+		
+		return discussion;
+	}
 
 	/**
 	 * 
@@ -479,10 +896,15 @@ public class IndexService {
 		logger.info("Cleaning up IndexingService");
 		
 		try {
-			this.indexWriter.close();
-			logger.info("indexWriter closed");
-			this.searcherManager.close();
-			logger.info("searcherManager closed");
+			this.commentIndexWriter.close();
+			logger.info("commentIndexWriter closed");
+			this.commentSearcherManager.close();
+			logger.info("commentSearcherManager closed");
+			
+			this.discussionIndexWriter.close();
+			logger.info("discussionIndexWriter closed");
+			this.discussionSearcherManager.close();
+			logger.info("discussionSearcherManager closed");
 		} 
 		catch (IOException e) {
 			logger.error("Unable to cleanup indexWriter and searcherManager", e);

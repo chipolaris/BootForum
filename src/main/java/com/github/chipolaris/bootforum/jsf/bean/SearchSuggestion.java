@@ -12,9 +12,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.IndexService;
 import com.github.chipolaris.bootforum.service.SearchCommentResult;
+import com.github.chipolaris.bootforum.service.SearchDiscussionResult;
 import com.github.chipolaris.bootforum.service.UserService;
 
 @Component
@@ -22,6 +24,10 @@ import com.github.chipolaris.bootforum.service.UserService;
 public class SearchSuggestion {
 
 	private static final Logger logger = LoggerFactory.getLogger(SearchSuggestion.class);
+
+	private static final int MAX_DISCUSSION_SUGGEST = 10;
+	
+	private static final int MAX_COMMENT_SUGGEST = 10;
 	
 	@Resource
 	private IndexService indexService;
@@ -32,6 +38,15 @@ public class SearchSuggestion {
 	@Resource
 	private UserService userService;
 
+	private List<Discussion> discussions;
+	
+	public List<Discussion> getDiscussions() {
+		return discussions;
+	}
+	public void setDiscussions(List<Discussion> discussions) {
+		this.discussions = discussions;
+	}
+	
 	private List<Comment> comments;
 	
 	public List<Comment> getComments() {
@@ -61,15 +76,21 @@ public class SearchSuggestion {
 		
 		if(keywords != null && keywords.length() >= 3) {
 			
+			SearchDiscussionResult searchDiscussionResult = indexService.searchDiscussionByKeywords(
+					keywords, 0, MAX_DISCUSSION_SUGGEST).getDataObject();
+			
+			logger.info(String.format("searchDiscussionResult.discussions.size is %d", searchDiscussionResult.getDiscussions().size()));
+			
+			setDiscussions(searchDiscussionResult.getDiscussions());
+			
 			SearchCommentResult searchCommentResult = indexService.searchCommentByKeywords(
-					keywords, true, true, 0, 10).getDataObject();
+					keywords, 0, MAX_COMMENT_SUGGEST).getDataObject();
 			
 			logger.info(String.format("searchCommentResult.comment.size is %d", searchCommentResult.getComments().size()));
 			
 			setComments(searchCommentResult.getComments());
 			
 			setUsernames(userService.searchUsernames(keywords).getDataObject());
-		
 		}
 	}
 }

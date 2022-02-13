@@ -3,6 +3,7 @@ package com.github.chipolaris.bootforum.jsf.bean;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -21,17 +22,27 @@ import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.event.DiscussionViewEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
+import com.github.chipolaris.bootforum.service.DiscussionService;
 import com.github.chipolaris.bootforum.service.GenericService;
+import com.github.chipolaris.bootforum.service.IndexService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 
 @Component(value="viewDiscussion")
 @Scope("view")
 public class ViewDiscussion {
 
+	private static final int MAX_SIMILAR_DISCUSSIONS = 10;
+
 	private static final Logger logger = LoggerFactory.getLogger(ViewDiscussion.class);
 	
 	@Resource
 	private GenericService genericService;
+	
+	@Resource
+	private DiscussionService discussionService;
+	
+	@Resource
+	private IndexService indexService;
 	
 	@Resource
 	private ApplicationEventPublisher applicationEventPublisher;
@@ -135,6 +146,29 @@ public class ViewDiscussion {
 		}
 		else {
 			JSFUtils.addErrorStringMessage(null, JSFUtils.getMessageBundle().getString("unable.to.save.discussion.title"));
+		}
+	}
+	
+	private List<Discussion> suggestedDiscussions;
+	
+	public List<Discussion> getSuggestedDiscussions() {
+		return suggestedDiscussions;
+	}
+	public void setSuggestedDiscussions(List<Discussion> suggestedDiscussions) {
+		this.suggestedDiscussions = suggestedDiscussions;
+	}
+	
+	public void fetchSuggestedDiscussions() {
+		
+		logger.warn("fetchSimilarDiscussions invoked");
+		
+		if(suggestedDiscussions == null) {
+			List<Discussion> discussionsSearchResult =
+				indexService.searchSimilarDiscussions(
+					this.discussion, 0, MAX_SIMILAR_DISCUSSIONS).getDataObject().getDiscussions();
+			
+			// fetch actual data from db
+			this.suggestedDiscussions = discussionService.fetchDiscussions(discussionsSearchResult).getDataObject();
 		}
 	}
 }

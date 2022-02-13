@@ -40,9 +40,6 @@ public class CommentService {
 	private FileService fileService;
 	
 	@Resource
-	private IndexService indexService;
-	
-	@Resource
 	private StatService statService;
 	
 	@Resource 
@@ -62,19 +59,6 @@ public class CommentService {
 		List<Comment> comments = genericDAO.getEntities(Comment.class, equalAttrs);
 		
 		response.setDataObject(comments);
-		
-		return response;
-	}
-
-	@Transactional(readOnly = false)
-	public ServiceResponse<Void> updateComment(Comment comment) {
-		
-		ServiceResponse<Void> response = new ServiceResponse<>();
-		
-		genericDAO.merge(comment);
-		
-		// update lucene index the comment
-		indexService.updateCommentIndex(comment); 
 		
 		return response;
 	}
@@ -128,9 +112,6 @@ public class CommentService {
 		}
 		
 		genericDAO.merge(discussion); // this merge will cascade to discussionStat
-
-		// lucene index the comment
-		indexService.addCommentIndex(reply);
 		
 		return response;
 	}

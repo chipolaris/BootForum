@@ -1,5 +1,8 @@
 package com.github.chipolaris.bootforum.service;
 
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -8,6 +11,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
@@ -123,5 +127,31 @@ public class PasswordResetService {
 						"<a href=\""
 						+ JSFUtils.getBaseURL() + "passwordReset.xhtml?key=" + passwordReset.getResetKey()
 						+ "\">" + this.applicationName + "</a>");
+	}
+	
+	
+	/**
+	 * Scheduled task
+	 */
+	
+	@Value("${Scheduled.cleanPasswordReset.timePassed.minutes}")
+	private Integer timePassedMinutes;
+	
+	@Scheduled(fixedRateString = "${Scheduled.cleanPasswordReset.interval.miliseconds}", 
+			initialDelayString = "${Scheduled.cleanPasswordReset.initialDelay.miliseconds}")
+	@Transactional(readOnly = false)
+	public void cleanPasswordReset() {
+		
+		logger.info("Cleanup PasswordReset records");
+		
+		Calendar cal = Calendar.getInstance();
+		
+		cal.add(Calendar.MINUTE, -timePassedMinutes);
+		
+		Date threshold = cal.getTime();
+		
+		Integer deletedCount = genericDAO.deleteLessThan(PasswordReset.class, Collections.singletonMap("createDate", threshold));
+		
+		logger.info(String.format("%d PasswordReset records deleted", deletedCount));
 	}
 }

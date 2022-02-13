@@ -54,7 +54,7 @@
 					</p:breadCrumb>
 				</div>
 				
-				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-d3 w3-center" style="margin: 16px -16px;">
  					<h3>#{msg['tag']} #{viewTag.tag.label}</h3>
  				</div>
  				
@@ -97,9 +97,10 @@
 									#{msg['started']} <pe:timeAgo value="#{discussion.createDate}" titlePattern="MMMMM dd yyyy" />
 									
 									<p:repeat var="tag" value="#{discussion.tags}">
-										<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
+										<h:link outcome="tag">
 											<span class="w3-tag" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} w3-large"/></span>
-										</h:outputLink>
+											<f:param name="id" value="#{tag.id}"/>
+										</h:link>
 									</p:repeat>
 								</p:column>
 								
@@ -154,7 +155,7 @@
 
 						<!-- tag info -->
 						<div class="w3-card" style="margin: 65px 0 16px 0;">
-							<header class="w3-container w3-theme-l1 w3-center">
+							<header class="w3-container w3-theme-d3 w3-center">
 								
 							  <h4>
 							  	<span class="w3-tag" style="font-weight:bold;color:##{viewTag.tag.color};background-color:#fff;border: 1px solid grey;border-radius: 3px;"><i class="pi pi-tag"/> #{viewTag.tag.label}</span>

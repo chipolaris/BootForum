@@ -47,7 +47,7 @@
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(viewForum.forum)}"/>
 				</div>
 
-				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-d3 w3-center" style="margin: 16px -16px;">
  					<h3>#{msg['forum']} "#{viewForum.forum.title}"</h3> 					
  					<span class="w3-tag w3-black w3-padding" jsf:rendered="#{not viewForum.forum.active}">Forum is not active</span>
  				</div>
@@ -92,9 +92,10 @@
 									#{msg['started']} <pe:timeAgo value="#{discussion.createDate}" titlePattern="MMMMM dd yyyy" />
 									
 									<p:repeat var="tag" value="#{discussion.tags}">
-										<h:outputLink value="viewTag.xhtml?id=#{tag.id}">
+										<h:link outcome="tag">
 											<span class="w3-tag" style="background-color:##{tag.color};margin-top:5px;">#{tag.label} <i class="#{tag.icon} fa-lg"/></span>
-										</h:outputLink>
+											<f:param name="id" value="#{tag.id}"/>
+										</h:link>
 									</p:repeat>
 								</p:column>
 								
@@ -163,7 +164,7 @@
 			    		
 				        <!-- forum info -->
 						<div class="w3-card">
-							<header class="w3-container w3-theme-l1 w3-center">
+							<header class="w3-container w3-theme-d3 w3-center">
 							  <h4><i class="pi pi-info-circle w3-large"/> #{msg['forum.info']}</h4>
 							</header>
 							

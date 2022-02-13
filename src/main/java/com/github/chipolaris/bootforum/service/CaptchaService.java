@@ -36,9 +36,6 @@ public class CaptchaService {
 	
 	private final Random random = new Random();
 	
-	@Value("#{applicationProperties['Captcha.refresherCron']}")
-	private String cronExpression;
-	
 	/**
 	 * Refresh captcha cache based on configured schedule
 	 * 
