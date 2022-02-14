@@ -176,7 +176,7 @@
 									#{msg['comments']}: <b>#{viewForum.forum.stat.commentCount}</b>
 								</p>
 								
-								<p>
+								<p jsf:rendered="#{not empty viewForum.forum.stat.lastComment}">
 									<h:link outcome="commentThread">
 										#{msg['latest.comment']}
 										<f:param name="id" value="#{viewForum.forum.stat.lastComment.commentId}"/>
