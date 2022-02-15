@@ -11,14 +11,48 @@
     template="/WEB-INF/template/layout_public.xhtml">
 	
 	<ui:define name="title">
-		User Profile
+		#{msg['member.profile']}
 	</ui:define>
 	
 	<ui:define name="content">
 		
 		<style type="text/css">
-		
-				
+			.half-circle {
+			
+			    width: 160px;
+			    height: 80px;
+			    /* background-color: transparent; */
+			    border-bottom-left-radius: 80px;
+			    border-bottom-right-radius: 80px;
+			    border: 3px solid lightgray;
+			    border-top: 0;
+			    
+			    -webkit-box-sizing: border-box;
+			    -moz-box-sizing: border-box;
+			    box-sizing: border-box;
+			}			
+			
+			/* fade out long text: http://jsfiddle.net/b9vtW/4/
+			   https://stackoverflow.com/questions/22808040/fading-out-text-on-overflow-with-css-if-the-text-is-bigger-than-allowed */
+			.row{
+			    margin-bottom: 5px;
+			    padding-bottom: 5px;
+			    max-height:180px;
+			    overflow:hidden;
+			    text-overflow: ellipsis;
+			    content: "";
+			    position:relative;
+			}
+			.row:before {
+			    content:'';
+			    width:100%;
+			    height:100%;    
+			    position:absolute;
+			    left:0;
+			    top:0;
+			    background:linear-gradient(transparent 150px, white);
+			}
+			
 		</style>
 	
 		<script>
@@ -33,13 +67,7 @@
 			<f:viewAction action="#{memberProfile.onLoad}"/>
 		</f:metadata>
 	
-		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
-						
-			<div>
-				<p:messages id="messages" showDetail="true" showSummary="false" globalOnly="true">
-					<p:autoUpdate/>
-				</p:messages>
-			</div>
+		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">
 			
 			<div jsf:id="userProfileDiv" >
 			
@@ -53,97 +81,129 @@
 				
 				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					<h3>#{msg['member.profile']}</h3>
- 				</div>
+ 				</div> 				
  				
- 				<div class="w3-panel w3-center">
- 					
-         			<div>		
-           				<h:graphicImage value="#{requestContext}/avatar/#{memberProfile.user.username}"
-							id="memberAvatar" height="100" width="100" 
-							title="#{comment.createBy} avatar"
+  				<div class="w3-row">
+				
+					<div class="w3-col l9 m12 s12 w3-container">
+		 				
+		 				<div>
+		 					<h4>#{msg['recent.comments']}:<span jsf:rendered="#{empty memberProfile.latestComments}"> #{msg['none']}</span></h4>
+		 				</div>
+		 				
+		 				<div id="latestComments" class="w3-container" jsf:rendered="#{not empty memberProfile.latestComments}">
+		 					<p:repeat var="comment" value="#{memberProfile.latestComments}">
+		 						
+								<div class="w3-panel w3-round-large w3-padding w3-theme-l5">
+									<p>
+										<b>#{msg['posted']} <pe:timeAgo value="#{comment.createDate}"/>:&#160;</b>
+									 	<h:link outcome="commentThread">
+											<span><b>'#{comment.title}'</b></span>
+											<f:param name="id" value="#{comment.id}"/>
+										</h:link>
+										
+										#{msg['in.discussion']} 
+										<h:link outcome="discussion">
+											<span class="w3-large">#{comment.discussion.title}</span>
+											<f:param name="id" value="#{comment.discussion.id}"/>
+										</h:link>
+			 						</p>
+									
+									<div class="row">
+								  		<h:outputText value="#{comment.content}" escape="false"/>
+								  	</div>
+								</div>
+		 					
+		 					</p:repeat>
+		 				</div>
+		 				
+		 			</div>
+		 			
+		 			<div class="w3-col l3 m12 s12 w3-container" id="infoDiv" style="position: -webkit-sticky; /* Safari */; position: sticky; top: 70px;">
+		 			 				
+ 						<div class="w3-center">
+	           				<h:graphicImage value="#{requestContext}/avatar/#{memberProfile.user.username}"
+								id="memberAvatar" height="150" width="150" styleClass="w3-circle"
+								title="#{comment.createBy} avatar"
+								rendered="#{fileHandler.isAvatarExists(memberProfile.user.username)}"/>
+						
+							<span jsf:rendered="#{!fileHandler.isAvatarExists(memberProfile.user.username)}" class="w3-circle avatarSpan"
+								title="#{memberProfile.user.username}"
+								style="display:inline-block;font-size:3.5rem;line-height:150px;width:150px;text-align:center;text-transform: uppercase;color:white;">
+								#{fn:substring(memberProfile.user.username, 0, 3)}
+							</span>
+						</div>
+						
+						<!-- <h:graphicImage value="#{requestContext}/avatar/#{memberProfile.user.username}" class="w3-circle"
+							id="commentorAvatar" height="150" width="150" style="border:3px;" title="#{user.username}"
 							rendered="#{fileHandler.isAvatarExists(memberProfile.user.username)}"/>
-					
-						<span jsf:rendered="#{!fileHandler.isAvatarExists(memberProfile.user.username)}" class="avatarSpan"
-							title="#{memberProfile.user.username}"
-							style="display:inline-block;font-size:2.5rem;line-height:100px;width:100px;text-align:center;text-transform: uppercase;color:white;">
-							#{fn:substring(memberProfile.user.username, 0, 3)}
-						</span>
-					</div>
- 					
- 					<div class="w3-section">
- 						#{msg['username']}: <b>#{memberProfile.user.username}</b>
- 					</div>
- 					
- 					<div class="w3-section">
- 						#{msg['joined.date']}: <b><pe:timeAgo value="#{memberProfile.user.createDate}"/></b>
- 					</div>
- 					
- 					<div class="w3-section">
- 						#{msg['discussions.started']}: <b>#{memberProfile.user.stat.discussionCount}</b>
- 					</div>
- 					
- 					<div class="w3-section">
- 						#{msg['comments']}: <b>#{memberProfile.user.stat.commentCount}</b>
- 					</div>
- 
- 					<div class="w3-section">
- 						#{msg['uploaded.images']}: <b>#{memberProfile.user.stat.commentThumbnailCount}</b>
- 					</div>
- 					
- 					<div class="w3-section">
- 						#{msg['uploaded.attachments']}: <b>#{memberProfile.user.stat.commentAttachmentCount}</b>
- 					</div>
- 										
- 					<div class="w3-section">
- 						#{msg['reputation']}: <b>#{memberProfile.user.stat.reputation}</b>
- 					</div>			
-
- 					<div class="w3-section">
- 						#{msg['member.profile.viewed']}: <b>#{memberProfile.user.stat.profileViewed}</b>
- 					</div>	
- 
-					<div class="w3-section">
- 						#{msg['last.login']}: <b><pe:timeAgo value="#{memberProfile.user.stat.lastLogin}"/></b>
- 					</div>
- 					
- 					<!-- if logged in, show the send private message link -->
-					<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
-						<div class="w3-section">								
-							<h:link outcome="/secure/privateMessages">
-								<span><i class="pi pi-send"/> #{msg['send.private.message.to']} <b>#{memberProfile.user.username}</b></span>
-								<f:param name="viewTab" value="newTab"/>
-								<f:param name="to" value="#{memberProfile.user.username}"/>
-							</h:link>
-						</div>
-					</sec:authorize>					
- 				
- 				</div>
- 				
- 				<div class="w3-border-top">
- 					<h4>#{msg['recent.comments']}:<span jsf:rendered="#{empty memberProfile.latestComments}"> #{msg['none']}</span></h4>
- 				</div>
- 				
- 				<div id="latestComments" class="w3-container" jsf:rendered="#{not empty memberProfile.latestComments}">
- 					<p:repeat var="comment" value="#{memberProfile.latestComments}">
- 						
-						<div class="w3-panel w3-round-large w3-padding w3-theme-l5">
-							<p>
-								<b>#{msg['posted']} <pe:timeAgo value="#{comment.createDate}"/>:&#160;</b>
-								<h:outputLink value="commentThread.xhtml?id=#{comment.id}"><span><b>'#{comment.title}'</b></span></h:outputLink>
-								#{msg['in.discussion']} 
-								<h:link outcome="discussion">
-									<span class="w3-large">#{comment.discussion.title}</span>
-									<f:param name="id" value="#{discussion.id}"/>
-								</h:link>
-	 						</p>
 							
-							<p>
-						  		<h:outputText value="#{comment.content}" escape="false"/>
-						  	</p>
-						</div>
- 					
- 					</p:repeat>
- 				</div>
+						<span jsf:rendered="#{!fileHandler.isAvatarExists(memberProfile.user.username)}" class="w3-circle avatarSpan" title="#{user.username}"
+							style="display:inline-block;font-size:4rem;line-height:150px;width:150px;text-align:center;text-transform: uppercase;color:white;">
+							#{fn:substring(memberProfile.user.username, 0, 3)}
+						</span> -->
+							 				
+		 				<div class="w3-card w3-cursive" style="margin: -75px 0 16px 0;">
+		 					
+		 					<div class="w3-container w3-small">
+		 								 						
+		 						<div class="half-circle" style="margin: auto;"/>
+			 					
+			 					<div class="w3-section">
+			 						#{msg['username']}: <b>#{memberProfile.user.username}</b>
+			 					</div>
+			 					
+			 					<div class="w3-section">
+			 						#{msg['joined.date']}: <b><pe:timeAgo value="#{memberProfile.user.createDate}"/></b>
+			 					</div>
+			 					
+			 					<div class="w3-section">
+			 						#{msg['discussions.started']}: <b>#{memberProfile.user.stat.discussionCount}</b>
+			 					</div>
+			 					
+			 					<div class="w3-section">
+			 						#{msg['comments']}: <b>#{memberProfile.user.stat.commentCount}</b>
+			 					</div>
+			 
+			 					<div class="w3-section">
+			 						#{msg['uploaded.images']}: <b>#{memberProfile.user.stat.commentThumbnailCount}</b>
+			 					</div>
+			 					
+			 					<div class="w3-section">
+			 						#{msg['uploaded.attachments']}: <b>#{memberProfile.user.stat.commentAttachmentCount}</b>
+			 					</div>
+			 										
+			 					<div class="w3-section">
+			 						#{msg['reputation']}: <b>#{memberProfile.user.stat.reputation}</b>
+			 					</div>			
+			
+			 					<div class="w3-section">
+			 						#{msg['member.profile.viewed']}: <b>#{memberProfile.user.stat.profileViewed}</b>
+			 					</div>	
+			 
+								<div class="w3-section">
+			 						#{msg['last.login']}: <b><pe:timeAgo value="#{memberProfile.user.stat.lastLogin}"/></b>
+			 					</div>
+			 					
+			 					<!-- if logged in, show the send private message link -->
+								<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+									<div class="w3-section">								
+										<h:link outcome="/secure/privateMessages">
+											<span><i class="pi pi-send"/> #{msg['send.private.message.to']} <b>#{memberProfile.user.username}</b></span>
+											<f:param name="viewTab" value="newTab"/>
+											<f:param name="to" value="#{memberProfile.user.username}"/>
+										</h:link>
+									</div>
+								</sec:authorize>
+														
+							</div>				
+		 				
+		 				</div>
+		 			
+		 			</div>
+		 			
+		 			
+		 		</div>
  				
 			</div>
 			

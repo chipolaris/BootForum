@@ -50,7 +50,7 @@
 					</p:breadCrumb>
 				</div>
 				
-				<div class="w3-padding-16 w3-theme-d3 w3-center" style="margin: 16px -16px;">
+				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					<h3>#{msg['list.members']}</h3>
  				</div>
 				
@@ -79,7 +79,7 @@
 									<span>
 										<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(user.username)}" class="w3-circle"
 											id="commentorAvatar" height="40" width="40" style="border:3px;margin-right:15px;" title="#{user.username}"/> -->
-										<h:graphicImage value="#{requestContext}/avatar/#{user.username}" class="w3-circle"
+										<h:graphicImage value="#{requestContext}/avatar/#{user.username}" styleClass="w3-circle"
 											id="commentorAvatar" height="36" width="36" style="border:3px;" title="#{user.username}"
 											rendered="#{fileHandler.isAvatarExists(user.username)}"/>
 												

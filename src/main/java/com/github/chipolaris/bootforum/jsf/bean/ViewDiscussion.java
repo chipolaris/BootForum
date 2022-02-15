@@ -169,7 +169,7 @@ public class ViewDiscussion {
 		
 		if(suggestedDiscussions == null) {
 						
-			// earch Lucene index for similar discussions
+			// search Lucene index for similar discussions
 			List<Discussion> discussionsSearchResult =
 				indexService.searchSimilarDiscussions(
 					this.discussion, 0, MAX_SIMILAR_DISCUSSIONS + 1).getDataObject().getDiscussions();
