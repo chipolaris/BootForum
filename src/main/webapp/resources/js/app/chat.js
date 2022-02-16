@@ -249,6 +249,10 @@ $(function () {
     	
     	// show room div with animation (duration 400)
     	$('#room' + roomId).show(400);
+    	
+    	// enable all button except the current room button
+    	$(".toggleRoomButton").prop("disabled", false);
+    	$(this).prop("disabled", true);
     });
     
     $( ".joinRoom" ).click(function(){

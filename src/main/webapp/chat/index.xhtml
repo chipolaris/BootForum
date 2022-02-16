@@ -15,7 +15,7 @@
 	</ui:define>
 	
 	<ui:define name="pageTitle">
-		<h3><b><i class="pi pi-comments"/> #{msg['chat.rooms']}</b></h3>
+		<h3><b><i class="pi pi-comments w3-large"/> #{msg['chat.rooms']}</b></h3>
 	</ui:define>
 
 	<ui:define name="content">
@@ -96,12 +96,10 @@
 		
 		<div jsf:id="mainContentDiv">
 			
-			<p/>
-			
-			<div class="w3-panel w3-center">
+			<div>
 				<div  jsf:rendered="#{fn:length(chatPage.chatRooms) eq 0}">No chat room available</div>
-				<form class="w3-container" jsf:rendered="#{fn:length(chatPage.chatRooms) gt 0}">
-					<div>#{msg['click.on.a.chat.room.to.join.live.conversation']}</div>
+				<form class="" jsf:rendered="#{fn:length(chatPage.chatRooms) gt 0}">
+					<!-- <div>#{msg['click.on.a.chat.room.to.join.live.conversation']}</div>
 	                <div>
 	                	<ui:repeat var="chatRoom" value="#{chatPage.chatRooms}">
 	                    	<button id="toggleRoom#{chatRoom.id}" class="w3-btn toggleRoomButton" type="submit" 
@@ -109,7 +107,21 @@
 	                    		<i class="#{chatRoom.icon}"/> #{chatRoom.label}
 	                    	</button>
 	                    </ui:repeat>
-	                </div>
+	                </div> -->
+	                
+	                <p:commandButton id="chatRoomSelectButton" value="Select a Chat Room" type="button" 
+	                	styleClass="ui-button-raised ui-button-flat" icon="pi pi-caret-down" style="font-weight:bold;"/>
+	                
+	                <p:overlayPanel for="chatRoomSelectButton" style="width:400px;background:#f5f5f5" widgetVar="chatRoomPicker">
+	                	<ui:repeat var="chatRoom" value="#{chatPage.chatRooms}">
+	                		<div style="margin:8px;" class="w3-large">
+		                    	<button id="toggleRoom#{chatRoom.id}" class="w3-btn w3-round toggleRoomButton" type="submit" onclick="PF('chatRoomPicker').hide()"
+		                    		data-roomid="#{chatRoom.id}" style="background-color:##{chatRoom.color};color:white;width:100%;">
+		                    		<b><i class="#{chatRoom.icon}"/> #{chatRoom.label}</b>
+		                    	</button>
+	                    	</div>
+	                    </ui:repeat>	                
+	                </p:overlayPanel>
 	            </form>				
 			</div>
 			
@@ -119,11 +131,12 @@
 			  -->			  
 			<c:forEach items="#{chatPage.chatRooms}" var="chatRoom">
 			
-				<div id="room#{chatRoom.id}" class="w3-card toggleRoomDiv" style="display: none;">
+				<div id="room#{chatRoom.id}" class="w3-card toggleRoomDiv" style="display: none;margin-top: 16px;">
 					
 					<div class="w3-cell-row w3-border-bottom" style="color:##{chatRoom.color};">
 						<div class="w3-cell w3-container">
-							<h4><b><i class="#{chatRoom.icon}"/> #{chatRoom.label} 
+							<h4>
+								<b><i class="#{chatRoom.icon}"/> #{chatRoom.label} 
 								<!-- <h:outputText value=" (users: #{fn:length(chatManager.subscribedUserMap['/room/'.concat(chatRoom.id)])})" id="userCount#{chatRoom.id}"/> -->
 								</b>
 							</h4>

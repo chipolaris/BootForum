@@ -33,6 +33,8 @@ public class ChatPage {
 	}
 
 	public void onLoad() {
-		this.chatRooms = genericService.getEntities(ChatRoom.class, Collections.emptyMap(), "sortOrder", false).getDataObject();
+		this.chatRooms = genericService.getEntities(ChatRoom.class, 
+				Collections.singletonMap("disabled", Boolean.FALSE), 
+				"sortOrder", false).getDataObject();
 	}
 }
