@@ -8,8 +8,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -44,15 +47,41 @@ public class ThumbnailServletHandler implements HttpRequestHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(ThumbnailServletHandler.class);
 	
+	private static final String DEFAULT_FILE_UPLOAD_DIRECTORY = System.getProperty("user.home") 
+			+ File.separator + "BootForum" + File.separator + "files";
+	
+	private static final String DEFAULT_COMMENT_THUMBNAIL_FOLDER_PATH = 
+			"comment" + File.separator + "thumbnails";
+	
 	// set browser cache to expire in 5 minutes
 	// TODO: make EXPIRE_TIME_IN_SECONDS configurable through application properties file
 	private static final Long EXPIRE_TIME_IN_SECONDS = TimeUnit.MINUTES.toSeconds(5);
 	
-	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Comment.thumbnailPath}' }")
-	private String thumbnailDirectory;
+	@Value("${File.uploadDirectory:#{null}}")
+	private String fileUploadDirectory;
+	
+	@Value("${Comment.thumbnail.folderPath:#{null}}")
+	private String commentThumbnailFolderPath;
+	
+	/* complete path to the thumbnail folder */
+	private Path thumbnailPath;
 	
 	@Resource
 	private GenericService genericService;
+	
+	@PostConstruct
+	private void init() {
+		
+		if(fileUploadDirectory == null) {
+			fileUploadDirectory = DEFAULT_FILE_UPLOAD_DIRECTORY;
+		}
+		
+		if(commentThumbnailFolderPath == null) {
+			commentThumbnailFolderPath = DEFAULT_COMMENT_THUMBNAIL_FOLDER_PATH;
+		}
+		
+		thumbnailPath = Paths.get(fileUploadDirectory, commentThumbnailFolderPath); 
+	}
 	
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
@@ -91,7 +120,7 @@ public class ThumbnailServletHandler implements HttpRequestHandler {
 		
 		InputStream is = null;
 		
-		File thumbnailFile = new File(this.thumbnailDirectory + File.separator + fileInfo.getPath());
+		File thumbnailFile = thumbnailPath.resolve(fileInfo.getPath()).toFile();
 		
 		if(thumbnailFile.exists()) {
 			is = new FileInputStream(thumbnailFile);

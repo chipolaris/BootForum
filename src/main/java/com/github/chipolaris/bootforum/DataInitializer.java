@@ -12,6 +12,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.domain.ChatRoom;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.DisplayOption;
@@ -111,6 +112,9 @@ public class DataInitializer implements ApplicationRunner {
 				logger.info("System Admin user created successfully. Creating Announcements forum and Welcome discussion");
 				Forum announcementsForum = createAnouncementsForum(adminUser);
 				createWelcomeDiscussion(announcementsForum, adminUser);
+				
+				// create first chat room
+				createFirstChatRoom();
 			}
 		}
 	}
@@ -274,6 +278,18 @@ public class DataInitializer implements ApplicationRunner {
 		}
 		
 		applicationEventPublisher.publishEvent(new RemoteIPFilterOptionLoadEvent(this, remoteIPFilterOption));
+	}
+	
+	private void createFirstChatRoom() {
+		
+		ChatRoom chatRoom = new ChatRoom();
+		
+		chatRoom.setLabel("First Chat Room");
+		chatRoom.setColor("purple");
+		chatRoom.setIcon("pi pi-globe");
+		chatRoom.setDisabled(false);
+		
+		genericService.saveEntity(chatRoom);
 	}
 
 }

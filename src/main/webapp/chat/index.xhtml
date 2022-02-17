@@ -99,17 +99,8 @@
 			<div>
 				<div  jsf:rendered="#{fn:length(chatPage.chatRooms) eq 0}">No chat room available</div>
 				<form class="" jsf:rendered="#{fn:length(chatPage.chatRooms) gt 0}">
-					<!-- <div>#{msg['click.on.a.chat.room.to.join.live.conversation']}</div>
-	                <div>
-	                	<ui:repeat var="chatRoom" value="#{chatPage.chatRooms}">
-	                    	<button id="toggleRoom#{chatRoom.id}" class="w3-btn toggleRoomButton" type="submit" 
-	                    		data-roomid="#{chatRoom.id}" style="background-color:##{chatRoom.color};color:white;">
-	                    		<i class="#{chatRoom.icon}"/> #{chatRoom.label}
-	                    	</button>
-	                    </ui:repeat>
-	                </div> -->
 	                
-	                <p:commandButton id="chatRoomSelectButton" value="Select a Chat Room" type="button" 
+	                <p:commandButton id="chatRoomSelectButton" value="#{msg['select.a.chat.room']}" type="button" 
 	                	styleClass="ui-button-raised ui-button-flat" icon="pi pi-caret-down" style="font-weight:bold;"/>
 	                
 	                <p:overlayPanel for="chatRoomSelectButton" style="width:400px;background:#f5f5f5" widgetVar="chatRoomPicker">

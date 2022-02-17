@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
@@ -42,6 +44,9 @@ public class AvatarServletHandler implements HttpRequestHandler {
 	
 	private static final String ANONYMOUS_AVATAR = "/images/user-anonymous-icon.png";
 	
+	private static final String DEFAULT_FILE_UPLOAD_DIRECTORY = System.getProperty("user.home") 
+			+ File.separator + "BootForum" + File.separator + "files";
+	
 	// TODO: make EXPIRE_TIME_IN_SECONDS configurable through application properties file
 	private static final Long EXPIRE_TIME_IN_SECONDS = 30l; //TimeUnit.DAYS.toSeconds(1);
 	
@@ -50,12 +55,26 @@ public class AvatarServletHandler implements HttpRequestHandler {
 	
 	// caching anonymousAvatarBytes for quick serving
 	private byte[] anonymousAvatarBytes;
+		
+	@Value("${File.uploadDirectory:undefined}")
+	private String fileUploadDirectory;
 	
-	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Avatar.filePath}' }")
-	private String avatarDirectory;
+	/* if application property 'Avatar.folderPath' does not exist, use default value 'undefined' */
+	@Value("${Avatar.folderPath:undefined}")
+	private String avatarFolderPath;
+	
+	/* complete path to the avatars folder */
+	private Path avatarPath;
 	
 	@PostConstruct
 	private void init() {
+		
+		if("undefined".equals(fileUploadDirectory)) {
+			fileUploadDirectory = DEFAULT_FILE_UPLOAD_DIRECTORY;
+		}
+		
+		avatarPath = Paths.get(fileUploadDirectory, avatarFolderPath);
+		
         // load the cached anonymousAvatarBytes for quick serving later
         try {
         	anonymousAvatarBytes = 
@@ -86,7 +105,8 @@ public class AvatarServletHandler implements HttpRequestHandler {
 		
 		InputStream is = null;
 		
-		File avatarFile = new File(this.avatarDirectory + File.separator + pathInfo + "." + avatarImageType);
+		//File avatarFile = new File(this.avatarDirectory + File.separator + pathInfo + "." + avatarImageType);
+		File avatarFile = avatarPath.resolve(pathInfo + "." + avatarImageType).toFile();
 		
 		if(avatarFile.exists()) {
 			is = new FileInputStream(avatarFile);

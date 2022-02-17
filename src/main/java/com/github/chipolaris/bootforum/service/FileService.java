@@ -5,6 +5,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,8 +28,32 @@ public class FileService {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileService.class);
 	
-	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Avatar.filePath}' }")
-	private String avatarDirectory;
+	private static final String DEFAULT_FILE_UPLOAD_DIRECTORY = System.getProperty("user.home") 
+			+ File.separator + "BootForum" + File.separator + "files";
+	
+	private static final String DEFAULT_AVATAR_FOLDER_PATH = "avatars";
+	
+	private static final String DEFAULT_COMMENT_THUMBNAIL_FOLDER_PATH = 
+			"comment" + File.separator + "thumbnails";
+	
+	private static final String DEFAULT_COMMENT_ATTACHMENT_FOLDER_PATH = 
+			"comment" + File.separator + "attachments";
+	
+	private static final String DEFAULT_MESSAGE_ATTACHMENT_FOLDER_PATH = 
+			"comment" + File.separator + "attachments";
+		
+	/* timestamp pattern used to generated unique file name for new file uploaded */
+	private static final String TIMESTAMP_PATTERN = "yyyyMMdd.HHmmss.SSS";
+	
+	@Value("${File.uploadDirectory:undefined}")
+	private String fileUploadDirectory;
+		
+	/* if application property 'Avatar.folderPath' does not exist, use default value 'avatars' */
+	@Value("${Avatar.folderPath:#{null}}")
+	private String avatarFolderPath;
+	
+	/* complete path to the avatar folder */
+	private Path avatarPath;		
 
 	@Value("#{ ${Avatar.maxFileSize} * 1024 }")
 	private Integer avatarMaxFileSize;
@@ -47,37 +73,84 @@ public class FileService {
 	@Value("#{ ${Comment.attachment.maxFileSize} * 1024}")
 	private Long commentAttachmentMaxSize;
 	
-	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Comment.thumbnailPath}' }")
-	private String commentThumbnailDirectory;
+	@Value("${Comment.thumbnail.folderPath:#{null}}")
+	private String commentThumbnailFolderPath;
 	
-	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Comment.attachmentPath}' }")
-	private String commentAttachmentDirectory;
-
+	/* complete path to the comment thumbnail folder */
+	private Path commentThumbnailPath;
+	
+	@Value("${Comment.attachment.folderPath:#{null}}")
+	private String commentAttachmentFolderPath;
+	
+	/* complete path to the comment attachment folder */
+	private Path commentAttachmentPath;
+	
 	@Value("#{ ${Message.attachment.maxFileSize} * 1024}")
 	private Long messageAttachmentMaxSize;
 	
-	@Value("#{ '${FileUpload.rootDirectory}' + systemProperties['file.separator'] + '${Message.attachmentPath}' }")
-	private String messageAttachmentDirectory;
+	@Value("${Message.attachment.folderPath:#{null}}")
+	private String messageAttachmentFolderPath;
 	
-	/* timestamp pattern used to generated unique file name for new file uploaded */
-	private static String TIMESTAMP_PATTERN = "yyyyMMdd.HHmmss.SSS";
+	/* complete path to the message attachment folder */
+	private Path messageAttachmentPath;
 	
 	private DateFormat dateFormat;
 	
 	@PostConstruct
 	public void init() {
 		
+		if("undefined".equals(fileUploadDirectory)) {
+			fileUploadDirectory = DEFAULT_FILE_UPLOAD_DIRECTORY;
+		}
+		
+		/*
+		 * Avatars
+		 */
+		if(avatarFolderPath == null) {
+			avatarFolderPath = DEFAULT_AVATAR_FOLDER_PATH;
+		}
+		
+		avatarPath = Paths.get(fileUploadDirectory, avatarFolderPath);
+		
 		// create avatar directory if not already exist
-		new File(avatarDirectory).mkdirs();
-				
+		avatarPath.toFile().mkdirs();
+		
+		/*
+		 * Comment Thumbnails
+		 */
+		if(commentThumbnailFolderPath == null) {
+			commentThumbnailFolderPath = DEFAULT_COMMENT_THUMBNAIL_FOLDER_PATH;
+		}
+		
+		commentThumbnailPath = Paths.get(fileUploadDirectory, commentThumbnailFolderPath);
+		
 		// create comment thumbnail if not already exis
-		new File(commentThumbnailDirectory).mkdirs();
+		commentThumbnailPath.toFile().mkdirs();
+		
+		
+		/*
+		 * Comment Attachments 
+		 */
+		if(commentAttachmentFolderPath == null) {
+			commentAttachmentFolderPath = DEFAULT_COMMENT_ATTACHMENT_FOLDER_PATH;
+		}
+		
+		commentAttachmentPath = Paths.get(fileUploadDirectory, commentAttachmentFolderPath);
 		
 		// create comment attachment if not already exist
-		new File(commentAttachmentDirectory).mkdirs();
-
-		// create comment attachment if not already exist
-		new File(messageAttachmentDirectory).mkdirs();
+		commentAttachmentPath.toFile().mkdirs();
+		
+		/*
+		 * Message Attachments 
+		 */
+		if(messageAttachmentFolderPath == null) {
+			messageAttachmentFolderPath = DEFAULT_MESSAGE_ATTACHMENT_FOLDER_PATH;
+		}
+		
+		messageAttachmentPath = Paths.get(fileUploadDirectory, messageAttachmentFolderPath);
+		
+		// create comment attachment if not already exist		
+		messageAttachmentPath.toFile().mkdir();
 		
 		// initialize dateFormat
 		dateFormat = new SimpleDateFormat(TIMESTAMP_PATTERN);
@@ -93,8 +166,7 @@ public class FileService {
 		
 		ServiceResponse<String> response = new ServiceResponse<String>();
 		
-		File avatarFile = new File(avatarDirectory + File.separator 
-				+ username + "." + avatarImageType);
+		File avatarFile = avatarPath.resolve(username + "." + avatarImageType).toFile();
 		
 		try {
 			BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
@@ -141,8 +213,8 @@ public class FileService {
 					+ this.avatarMaxFileSize + " bytes");				
 		}
 		else {
-			File avatarFile = new File(avatarDirectory + File.separator 
-					+ username + "." + avatarImageType);
+			
+			File avatarFile = avatarPath.resolve(username + "." + avatarImageType).toFile();
 			
 			try {
 				BufferedImage bufferedImage = ImageIO.read(inputStream);
@@ -179,8 +251,7 @@ public class FileService {
 		
 		ServiceResponse<File> response = new ServiceResponse<File>();
 		
-		response.setDataObject(new File(avatarDirectory + File.separator + 
-				username + "." + avatarImageType));
+		response.setDataObject(avatarPath.resolve(username + "." + avatarImageType).toFile());
 		
 		return response;
 	}
@@ -194,8 +265,7 @@ public class FileService {
 		
 		ServiceResponse<Boolean> response = new ServiceResponse<Boolean>();
 		
-		File avatarFile = new File(avatarDirectory + File.separator + 
-				username + "." + avatarImageType);
+		File avatarFile = avatarPath.resolve(username + "." + avatarImageType).toFile();
 		
 		response.setDataObject(avatarFile.delete());
 		
@@ -218,7 +288,7 @@ public class FileService {
 			
 			String fileName = createFilename(extension);
 			
-			File imageFile = new File(this.commentThumbnailDirectory + File.separator + fileName);
+			File imageFile = commentThumbnailPath.resolve(File.separator + fileName).toFile();
 			
 			try {
 				BufferedImage bufferedImage = ImageIO.read(bais);
@@ -246,8 +316,8 @@ public class FileService {
 	public ServiceResponse<File> getCommentThumnail(String fileName) {
 		
 		ServiceResponse<File> response = new ServiceResponse<File>();
-
-		response.setDataObject(new File(this.commentThumbnailDirectory + File.separator + fileName));
+		
+		response.setDataObject(commentThumbnailPath.resolve(File.separator + fileName).toFile());
 		
 		return response;
 	}
@@ -261,7 +331,7 @@ public class FileService {
 		
 		ServiceResponse<Boolean> response = new ServiceResponse<Boolean>();
 		
-		File file2Delete = new File(this.commentThumbnailDirectory + File.separator + fileName);
+		File file2Delete = commentThumbnailPath.resolve(File.separator + fileName).toFile();
 		
 		response.setDataObject(file2Delete.delete());
 		
@@ -282,7 +352,7 @@ public class FileService {
 			
 			String fileName = createFilename(extension);
 			
-			File attachmentFile = new File(this.commentAttachmentDirectory + File.separator + fileName);
+			File attachmentFile = commentAttachmentPath.resolve(fileName).toFile();
 			
 			try {
 				
@@ -311,7 +381,7 @@ public class FileService {
 		
 		ServiceResponse<File> response = new ServiceResponse<File>();
 
-		response.setDataObject(new File(this.commentAttachmentDirectory + File.separator + fileName));
+		response.setDataObject(commentAttachmentPath.resolve(fileName).toFile());
 		
 		return response;
 	}
@@ -325,7 +395,7 @@ public class FileService {
 		
 		ServiceResponse<Boolean> response = new ServiceResponse<Boolean>();
 		
-		File file2Delete = new File(this.commentAttachmentDirectory + File.separator + fileName);
+		File file2Delete = commentAttachmentPath.resolve(fileName).toFile();
 		
 		response.setDataObject(file2Delete.delete());
 		
@@ -347,7 +417,7 @@ public class FileService {
 			
 			String fileName = createFilename(extension);
 			
-			File attachmentFile = new File(this.messageAttachmentDirectory + File.separator + fileName);
+			File attachmentFile = messageAttachmentPath.resolve(fileName).toFile();
 			
 			try {
 				
@@ -369,14 +439,14 @@ public class FileService {
 	
 	/**
 	 * 
-	 * @param filePath
+	 * @param fileName
 	 * @return
 	 */
-	public ServiceResponse<File> getMessageAttachment(String filePath) {
+	public ServiceResponse<File> getMessageAttachment(String fileName) {
 		
 		ServiceResponse<File> response = new ServiceResponse<File>();
 
-		response.setDataObject(new File(this.messageAttachmentDirectory + File.separator + filePath));
+		response.setDataObject(messageAttachmentPath.resolve(fileName).toFile());
 		
 		return response;
 	}		
@@ -390,7 +460,7 @@ public class FileService {
 		
 		ServiceResponse<Boolean> response = new ServiceResponse<Boolean>();
 		
-		File file2Delete = new File(this.messageAttachmentDirectory + File.separator + fileName);
+		File file2Delete = messageAttachmentPath.resolve(fileName).toFile();
 		
 		response.setDataObject(file2Delete.delete());
 		

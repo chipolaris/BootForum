@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,6 +59,9 @@ import net.htmlparser.jericho.TextExtractor;
 @Service
 public class IndexService {
 
+	private static final String DEFAULT_INDEX_DIRECTORY = System.getProperty("user.home") 
+			+ File.separator + "BootForum" + File.separator + "index";
+	
 	private static final String DISCUSSION_DIR = "discussion";
 
 	private static final String COMMENT_DIR = "comment";
@@ -69,7 +73,7 @@ public class IndexService {
 	/*@Value("${Lucene.maxHitsPerPage}")
 	private Integer maxHitsPerPage;*/
 	
-	@Value("${Lucene.indexDirectory}")
+	@Value("${Lucene.indexDirectory:#{nul}}")
 	private String indexDirectory;
 	
 	/* comment index */
@@ -94,12 +98,15 @@ public class IndexService {
 	
 	/* backup directory path */
 	private Path indexBackupDirPath;
-	
-	
+		
 	@PostConstruct
 	public void init() {
 		
 		logger.info("Initialize IndexService");
+		
+		if(indexDirectory == null) {
+			indexDirectory = DEFAULT_INDEX_DIRECTORY;
+		}
 		
 		try {
 			commentIndexWriter = initCommentIndexWriter(OpenMode.CREATE_OR_APPEND);
@@ -137,7 +144,7 @@ public class IndexService {
 			logger.error("Unable to build indexWriter", e);
 		}
 		
-		this.indexBackupDirPath = Paths.get(indexDirectory).getParent().resolve(INDEX_BACKUP_DIR);
+		this.indexBackupDirPath = Paths.get(indexDirectory).resolve(INDEX_BACKUP_DIR);
 		// create backup directory if it's not already exists
 		indexBackupDirPath.toFile().mkdirs();
 	}
