@@ -130,6 +130,26 @@
 				}
 			}
 			
+			/* 
+			 * debounce function to prevent exessive invokations, 
+			 *	ex: prevent code to be unecessarily invoked multiple times (such as hooked up to onkeyup event on textInput) 
+			 * https://www.freecodecamp.org/news/javascript-debounce-example/
+			 */ 
+			function debounce(func, timeout = 300){
+				let timer;
+			  	return (...args) => {
+			    	clearTimeout(timer);
+			    	timer = setTimeout(() => { func.apply(this, args); }, timeout);
+			    };
+			}		
+			
+			/*
+			 * 	utilize the debounce function above to prevent exessive server calls on search suggestions:
+			 * 	 Only invoke the showSearchSuggestion after 300 miliseonds of last keyup
+			 */
+			const debounceSearchSuggestion = debounce((keywordInput, searchValueEl, searchCommentLinkEl, elementId) => 
+				{ showSearchSuggestion(keywordInput, searchValueEl, searchCommentLinkEl, elementId) }, 300);
+			
 			function hideSearchSuggestion(elementId) {
 				var elm = document.getElementById(elementId);
 				elm.className = elm.className.replace(" w3-show", "");
@@ -251,7 +271,7 @@
 						<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
 						<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." autocomplete="off"
 							class="w3-input w3-border w3-round searchInput searchInputExpand" id="keywords" 
-							onkeyup="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv');document.getElementById('keywordsSmall').value = this.value;" 
+							onkeyup="debounceSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv');document.getElementById('keywordsSmall').value = this.value;" 
 							onfocus="showSearchSuggestion(this, 'searchValue', 'searchCommentLink', 'searchSuggestionDiv', false)" 
 							onblur="setTimeout(function(){ hideSearchSuggestion('searchSuggestionDiv'); }, 300);"/>
 							
