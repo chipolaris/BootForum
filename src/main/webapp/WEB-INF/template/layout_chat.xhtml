@@ -95,9 +95,9 @@
 					<button id="connect" class="w3-btn" type="submit"><i class="pi pi-sitemap"/> #{msg['connect']}</button>
 					<button id="disconnect" class="w3-btn" onclick="PF('cp').show();"><i class="pi pi-power-off"/> #{msg['disconnect']}</button>
 					
-				    <p:confirmDialog message="Disconnect and leave all chat rooms?" header="Disconnect" severity="alert" widgetVar="cp" appendTo="@(body)">
-				        <p:button value="Yes" onclick="PF('cp').hide();disconnect();return false;" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-				        <p:button value="No" onclick="PF('cp').hide();return false;" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+				    <p:confirmDialog message="#{msg['disconnect.and.leave.all.chat.rooms']}?" header="#{msg['disconnect']}" severity="alert" widgetVar="cp" appendTo="@(body)">
+				        <p:button value="#{msg['yes']}" onclick="PF('cp').hide();disconnect();return false;" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+				        <p:button value="#{msg['no']}" onclick="PF('cp').hide();return false;" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
 				    </p:confirmDialog>
 				</form>				
 							
