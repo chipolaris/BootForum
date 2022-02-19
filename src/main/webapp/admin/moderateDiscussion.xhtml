@@ -10,6 +10,12 @@
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
     xmlns:bf="http://bootforum.chipolaris.github.com/jsf/component"
     template="/WEB-INF/template/layout_admin.xhtml">
+
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="id" value="#{moderateDiscussion.discussionId}"/>
+		<f:viewAction action="#{moderateDiscussion.onLoad}"/>
+	</f:metadata>
 	
 	<ui:define name="title">
 		Moderate Discussion
@@ -81,13 +87,7 @@
 					);
 				}
 			//]]>	
-		</script>		
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="id" value="#{moderateDiscussion.discussionId}"/>
-			<f:viewAction action="#{moderateDiscussion.onLoad}"/>
-		</f:metadata>
+		</script>
 	
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">		
 			

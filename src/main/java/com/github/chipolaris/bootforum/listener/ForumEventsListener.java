@@ -25,7 +25,8 @@ public class ForumEventsListener {
 		
 		logger.info("Handle Forum Add");
 		
-		forumMap.init();
+		// reset forumMap.initialized flag so it will be re-initialize when called on next time
+		forumMap.setInitialized(false);  
 	}
 	
 	@EventListener
@@ -33,7 +34,8 @@ public class ForumEventsListener {
 		
 		logger.info("Handle Forum Update");
 		
-		forumMap.init();
+		// reset forumMap.initialized flag so it will be re-initialize when called on next time
+		forumMap.setInitialized(false);  
 	}
 	
 	@EventListener
@@ -41,6 +43,7 @@ public class ForumEventsListener {
 		
 		logger.info("Handle Forum Delete");
 		
-		forumMap.init();
+		// reset forumMap.initialized flag so it will be re-initialize when called on next time
+		forumMap.setInitialized(false);  
 	}
 }

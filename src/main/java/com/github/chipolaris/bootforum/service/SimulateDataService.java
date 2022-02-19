@@ -15,15 +15,18 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.UserDAO;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
 import com.github.chipolaris.bootforum.domain.Message;
@@ -33,7 +36,6 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
-import com.github.chipolaris.bootforum.event.CommentAddEvent;
 import com.github.chipolaris.bootforum.event.DiscussionAddEvent;
 import com.github.chipolaris.bootforum.event.ForumGroupAddEvent;
 import com.github.chipolaris.bootforum.event.UserRegistrationEvent;
@@ -63,6 +65,18 @@ public class SimulateDataService {
 	
 	@Resource
 	private DiscussionService discussionService;
+	
+	@Resource
+	private IndexService indexService;
+	
+	@Resource
+	private StatService statService;
+	
+	@Resource
+	private SystemInfoService systemInfoService;
+	
+	@Resource 
+	private CacheManager cacheManager;
 	
 	@Resource
 	private PasswordEncoder passwordEncoder;
@@ -231,6 +245,7 @@ public class SimulateDataService {
 		
 		Discussion discussion = new Discussion();
 		discussion.setForum(forum);
+		discussion.setStat(new DiscussionStat());
 		discussion.setTitle(discussionTitle);
 		
 		Comment comment = new Comment();
@@ -249,6 +264,19 @@ public class SimulateDataService {
 			applicationEventPublisher.publishEvent(new DiscussionAddEvent(this, newDiscussion, discussionStarter));
 			
 			createSimulateComments(newDiscussion, numComments, commentors);
+			
+			// discussion stat
+			statService.syncDiscussionStat(discussion);
+			
+			// forum stat
+			statService.synchForumStat(forum);
+			// evict cache's entry with key forumStat.id
+			cacheManager.getCache(CachingConfig.FORUM_STAT).evict(forum.getStat().getId());
+			
+			// update systemStat
+			SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
+			systemStat.addCommentCount(numComments);
+			systemStat.setLastComment(discussion.getStat().getLastComment());			
 		}
 	}
 
@@ -278,12 +306,18 @@ public class SimulateDataService {
 			
 			commentService.addReply(comment, user, Collections.emptyList(), Collections.emptyList());
 			
-			applicationEventPublisher.publishEvent(new CommentAddEvent(this, comment, user));
+			//applicationEventPublisher.publishEvent(new CommentAddEvent(this, comment, user));
+			indexService.addCommentIndex(comment);
+			
+			// user stat
+			statService.syncUserStat(user.getUsername());
+			// evict cache's entry with key user.username
+			cacheManager.getCache(CachingConfig.USER_STAT).evict(user.getUsername());
 			
 			createdComments.add(comment);
 		}
 	}
-
+	
 	@Transactional(readOnly = false)
 	public ServiceResponse<Void> simulatePrivateMessages(int numMessages, List<String> users) {
 		ServiceResponse<Void> response = new ServiceResponse<>();

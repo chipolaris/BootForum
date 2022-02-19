@@ -197,6 +197,7 @@ public class DiscussionEventsListener {
 		// evict cache's entry with key toForumStat.id
 		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(toForum.getStat().getId());
 		
-		forumMap.init();
+		// reset forumMap.initialized flag so it will be re-initialize when called on next time
+		forumMap.setInitialized(false);  
 	}
 }

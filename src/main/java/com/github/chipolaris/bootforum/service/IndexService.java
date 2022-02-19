@@ -572,8 +572,8 @@ public class IndexService {
 		try {
 			indexSearcher = commentSearcherManager.acquire();
 			
-			Query titleQuery = new QueryParser("title", commentAnalyzer).parse(searchString);
-			Query contentQuery = new QueryParser("content", commentAnalyzer).parse(searchString);
+			Query titleQuery = new QueryParser("title", commentAnalyzer).parse(QueryParser.escape(searchString));
+			Query contentQuery = new QueryParser("content", commentAnalyzer).parse(QueryParser.escape(searchString));
 			
 			BoostQuery boostTitleQuery = new BoostQuery(titleQuery, 0.75f);
 			BoostQuery boostContentQuery = new BoostQuery(contentQuery, 0.25f);
@@ -661,7 +661,7 @@ public class IndexService {
 		try {
 			indexSearcher = discussionSearcherManager.acquire();
 			
-			Query titleQuery = new QueryParser("title", discussionAnalyzer).parse(searchString);
+			Query titleQuery = new QueryParser("title", discussionAnalyzer).parse(QueryParser.escape(searchString));
 			Query isClosedQuery = new QueryParser("closed", discussionAnalyzer).parse(String.valueOf(Boolean.TRUE));
 						
 			// title match will get scoring boost of 0.65
@@ -768,7 +768,7 @@ public class IndexService {
 				boostTagQuery = new BoostQuery(tagQuery, 0.35f);
 			}
 			
-			Query titleQuery = new QueryParser("title", discussionAnalyzer).parse(discussion.getTitle());
+			Query titleQuery = new QueryParser("title", discussionAnalyzer).parse(QueryParser.escape(discussion.getTitle()));
 			Query notClosedQuery = new QueryParser("closed", discussionAnalyzer).parse(String.valueOf(Boolean.FALSE));
 						
 			// title match will get scoring boost of 0.50 if tag is available, otherwise, it would get .85

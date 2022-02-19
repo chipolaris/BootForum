@@ -9,6 +9,12 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:sec="http://www.springframework.org/security/tags"
     template="/WEB-INF/template/layout_public.xhtml">
+
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="username" value="#{memberProfile.username}"/>
+		<f:viewAction action="#{memberProfile.onLoad}"/>
+	</f:metadata>
 	
 	<ui:define name="title">
 		#{msg['member.profile']}
@@ -60,12 +66,6 @@
 				
 			//]]>
 		</script>
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="username" value="#{memberProfile.username}"/>
-			<f:viewAction action="#{memberProfile.onLoad}"/>
-		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">
 			

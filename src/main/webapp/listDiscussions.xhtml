@@ -7,6 +7,14 @@
     xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     template="/WEB-INF/template/layout_public.xhtml">
+
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="sort" value="#{listDiscussions.sort}"/>
+		<f:viewParam name="order" value="#{listDiscussions.order}"/>
+		<f:viewParam name="pageSize" value="#{listDiscussions.pageSize}"/>
+		<f:viewAction action="#{listDiscussions.onLoad}"/>
+	</f:metadata>
 	
 	<ui:define name="title">
 		#{msg['list.discussions']}
@@ -25,13 +33,6 @@
  				
 			//]]>	
 		</script>
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="sort" value="#{listDiscussions.sort}"/>
-			<f:viewParam name="order" value="#{listDiscussions.order}"/>
-			<f:viewParam name="pageSize" value="#{listDiscussions.pageSize}"/>
-			<f:viewAction action="#{listDiscussions.onLoad}"/>
-		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
 						

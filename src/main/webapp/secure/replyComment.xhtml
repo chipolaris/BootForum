@@ -10,19 +10,19 @@
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
     template="/WEB-INF/template/layout_public.xhtml">
 
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="id" value="#{replyComment.commentId}"/>
+		<f:viewParam name="quote" value="#{replyComment.quote}"/>
+		<f:viewParam name="discussionId" value="#{replyComment.discussionId}"/>
+		<f:viewAction action="#{replyComment.onLoad}"/>
+	</f:metadata>
+
 	<ui:define name="title">
 		#{msg['reply.to.comment']} '#{replyComment.comment.title}' #{msg['in.discussion']} '#{replyComment.comment.discussion.title}'
 	</ui:define>
 
-	<ui:define name="content">	
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="id" value="#{replyComment.commentId}"/>
-			<f:viewParam name="quote" value="#{replyComment.quote}"/>
-			<f:viewParam name="discussionId" value="#{replyComment.discussionId}"/>
-			<f:viewAction action="#{replyComment.onLoad}"/>
-		</f:metadata>
+	<ui:define name="content">
 
 		<script type="text/javascript">
  			//<![CDATA[

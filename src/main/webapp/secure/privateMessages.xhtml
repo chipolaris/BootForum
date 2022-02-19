@@ -9,6 +9,13 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
     template="/WEB-INF/template/layout_secure.xhtml">
+
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="viewTab" value="#{privateMessages.viewTab}"/>
+		<f:viewParam name="to" value="#{privateMessages.to}"/>
+		<f:viewAction action="#{privateMessages.onLoad}"/>
+	</f:metadata>
 	
 	<ui:define name="title">
 		#{msg['private.messages']}
@@ -118,13 +125,6 @@
  				}
 			//]]>
 		</script>
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="viewTab" value="#{privateMessages.viewTab}"/>
-			<f:viewParam name="to" value="#{privateMessages.to}"/>
-			<f:viewAction action="#{privateMessages.onLoad}"/>
-		</f:metadata>
 						
 		<div>
 			<p:messages id="messages" showDetail="true" showSummary="false" closable="true">

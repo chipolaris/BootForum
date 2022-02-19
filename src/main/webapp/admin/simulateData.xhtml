@@ -16,7 +16,7 @@
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 		
-			<p:messages id="messages" showDetail="true" closable="true">
+			<p:messages id="messages" showDetail="true" closable="true" globalOnly="true">
 				<p:autoUpdate/>
 			</p:messages>
 			
@@ -56,7 +56,7 @@
 							</div>
 							
 							<div class="w3-col" style="margin:10px 0px;">
-								<p:commandButton ajax="true" value="Create Users" icon="pi pi-cog" 
+								<p:commandButton ajax="true" value="Create Users" icon="pi pi-cog"
 									action="#{simulateData.createRandomUsers}" update=":discussionForm :forumDataForm"/>
 							</div>
 						</div>
@@ -72,7 +72,7 @@
 								<h:outputLabel value="Forum" for="forumSelectListbox" style="font-weight:bold;"/>
 								<p/>								
 					            <p:selectOneListbox id="forumSelectListbox" value="#{simulateData.form.forum}" converter="#{simulateData.forumConverter}"
-					                var="forum" filter="true" filterMatchMode="contains">
+					                var="forum" filter="true" filterMatchMode="contains" required="true" requiredMessage="A forum selection is required">
 					                <f:selectItems value="#{simulateData.forums}" var="forum" itemLabel="#{forum.title}" itemValue="#{forum}"/>
 					                <p:column width="30">
 					                    <span class="#{forum.icon} w3-large"/>
@@ -80,19 +80,32 @@
 					                <p:column>
 					                    <h:outputText value="#{forum.title}"/>
 					                </p:column>
-					            </p:selectOneListbox>						
+					            </p:selectOneListbox>
+					            <p/>
+					            <p:messages for="forumSelectListbox">
+					            	<p:autoUpdate/>
+					            </p:messages>					
 							</div>
 	
 							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
 								<h:outputLabel value="Discussion Title" for="discussionTitle" style="font-weight:bold;"/>
 								<p/>
-								<p:inputText value="#{simulateData.form.discussionTitle}" style="width:100%;" required="true" id="discussionTitle"/>
+								<p:inputText value="#{simulateData.form.discussionTitle}" style="width:100%;"  id="discussionTitle"
+									 required="true" requiredMessage="Must enter discussion title"/>
+								<p:messages for="discussionTitle">
+									<p:autoUpdate/>
+								</p:messages>
 							</div>
 							
 							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
 								<h:outputLabel value="Number of Comments" for="numComments" style="font-weight:bold;"/>
 								<p/>
-								<p:inputText value="#{simulateData.form.numComments}" style="width:100%;" required="true" id="numComments"/>
+								<p:inputText value="#{simulateData.form.numComments}" style="width:100%;" id="numComments" validatorMessage="Valid value is 1 to 10000">
+									<f:validateLongRange minimum="1" maximum="10000"/>
+								</p:inputText>
+								<p:messages for="numComments">
+									<p:autoUpdate/>
+								</p:messages>
 							</div>
 							
 							<div class="w3-col w3-rest w3-margin-top" style="padding: 0px 5px;">
@@ -100,7 +113,7 @@
 								<h:outputLabel value="Pick Commentors" for="commentorList" style="font-weight:bold;"/>
 								<p/>
 							    <p:pickList id="commentorList" value="#{simulateData.form.commentors}" var="commentor"
-	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true">
+	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true" required="true" requiredMessage="Must pick at least one commentor">
 	         					
 	         						<f:facet name="sourceCaption">Available</f:facet>
 	        						<f:facet name="targetCaption">Chosen</f:facet>
@@ -121,16 +134,19 @@
 							        </p:column>						
 	        						
 	                			</p:pickList>
+	                			<p:messages for="commentorList">
+	                				<p:autoUpdate/>
+	                			</p:messages>
 							</div>
 	
 							<div class="w3-col" style="padding: 0px 5px; margin:10px 0px;">
 								
 								<!-- submit button to show on small screen -->
-								<p:commandButton ajax="true" value="Simulate Discussion" icon="pi pi-cog" 
+								<p:commandButton ajax="true" value="Simulate Discussion" icon="pi pi-cog"
 									styleClass="w3-block w3-hide-large w3-hide-medium" action="#{simulateData.simulateDiscussion}"/>
 								
 								<!-- submit button to show on large and medium screen -->	
-								<p:commandButton ajax="true" value="Simulate Discussion" icon="pi pi-cog" 
+								<p:commandButton ajax="true" value="Simulate Discussion" icon="pi pi-cog"
 									styleClass="w3-hide-small" action="#{simulateData.simulateDiscussion}"/>
 								
 							</div>
@@ -149,22 +165,40 @@
 						
 							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
 								<h:outputLabel value="Forum Group Title" for="forumGroupTitle"/><br/>
-								<p:inputText value="#{simulateData.form.forumGroupTitle}" style="width:100%;" required="true" id="forumGroupTitle"/>
+								<p:inputText value="#{simulateData.form.forumGroupTitle}" style="width:100%;" required="true" id="forumGroupTitle"
+									requiredMessage="Must enter the forum group title"/>
+								<p:messages for="forumGroupTitle">
+									<p:autoUpdate/>
+								</p:messages>
 							</div>
 	
 							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
 								<h:outputLabel value="Forum Title" for="forumTitle"/><br/>
-								<p:inputText value="#{simulateData.form.forumTitle}" style="width:100%;" required="true" id="forumTitle"/>
+								<p:inputText value="#{simulateData.form.forumTitle}" style="width:100%;" required="true" id="forumTitle"
+									requiredMessage="Must enter the forum title"/>
+								<p:messages for="forumTitle">
+									<p:autoUpdate/>
+								</p:messages>
 							</div>
 	
 							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
 								<h:outputLabel value="Discussion Title (Template)" for="discussionTitle"/><br/>
-								<p:inputText value="#{simulateData.form.discussionTitle}" style="width:100%;" required="true" id="discussionTitle"/>
+								<p:inputText value="#{simulateData.form.discussionTitle}" style="width:100%;" required="true" id="discussionTitle"
+									requiredMessage="Must eneter the discussion title"/>
+								<p:messages for="discussionTitle">
+									<p:autoUpdate/>
+								</p:messages>
 							</div>
 							
 							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
 								<h:outputLabel value="Number of Discussions" for="numDiscussions"/><br/>
-								<p:inputText value="#{simulateData.form.numDiscussions}" style="width:100%;" required="true" id="numDiscussions"/>
+								<p:inputText value="#{simulateData.form.numDiscussions}" style="width:100%;" required="true" id="numDiscussions"
+									validatorMessage="Number of discussion must be between 1 and 100">
+									<f:validateLongRange minimum="1" maximum="100"/>
+								</p:inputText>
+								<p:messages for="numDiscussions">
+									<p:autoUpdate/>
+								</p:messages>
 							</div>
 							
 							<div class="w3-col w3-rest w3-margin-top" style="padding: 0px 5px;">
@@ -172,7 +206,8 @@
 								<h:outputLabel value="Pick Commentors" for="commentorList"/><br/>
 								
 							    <p:pickList id="commentorList" value="#{simulateData.form.commentors}" var="commentor"
-	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true">
+	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true" required="true"
+	                				requiredMessage="Must select at least one commentor">
 	         					
 	         						<f:facet name="sourceCaption">Available</f:facet>
 	        						<f:facet name="targetCaption">Chosen</f:facet>
@@ -193,16 +228,20 @@
 							        </p:column>						
 	        						
 	                			</p:pickList>
+	                			
+	                			<p:messages for="commentorList">
+									<p:autoUpdate/>
+								</p:messages>
 							</div>
 	
 							<div class="w3-col" style="padding: 0px 5px; margin:10px 0px;">
 								
 								<!-- submit button to show on small screen -->
-								<p:commandButton ajax="true" value="Simulate Forum Data" icon="pi pi-cog" 
+								<p:commandButton ajax="true" value="Simulate Forum Data" icon="pi pi-cog"
 									styleClass="w3-block w3-hide-large w3-hide-medium" action="#{simulateData.simulateForumData}"/>
 								
 								<!-- submit button to show on large and medium screen -->	
-								<p:commandButton ajax="true" value="Simulate Forum Data" icon="pi pi-cog" 
+								<p:commandButton ajax="true" value="Simulate Forum Data" icon="pi pi-cog"
 									styleClass="w3-hide-small" action="#{simulateData.simulateForumData}"/>
 								
 							</div>
@@ -219,7 +258,13 @@
 							
 							<div class="w3-half w3-margin-top" style="padding: 0px 5px;">
 								<h:outputLabel value="Number of Private Message" for="numMessages"/><br/>
-								<p:inputText value="#{simulateData.form.numMessages}" style="width:100%;" required="true" id="numMessages"/>
+								<p:inputText value="#{simulateData.form.numMessages}" style="width:100%;" id="numMessages"
+									validatorMessage="Number of messages must between 1 and 100">
+									<f:validateLongRange minimum="1" maximum="100"/>
+								</p:inputText>
+								<p:messages for="numMessages">
+									<p:autoUpdate/>
+								</p:messages>
 							</div>
 							
 							<div class="w3-col w3-rest w3-margin-top" style="padding: 0px 5px;">
@@ -227,7 +272,8 @@
 								<h:outputLabel value="Pick Commentors" for="commentorList"/><br/>
 								
 							    <p:pickList id="commentorList" value="#{simulateData.form.commentors}" var="commentor"
-	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true">
+	                				itemValue="#{commentor}" itemLabel="#{commentor}" responsive="true"
+	                				required="true" requiredMessage="Must pick at least a commentor">
 	         					
 	         						<f:facet name="sourceCaption">Available</f:facet>
 	        						<f:facet name="targetCaption">Chosen</f:facet>
@@ -248,16 +294,19 @@
 							        </p:column>						
 	        						
 	                			</p:pickList>
+	                			<p:messages for="commentorList">
+									<p:autoUpdate/>
+								</p:messages>
 							</div>
 							
 							<div class="w3-col" style="padding: 0px 5px; margin:10px 0px;">
 								
 								<!-- submit button to show on small screen -->
-								<p:commandButton ajax="true" value="Simulate Private Messages" icon="pi pi-cog" 
+								<p:commandButton ajax="true" value="Simulate Private Messages" icon="pi pi-cog"
 									styleClass="w3-block w3-hide-large w3-hide-medium" action="#{simulateData.simulatePrivateMessages}"/>
 								
 								<!-- submit button to show on large and medium screen -->	
-								<p:commandButton ajax="true" value="Simulate Private Messages" icon="pi pi-cog" 
+								<p:commandButton ajax="true" value="Simulate Private Messages" icon="pi pi-cog"
 									styleClass="w3-hide-small" action="#{simulateData.simulatePrivateMessages}"/>
 								
 							</div>

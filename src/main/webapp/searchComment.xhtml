@@ -9,6 +9,12 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     template="/WEB-INF/template/layout_public.xhtml">
 
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="keywords" value="#{searchComment.keywords}"/>
+		<f:viewAction action="#{searchComment.onLoad}"/>
+	</f:metadata>
+
 	<ui:define name="title">
 		#{msg['application.title']} - #{msg['search.comments']}
 	</ui:define>
@@ -45,12 +51,6 @@
 				});
 			//]]>
 		</script>
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="keywords" value="#{searchComment.keywords}"/>
-			<f:viewAction action="#{searchComment.onLoad}"/>
-		</f:metadata>
 
 		<!-- Use the mark.js library from https://markjs.io/ -->
 		<h:outputScript library="js" name="jquery.mark.min.js"/>

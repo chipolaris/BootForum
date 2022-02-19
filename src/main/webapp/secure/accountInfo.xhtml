@@ -7,6 +7,10 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf" 
     template="/WEB-INF/template/layout_secure.xhtml">
 
+	<f:metadata>
+		<f:viewAction action="#{imageUploadView.onLoad}"/>
+	</f:metadata>
+
 	<ui:define name="title">
 		#{msg['application.title']} - #{msg['my.account.information']}
 	</ui:define>
@@ -16,10 +20,6 @@
 	</ui:define>
 
 	<ui:define name="content">
-	
-		<f:metadata>
-			<f:viewAction action="#{imageUploadView.onLoad}"/>
-		</f:metadata>
 
 		<script type="text/javascript">
  			//<![CDATA[	

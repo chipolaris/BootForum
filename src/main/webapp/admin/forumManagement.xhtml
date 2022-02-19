@@ -8,6 +8,11 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     template="/WEB-INF/template/layout_admin.xhtml">
 
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewAction action="#{forumMap.init}"/>
+	</f:metadata>
+
 	<ui:define name="title">
 		#{msg['application.title']} - Forums Management
 	</ui:define>

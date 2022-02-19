@@ -10,17 +10,17 @@
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
     template="/WEB-INF/template/layout_public.xhtml">
 
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="forumId" value="#{addDiscussion.forumId}"/>
+		<f:viewAction action="#{addDiscussion.onLoad}"/>
+	</f:metadata>
+
 	<ui:define name="title">
 		#{msg['application.title']} - Add New Discussion
 	</ui:define>
 
 	<ui:define name="content">
-	
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="forumId" value="#{addDiscussion.forumId}"/>
-			<f:viewAction action="#{addDiscussion.onLoad}"/>
-		</f:metadata>
 		
 		<style>
 			

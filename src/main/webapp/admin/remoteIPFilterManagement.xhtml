@@ -9,6 +9,11 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     template="/WEB-INF/template/layout_admin.xhtml">
 
+	<!-- load data-->
+	<f:metadata>
+		<f:viewAction action="#{manageRemoteIPFilter.onLoad}"/>
+	</f:metadata>
+
 	<ui:define name="title">
 		#{msg['ip.filter.management']}
 	</ui:define>
@@ -18,11 +23,6 @@
 		<style type="text/css">
 			
 		</style>
-		
-		<!-- load data-->
-		<f:metadata>
-			<f:viewAction action="#{manageRemoteIPFilter.onLoad}"/>
-		</f:metadata>
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 			

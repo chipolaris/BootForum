@@ -7,6 +7,11 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:sec="http://www.springframework.org/security/tags"
 	template="/WEB-INF/template/layout_public.xhtml">
+
+	<!-- load data-->
+	<f:metadata>
+		<f:viewAction action="#{homePage.onLoad}"/>
+	</f:metadata>
 	
 	<ui:define name="title">
 		<!-- Welcome to #{msg['application.title']} -->
@@ -14,11 +19,6 @@
 	</ui:define>
 	
 	<ui:define name="content">
-	
-		<!-- load data-->
-		<f:metadata>
-			<f:viewAction action="#{homePage.onLoad}"/>
-		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-white">
 			

@@ -9,6 +9,12 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
     template="/WEB-INF/template/layout_public.xhtml">
+
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="id" value="#{viewForum.id}"/>
+		<f:viewAction action="#{viewForum.onLoad}"/>
+	</f:metadata>
 	
 	<ui:define name="title">
 		#{msg['view.forum']}
@@ -23,7 +29,7 @@
 			.ui-datatable.borderless thead th,
 			.ui-datatable.borderless tbody,
 			.ui-datatable.borderless tbody tr,
-			.ui-datatable.borderless tbody td {
+			.ui-datatable.borderless tbody tr td {
 			    border-style: none;
 			}
 			
@@ -32,12 +38,6 @@
 			}
 			
 		</style>
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="id" value="#{viewForum.id}"/>
-			<f:viewAction action="#{viewForum.onLoad}"/>
-		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">
 			
@@ -99,7 +99,7 @@
 									</p:repeat>
 								</p:column>
 								
-								<p:column sortBy="#{discussion.stat.commentCount}" style="text-align:center;width:120px;" responsivePriority="3">
+								<p:column sortBy="#{discussion.stat.commentCount}" style="text-align:center;width:100px;" responsivePriority="3">
 									<f:facet name="header">
 										<h:outputText value="#{msg['comments']}" style="font-weight:bold;"/>
 									</f:facet>
@@ -108,7 +108,7 @@
 									
 								</p:column>
 		
-								<p:column sortBy="#{discussion.stat.viewCount}" style="text-align:center;width:120px;" responsivePriority="4">
+								<p:column sortBy="#{discussion.stat.viewCount}" style="text-align:center;width:80px;" responsivePriority="4">
 									<f:facet name="header">
 										<h:outputText value="#{msg['views']}" style="font-weight:bold;"/>
 									</f:facet>
@@ -117,7 +117,7 @@
 									
 								</p:column>
 		
-								<p:column sortBy="#{discussion.stat.lastComment.commentDate}" style="text-align:right;width:160px;" responsivePriority="2">
+								<p:column sortBy="#{discussion.stat.lastComment.commentDate}" style="text-align:right;width:190px;" responsivePriority="2">
 									<f:facet name="header">
 										<h:outputText value="#{msg['latest.comment']}" />
 									</f:facet>

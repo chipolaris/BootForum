@@ -10,17 +10,17 @@
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
     template="/WEB-INF/template/layout_public.xhtml">
 
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="id" value="#{editComment.id}"/>
+		<f:viewAction action="#{editComment.onLoad}"/>
+	</f:metadata>
+
 	<ui:define name="title">
 		Edit comment '#{editComment.comment.title}' in discussion '#{editComment.comment.discussion.title}'
 	</ui:define>
 
-	<ui:define name="content">	
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="id" value="#{editComment.id}"/>
-			<f:viewAction action="#{editComment.onLoad}"/>
-		</f:metadata>
+	<ui:define name="content">
 
 		<script type="text/javascript">
  			//<![CDATA[

@@ -9,6 +9,12 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     template="/WEB-INF/template/layout_admin.xhtml">
 
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="forumId" value="#{discussionManagement.forumId}"/>
+		<f:viewAction action="#{discussionManagement.onLoad}"/>
+	</f:metadata>
+
 	<ui:define name="title">
 		#{msg['application.title']} - #{msg['discussions.management']}
 	</ui:define>
@@ -22,7 +28,7 @@
 			.ui-datatable.borderless thead th,
 			.ui-datatable.borderless tbody,
 			.ui-datatable.borderless tbody tr,
-			.ui-datatable.borderless tbody td {
+			.ui-datatable.borderless tbody tr td {
 			    border-style: none;
 			}
 			
@@ -59,12 +65,6 @@
 				}				
 			//]]>	
 		</script>
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="forumId" value="#{discussionManagement.forumId}"/>
-			<f:viewAction action="#{discussionManagement.onLoad}"/>
-		</f:metadata>
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
 		

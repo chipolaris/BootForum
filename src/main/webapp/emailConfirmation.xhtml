@@ -6,18 +6,18 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:p="http://primefaces.org/ui"
     template="/WEB-INF/template/layout_public.xhtml">
-    
+ 
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="key" value="#{emailConfirmation.key}" required="true" requiredMessage="Valid key is required" />
+		<f:viewAction action="#{emailConfirmation.onLoad}"/>
+	</f:metadata>
+		    
     <ui:define name="title">
 		Email Confirmation
 	</ui:define>
 	
  	<ui:define name="content">
-
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="key" value="#{emailConfirmation.key}" required="true" requiredMessage="Valid key is required" />
-			<f:viewAction action="#{emailConfirmation.onLoad}"/>
-		</f:metadata>
 		
 		<p:messages id="messages" showDetail="true" showSummary="false">
 			<p:autoUpdate/>

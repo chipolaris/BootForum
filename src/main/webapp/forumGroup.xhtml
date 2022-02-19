@@ -9,6 +9,11 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
     template="/WEB-INF/template/layout_public.xhtml">
+
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewAction action="#{forumMap.init}"/>
+	</f:metadata>
 	
 	<ui:define name="title">
 		List Forums
@@ -23,7 +28,7 @@
 			.ui-treetable.borderless thead th,
 			.ui-treetable.borderless tbody,
 			.ui-treetable.borderless tbody tr,
-			.ui-treetable.borderless tbody td {
+			.ui-treetable.borderless tbody tr td {
 			    border-style: none;
 			}
 			
@@ -96,15 +101,15 @@
 						        	</span>
 						        </p:column>
 						        
-						        <p:column headerText="#{msg['discussions']}" style="text-align:center;width:100px;" responsivePriority="3">
+						        <p:column headerText="#{msg['discussions']}" style="text-align:center;width:90px;" responsivePriority="3">
 						        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.discussionCount}</span>
 						        </p:column>
 						        
-						        <p:column headerText="#{msg['comments']}" style="text-align:center;width:100px;" responsivePriority="4">
+						        <p:column headerText="#{msg['comments']}" style="text-align:center;width:90px;" responsivePriority="4">
 						        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.commentCount}</span>
 						        </p:column>
 		
-								<p:column headerText="#{msg['latest.comments']}" style="text-align:right;width:200px;" responsivePriority="2">
+								<p:column headerText="#{msg['latest.comments']}" style="text-align:right;width:190px;" responsivePriority="2">
 									<div jsf:rendered="#{treeNode.type eq 'Forum' and not empty data.stat.lastComment}">
 										<pe:timeAgo value="#{data.stat.lastComment.commentDate}" titlePattern="MMMMM dd yyyy " /> #{msg['by']}
 										

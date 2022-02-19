@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.github.chipolaris</groupId>
 	<artifactId>BootForum</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>BootForum</name>
 	<description>BootForum - Forum Software using Java and Spring Boot</description>

@@ -10,6 +10,12 @@
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
     xmlns:bf="http://bootforum.chipolaris.github.com/jsf/component"
     template="/WEB-INF/template/layout_public.xhtml">
+
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="id" value="#{viewDiscussion.id}"/>
+		<f:viewAction action="#{viewDiscussion.onLoad}"/>
+	</f:metadata>
 	
 	<ui:define name="title">
 		View Discussion
@@ -76,12 +82,6 @@
 			}
 			
 		</style>
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="id" value="#{viewDiscussion.id}"/>
-			<f:viewAction action="#{viewDiscussion.onLoad}"/>
-		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">		
 			

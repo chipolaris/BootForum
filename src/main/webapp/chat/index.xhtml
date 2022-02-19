@@ -10,6 +10,11 @@
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     template="/WEB-INF/template/layout_chat.xhtml">
 
+	<!-- load data-->
+	<f:metadata>
+		<f:viewAction action="#{chatPage.onLoad}"/>
+	</f:metadata>
+
 	<ui:define name="title">
 		#{msg['application.title']} - #{msg['live.chat']} 
 	</ui:define>
@@ -88,11 +93,6 @@
 			}			
 			
 		</style>
-		
-		<!-- load data-->
-		<f:metadata>
-			<f:viewAction action="#{chatPage.onLoad}"/>
-		</f:metadata>
 		
 		<div jsf:id="mainContentDiv">
 			

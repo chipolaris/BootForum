@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.github.chipolaris.bootforum.domain.ChatRoom;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.Discussion;
+import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.domain.EmailOption;
 import com.github.chipolaris.bootforum.domain.Forum;
@@ -158,7 +159,7 @@ public class DataInitializer implements ApplicationRunner {
 			
 			// default values
 			displayOption.setThemeColor("w3-theme-light-blue");
-			displayOption.setThemeComponent("nova-light");
+			displayOption.setThemeComponent("saga");
 			
 			displayOption.setShowMostCommentsDiscussions(true);
 			displayOption.setNumMostCommentsDiscussions(5);
@@ -235,7 +236,7 @@ public class DataInitializer implements ApplicationRunner {
 		forum.setTitle("Anouncements");
 		forum.setDescription("Latest news/announcements");
 		forum.setActive(false);
-		forum.setIcon("fa fa-bullhorn");
+		forum.setIcon("pi pi-volume-up");
 		forum.setIconColor("ff7e00"); // Amber (SAE/ECE)
 		
 		forum = forumService.addForum(forum, null).getDataObject();
@@ -247,6 +248,7 @@ public class DataInitializer implements ApplicationRunner {
 		
 		Discussion discussion = new Discussion();
 		discussion.setForum(forum);
+		discussion.setStat(new DiscussionStat());
 		discussion.setImportant(true);
 		discussion.setSticky(true);
 		discussion.setTitle("Welcome to " + applicationName);

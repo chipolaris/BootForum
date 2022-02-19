@@ -9,7 +9,13 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:func="http://bootforum.chipolaris.github.com/functions"
     template="/WEB-INF/template/layout_public.xhtml">
-	
+		
+	<!-- set request parameter values from URL to backing bean -->
+	<f:metadata>
+		<f:viewParam name="id" value="#{viewTag.id}"/>
+		<f:viewAction action="#{viewTag.onLoad}"/>
+	</f:metadata>
+			
 	<ui:define name="title">
 		View Tag
 	</ui:define>
@@ -36,12 +42,6 @@
 				 border-style: none;
 			}			
 		</style>
-		
-		<!-- set request parameter values from URL to backing bean -->
-		<f:metadata>
-			<f:viewParam name="id" value="#{viewTag.id}"/>
-			<f:viewAction action="#{viewTag.onLoad}"/>
-		</f:metadata>
 	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">
 			

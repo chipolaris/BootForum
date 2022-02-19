@@ -28,6 +28,7 @@ import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.DiscussionService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.IndexService;
+import com.github.chipolaris.bootforum.service.SearchDiscussionResult;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 
 @Component(value="viewDiscussion")
@@ -169,24 +170,29 @@ public class ViewDiscussion {
 		
 		if(suggestedDiscussions == null) {
 						
-			// search Lucene index for similar discussions
-			List<Discussion> discussionsSearchResult =
-				indexService.searchSimilarDiscussions(
-					this.discussion, 0, MAX_SIMILAR_DISCUSSIONS + 1).getDataObject().getDiscussions();
+			// search Lucene index for similar discussions	
+			ServiceResponse<SearchDiscussionResult> response = indexService.searchSimilarDiscussions(
+					this.discussion, 0, MAX_SIMILAR_DISCUSSIONS + 1);
 			
-			// since Lucene result might include the current discussion, filter it out
-			for(Iterator<Discussion> iter = discussionsSearchResult.iterator(); iter.hasNext(); ) {
-				Discussion disc = iter.next();
-				if(disc.getId().equals(this.discussion.getId())) {
-					iter.remove();
+			if(response.getDataObject() != null) {
+			
+				List<Discussion> discussionsSearchResult = response.getDataObject().getDiscussions();
+				
+				// since Lucene result might include the current discussion, filter it out
+				for(Iterator<Discussion> iter = discussionsSearchResult.iterator(); iter.hasNext(); ) {
+					Discussion disc = iter.next();
+					if(disc.getId().equals(this.discussion.getId())) {
+						iter.remove();
+					}
+				}
+				
+				if(!discussionsSearchResult.isEmpty()) {
+					// fetch actual data from db
+					this.suggestedDiscussions = discussionService.fetchDiscussions(discussionsSearchResult).getDataObject();
 				}
 			}
 			
-			if(!discussionsSearchResult.isEmpty()) {
-				// fetch actual data from db
-				this.suggestedDiscussions = discussionService.fetchDiscussions(discussionsSearchResult).getDataObject();
-			}
-			else {
+			if(suggestedDiscussions == null) { // if suggestedDiscussions is STILL null
 				this.suggestedDiscussions = new ArrayList<>();
 			}
 		}

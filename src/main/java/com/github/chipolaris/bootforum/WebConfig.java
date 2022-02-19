@@ -145,7 +145,7 @@ public class WebConfig implements ServletContextInitializer {
 		// 'theme.component', if the cookie does not exist, use default
 		servletContext.setInitParameter("primefaces.THEME",
 				"#{empty cookie['theme.component'].value ?"
-			  + " (empty systemInfo.displayOption.themeComponent ? 'vela' : systemInfo.displayOption.themeComponent)"
+			  + " (empty systemInfo.displayOption.themeComponent ? 'saga' : systemInfo.displayOption.themeComponent)"
 			  + " : cookie['theme.component'].value}");
 		servletContext.setInitParameter("primefaces.UPLOADER", "commons"); // native/commons/auto
 		servletContext.setInitParameter("primefaces.FONT_AWESOME", "true");

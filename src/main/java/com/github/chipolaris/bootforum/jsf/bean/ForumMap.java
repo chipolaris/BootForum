@@ -1,10 +1,7 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -13,17 +10,16 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
-import com.github.chipolaris.bootforum.domain.ForumStat;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 // application scope JSF backing bean
 @Component
+@Scope("application")
 public class ForumMap {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ForumMap.class);
@@ -48,33 +44,43 @@ public class ForumMap {
 	public void setManagementRootTreeNode(DefaultTreeNode managementRootTreeNode) {
 		this.managementRootTreeNode = managementRootTreeNode;
 	}
+
+	private boolean initialized; 
 	
-	@PostConstruct
+	public boolean isInitialized() {
+		return initialized;
+	}
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
+	}
+	
 	public void init() {
 		
-		List<Forum> forums = genericService.getEntities(Forum.class, Collections.singletonMap("forumGroup", null), 
-				"sortOrder", false).getDataObject();
-
-		List<ForumGroup> forumGroups = genericService.getEntities(ForumGroup.class, Collections.singletonMap("parent", null), 
-				"sortOrder", false).getDataObject();
-		
-		forumRootTreeNode = new DefaultTreeNode(null, null);
-		forumRootTreeNode.setExpanded(true);
-		
-		TreeNode rootTreeNode = new DefaultTreeNode("Root", null, forumRootTreeNode);
-		rootTreeNode.setExpanded(true);
-		
-		buildForumTreeNodes(forums, forumGroups, rootTreeNode);
-		
-		// 
-		
-		managementRootTreeNode = new DefaultTreeNode(null, null);
-		managementRootTreeNode.setExpanded(true);
-		
-		TreeNode managementTreeNode = new DefaultTreeNode("Root", null, managementRootTreeNode);
-		managementTreeNode.setExpanded(true);
-		
-		buildManagementTree(forums, forumGroups, managementTreeNode);
+		if(initialized == false) {
+			List<Forum> forums = genericService.getEntities(Forum.class, Collections.singletonMap("forumGroup", null), 
+					"sortOrder", false).getDataObject();
+	
+			List<ForumGroup> forumGroups = genericService.getEntities(ForumGroup.class, Collections.singletonMap("parent", null), 
+					"sortOrder", false).getDataObject();
+			
+			forumRootTreeNode = new DefaultTreeNode(null, null);
+			forumRootTreeNode.setExpanded(true);
+			
+			TreeNode rootTreeNode = new DefaultTreeNode("Root", null, forumRootTreeNode);
+			rootTreeNode.setExpanded(true);
+			
+			buildForumTreeNodes(forums, forumGroups, rootTreeNode);
+			
+			// 
+			
+			managementRootTreeNode = new DefaultTreeNode(null, null);
+			managementRootTreeNode.setExpanded(true);
+			
+			TreeNode managementTreeNode = new DefaultTreeNode("Root", null, managementRootTreeNode);
+			managementTreeNode.setExpanded(true);
+			
+			buildManagementTree(forums, forumGroups, managementTreeNode);
+		}
 	}
 
 	private void buildManagementTree(List<Forum> forums, List<ForumGroup> forumGroups, TreeNode parent) {
