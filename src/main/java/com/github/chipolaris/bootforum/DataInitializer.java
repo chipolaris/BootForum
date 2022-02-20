@@ -287,8 +287,8 @@ public class DataInitializer implements ApplicationRunner {
 		ChatRoom chatRoom = new ChatRoom();
 		
 		chatRoom.setLabel("First Chat Room");
-		chatRoom.setColor("purple");
-		chatRoom.setIcon("pi pi-globe");
+		chatRoom.setColor("800080");
+		chatRoom.setIcon("pi pi-heart-fill");
 		chatRoom.setDisabled(false);
 		
 		genericService.saveEntity(chatRoom);
