@@ -44,13 +44,6 @@ import com.github.chipolaris.bootforum.service.UserService;
 @Component
 public class DataInitializer implements ApplicationRunner {
 
-	private static final String REGISTRATION_EMAIL_TEMPLATE = 
-			"<p>Thank you <b>&lt;username&gt;</b> for registration with &lt;app-name&gt;</p>"
-		  + "<p>Please confirm your email with the link below</p>" 
-		  + "<p>&lt;confirm-link&gt;</p>"
-		  + "<p>If you did not register for &lt;app-name&gt;, please disregard this and no action is necessary</p>"
-		  + "<p>The &lt;app-name&gt; team</p>";
-
 	private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 	
 	@Resource
@@ -220,8 +213,12 @@ public class DataInitializer implements ApplicationRunner {
 			registrationOption = new RegistrationOption();
 			registrationOption.setId(1L);
 			
-			registrationOption.setEnableEmailConfirm(false);
+			registrationOption.setEnableCaptcha(true);
+			registrationOption.setEnableEmailConfirm(true);
+			registrationOption.setRegistrationEmailSubject(REGISTRATION_EMAIL_SUBJECT);
 			registrationOption.setRegistrationEmailTemplate(REGISTRATION_EMAIL_TEMPLATE);
+			registrationOption.setPasswordResetEmailSubject(PASSWORD_RESET_EMAIL_SUBJECT);
+			registrationOption.setPasswordResetEmailTemplate(PASSWORD_RESET_EMAIL_TEMPLATE);
 			
 			genericService.saveEntity(registrationOption);
 		}
@@ -293,5 +290,24 @@ public class DataInitializer implements ApplicationRunner {
 		
 		genericService.saveEntity(chatRoom);
 	}
+	
+	/*
+	 * Default values on first time system initialization
+	 */
+	private static final String REGISTRATION_EMAIL_SUBJECT = "Confirm account registration at BootForum";
+	
+	private static final String REGISTRATION_EMAIL_TEMPLATE = 
+			"<p><strong>Hi #username</strong>,</p>"
+		  +	"<p>This email&nbsp;<strong>#email</strong>&nbsp;has been used for account registration on <strong>BootForum</strong>.</p>"
+		  +	"<p>If that wasn&#39;t your intention, kindly ignore this email. Otherwise, please lick on this link #confirm-url to activate your account.</p>"
+		  +	"<p>Regards,</p>";
+	
+	private static final String PASSWORD_RESET_EMAIL_SUBJECT = "Password reset requested at BootForum";
+	
+	private static final String PASSWORD_RESET_EMAIL_TEMPLATE =
+			"<p><strong>Hi #username</strong>,</p>"
+		  + "<p>Here is the <strong>#reset-url</strong> to reset your password in <strong>BootForum</strong></p>"
+		  + "<p>If you didn&#39;t request this, kindly ignore this email.</p>"
+		  + "<p>Regards,</p>";
 
 }

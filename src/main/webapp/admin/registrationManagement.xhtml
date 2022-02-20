@@ -49,15 +49,15 @@
 			
 			<h:form id="form">
 				<p:tabView id="tabView">
-					<p:tab>
+					<p:tab id="registrationTab">
 						<f:facet name="title">
 							<div class="w3-container w3-large">
-								<i class="pi pi-users w3-large"/> #{msg['user.registration.option']}
+								<i class="pi pi-book w3-large"/> #{msg['user.registrations']}
 							</div>
 						</f:facet>
 						
 						<div class="w3-row-padding">
-							<p/>
+							
 							<div>
 								<h:selectBooleanCheckbox id="enableCaptcha" value="#{registrationManagement.registrationOption.enableCaptcha}" 
 									styleClass="w3-check"/>&nbsp;&nbsp;					
@@ -68,7 +68,7 @@
 							<div class="w3-margin-top">
 								<h:selectBooleanCheckbox id="enableEmailConfirm" value="#{registrationManagement.registrationOption.enableEmailConfirm}" 
 									styleClass="w3-check" onchange="updateRegistrationEmailInputs();"/>&nbsp;&nbsp;
-								<p:outputLabel for="enableEmailConfirm" value="${msg['enable.email.confirm']}" styleClass="w3-medium" style="font-weight:bold;"/>
+								<p:outputLabel for="enableEmailConfirm" value="${msg['enable.email.confirmation']}" styleClass="w3-medium" style="font-weight:bold;"/>
 							</div>
 							
 							<div class="w3-margin-top w3-padding">
@@ -78,7 +78,7 @@
 								<p:overlayPanel for="helpRegistrationEmailSubject" style="width:240px" styleClass="w3-black">
 									<h5>#{msg['example']}:</h5>
 									<hr/> 
-									#{msg['confirm.account.registration.at']} <b>BootForum</b>
+									#{msg['help.confirm.account.registration']}
 								</p:overlayPanel>
 								<p/>
 								<p:inputText id="registrationEmailSubject" value="#{registrationManagement.registrationOption.registrationEmailSubject}" styleClass="w3-input" maxlength="200" 
@@ -95,22 +95,14 @@
 								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailTemplate"/>
 								<p/>
 								<p:overlayPanel for="helpRegistrationEmailTemplate" style="width:350px" styleClass="w3-black">
-									<h5>#{msg['sample.email.to.send.when.user.register.for.account']}:</h5>
+									<h5>#{msg['help.sample.email.registration.header']}:</h5>
 									<hr/>
-									<b>#{msg['hi']} #username</b>,
 									<p>
-									#{msg['this.email']} <b>#email</b> #{msg['has.been.used.for.account.registration.on.BootForum']}.
-									</p>
-									<p>
-									#{msg['if.that.was.not.your.intention.kindly.ignore.this.email.otherwise.please.click.on.this.link']} #confirm-url #{msg['to.activate.your.account']}.
-									</p>
-									<p>
-									#{msg['regards']},
+										<h:outputText value="#{msg['help.sample.email.registration.template']}" escape="false"/>
 									</p>
 									<hr/>
 									<p>
-									<b>#{msg['note']}:</b> #username, #email, #{msg['and']} #confirm-url
-									#{msg['will.be.replaced.by.the.actual.values.on.the.email']}
+									<h:outputText value="#{msg['help.sample.email.registration.note']}" escape="false"/>
 									</p>
 								</p:overlayPanel>
 		
@@ -126,81 +118,15 @@
 								</h:message>							
 								
 							</div>
-							
-							<div class="w3-margin-top w3-padding">
-								<p/>
-								<p:outputLabel for="passwordResetEmailSubject" value="#{msg['password.reset.email.subject']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailSubject"/>
-								<p:overlayPanel for="helpPasswordResetEmailSubject" style="width:240px" styleClass="w3-black">
-									<h5>#{msg['example']}:</h5>
-									<hr/> 
-									#{msg['password.reset.requested.at']} <b>BootForum</b>
-								</p:overlayPanel>
-								<p/>
-								<p:inputText id="passwordResetEmailSubject" value="#{registrationManagement.registrationOption.passwordResetEmailSubject}" 
-									required="true" styleClass="w3-input" maxlength="200" />
-								<h:message id="passwordResetEmailSubjectError" for="passwordResetEmailSubject" styleClass="w3-pale-red">
-									<p:autoUpdate/>
-								</h:message>
-							</div>					
-		
-							<div jsf:id="passwordResetEmailTemplateDiv" class="w3-margin-top w3-padding">
-		
-								<p:outputLabel for="passwordResetEmailTemplate" value="#{msg['password.reset.email.template']}" styleClass="w3-medium" 
-									style="font-weight:bold;" indicateRequired="false"/>
-								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailTemplate"/>
-								<p/>
-								<p:overlayPanel for="helpPasswordResetEmailTemplate" style="width:350px" styleClass="w3-black">
-									<h5>#{msg['sample.email.to.send.when.user.requests.password.reset']}:</h5>
-									<hr/>
-									<b>#{msg['hi']} #username</b>,
-									<p>
-									#{msg['here.is.the']} #reset-url #{msg['to.reset.your.password.in']} <b>BootForum</b>
-									</p>
-									<p> 
-									#{msg['if.you.did.not.request.this.kindly.ignore.this.email']}.
-									</p>
-									<p>
-									#{msg['regards']},
-									</p>
-									<hr/>
-									<p>
-									<b>#{msg['note']}:</b> #username, #email, #{msg['and']} #reset-url #{msg['will.be.replaced.by.the.actual.values.on.the.email']}
-									</p>
-								</p:overlayPanel>
-		
-								<pe:ckEditor id="passwordResetEmailTemplate" value="#{registrationManagement.registrationOption.passwordResetEmailTemplate}" skin="moono-lisa" width="100%" required="true"
-									toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
-												'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
-												'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
-												'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" requiredMessage="Password Reset Email Template is required">
-								</pe:ckEditor>
-								<h:message id="passwordResetEmailTemplateError" for="passwordResetEmailTemplate" styleClass="w3-pale-red">
-									<p:autoUpdate/>
-								</h:message>							
-								
-							</div>
-		
-							<div class="w3-margin-top w3-padding">
+
+							<div class="w3-padding">
 								
 								<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
 								<p:commandButton value="#{msg['save']}" type="button" icon="pi pi-check" onclick="submitForm();"
 									styleClass="w3-btn w3-theme-dark w3-border-0" />
 							</div>
-						
-							<p:remoteCommand name="submitForm" action="#{registrationManagement.edit}"/>
-							
-						</div>
-											
-					</p:tab>
-					<p:tab id="registrationTab">
-						<f:facet name="title">
-							<div class="w3-container w3-large">
-								<i class="pi pi-book w3-large"/> #{msg['user.registrations']}
-							</div>
-						</f:facet>
-						
-						<div class="w3-row-padding">
+
+
 							
 							<p:dataTable var="registration" value="#{registrationManagement.registrationLazyModel}" style="margin: 0 auto;" styleClass="borderless"
 								widgetVar="registrationTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
@@ -273,6 +199,61 @@
 						</f:facet>
 						
 						<div class="w3-row-padding">
+						
+							<div class="w3-padding">
+								<p/>
+								<p:outputLabel for="passwordResetEmailSubject" value="#{msg['password.reset.email.subject']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailSubject"/>
+								<p:overlayPanel for="helpPasswordResetEmailSubject" style="width:240px" styleClass="w3-black">
+									<h5>#{msg['example']}:</h5>
+									<hr/> 
+									#{msg['help.password.reset.requested']}
+								</p:overlayPanel>
+								<p/>
+								<p:inputText id="passwordResetEmailSubject" value="#{registrationManagement.registrationOption.passwordResetEmailSubject}" 
+									required="true" styleClass="w3-input" maxlength="200" />
+								<h:message id="passwordResetEmailSubjectError" for="passwordResetEmailSubject" styleClass="w3-pale-red">
+									<p:autoUpdate/>
+								</h:message>
+							</div>					
+		
+							<div jsf:id="passwordResetEmailTemplateDiv" class="w3-margin-top w3-padding">
+		
+								<p:outputLabel for="passwordResetEmailTemplate" value="#{msg['password.reset.email.template']}" styleClass="w3-medium" 
+									style="font-weight:bold;" indicateRequired="false"/>
+								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPasswordResetEmailTemplate"/>
+								<p/>
+								<p:overlayPanel for="helpPasswordResetEmailTemplate" style="width:350px" styleClass="w3-black">
+									<h5>#{msg['help.sample.email.password.reset.header']}:</h5>
+									<hr/>
+									<p>
+										<h:outputText value="#{msg['help.sample.email.password.reset.template']}" escape="false"/>
+									</p>
+									<hr/>
+									<p>
+									<h:outputText value="#{msg['help.sample.email.password.reset.note']}" escape="false"/>
+									</p>
+								</p:overlayPanel>
+		
+								<pe:ckEditor id="passwordResetEmailTemplate" value="#{registrationManagement.registrationOption.passwordResetEmailTemplate}" skin="moono-lisa" width="100%" required="true"
+									toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
+												'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
+												'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
+												'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" requiredMessage="Password Reset Email Template is required">
+								</pe:ckEditor>
+								<h:message id="passwordResetEmailTemplateError" for="passwordResetEmailTemplate" styleClass="w3-pale-red">
+									<p:autoUpdate/>
+								</h:message>							
+								
+							</div>
+		
+							<div class="w3-padding">
+								
+								<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
+								<p:commandButton value="#{msg['save']}" type="button" icon="pi pi-check" onclick="submitForm();"
+									styleClass="w3-btn w3-theme-dark w3-border-0" />
+							</div>						
+	
 							<p:dataTable var="passwordReset" value="#{registrationManagement.passwordResetLazyModel}" style="margin: 0 auto;" styleClass="borderless"
 								widgetVar="passwordResetTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending" emptyMessage="#{msg['no.records.found']}"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
@@ -327,6 +308,8 @@
 											
 					</p:tab>				
 				</p:tabView>
+				
+				<p:remoteCommand name="submitForm" action="#{registrationManagement.edit}"/>
 			</h:form>
 
 			<p:confirmDialog message="Are you sure?" width="300" global="true"
