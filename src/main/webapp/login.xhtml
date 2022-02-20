@@ -142,7 +142,7 @@
 									<h:message for="captchaInput" id="captchaInputMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 								</p>
 								
-								<p>
+								<p jsf:rendered="#{publicBackingBean.registrationOption.enableCaptcha}">
 												
 									<h:graphicImage value="data:image/png;base64,#{captchaImage.randomCaptchaBase64}" id="captchaImage"/>
 									

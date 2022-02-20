@@ -196,6 +196,10 @@
 					<!-- medium screen top menu items -->
 					<a href="#{request.contextPath}/forumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white w3-text-dark-gray" 
 						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['forums']}">
+						<i class="pi pi-comment w3-xlarge"/>
+					</a>
+					<a href="#{request.contextPath}/chat/index.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white w3-text-dark-gray" 
+						style="font-size:1.40rem;padding:15px 14px 14px 14px;" title="#{msg['chat.rooms']}">
 						<i class="pi pi-comments w3-xlarge"/>
 					</a>
 					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-large w3-hover-grey w3-hover-text-white w3-text-dark-gray" 
@@ -216,7 +220,10 @@
 					
 					<!-- large screen top menu items -->
 					<a href="#{request.contextPath}/forumGroup.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white w3-text-dark-gray">
-						<i class="pi pi-comments w3-xlarge"/><br/><span class="w3-medium">#{msg['forums']}</span>
+						<i class="pi pi-comment w3-xlarge"/><br/><span class="w3-medium">#{msg['forums']}</span>
+					</a>
+					<a href="#{request.contextPath}/chat/index.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white w3-text-dark-gray">
+						<i class="pi pi-comments w3-xlarge"/><br/><span class="w3-medium">#{msg['chat.rooms']}</span>
 					</a>
 					<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-grey w3-hover-text-white w3-text-dark-gray">
 						<i class="pi pi-users w3-xlarge"/><br/><span class="w3-medium">#{msg['members']}</span>
@@ -515,7 +522,7 @@
 								</p:inputText>
 								<h:message for="captchaInput" id="captchaInputMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
-							<p>
+							<p jsf:rendered="#{publicBackingBean.registrationOption.enableCaptcha}">
 											
 								<h:graphicImage value="data:image/png;base64,#{captchaImage.randomCaptchaBase64}" id="captchaImage"/>
 								

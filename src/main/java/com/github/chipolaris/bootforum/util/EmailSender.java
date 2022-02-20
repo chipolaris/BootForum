@@ -45,6 +45,8 @@ public class EmailSender {
 		
 		private String password;
 		
+		private String defaultEncoding;
+		
 		private Boolean authentication;
 		
 		private Boolean tlsEnable;
@@ -69,6 +71,11 @@ public class EmailSender {
 			return this;
 		}
 		
+		public Builder defaultEncoding(String defaultEncoding) {
+			this.defaultEncoding = defaultEncoding;
+			return this;
+		}
+		
 		public Builder authentication(Boolean authentication) {
 			this.authentication = authentication;
 			return this;
@@ -90,6 +97,7 @@ public class EmailSender {
 			emailSender.javaMailSender.setPort(this.port);
 			emailSender.javaMailSender.setUsername(this.username);
 			emailSender.javaMailSender.setPassword(this.password);
+			emailSender.javaMailSender.setDefaultEncoding(this.defaultEncoding);
 			
 			Properties javaMailProperties = new Properties();
 			javaMailProperties.put("mail.smtp.auth", this.authentication);

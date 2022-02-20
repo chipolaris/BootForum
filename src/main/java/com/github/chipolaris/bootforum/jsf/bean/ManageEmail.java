@@ -107,7 +107,7 @@ public class ManageEmail {
 		this.testRan = true;
 		
 		EmailSender emailSender = EmailSender.builder().host(this.emailOption.getHost())
-				.port(this.emailOption.getPort()).authentication(this.emailOption.getAuthentication())
+				.port(this.emailOption.getPort()).defaultEncoding("UTF-8").authentication(this.emailOption.getAuthentication())
 				.tlsEnable(this.emailOption.getTlsEnable()).username(this.emailOption.getUsername())
 				.password(this.emailOption.getPassword()).build();
 		

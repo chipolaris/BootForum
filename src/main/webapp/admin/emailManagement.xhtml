@@ -4,7 +4,6 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     template="/WEB-INF/template/layout_admin.xhtml">
@@ -30,7 +29,7 @@
  				<h3><b>#{msg['email.configuration']}</b></h3>
  			</div>
  			
- 			<p:messages id="messages" showDetail="true" closable="true">
+ 			<p:messages id="messages" showDetail="true" closable="true" globalOnly="true">
 				<p:autoUpdate/>
 			</p:messages>
 			
@@ -58,7 +57,7 @@
 
 					<div class="w3-half w3-container">
 						<p/>
-						<div class="w3-quarter w3-container">
+						<div class="w3-third w3-container">
 							
 							<p:outputLabel for="port" value="#{msg['port']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/> 
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPort"/>
@@ -77,7 +76,7 @@
 							</h:message>
 						</div>
 
-						<div class="w3-half w3-container w3-right-align">
+						<div class="w3-third w3-container w3-right-align">
 							<p:outputLabel for="authentication" value="#{msg['authentication']}" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpAuthentication"/>
 							<p:overlayPanel for="helpAuthentication" style="width:240px" styleClass="w3-left-align">
@@ -87,7 +86,7 @@
 							<p:selectBooleanCheckbox id="authentication" value="#{manageEmail.emailOption.authentication}"/>
 						</div>
 	
-						<div class="w3-quarter w3-container w3-right-align">
+						<div class="w3-third w3-container w3-right-align">
 							<p:outputLabel for="tls" value="TLS" styleClass="w3-medium" style="font-weight:bold;"/>
 							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpTLS"/>
 							<p:overlayPanel for="helpTLS" style="width:240px" styleClass="w3-left-align">
@@ -114,17 +113,19 @@
 					</div>
 					
 					<div class="w3-half w3-container">
-						<p:outputLabel for="username" value="#{msg['password']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
-						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPassword"/>
-						<p:overlayPanel for="helpPassword" style="width:240px">
-							#{msg['password.to.login.SMTP.server']}
-						</p:overlayPanel>
-						<p/>
-						<p:password id="password" value="#{manageEmail.emailOption.password}" styleClass="w3-input" maxlength="80" 
-							required="true" requiredMessage="#{msg['email.password.required']}" redisplay="true"/>
-						<h:message id="passwordError" for="password" styleClass="w3-pale-red">
-							<p:autoUpdate/>
-						</h:message>
+						<div class="w3-container">
+							<p:outputLabel for="password" value="#{msg['password']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
+							&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpPassword"/>
+							<p:overlayPanel for="helpPassword" style="width:240px">
+								#{msg['password.to.login.SMTP.server']}
+							</p:overlayPanel>
+							<p/>
+							<p:password id="password" value="#{manageEmail.emailOption.password}" styleClass="w3-input"
+								required="true" requiredMessage="#{msg['email.password.required']}" redisplay="true"/>
+							<h:message id="passwordError" for="password" styleClass="w3-pale-red">
+								<p:autoUpdate/>
+							</h:message>
+						</div>
 					</div>
 
 					<div class="w3-threequarter w3-container w3-margin-top">
@@ -132,41 +133,45 @@
 						<p:commandButton value="#{msg['update']}" type="button" icon="pi pi-check" onclick="submitForm();"
 							styleClass="w3-btn w3-theme-dark w3-border-0"/>
 						
-						<span class="w3-margin-left" onclick="$('#form\\:testConfigurationDiv').toggle();"
+						<span class="w3-margin-left" onclick="$('#testConfigurationForm\\:testConfigurationDiv').toggle();"
 							style="cursor:pointer;color:purple;font-weight:bold;">
 							#{msg['test.configuration']}
 						</span>
 						&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpTestConfiguration"/>
 						<p:overlayPanel for="helpTestConfiguration" style="width:240px" styleClass="w3-left-align">
-							#{msg['send.a.test.email.to.validate.the.configuration']}
+							#{msg['validate.email.configuration']}
 						</p:overlayPanel>
 					</div>                	
 					
 				</div>
 				
 				<p:remoteCommand name="submitForm" action="#{manageEmail.update}"/>
-
+			
+			</h:form>
+			
+			<h:form id="testConfigurationForm">	
+				
 				<p/>
 				
 				<div jsf:id="testConfigurationDiv" class="w3-container w3-border-top w3-animate-top">
 					
 					<div class="w3-panel w3-border w3-round w3-display-container">
 					
-						<span onclick="$('#form\\:testConfigurationDiv').hide();" class="w3-button w3-display-topright w3-grey w3-theme-dark">X</span>
+						<span onclick="$('#testConfigurationForm\\:testConfigurationDiv').hide();" class="w3-button w3-display-topright w3-grey w3-theme-dark">X</span>
 						
 						<br/><br/>
 						
 						<div class="w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-margin-top">
 							<p>
-							#{msg['enter.the.input.fields.below.to.test.email.configuration.if.configuration.are.OK.an.email.will.be.sent.to.the.to.email']}
+							#{msg['test.email.instruction']}
 							</p>
 						</div>
 						
 						<div jsf:id="testResultDiv" class="w3-card w3-container w3-margin-top">
 							
 							<h4><b>#{msg['test.result']}:</b></h4>
-							<h4 jsf:rendered="#{manageEmail.testRan and manageEmail.testSuccess}" class="w3-green"> Test Email Sent</h4>
-							<h4 jsf:rendered="#{manageEmail.testRan and not manageEmail.testSuccess}" class="w3-red"> Failed</h4>
+							<h4 jsf:rendered="#{manageEmail.testRan and manageEmail.testSuccess}" class="w3-green"> #{msg['test.email.success']}</h4>
+							<h4 jsf:rendered="#{manageEmail.testRan and not manageEmail.testSuccess}" class="w3-red"> #{msg['test.email.failed']}</h4>
 						</div>
 						
 						<p/>
@@ -176,7 +181,7 @@
 							<p:outputLabel for="testToEmail" value="#{msg['to.email']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 							<br/>
 							<p:inputText id="testToEmail" value="#{manageEmail.testToEmail}" styleClass="w3-input"
-								maxlength="80" required="true" requiredMessage="Must specify 'To Email'"/>
+								maxlength="80" required="true" requiredMessage="#{msg['must.enter.toEmail']}"/>
 							<h:message id="testToEmailError" for="testToEmail" styleClass="w3-pale-red">
 								<p:autoUpdate/>
 							</h:message>
@@ -185,7 +190,7 @@
 							<p:outputLabel for="testEmailSubject" value="#{msg['email.subject']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 							<br/>
 							<p:inputText id="testEmailSubject" value="#{manageEmail.testEmailSubject}" styleClass="w3-input"
-								maxlength="100" required="true" requiredMessage="Must specify 'Test Email Subject'"/>
+								maxlength="100" required="true" requiredMessage="#{msg['must.enter.email.subject']}"/>
 							<h:message id="testEmailSubjectError" for="testEmailSubject" styleClass="w3-pale-red">
 								<p:autoUpdate/>
 							</h:message>
@@ -214,7 +219,7 @@
 									without the sanitizer.
 							 -->
 							<p:textEditor id="testEmailContent" value="#{manageEmail.testEmailContent}" widgetVar="testEmailContentVar" 
-								height="250" secure="false" required="true" requiredMessage="Test email content is required"/>
+								height="250" secure="false" required="true" requiredMessage="#{msg['must.enter.email.content']}"/>
 							<h:message id="testEmailContentError" for="testEmailContent" styleClass="w3-pale-red">
 								<p:autoUpdate/>
 							</h:message>
@@ -238,7 +243,7 @@
 			
 			/* hide the testConfigurationDiv after the page loaded */
 			$(document).ready(function() {
-				$('#form\\:testConfigurationDiv').toggle();
+				$('#testConfigurationForm\\:testConfigurationDiv').toggle();
 			});	
 			//]]>
 		</script>

@@ -1,3 +1,5 @@
+if(typeof PrimeFacesExt !== 'undefined') {
+	
   PrimeFacesExt.locales.TimeAgo['en'] = {
     prefixAgo: null,
     prefixFromNow: null,
@@ -116,3 +118,4 @@
     numbers: [],
     wordSeparator: ""
   }
+}

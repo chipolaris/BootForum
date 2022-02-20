@@ -130,7 +130,7 @@ public class RegistrationService {
 		
 		EmailSender emailSender = EmailSender.builder().host(emailOption.getHost()).port(emailOption.getPort())
 				.username(emailOption.getUsername()).password(emailOption.getPassword())
-				.tlsEnable(emailOption.getTlsEnable()).authentication(emailOption.getAuthentication()).build();
+				.tlsEnable(emailOption.getTlsEnable()).defaultEncoding("UTF-8").authentication(emailOption.getAuthentication()).build();
 		
 		emailSender.sendEmail(emailOption.getUsername(), registration.getEmail(), 
 				registrationOption.getRegistrationEmailSubject(), 
