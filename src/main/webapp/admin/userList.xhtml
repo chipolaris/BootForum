@@ -211,9 +211,10 @@
 										<f:setPropertyActionListener value="#{user}" target="#{userList.selectedRecord}"/>
 									</p:commandButton>
 									
-									<p:commandButton ajax="true" icon="pi pi-trash" styleClass="w3-button" value="#{msg['userAction.delete']}" process="@this"
-										oncomplete="PF('deleteUserConfirmation').show();" title="Delete this User" style="margin-left:4px;">
-										<f:setPropertyActionListener value="#{user}" target="#{userList.selectedRecord}" />  
+									<p:commandButton ajax="true" icon="pi pi-trash" styleClass="w3-button" value="#{msg['delete']}" action="#{userList.delete}"
+										oncomplete="changeAvatarBackgrounds();" title="#{msg['delete.user']}" style="margin-left:4px;" update="userList">
+										<p:confirm header="#{msg['confirm.delete.user']}" message="#{msg['delete.user']} #{user.username}?" icon="pi pi-exclamation-triangle"/>
+										<f:setPropertyActionListener value="#{user}" target="#{userList.deleteRecord}" />  
 									</p:commandButton>
 									
 								</div>
@@ -231,11 +232,11 @@
 		    	<div class="w3-container">
 						
 					<h:form id="editForm" rendered="#{not empty userList.selectedRecord}">
-											       
-				        <a href="javascript:void(0)" class="w3-button w3-border w3-theme-light"
-				        	onclick="$('.toggleDiv').toggle();">
-				        	<i class="pi pi-users"/> Back to User List
-				        </a>
+				        
+						<p:linkButton type="button" value="Back to User List" icon="pi pi-users"
+							title="Back to User List" onclick="$('.toggleDiv').toggle();"
+							styleClass="ui-button-raised ui-button-flat" style="padding:4px 0;font-family:Arial, primeicons">
+   						</p:linkButton>				        
 				        
 				        <div class="w3-card-2 w3-margin-top">
 				  			
@@ -340,18 +341,11 @@
 		
 			</div>
 
-			<p:confirmDialog message="Are you sure?" width="300" global="true" header="Confirm"
-				severity="alert" widgetVar="deleteUserConfirmation">
-				<h:form id="deleteForm">
-					<p:commandButton value="Yes" icon="pi pi-check" styleClass="w3-button w3-theme-l3" 
-						update=":form:userList"
-						action="#{userList.delete}"
-						oncomplete="PF('deleteUserConfirmation').hide()" />
-					<p:commandButton value="Cancel" styleClass="w3-button w3-theme-l3" 
-						onclick="PF('deleteUserConfirmation').hide();return false;"
-						type="button" icon="pi pi-times" style="margin-left:5px;" />
-				</h:form>
-			</p:confirmDialog>
+			<!-- global confirm dialog -->
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
+        		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+    		</p:confirmDialog>
 		
 		</div>
 		

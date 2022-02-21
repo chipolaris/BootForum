@@ -198,10 +198,10 @@
 			<div class="w3-modal-content w3-animate-right">
 			
 				<header class="w3-container w3-theme-d3">
-		        	<h3>Edit user '#{userManagement.selectedRecord.username}'</h3>
+		        	<h4>Edit user '#{userManagement.selectedRecord.username}'</h4>
 		        	
-		        	<span onclick="document.getElementById('editModal').style.display='none'" 
-		      			class="w3-button w3-display-topright w3-xlarge">&times;</span>
+		        	<span onclick="$('#editModal').hide()" style="line-height:40px;height:50px;"
+		      			class="w3-button w3-display-topright">X</span>
 		        </header>
 			
 		    	<div class="w3-container">
@@ -281,9 +281,15 @@
 				            	oncomplete="$('#editModal').toggle();customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" value="Save"
 				            	update=":form:userTable" icon="pi pi-save"/>
 					  		
+					  		<p:commandButton id="deleteUser" action="#{userManagement.delete}" title="#{msg['delete.user']}" value="#{msg['delete']}" 
+					  			style="margin-left:4px;" update=":form:userTable" icon="pi pi-trash" 
+					  			oncomplete="$('#editModal').toggle();customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();">
+					  			<p:confirm header="#{msg['confirm.delete.user']}" message="#{msg['delete.user']} #{userManagement.selectedRecord.username}?" icon="pi pi-exclamation-triangle"/>
+					  		</p:commandButton>
+					  		
 					  		<p:commandButton value="Cancel"
 								onclick="$('#editModal').toggle();"
-								type="button" icon="pi pi-times" style="margin-left:5px;" />
+								type="button" icon="pi pi-times" style="margin-left:4px;" />
 				  		</div>
 			  		</h:form>
 		      
@@ -292,19 +298,11 @@
 		
 		</h:panelGroup>
 
-		<p:confirmDialog message="Are you sure?" width="300" global="true"
-			showEffect="explode" hideEffect="explode" header="Confirm"
-			severity="alert" widgetVar="confirmDeleteDialogVar">
-			<h:form id="deleteForm">
-				<p:commandButton value="Yes" icon="pi pi-check"
-					update=":form:userTable"
-					action="#{userManagement.delete}"
-					oncomplete="PF('confirmDeleteDialogVar').hide()" />
-				<p:commandButton value="Cancel"
-					onclick="PF('confirmDeleteDialogVar').hide();return false;"
-					type="button" icon="pi pi-times" style="margin-left:5px;" />
-			</h:form>
-		</p:confirmDialog>
+		<!-- global confirm dialog -->
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
+       		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+       		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+   		</p:confirmDialog>
 
 	</ui:define>
 

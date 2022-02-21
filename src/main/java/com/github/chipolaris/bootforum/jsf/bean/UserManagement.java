@@ -49,14 +49,6 @@ public class UserManagement {
 		this.newRecord = newRecord;
 	}
 	
-	private User deleteRecord;
-	public User getDeleteRecord() {
-		return deleteRecord;
-	}
-	public void setDeleteRecord(User deleteRecord) {
-		this.deleteRecord = deleteRecord;
-	}
-	
 	public void update() {
 		
 		ServiceResponse<Void> response =
@@ -75,19 +67,20 @@ public class UserManagement {
 	
 	public void delete() {
 		
-		if(deleteRecord == null) {
+		if(selectedRecord == null) {
 			JSFUtils.addErrorStringMessage(null, "No record is selected to delete");
 			return;
 		}
 		
-		ServiceResponse<?> response = genericService.deleteEntity(this.deleteRecord);
+		ServiceResponse<Void> response = userService.deleteUser(this.selectedRecord);
+		
 		if(response.getAckCode() != AckCodeType.FAILURE) {
 			
-			deleteRecord = null;
+			selectedRecord = null;
 			JSFUtils.addInfoStringMessage(null, "Record deleted");
 		}
 		else {
-			JSFUtils.addErrorStringMessage(null, "Error deleting " + deleteRecord + " : " + response.getMessages());
+			JSFUtils.addErrorStringMessage(null, "Error deleting " + selectedRecord + " : " + response.getMessages());
 		}
 	}
 

@@ -160,8 +160,9 @@ public class UserDAO {
 	}
 	
 	public void deleteUser(User user) {
-		entityManager.remove(user);
-		username2EmailMap.remove(user.getUsername());
+		User userToDelete = entityManager.merge(user);
+		entityManager.remove(userToDelete);
+		username2EmailMap.remove(userToDelete.getUsername());
 	}
 	
 	// update personInfo, make sure not to update user itself since the user contain 
