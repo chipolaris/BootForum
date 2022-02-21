@@ -133,7 +133,7 @@
 						<p:commandButton value="#{msg['update']}" type="button" icon="pi pi-check" onclick="submitForm();"
 							styleClass="w3-btn w3-theme-dark w3-border-0"/>
 						
-						<span class="w3-margin-left" onclick="$('#testConfigurationForm\\:testConfigurationDiv').toggle();"
+						<span class="w3-margin-left" onclick="$('#form\\:testConfigurationDiv').toggle();"
 							style="cursor:pointer;color:purple;font-weight:bold;">
 							#{msg['test.configuration']}
 						</span>
@@ -145,11 +145,11 @@
 					
 				</div>
 				
-				<p:remoteCommand name="submitForm" action="#{manageEmail.update}"/>
-			
-			</h:form>
-			
-			<h:form id="testConfigurationForm">	
+				<!-- Note the process attribute includes only fields relevant to email config data => we don't want JSF to validate the whole form. 
+					This is because this form contains fields (below) for testing email configuration, and those test fields are mandatory for sending test email.
+					If we don't specify specific fields to be validated, the process will stop at the validation phrase and the action will not be invoked
+					-->
+				<p:remoteCommand name="submitForm" action="#{manageEmail.update}" process="@this host port authentication tls username password"/>
 				
 				<p/>
 				
@@ -157,7 +157,7 @@
 					
 					<div class="w3-panel w3-border w3-round w3-display-container">
 					
-						<span onclick="$('#testConfigurationForm\\:testConfigurationDiv').hide();" class="w3-button w3-display-topright w3-grey w3-theme-dark">X</span>
+						<span onclick="$('#form\\:testConfigurationDiv').hide();" class="w3-button w3-display-topright w3-grey w3-theme-dark">X</span>
 						
 						<br/><br/>
 						
@@ -243,7 +243,7 @@
 			
 			/* hide the testConfigurationDiv after the page loaded */
 			$(document).ready(function() {
-				$('#testConfigurationForm\\:testConfigurationDiv').toggle();
+				$('#form\\:testConfigurationDiv').toggle();
 			});	
 			//]]>
 		</script>
