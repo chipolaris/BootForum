@@ -59,33 +59,55 @@
 						<div class="w3-row-padding">
 							
 							<div>
+								
 								<h:selectBooleanCheckbox id="enableCaptcha" value="#{registrationManagement.registrationOption.enableCaptcha}" 
 									styleClass="w3-check"/>&nbsp;&nbsp;					
+								
 								<p:outputLabel for="enableCaptcha" value="#{msg['enable.captcha.on.registration.page']}" styleClass="w3-medium" style="font-weight:bold;"/>
+								
+								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpEnableCaptchaOnRegistrationPage"/>
+								
+								<p:overlayPanel for="helpEnableCaptchaOnRegistrationPage" style="width:240px" styleClass="w3-black">
+									#{msg['help.enable.captcha.on.registration.page']}
+								</p:overlayPanel>
 								
 							</div>
 											
 							<div class="w3-margin-top">
+								
 								<h:selectBooleanCheckbox id="enableEmailConfirm" value="#{registrationManagement.registrationOption.enableEmailConfirm}" 
 									styleClass="w3-check" onchange="updateRegistrationEmailInputs();"/>&nbsp;&nbsp;
+								
 								<p:outputLabel for="enableEmailConfirm" value="${msg['enable.email.confirmation']}" styleClass="w3-medium" style="font-weight:bold;"/>
+							
+								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpEnableEmailConnfirm"/>
+								
+								<p:overlayPanel for="helpEnableEmailConnfirm" style="width:240px" styleClass="w3-black">
+									#{msg['help.enable.email.connfirm']}
+								</p:overlayPanel>
+								
 							</div>
 							
 							<div class="w3-margin-top w3-padding">
+								
 								<p/>
 								<p:outputLabel for="registrationEmailSubject" value="#{msg['registration.email.subject']}" styleClass="w3-medium" style="font-weight:bold;" indicateRequired="false"/>
 								&nbsp;<i class="pi pi-question-circle w3-large" jsf:id="helpRegistrationEmailSubject"/>
+								
 								<p:overlayPanel for="helpRegistrationEmailSubject" style="width:240px" styleClass="w3-black">
 									<h5>#{msg['example']}:</h5>
 									<hr/> 
 									#{msg['help.confirm.account.registration']}
 								</p:overlayPanel>
+								
 								<p/>
 								<p:inputText id="registrationEmailSubject" value="#{registrationManagement.registrationOption.registrationEmailSubject}" styleClass="w3-input" maxlength="200" 
 									readonly="#{registrationManagement.registrationOption.enableEmailConfirm ? 'false' : 'true'}"/>
+								
 								<h:message id="registrationEmailSubjectError" for="registrationEmailSubject" styleClass="w3-pale-red">
 									<p:autoUpdate/>
 								</h:message>
+							
 							</div>
 							
 							<div jsf:id="registrationEmailTemplateDiv" class="w3-margin-top w3-padding">
