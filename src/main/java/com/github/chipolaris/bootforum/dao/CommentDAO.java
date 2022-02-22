@@ -1,9 +1,13 @@
 package com.github.chipolaris.bootforum.dao;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -62,5 +66,25 @@ public class CommentDAO {
 		typedQuery.setMaxResults(maxResult);
 		
 		return typedQuery.getResultList();
+	}
+	
+	public Map<String, Integer> getMostCommentsUsers(Date since, Integer maxResult) {
+		
+		Map<String, Integer> users = new HashMap<>();
+		
+		Query query = entityManager.createQuery("SELECT c.createBy username, count(c) commentCount FROM Comment c WHERE c.createDate >= :since"
+				+ " GROUP BY username ORDER BY commentCount DESC");
+		query.setParameter("since", since);
+		
+		query.setMaxResults(maxResult);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			users.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return users;
 	}
 }

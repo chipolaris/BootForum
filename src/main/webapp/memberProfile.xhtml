@@ -69,7 +69,7 @@
 	
 		<div class="w3-panel w3-card-4 w3-white" jsf:id="mainContentDiv">
 			
-			<div jsf:id="userProfileDiv" >
+			<div jsf:id="userProfileDiv" jsf:rendered="#{not memberProfile.userDeleted}">
 			
 				<div>
 					<p:breadCrumb class="w3-hide-small w3-margin-top">
@@ -213,6 +213,10 @@
 		 			
 		 		</div>
  				
+			</div>
+			
+			<div jsf:id="userDeletedDiv" jsf:rendered="#{memberProfile.userDeleted}">
+				<h4><b>User account '#{memberProfile.username}' has been deleted</b></h4>
 			</div>
 			
 		</div>

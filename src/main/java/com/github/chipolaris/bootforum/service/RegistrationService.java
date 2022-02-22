@@ -15,6 +15,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.UserDAO;
+import com.github.chipolaris.bootforum.domain.DeletedUser;
 import com.github.chipolaris.bootforum.domain.EmailOption;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.Preferences;
@@ -167,6 +168,8 @@ public class RegistrationService {
 		}
 		else if(userDAO.usernameExists(registration.getUsername())
 			|| genericDAO.countEntities(Registration.class, 
+					Collections.singletonMap("username", registration.getUsername())).longValue() > 0
+			|| genericDAO.countEntities(DeletedUser.class, 
 					Collections.singletonMap("username", registration.getUsername())).longValue() > 0) {
 			errors.add("Username already exists in the system");
 		}

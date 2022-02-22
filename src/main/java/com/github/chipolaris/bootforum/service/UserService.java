@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.UserDAO;
+import com.github.chipolaris.bootforum.domain.DeletedUser;
 import com.github.chipolaris.bootforum.domain.PasswordReset;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.User;
@@ -63,7 +65,8 @@ public class UserService {
 		if(user.getUsername().length() < 5) {
 			messages.add("Username must be at least 5 characters");
 		}
-		else if(userDAO.usernameExists(user.getUsername())) {
+		else if(userDAO.usernameExists(user.getUsername()) || genericDAO.countEntities(
+				DeletedUser.class, Collections.singletonMap("username", user.getUsername())).intValue() > 0) {
 			messages.add("Username already exists in the system");
 		}
 		
@@ -86,8 +89,17 @@ public class UserService {
 		
 		ServiceResponse<Void> response = new ServiceResponse<>();
 		
+		DeletedUser deletedUser = DeletedUser.fromUser(user);
+		
+		// clear up relationships before deleting
+		user.setPerson(null);
+		user.setPreferences(null);
+		user.setStat(null);
 		userDAO.deleteUser(user);
 		
+		// save deletedUser
+		genericDAO.merge(deletedUser);
+				
 		return response;
 	}
 	

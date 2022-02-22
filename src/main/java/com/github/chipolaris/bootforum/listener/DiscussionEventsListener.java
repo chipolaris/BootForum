@@ -109,6 +109,7 @@ public class DiscussionEventsListener {
 		
 		// delete indexes
 		indexService.deleteComments(discussionDeleteEvent.getDiscussion().getId());
+		indexService.deleteDiscussion(discussionDeleteEvent.getDiscussion());		
 	}
 	
 	@EventListener

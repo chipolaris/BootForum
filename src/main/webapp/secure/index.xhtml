@@ -28,9 +28,9 @@
 			</p:messages>
 		</div>
 
-		<div class="w3-row-padding w3-margin-bottom">
+		<div class="w3-row-padding w3-section">
 			<div class="w3-quarter">
-				<div class="w3-container w3-red w3-padding-16">
+				<div class="w3-container w3-card w3-padding-16 w3-deep-orange w3-opacity-min">
 					<div class="w3-left">
 						<i class="pi pi-user w3-xxlarge"/>
 					</div>
@@ -38,11 +38,11 @@
 						<h3>&#160;</h3>
 					</div>
 					<div class="w3-clear"/>
-					<h:link value="Account" outcome="/secure/accountInfo" styleClass="w3-text-white w3-xlarge"/>
+					<h:link value="Account" outcome="/secure/accountInfo" styleClass="w3-xlarge w3-text-white"/>
 				</div>
 			</div>
 			<div class="w3-quarter">
-				<div class="w3-container w3-blue w3-padding-16">
+				<div class="w3-container w3-card w3-padding-16 w3-teal w3-opacity-min">
 					<div class="w3-left">
 						<i class="pi pi-envelope w3-xxlarge"/>
 					</div>
@@ -50,11 +50,11 @@
 						<h3>#{userDashboard.unreadMessage}/#{userDashboard.totalMessage}</h3>
 					</div>
 					<div class="w3-clear"/>
-					<h:link value="Messages" outcome="/secure/privateMessages" styleClass="w3-text-white w3-xlarge"/>
+					<h:link value="Messages" outcome="/secure/privateMessages" styleClass="w3-xlarge w3-text-white"/>
 				</div>
 			</div>
 			<div class="w3-quarter">
-				<div class="w3-container w3-teal w3-padding-16">
+				<div class="w3-container w3-card w3-padding-16 w3-indigo w3-opacity-min">
 					<div class="w3-left">
 						<i class="pi pi-comment w3-xxlarge"/>
 					</div>
@@ -62,11 +62,11 @@
 						<h3>#{userSession.user.stat.commentCount}</h3>
 					</div>
 					<div class="w3-clear"/>
-					<h:link value="Comments" outcome="/secure/myComments" styleClass="w3-text-white w3-xlarge"/>
+					<h:link value="Comments" outcome="/secure/myComments" styleClass="w3-xlarge w3-text-white"/>
 				</div>
 			</div>
 			<div class="w3-quarter">
-				<div class="w3-container w3-orange w3-text-white w3-padding-16">
+				<div class="w3-container w3-card w3-padding-16 w3-purple w3-opacity-min">
 					<div class="w3-left">
 						<i class="pi pi-pencil w3-xxlarge"/>
 					</div>
@@ -74,7 +74,7 @@
 						<h3>&#160;</h3>
 					</div>
 					<div class="w3-clear"/>
-					<h:link value="Signature" outcome="/secure/signaturePreference" styleClass="w3-text-white w3-xlarge"/>
+					<h:link value="Signature" outcome="/secure/signaturePreference" styleClass="w3-xlarge w3-text-white"/>
 				</div>
 			</div>
 		</div>

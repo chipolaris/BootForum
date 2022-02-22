@@ -19,6 +19,8 @@ import com.github.chipolaris.bootforum.service.TagService;
 @Scope("view")
 public class HomePage {
 
+	private static final int DAY_BACK = 365;
+
 	@Resource
 	private GenericService genericService;
 	
@@ -95,11 +97,11 @@ public class HomePage {
 		}
 		
 		if(displayOption.isShowMostViewsDiscussions()) {
-			this.mostViewsDiscussions = discussionService.getMostViewsDiscussions(365, 
+			this.mostViewsDiscussions = discussionService.getMostViewsDiscussions(DAY_BACK, 
 					displayOption.getNumMostViewsDiscussions()).getDataObject();
 		}
 		if(displayOption.isShowMostCommentsDiscussions()) {
-			this.mostCommentsDiscussions = discussionService.getMostCommentsDiscussions(365, 
+			this.mostCommentsDiscussions = discussionService.getMostCommentsDiscussions(DAY_BACK, 
 					displayOption.getNumMostCommentsDiscussions()).getDataObject();
 		}
 		if(displayOption.isShowMostRecentDiscussions()) {

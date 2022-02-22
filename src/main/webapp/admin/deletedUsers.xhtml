@@ -10,7 +10,7 @@
     template="/WEB-INF/template/layout_admin.xhtml">
 
 	<ui:define name="title">
-		#{msg['application.title']} #{msg['administration.manage.users']}
+		#{msg['application.title']} - #{msg['deleted.users']}
 	</ui:define>
 	
 	<ui:define name="content">
@@ -51,7 +51,6 @@
  				}
 			//]]>	
 		</script>
-
 		
 		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white">
 
@@ -60,15 +59,11 @@
 			</p:messages>
 
 			<div class="w3-panel w3-theme-d5 w3-center w3-round">
- 				<h3><b>#{msg['userManagement.page.title']}</b></h3>
- 				<h:link outcome="userList" styleClass="w3-button w3-border w3-text-white">
- 					<i class="pi pi-th-large"/>
- 					#{msg['view.as.grid']}
+ 				<h3><b>#{msg['deleted.users']}</b></h3>
+ 				<h:link outcome="userManagement" styleClass="w3-button w3-border w3-text-white">
+ 					<i class="pi pi-users"/>
+ 					#{msg['current.users']}
  				</h:link>
- 				<h:link outcome="deletedUsers" styleClass="w3-margin-left w3-button w3-border w3-text-white">
- 					<i class="pi pi-trash"/>
- 					#{msg['deleted.users']}
- 				</h:link><p/>
  				<p/>
  			</div>
 		
@@ -76,7 +71,7 @@
 			
 			<h:form id="form">
 			
-				<p:dataTable var="user" value="#{userManagement.lazyModel}" style="margin: 0 auto;"
+				<p:dataTable var="user" value="#{deletedUsers.lazyModel}" style="margin: 0 auto;"
 					widgetVar="userTableVar" rowIndexVar="rowIndex" paginator="true" reflow="false"
 					rows="25" lazy="true" id="userTable" filterEvent="enter" 
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -137,12 +132,12 @@
 						<h:outputText value="#{user.person.lastName}" />
 					</p:column>
 		
-					<!-- <p:column sortBy="#{user.person.email}" filterBy="#{user.person.email}" responsivePriority="6">
+					<p:column sortBy="#{user.person.email}" filterBy="#{user.person.email}" responsivePriority="6">
 						<f:facet name="header">
 							<h:outputText value="Email Address" style="font-weight:bold;"/>
 						</f:facet>
 						<h:outputText value="#{user.person.email}" />
-					</p:column> -->
+					</p:column>
 
 					<p:column sortBy="#{user.userRole}" filterBy="#{user.userRole}" style="text-align:center;font-weight:bold;" responsivePriority="2">
 						<f:facet name="header">
@@ -158,35 +153,19 @@
 		            	</f:facet>
 		            						
 						<h:outputText value="#{user.userRole.label}" />
-					</p:column>
-					
-					<p:column sortBy="#{user.accountStatus}" filterBy="#{user.accountStatus}" style="text-align:center;font-weight:bold;" responsivePriority="3">
-						<f:facet name="header">
-							<h:outputText value="#{msg['account.status']}" style="font-weight:bold;"/>
-						</f:facet>
-
-						<f:facet name="filter">
-			      			<p:selectOneMenu onchange="PF('userTableVar').filter()" converter="#{enumConverters.accountStatus}">
-			      				<!-- <f:converter converterId="accountStatusConverter"/> -->
-								<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
-								<f:selectItem itemValue="#{null}" itemLabel=" - All - "/>
-							</p:selectOneMenu>
-		            	</f:facet>
-		            						
-						<h:outputText value="#{user.accountStatus}" />
-					</p:column>					
+					</p:column>				
 
 					<p:column exportable="false"
 						style="vertical-align:middle;width:50px;text-align:center;">
 						
 						<f:facet name="header">
-							<h:outputText value="Edit" style="font-weight:bold;"/>
+							<h:outputText value="View" style="font-weight:bold;"/>
 						</f:facet>
 						
-						<p:commandButton update=":editModal" 
-							oncomplete="$('#editModal').toggle();customizePrimefaceButtons();changeAvatarBackgrounds();" 
-							icon="pi pi-pencil" title="Edit">
-							<f:setPropertyActionListener value="#{user}" target="#{userManagement.selectedRecord}" />
+						<p:commandButton update=":viewModal" 
+							oncomplete="$('#viewModal').toggle();customizePrimefaceButtons();changeAvatarBackgrounds();" 
+							icon="pi pi-eye" title="View">
+							<f:setPropertyActionListener value="#{user}" target="#{deletedUsers.selectedRecord}" />
 						</p:commandButton>
 						
 					</p:column>
@@ -198,103 +177,74 @@
 		</div>
 
 		<!-- The Modal -->
-		<h:panelGroup layout="block" id="editModal" styleClass="w3-modal">
+		<h:panelGroup layout="block" id="viewModal" styleClass="w3-modal">
 			
 			<div class="w3-modal-content w3-animate-right">
 			
 				<header class="w3-container w3-theme-d3">
-		        	<h4>Edit user '#{userManagement.selectedRecord.username}'</h4>
+		        	<h4>Deleted user '#{deletedUsers.selectedRecord.username}'</h4>
 		        	
-		        	<span onclick="$('#editModal').hide()" style="line-height:40px;height:50px;"
+		        	<span onclick="$('#viewModal').hide()" style="line-height:40px;height:50px;"
 		      			class="w3-button w3-display-topright">X</span>
 		        </header>
 			
 		    	<div class="w3-container">
-		      		
-						
-					<h:form id="editForm" rendered="#{userManagement.selectedRecord != null}">
-				       
-				        
-				        <div class="w3-card-2 w3-margin-top">
+		      								
+					<h:form id="editForm" rendered="#{deletedUsers.selectedRecord != null}">
+				       				        
+				        <div class="w3-card-2 w3-section">
+				  			
+				  			<center><span class="w3-large"><b>#{msg['deleted']} <pe:timeAgo value="#{deletedUsers.selectedRecord.deleteDate}" titlePattern="MMMMM dd, yyyy HH:mm a" styleClass="w3-large"/></b></span></center>
 				  			
 				  			<h:panelGrid columns="2" cellspacing="10">
 				  			
 				  				<h:outputText value="Avatar:"/>
 									
-								<h:graphicImage value="#{requestContext}/avatar/#{userManagement.selectedRecord.username}" class="w3-circle"
-									id="commentorAvatar" height="60" width="60" title="#{userManagement.selectedRecord.username}"
-									rendered="#{fileHandler.isAvatarExists(userManagement.selectedRecord.username)}"/>
+								<h:graphicImage value="#{requestContext}/avatar/#{deletedUsers.selectedRecord.username}" class="w3-circle"
+									id="commentorAvatar" height="60" width="60" title="#{deletedUsers.selectedRecord.username}"
+									rendered="#{fileHandler.isAvatarExists(deletedUsers.selectedRecord.username)}"/>
 																
-								<span jsf:rendered="#{!fileHandler.isAvatarExists(userManagement.selectedRecord.username)}" class="w3-circle avatarSpan"
-									title="#{userManagement.selectedRecord.username}"
+								<span jsf:rendered="#{!fileHandler.isAvatarExists(deletedUsers.selectedRecord.username)}" class="w3-circle avatarSpan"
+									title="#{deletedUsers.selectedRecord.username}"
 									style="display:inline-block;font-size:1.7rem;line-height:60px;width:60px;text-align:center;text-transform: uppercase;color:white">
-									#{fn:substring(userManagement.selectedRecord.username, 0, 3)}
+									#{fn:substring(deletedUsers.selectedRecord.username, 0, 3)}
 								</span>									
 								
 		 		  				<h:outputText value="Username:"/>
-				  				<h:outputText value="#{userManagement.selectedRecord.username}" style="font-weight:bold;"/>
+				  				<h:outputText value="#{deletedUsers.selectedRecord.username}" style="font-weight:bold;"/>
 				  				
 				  				<h:outputText value="First Name:"/>
-				  				<h:outputText value="#{userManagement.selectedRecord.person.firstName}" style="font-weight:bold;"/>
+				  				<h:outputText value="#{deletedUsers.selectedRecord.person.firstName}" style="font-weight:bold;"/>
 				  				
 				  				<h:outputText value="Last Name:"/>
-				  				<h:outputText value="#{userManagement.selectedRecord.person.lastName}" style="font-weight:bold;"/>
+				  				<h:outputText value="#{deletedUsers.selectedRecord.person.lastName}" style="font-weight:bold;"/>
 				  				
 				  				<h:outputText value="Email:"/>
-				  				<h:outputText value="#{userManagement.selectedRecord.person.email}" style="font-weight:bold;"/>
+				  				<h:outputText value="#{deletedUsers.selectedRecord.person.email}" style="font-weight:bold;"/>
 
 				  				<h:outputText value="Discussions Started"/>
-				  				<h:outputText value="#{userManagement.selectedRecord.stat.discussionCount}" style="font-weight:bold;"/>
+				  				<h:outputText value="#{deletedUsers.selectedRecord.stat.discussionCount}" style="font-weight:bold;"/>
 				  				
 				  				<h:outputText value="Comments:"/>
-				  				<h:outputText value="#{userManagement.selectedRecord.stat.commentCount}" style="font-weight:bold;"/>
+				  				<h:outputText value="#{deletedUsers.selectedRecord.stat.commentCount}" style="font-weight:bold;"/>
 				  				
 				  				<h:outputText value="Last Comment"/>
-				  				<pe:timeAgo value="#{userManagement.selectedRecord.stat.lastComment.commentDate}" titlePattern="MMMMM dd, yyyy" style="font-weight:bold;"/>
+				  				<pe:timeAgo value="#{deletedUsers.selectedRecord.stat.lastComment.commentDate}" titlePattern="MMMMM dd, yyyy" style="font-weight:bold;"/>
 				  				
 				  				<h:outputText value="Comment Thumbnails Uploaded:"/>
-				  				<h:outputText value="#{userManagement.selectedRecord.stat.commentThumbnailCount}" style="font-weight:bold;"/>
+				  				<h:outputText value="#{deletedUsers.selectedRecord.stat.commentThumbnailCount}" style="font-weight:bold;"/>
 				  				
 				  				<h:outputText value="Comment Attachments Uploaded:"/>
-				  				<h:outputText value="#{userManagement.selectedRecord.stat.commentAttachmentCount}" style="font-weight:bold;"/>
+				  				<h:outputText value="#{deletedUsers.selectedRecord.stat.commentAttachmentCount}" style="font-weight:bold;"/>
 				  				
 			  					<h:outputText value="Last Login"/>
-			  					<pe:timeAgo value="#{userManagement.selectedRecord.stat.lastLogin}" titlePattern="MMMMM dd, yyyy" style="font-weight:bold;"/>
+			  					<pe:timeAgo value="#{deletedUsers.selectedRecord.stat.lastLogin}" titlePattern="MMMMM dd, yyyy" style="font-weight:bold;"/>
 				  				
 				  				<h:outputText value="Reputation:"/>
-				  				<h:outputText value="#{userManagement.selectedRecord.stat.reputation}" style="font-weight:bold;"/>
-				  				
-		 		  				<h:outputLabel value="#{msg['account.status']}" for="accountStatus"/>						
-								<p:selectOneMenu value="#{userManagement.selectedRecord.accountStatus}" id="accountStatus">
-									<f:selectItems value="#{referenceData.accountStatuses}" var="status" itemValue="#{status}" itemLabel="#{status.label}"/>
-									<!-- If we want ajax update, can use the p:ajax event="change" as below to initiate call to server side action -->
-									<!-- <p:ajax event="change" listener="#{userManagement.updateAccountStatus}" update=":form:userTable"></p:ajax> -->
-								</p:selectOneMenu>
+				  				<h:outputText value="#{deletedUsers.selectedRecord.stat.reputation}" style="font-weight:bold;"/>
 								
-								<h:outputLabel value="Set New Role:" for="userRole"/>
-								<p:selectOneMenu value="#{userManagement.selectedRecord.userRole}" id="userRole">
-									<f:selectItems value="#{referenceData.userRoles}" var="userRole" itemValue="#{userRole}" itemLabel="#{userRole.label}"/>
-								</p:selectOneMenu>
-				  				
-				  				<h:outputLabel value="New Password:" for="newPassword"/>
-				  				<p:password id="newPassword" value="#{userManagement.newPassword}" feedback="true"/>
 				  			</h:panelGrid>
 				  		
-				  		</div>
-				  		<div class="w3-section">
-				            <p:commandButton id="updateUser" ajax="true" action="#{userManagement.update}"
-				            	oncomplete="$('#editModal').toggle();customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();" value="Save"
-				            	update=":form:userTable" icon="pi pi-save"/>
-					  		
-					  		<p:commandButton id="deleteUser" action="#{userManagement.delete}" title="#{msg['delete.user']}" value="#{msg['delete']}" 
-					  			style="margin-left:4px;" update=":form:userTable" icon="pi pi-trash" 
-					  			oncomplete="$('#editModal').toggle();customizeDatatableStyle();customizePrimefaceButtons();changeAvatarBackgrounds();">
-					  			<p:confirm header="#{msg['confirm.delete.user']}" message="#{msg['delete.user']} #{userManagement.selectedRecord.username}?" icon="pi pi-exclamation-triangle"/>
-					  		</p:commandButton>
-					  		
-					  		<p:commandButton value="Cancel"
-								onclick="$('#editModal').toggle();"
-								type="button" icon="pi pi-times" style="margin-left:4px;" />
 				  		</div>
 			  		</h:form>
 		      
@@ -302,12 +252,6 @@
 		  </div>
 		
 		</h:panelGroup>
-
-		<!-- global confirm dialog -->
-		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
-       		<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-       		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-   		</p:confirmDialog>
 
 	</ui:define>
 

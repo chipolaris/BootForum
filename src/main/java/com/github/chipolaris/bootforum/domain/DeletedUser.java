@@ -2,7 +2,6 @@ package com.github.chipolaris.bootforum.domain;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,45 +10,28 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
 
 @Entity
-@Table(name="USER_T", 
-	uniqueConstraints= {@UniqueConstraint(columnNames="USER_NAME", name="UNIQ_USER_USER_NAME")})
-@TableGenerator(name="UserIdGenerator", table="ENTITY_ID_T", pkColumnName="GEN_KEY", 
-	pkColumnValue="USER_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
-public class User extends BaseEntity {
-
-	@PrePersist
-	public void prePersist() {
-		Date now = Calendar.getInstance().getTime();
-		this.setCreateDate(now);
-	}
-	
-	@PreUpdate
-	public void preUpdate() {
-		Date now = Calendar.getInstance().getTime();
-		this.setUpdateDate(now);
-	}
+@Table(name="DELETED_USER_T", 
+	uniqueConstraints= {@UniqueConstraint(columnNames="USER_NAME", name="UNIQ_DEL_USER_USER_NAME")})
+public class DeletedUser extends BaseEntity {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="UserIdGenerator")
 	private Long id;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="DELETE_DATE")
+	private Date deleteDate;
+
 	@Column(name="USERNAME", length=50, nullable=false)
 	private String username;
 	
@@ -61,23 +43,15 @@ public class User extends BaseEntity {
 	private UserRole userRole;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="PERSON_ID", foreignKey = @ForeignKey(name="FK_USER_PERS"))
+	@JoinColumn(name="PERSON_ID", foreignKey = @ForeignKey(name="FK_DEL_USER_PERS"))
 	private Person person;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="PREFERENCE_ID", foreignKey = @ForeignKey(name="FK_USER_PREF"))
+	@JoinColumn(name="PREFERENCE_ID", foreignKey = @ForeignKey(name="FK_DEL_USER_PREF"))
 	private Preferences preferences;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name="ACCOUNT_STATUS", length=50)
-	private AccountStatus accountStatus;
-	
-	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
-	@OrderBy("id ASC")
-	private List<SecurityChallenge> securityChallenges;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinColumn(name="USER_STAT_ID", foreignKey = @ForeignKey(name="FK_USER_USER_STAT"))
+	@JoinColumn(name="USER_STAT_ID", foreignKey = @ForeignKey(name="FK_DEL_USER_USER_STAT"))
 	private UserStat stat;
 	
 	@Override
@@ -86,6 +60,13 @@ public class User extends BaseEntity {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Date getDeleteDate() {
+		return deleteDate;
+	}
+	public void setDeleteDate(Date deleteDate) {
+		this.deleteDate = deleteDate;
 	}
 	
 	public String getUsername() {
@@ -123,24 +104,35 @@ public class User extends BaseEntity {
 		this.preferences = preferences;
 	}
 	
-	public AccountStatus getAccountStatus() {
-		return accountStatus;
-	}
-	public void setAccountStatus(AccountStatus accountStatus) {
-		this.accountStatus = accountStatus;
-	}
-	
-	public List<SecurityChallenge> getSecurityChallenges() {
-		return securityChallenges;
-	}
-	public void setSecurityChallenges(List<SecurityChallenge> securityChallenges) {
-		this.securityChallenges = securityChallenges;
-	}
-	
 	public UserStat getStat() {
 		return stat;
 	}
 	public void setStat(UserStat stat) {
 		this.stat = stat;
+	}
+	
+	/*
+	 * utility method to copy from User object
+	 */
+	public static DeletedUser fromUser(User user) {
+		
+		DeletedUser deletedUser = new DeletedUser();
+		
+		deletedUser.setId(user.getId());
+		deletedUser.setUsername(user.getUsername());
+		deletedUser.setPassword(user.getPassword());
+		deletedUser.setPerson(user.getPerson());
+		deletedUser.setPreferences(user.getPreferences());
+		deletedUser.setStat(user.getStat());
+		deletedUser.setCreateBy(user.getCreateBy());
+		deletedUser.setCreateDate(user.getCreateDate());
+		deletedUser.setUpdateBy(user.getUpdateBy());
+		deletedUser.setUpdateDate(user.getUpdateDate());
+		deletedUser.setUserRole(user.getUserRole());
+		
+		Date now = Calendar.getInstance().getTime();
+		deletedUser.setDeleteDate(now);
+		
+		return deletedUser;
 	}
 }

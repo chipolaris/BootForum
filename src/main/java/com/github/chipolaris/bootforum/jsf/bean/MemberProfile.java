@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -14,10 +15,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.DeletedUser;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.event.UserProfileViewEvent;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.CommentService;
+import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 import com.github.chipolaris.bootforum.service.UserService;
 
@@ -31,6 +34,9 @@ public class MemberProfile {
 
 	@Resource
 	private UserService userService;
+	
+	@Resource
+	private GenericService genericService;
 	
 	@Resource
 	private CommentService commentService;
@@ -56,6 +62,15 @@ public class MemberProfile {
 		this.user = user;
 	}
 	
+	private boolean userDeleted;
+	
+	public boolean isUserDeleted() {
+		return userDeleted;
+	}
+	public void setUserDeleted(boolean userDeleted) {
+		this.userDeleted = userDeleted;
+	}	
+	
 	private List<Comment> latestComments;
 	
 	public List<Comment> getLatestComments() {
@@ -76,7 +91,8 @@ public class MemberProfile {
 				applicationEventPublisher.publishEvent(new UserProfileViewEvent(this, user));
 			}
 			
-			ServiceResponse<List<Comment>> latestCommentResponse = commentService.getLatestCommentsForUser(username, LATEST_COMMENT_MAX_RESULT);
+			ServiceResponse<List<Comment>> latestCommentResponse = 
+					commentService.getLatestCommentsForUser(username, LATEST_COMMENT_MAX_RESULT);
 			
 			if(userResponse.getAckCode() != AckCodeType.FAILURE) {
 				this.latestComments = latestCommentResponse.getDataObject();
@@ -84,15 +100,19 @@ public class MemberProfile {
 		}
 		
 		if(this.user == null) {
-			try {
-				FacesContext context = FacesContext.getCurrentInstance();
-				context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
-				context.responseComplete();
-			} 
-			catch (IOException e) {
-				logger.error("Unable to set response 404 on username: " + this.username + ". Error: " + e);
-			}			
+			
+			this.userDeleted = genericService.countEntities(DeletedUser.class, 
+					Collections.singletonMap("username", this.username)).getDataObject() > 0;
+			
+			if (!userDeleted) {
+				try {
+					FacesContext context = FacesContext.getCurrentInstance();
+					context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
+					context.responseComplete();
+				} catch (IOException e) {
+					logger.error("Unable to set response 404 on username: " + this.username + ". Error: " + e);
+				}
+			}
 		}
 	}
-	
 }

@@ -68,10 +68,15 @@
 			
 			<div class="w3-panel w3-theme-d5 w3-center w3-round">
  				<h3 id="title"><b>#{msg['manage.users']}</b></h3>
- 				<h:link outcome="userManagement" styleClass="w3-button w3-border">
+ 				<h:link outcome="userManagement" styleClass="w3-button w3-border w3-text-white">
  					<i class="pi pi-table"/>
  					#{msg['view.as.table']}
- 				</h:link><p/>
+ 				</h:link>
+ 				<h:link outcome="deletedUsers" styleClass="w3-margin-left w3-button w3-border w3-text-white">
+ 					<i class="pi pi-trash"/>
+ 					#{msg['deleted.users']}
+ 				</h:link>
+ 				<p/>
  			</div>
 			
 			<div jsf:id="userListDiv" class="w3-margin-top w3-animate-right toggleDiv">

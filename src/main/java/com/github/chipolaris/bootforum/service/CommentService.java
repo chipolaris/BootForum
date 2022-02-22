@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -212,6 +213,16 @@ public class CommentService {
 		ServiceResponse<List<Comment>> response = new ServiceResponse<>();
 		
 		response.setDataObject(commentDAO.getLatestCommentsForUser(username, maxResult));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostCommentsUsers(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(commentDAO.getMostCommentsUsers(since, maxResult));
 		
 		return response;
 	}

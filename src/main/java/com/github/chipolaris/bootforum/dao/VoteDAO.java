@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.dao;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class VoteDAO {
 		return resultList.isEmpty() ? null : resultList.get(0);
 	}
 	
-	public Map<String, Long> getReputation4EveryUsers() {
+	public Map<String, Long> getReputation4AllUsers() {
 		
 		Map<String, Long> results = new HashMap<>();
 		
@@ -63,5 +64,25 @@ public class VoteDAO {
 		typedQuery.setParameter("username", username);
 		
 		return (Number) typedQuery.getSingleResult();
+	}
+	
+	public Map<String, Integer> getTopReputationUsers(Date since, Integer maxResult) {
+		
+		Map<String, Integer> users = new HashMap<>();
+		
+		Query query = entityManager.createQuery("SELECT c.createBy username, COALESCE(SUM(v.voteValue), 0) reputation FROM Comment c,"
+				+ " c.commentVote.votes v WHERE c.createDate >= :since GROUP BY username ORDER BY reputation DESC");
+		query.setParameter("since", since);
+		
+		query.setMaxResults(maxResult);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			users.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return users;
 	}
 }

@@ -1,5 +1,6 @@
 package com.github.chipolaris.bootforum.service;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -62,7 +63,17 @@ public class VoteService {
 	
 		ServiceResponse<Map<String, Long>> response = new ServiceResponse<>();
 		
-		response.setDataObject(voteDAO.getReputation4EveryUsers());
+		response.setDataObject(voteDAO.getReputation4AllUsers());
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostReputationUsers(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(voteDAO.getTopReputationUsers(since, maxResult));
 		
 		return response;
 	}
