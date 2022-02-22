@@ -2,9 +2,12 @@ package com.github.chipolaris.bootforum.jsf.bean;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -58,6 +61,15 @@ public class AdminDashboard {
 		this.mostCommentsDiscussions = mostCommentsDiscussions;
 	}
 	
+	private Map<String, Integer> mostDiscussionsUsers;
+	
+	public Map<String, Integer> getMostDiscussionsUsers() {
+		return mostDiscussionsUsers;
+	}
+	public void setMostDiscussionsUsers(Map<String, Integer> mostDiscussionsUsers) {
+		this.mostDiscussionsUsers = mostDiscussionsUsers;
+	}
+	
 	private Map<String, Integer> mostCommentsUsers;
 	
 	public Map<String, Integer> getMostCommentsUsers() {
@@ -84,13 +96,32 @@ public class AdminDashboard {
 		this.setMostCommentsDiscussions(discussionService.getMostCommentsDiscussions(INITIAL_DAY_BACK, 
 				NUM_RECORDS).getDataObject());
 		
+		this.setMostDiscussionsUsers(discussionService.getMostDiscussionUsers(Date.from(LocalDate.now()
+				.minusDays(INITIAL_DAY_BACK).atStartOfDay(ZoneId.systemDefault()).toInstant()), 
+				NUM_RECORDS).getDataObject());
+		
+		this.mostDiscussionsUsers =
+			mostDiscussionsUsers.entrySet().stream()
+		       .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(20)
+		       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+		
 		this.setMostReputationUsers(voteService.getMostReputationUsers(Date.from(LocalDate.now()
 				.minusDays(INITIAL_DAY_BACK).atStartOfDay(ZoneId.systemDefault()).toInstant()), 
 				NUM_RECORDS).getDataObject());
 		
+		this.mostReputationUsers =
+				mostReputationUsers.entrySet().stream()
+			       .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(20)
+			       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+		
 		this.setMostCommentsUsers(commentService.getMostCommentsUsers(Date.from(LocalDate.now()
 				.minusDays(INITIAL_DAY_BACK).atStartOfDay(ZoneId.systemDefault()).toInstant()), 
 				NUM_RECORDS).getDataObject());
+		
+		this.mostCommentsUsers =
+				mostCommentsUsers.entrySet().stream()
+			       .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(20)
+			       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 	}
 
 

@@ -62,7 +62,23 @@
 			<p/>
 			
 			<div class="w3-row-padding w3-section">
-				<div class="w3-half">
+
+				<div class="w3-third">
+					
+					<div class="w3-card w3-white">
+						<header class="w3-container w3-light-gray">
+				        	<h4>Users with most discussions</h4>
+				        </header>
+				        <p:repeat var="username" value="#{adminDashboard.mostDiscussionsUsers.keySet().toArray()}">
+				        	<div class="w3-container w3-section w3-border-bottom">
+				        		<b>#{username}</b>: #{adminDashboard.mostDiscussionsUsers[username]}
+				        	</div>
+				        </p:repeat>
+					</div>
+					
+				</div>			
+			
+				<div class="w3-third">
 					
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-light-gray">
@@ -77,7 +93,7 @@
 					
 				</div>
 				
-				<div class="w3-half">
+				<div class="w3-third">
 
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-light-gray">

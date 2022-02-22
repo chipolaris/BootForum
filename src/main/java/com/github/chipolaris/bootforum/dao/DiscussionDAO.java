@@ -1,7 +1,9 @@
 package com.github.chipolaris.bootforum.dao;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -182,5 +184,25 @@ public class DiscussionDAO {
 		typedQuery.setParameter("discussionIds", discussionIds);
 		
 		return typedQuery.getResultList();
+	}
+	
+	public Map<String, Integer> getMostDiscussionUsers(Date since, Integer maxResult) {
+		
+		Map<String, Integer> users = new HashMap<>();
+		
+		Query query = entityManager.createQuery("SELECT d.createBy username, count(d) discussionCount FROM Discussion d WHERE d.createDate >= :since"
+				+ " GROUP BY username ORDER BY discussionCount DESC");
+		query.setParameter("since", since);
+		
+		query.setMaxResults(maxResult);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			users.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return users;
 	}
 }

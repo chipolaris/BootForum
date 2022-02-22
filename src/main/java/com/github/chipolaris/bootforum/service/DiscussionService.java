@@ -3,8 +3,10 @@ package com.github.chipolaris.bootforum.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -278,6 +280,16 @@ public class DiscussionService {
 		}
 		
 		response.setDataObject(discussionDAO.fetch(discussionIds));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostDiscussionUsers(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(discussionDAO.getMostDiscussionUsers(since, maxResult));
 		
 		return response;
 	}
