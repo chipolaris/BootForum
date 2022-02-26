@@ -1,41 +1,210 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:jsf="http://xmlns.jcp.org/jsf" 
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
-	template="/WEB-INF/template/layout_admin.xhtml">
+	template="/WEB-INF/template/layout_dashboard.xhtml">
 
 	<f:metadata>
 		<f:viewAction action="#{adminDashboard.onLoad}"/>
 	</f:metadata>
 	
 	<ui:define name="title">
-		#{msg['application.title']} - #{msg['administrator.area']}
+		#{msg['application.title']} - #{msg['admin.dashboard']}
+	</ui:define>
+	
+	<ui:define name="pageTitle">
+		#{msg['admin.dashboard']}
 	</ui:define>
 	
 	<ui:define name="content">
 	
-		<div class="w3-panel w3-card-4 w3-margin-top" style="background-color: #f4f4f4;">
+		<style>
+			/* set vertical alignment to middle */
+			.report_line { 
+				height: 36px;
+				line-height: 36px;
+				padding-left: 16px;
+				padding-right: 16px;
+				display: flex; 
+				justify-content: space-between
+			}
+		</style>
+	
+		<div class="w3-panel w3-margin-top" jsf:id="dashboard">
 			
-			<div class="w3-panel w3-theme-dark w3-center w3-round">
+			<!-- <div class="w3-panel w3-theme-dark w3-center w3-round">
  				<h3>#{msg['admin.dashboard']}</h3>
- 			</div>
+ 			</div> -->
  			
  			<div class="w3-section w3-border-bottom">
- 				<h4 style="text-align: center">Last 7 days</h4>
+ 				<div class="w3-container w3-center w3-section">
+ 					<!-- <p:commandButton id="periodButton" value="#{adminDashboard.reportPeriod.toString()}" type="button" 
+ 						onclick="return false;"
+	                	styleClass="ui-button-raised ui-button-flat" icon="pi pi-caret-down" style="font-weight:bold;"/> -->
+					
+					<h:form>
+						<p:selectOneButton value="#{adminDashboard.reportPeriod}">
+	            			<f:selectItem itemLabel="#{msg['last.7.days']}" itemValue="7"/>
+	            			<f:selectItem itemLabel="#{msg['last.30.days']}" itemValue="30"/>
+	            			<f:selectItem itemLabel="#{msg['last.year']}" itemValue="365"/>						
+							<f:selectItem itemLabel="#{msg['all.time']}" itemValue="10000"/>
+							
+							<p:ajax event="change" listener="#{adminDashboard.onLoad}" update="dashboard" oncomplete="changeAvatarBackgrounds();"/>
+						</p:selectOneButton>
+	                </h:form>
+ 				</div>
+ 				<!-- <h4 style="text-align: center">Last 7 days</h4> -->
  			</div>
+
+
+
+			<div class="w3-row-padding w3-section">
+
+				<div class="w3-quarter">
+					
+					<div class="w3-card w3-white">
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Users - Most Discussions</h4>
+				        </header>
+				        <p:repeat var="username" value="#{adminDashboard.mostDiscussionsUsers.keySet().toArray()}">
+				        	<div class="w3-container">
+								
+								<p style="float:left">
+									<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+										height="40" width="40" style="border:1px;" title="#{username}"
+										rendered="#{fileHandler.isAvatarExists(username)}"/>
+								
+									<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
+										title="#{username}"
+										style="display:inline-block;font-size:1.0rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;">
+										#{fn:substring(username, 0, 3)}
+									</span>
+					        		
+					        		#{username}
+				        		</p>	
+				        		<p style="float:right">
+				        			<span class="w3-xlarge"><b>#{adminDashboard.mostDiscussionsUsers[username]}</b></span>
+				        		</p>
+				        	</div>
+				        </p:repeat>
+					</div>
+					
+				</div>			
+			
+				<div class="w3-quarter">
+					
+					<div class="w3-card w3-white">
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Users - Most Comments</h4>
+				        </header>
+				        <p:repeat var="username" value="#{adminDashboard.mostCommentsUsers.keySet().toArray()}">
+				        	
+				        	<div class="w3-container">
+				        		<p style="float:left">
+									<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+										height="40" width="40" style="border:1px;" title="#{username}"
+										rendered="#{fileHandler.isAvatarExists(username)}"/>
+								
+									<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
+										title="#{username}"
+										style="display:inline-block;font-size:1.0rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;">
+										#{fn:substring(username, 0, 3)}
+									</span>
+					        		
+					        		#{username}
+				        		</p>
+				        		<p style="float:right">
+				        			<span class="w3-xlarge"><b>#{adminDashboard.mostCommentsUsers[username]}</b></span>
+				        		</p>
+				        	</div>
+				        </p:repeat>
+					</div>
+					
+				</div>
+				
+				<div class="w3-quarter">
+
+					<div class="w3-card w3-white">
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Users - Most Voted Up</h4>
+				        </header>
+				        
+				        <p:repeat var="username" value="#{adminDashboard.mostVotedUpUsers.keySet().toArray()}">
+				        	<div class="w3-container">
+				        		<p style="float:left">
+									<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+										height="40" width="40" style="border:1px;" title="#{username}"
+										rendered="#{fileHandler.isAvatarExists(username)}"/>
+								
+									<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
+										title="#{username}"
+										style="display:inline-block;font-size:1.0rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;">
+										#{fn:substring(username, 0, 3)}
+									</span>
+					        		
+					        		#{username}
+				        		</p>
+				        		<p style="float:right">
+				        			<span class="w3-xlarge"><b>#{adminDashboard.mostVotedUpUsers[username]}</b></span>
+				        		</p>
+				        	</div>
+				        </p:repeat>
+					</div>
+				
+				</div>
+
+				<div class="w3-quarter">
+
+					<div class="w3-card w3-white">
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Users - Most Voted Down</h4>
+				        </header>
+				        
+				        <p:repeat var="username" value="#{adminDashboard.mostVotedDownUsers.keySet().toArray()}">
+				        	<div class="w3-container">
+				        		<p style="float:left">
+									<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+										height="40" width="40" style="border:1px;" title="#{username}"
+										rendered="#{fileHandler.isAvatarExists(username)}"/>
+								
+									<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
+										title="#{username}"
+										style="display:inline-block;font-size:1.0rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;">
+										#{fn:substring(username, 0, 3)}
+									</span>
+					        		
+					        		#{username}
+				        		</p>
+				        		<p style="float:right">
+				        			<span class="w3-xlarge"><b>#{adminDashboard.mostVotedDownUsers[username]}</b></span>
+				        		</p>
+				        	</div>
+				        </p:repeat>
+					</div>
+				
+				</div>	
+			
+			</div>
+
 
 			<div class="w3-row-padding w3-section">
 			
 				<div class="w3-half">
 					
 					<div class="w3-card w3-white">
-						<header class="w3-container w3-light-gray">
-				        	<h4>Most views discussions</h4>
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Discussions - most views</h4>
 				        </header>
 				        <p:repeat var="discussion" value="#{adminDashboard.mostViewsDiscussions}">
-				        	<div class="w3-container w3-section w3-border-bottom">
-				        		#{discussion.title}: <b>#{discussion.stat.viewCount}</b>
+				        	<div class="report_line w3-border-bottom">
+				        		<span>
+				        			#{discussion.title}
+				        		</span>
+				        		
+				        		<span class="w3-large"><b>#{discussion.stat.viewCount}</b></span>
+				        		
 				        	</div>
 				        </p:repeat>
 					</div>
@@ -45,12 +214,18 @@
 				<div class="w3-half">
 
 					<div class="w3-card w3-white">
-						<header class="w3-container w3-light-gray">
-				        	<h4>Most comments discussions</h4>
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Discussions - most comments</h4>
 				        </header>
 				        <p:repeat var="discussion" value="#{adminDashboard.mostCommentsDiscussions}">
-				        	<div class="w3-container w3-section w3-border-bottom">
-				        		#{discussion.title}: <b>#{discussion.stat.commentCount}</b>
+				        	<div class="report_line w3-border-bottom">
+				        		<span>
+				        			#{discussion.title}:
+				        		</span>
+				        		<span class="w3-large">
+				        			<b>#{discussion.stat.commentCount}</b>
+				        		</span> 
+				        		
 				        	</div>
 				        </p:repeat>
 					</div>
@@ -58,57 +233,80 @@
 				</div>
 				
 			</div>
-			
-			<p/>
-			
-			<div class="w3-row-padding w3-section">
 
-				<div class="w3-third">
+
+ 			<div class="w3-row-padding w3-section">
+ 
+				<div class="w3-half">
 					
 					<div class="w3-card w3-white">
-						<header class="w3-container w3-light-gray">
-				        	<h4>Users with most discussions</h4>
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Forums - most views</h4>
 				        </header>
-				        <p:repeat var="username" value="#{adminDashboard.mostDiscussionsUsers.keySet().toArray()}">
-				        	<div class="w3-container w3-section w3-border-bottom">
-				        		<b>#{username}</b>: #{adminDashboard.mostDiscussionsUsers[username]}
+				        <p:repeat var="forumTitle" value="#{adminDashboard.mostViewsForums.keySet().toArray()}">
+				        	<div class="report_line w3-border-bottom">
+				        		#{forumTitle} <span class="w3-large"><b>#{adminDashboard.mostViewsForums[forumTitle]}</b></span>
 				        	</div>
 				        </p:repeat>
 					</div>
 					
 				</div>			
 			
-				<div class="w3-third">
+				<div class="w3-half">
 					
 					<div class="w3-card w3-white">
-						<header class="w3-container w3-light-gray">
-				        	<h4>Users with most comments</h4>
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Forums - most comments</h4>
 				        </header>
-				        <p:repeat var="username" value="#{adminDashboard.mostCommentsUsers.keySet().toArray()}">
-				        	<div class="w3-container w3-section w3-border-bottom">
-				        		<b>#{username}</b>: #{adminDashboard.mostCommentsUsers[username]}
+				        <p:repeat var="forumTitle" value="#{adminDashboard.mostCommentsForums.keySet().toArray()}">
+				        	<div class="report_line w3-border-bottom">
+				        		#{forumTitle} <span class="w3-large"><b>#{adminDashboard.mostCommentsForums[forumTitle]}</b></span>
 				        	</div>
 				        </p:repeat>
 					</div>
 					
 				</div>
-				
-				<div class="w3-third">
+ 				
+ 			</div>
 
+ 			
+ 			<div class="w3-row-padding w3-section">
+ 
+				<div class="w3-half">
+					
 					<div class="w3-card w3-white">
-						<header class="w3-container w3-light-gray">
-				        	<h4>Users with most reputations</h4>
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Tags - most views</h4>
 				        </header>
-				        <p:repeat var="username" value="#{adminDashboard.mostReputationUsers.keySet().toArray()}">
-				        	<div class="w3-container w3-section w3-border-bottom">
-				        		<b>#{username}</b>: #{adminDashboard.mostReputationUsers[username]}
+				        <p:repeat var="tagLabel" value="#{adminDashboard.mostViewsTags.keySet().toArray()}">
+				        	<div class="report_line w3-border-bottom">
+				        		<b>#{tagLabel}</b> <span class="w3-large"><b>#{adminDashboard.mostViewsTags[tagLabel]}</b></span>
 				        	</div>
 				        </p:repeat>
 					</div>
-				
-				</div>				
+					
+				</div>			
 			
-			</div>		
+				<div class="w3-half">
+					
+					<div class="w3-card w3-white">
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Tags - most comments</h4>
+				        </header>
+				        <p:repeat var="tagLabel" value="#{adminDashboard.mostCommentsTags.keySet().toArray()}">
+				        	<div class="report_line w3-border-bottom">
+				        		<b>#{tagLabel}</b> <span class="w3-large"><b>#{adminDashboard.mostCommentsTags[tagLabel]}</b></span>
+				        	</div>
+				        </p:repeat>
+					</div>
+					
+				</div>
+ 				
+ 			</div>
+ 			
+
+			
+		
 			
 		</div>
 		

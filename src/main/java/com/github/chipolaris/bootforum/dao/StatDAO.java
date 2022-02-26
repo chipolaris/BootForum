@@ -352,4 +352,188 @@ public class StatDAO {
 		
 		return commentors;
 	}
+	
+	public Map<String, Integer> getMostCommentsForums(Date since, Integer maxResult) {
+		
+		Map<String, Integer> forums = new HashMap<>();
+		
+		Query query = entityManager.createQuery("Select d.forum.title, COALESCE(SUM(d.stat.commentCount), 0) totalCommentCount from Discussion d"
+				+ " WHERE d.createDate >= :since GROUP BY d.forum ORDER BY totalCommentCount");
+		
+		query.setParameter("since", since);
+		
+		if(maxResult != null) {
+			query.setMaxResults(maxResult);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			forums.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return forums;
+	}
+	
+	public Map<String, Integer> getMostViewsForums(Date since, Integer maxResult) {
+		
+		Map<String, Integer> forums = new HashMap<>();
+		
+		Query query = entityManager.createQuery("Select d.forum.title, COALESCE(SUM(d.stat.viewCount), 0) totalViewCount from Discussion d"
+				+ " WHERE d.createDate >= :since GROUP BY d.forum ORDER BY totalViewCount");
+		
+		query.setParameter("since", since);
+		
+		if(maxResult != null) {
+			query.setMaxResults(maxResult);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			forums.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return forums;
+	}
+	
+	public Map<String, Integer> getMostCommentsTags(Date since, Integer maxResult) {
+		
+		Map<String, Integer> tags = new HashMap<>();
+		
+		Query query = entityManager.createQuery("Select t.label, COALESCE(SUM(d.stat.commentCount), 0) totalCommentCount from Discussion d,"
+				+ " d.tags t WHERE d.createDate >= :since GROUP BY t ORDER BY totalCommentCount ");
+		
+		query.setParameter("since", since);
+		
+		if(maxResult != null) {
+			query.setMaxResults(maxResult);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			tags.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return tags;
+	}	
+	
+	public Map<String, Integer> getMostViewsTags(Date since, Integer maxResult) {
+		
+		Map<String, Integer> tags = new HashMap<>();
+		
+		Query query = entityManager.createQuery("Select t.label, COALESCE(SUM(d.stat.viewCount), 0) totalViewCount from Discussion d,"
+				+ " d.tags t WHERE d.createDate >= :since GROUP BY t ORDER BY totalViewCount");
+		
+		query.setParameter("since", since);
+		
+		if(maxResult != null) {
+			query.setMaxResults(maxResult);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			tags.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return tags;
+	}
+	
+	public Map<String, Integer> getMostVotedUpUsers(Date since, Integer maxResult) {
+		
+		Map<String, Integer> users = new HashMap<>();
+		
+		Query query = entityManager.createQuery("SELECT c.createBy, COALESCE(SUM(c.commentVote.voteUpCount), 0) voteUpCount"
+				+ " FROM Comment c WHERE c.createDate >= :since GROUP BY c.createBy ORDER BY voteUpCount DESC");
+		
+		query.setParameter("since", since);
+		
+		if(maxResult != null) {
+			query.setMaxResults(maxResult);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			users.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return users;
+	}
+	
+	public Map<String, Integer> getMostVotedDownUsers(Date since, Integer maxResult) {
+		
+		Map<String, Integer> users = new HashMap<>();
+		
+		Query query = entityManager.createQuery("SELECT c.createBy, COALESCE(SUM(c.commentVote.voteDownCount), 0) voteDownCount"
+				+ " FROM Comment c WHERE c.createDate >= :since GROUP BY c.createBy ORDER BY voteDownCount DESC");
+		
+		query.setParameter("since", since);
+		
+		if(maxResult != null) {
+			query.setMaxResults(maxResult);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			users.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return users;
+	}
+	
+	public Map<String, Integer> getMostVotedUpComments(Date since, Integer maxResult) {
+		
+		Map<String, Integer> comments = new HashMap<>();
+		
+		Query query = entityManager.createQuery("Select c.title, c.commentVote.voteUpCount FROM Comment c"
+				+ " WHERE c.createDate >= :since ORDER BY c.commentVote.voteUpCount DESC");
+		
+		query.setParameter("since", since);
+		
+		if(maxResult != null) {
+			query.setMaxResults(maxResult);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			comments.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return comments;
+	}
+	
+	public Map<String, Integer> getMostVotedDownComments(Date since, Integer maxResult) {
+		
+		Map<String, Integer> comments = new HashMap<>();
+		
+		Query query = entityManager.createQuery("Select c.title, c.commentVote.voteDownCount FROM Comment c"
+				+ " WHERE c.createDate >= :since ORDER BY c.commentVote.voteDownCount DESC");
+		
+		query.setParameter("since", since);
+		
+		if(maxResult != null) {
+			query.setMaxResults(maxResult);
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultList = query.getResultList();
+		
+		for(Object[] objectArray : resultList) {
+			comments.put((String)objectArray[0], ((Number)objectArray[1]).intValue());
+		}
+		
+		return comments;
+	}
 }

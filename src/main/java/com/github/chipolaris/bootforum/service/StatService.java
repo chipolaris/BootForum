@@ -1,6 +1,8 @@
 package com.github.chipolaris.bootforum.service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import javax.annotation.Resource;
@@ -49,6 +51,86 @@ public class StatService {
 	
 	@Resource
 	private VoteDAO voteDAO;
+
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostVotedUpUsers(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(statDAO.getMostVotedUpUsers(since, maxResult));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostVotedDownUsers(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(statDAO.getMostVotedDownUsers(since, maxResult));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostVotedUpComments(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(statDAO.getMostVotedUpComments(since, maxResult));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostVotedDownComments(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(statDAO.getMostVotedDownComments(since, maxResult));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostCommentsForums(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(statDAO.getMostCommentsForums(since, maxResult));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostViewsForums(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(statDAO.getMostViewsForums(since, maxResult));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostCommentsTags(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(statDAO.getMostCommentsTags(since, maxResult));
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Map<String, Integer>> getMostViewsTags(Date since, Integer maxResult) {
+		
+		ServiceResponse<Map<String, Integer>> response = new ServiceResponse<>();
+		
+		response.setDataObject(statDAO.getMostViewsTags(since, maxResult));
+		
+		return response;
+	}
 	
 	@Transactional(readOnly = true)
 	@Cacheable(value=CachingConfig.USER_STAT, key="#username")

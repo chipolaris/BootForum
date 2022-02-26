@@ -183,7 +183,9 @@ public class RegistrationService {
 		}
 		else if(userDAO.emailExists(registration.getEmail())
 			|| genericDAO.countEntities(Registration.class, 
-					Collections.singletonMap("email", registration.getEmail())).longValue() > 0) {
+					Collections.singletonMap("email", registration.getEmail())).longValue() > 0
+			|| genericDAO.countEntities(DeletedUser.class, 
+					Collections.singletonMap("person.email", registration.getEmail())).longValue() > 0) {
 			errors.add("Email already exists in the system");
 		}
 		

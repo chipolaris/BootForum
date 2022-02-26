@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title><ui:insert name="title">#{msg['application.title']}</ui:insert></title>
+        
+        <!-- *Note: favicon generated and setup instruction taken from https://favicon.io/favicon-generator/ -->
+		<link rel="apple-touch-icon" sizes="180x180" href="#{request.contextPath}/favicon_io/apple-touch-icon.png"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="#{request.contextPath}/favicon_io/favicon-32x32.png"/>
+		<link rel="icon" type="image/png" sizes="16x16" href="#{request.contextPath}/favicon_io/favicon-16x16.png"/>
+		<link rel="manifest" href="#{request.contextPath}/favicon_io/site.webmanifest"/>
+        
+        <h:outputScript library="js" name="app/timeAgoLocale.js"/>
+        <h:outputStylesheet library="css" name="w3.css"/>
+        
+        <!-- color themes -->
+        <!-- read from cookie name 'theme.color', if empty read from #{systemInfo.displayOption.themeColor}, 
+        	if still empty, set to default value 'w3-theme-light-blue' -->
+        <c:set var = "theme_color" value = "#{cookie['theme.color'].value}"/>
+        
+        <c:if test = "#{empty theme_color}">
+        	
+        	<c:set var = "theme_color" value = "#{systemInfo.displayOption.themeColor}"/>
+        	        	
+        	<c:if test = "#{empty theme_color}">
+        		<c:set var = "theme_color" value = "w3-theme-light-blue"/>
+      		</c:if>
+      	</c:if>     	
+        <h:outputStylesheet library="css" name="w3-theme/#{theme_color}.css"/>
+        
+        <style>
+        
+			html, body, h1, h2, h3, h4, h5 {font-family: Arial, sans-serif}
+			/* a { text-decoration: none }
+			a:link           { color: #339966 } 
+			a:visited        { color: #C92D99 } 
+			a:hover, a:focus { color: #990000 } 
+			a:active         { color: #339966 }  */
+			
+		</style>
+    </h:head>
+
+    <h:body style="margin:0px;">
+
+		<!-- Top bar container -->
+		<div class="w3-top" style="z-index:5">
+				
+			<div class="w3-bar w3-large w3-bottombar w3-dark-gray" style="z-index:4;">
+				
+				<span class="w3-bar-item">#{msg['application.title']} #{msg['administration']}</span>
+				
+				<button class="w3-bar-item w3-button" onclick="toggleSidebar();"><i class="pi pi-bars w3-xlarge"/></button>
+								
+				<div class="w3-dropdown-hover w3-right">
+					<button class="w3-button" style="height:46px;padding-left:8px;padding-right:8px;">
+						<h:graphicImage value="#{requestContext}/avatar/#{userSession.user.username}" class="w3-circle"
+							height="36" width="36" style="border:1px;" title="#{userSession.user.username}"
+							rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"/>
+					
+						<span jsf:rendered="#{!fileHandler.isAvatarExists(userSession.user.username)}" class="w3-circle avatarSpan"
+							title="#{userSession.user.username}"
+							style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;color:white;">
+							#{fn:substring(userSession.user.username, 0, 3)}
+						</span>
+					</button>
+					
+					<div class="w3-dropdown-content w3-bar-block w3-card" style="right:0">					
+						<h:link outcome="/secure/index" styleClass="w3-bar-item w3-button" title="Forum Home"><i class="pi pi-cog"/> #{msg['account']}</h:link>
+						<h:link outcome="/index" styleClass="w3-bar-item w3-button" title="Forum Home"><i class="pi pi-home"/> #{msg['home']}</h:link>
+						<h:outputLink value="#{request.contextPath}/logout" styleClass="w3-bar-item w3-button"><i class="pi pi-sign-out"/> #{msg['logout']}</h:outputLink>
+					</div>
+				</div>
+				
+				<span class="w3-bar-item w3-right"><b><ui:insert name="pageTitle"/></b></span>
+				
+			</div>
+		
+		</div>
+		
+		<!-- Sidebar/menu -->
+		<nav class="w3-sidebar w3-animate-left" style="z-index:3;width:230px;display:none !important" id="mySidebar">
+		
+		  <p/>
+		  		 		  
+		  <div class="w3-bar-block">
+		    
+		    <h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-" title="Dashboard"/> #{msg['admin.dashboard']}</h:link>
+		    <h:link outcome="/admin/userList" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="Manage Users"/> <b>#{msg['manage.users']}</b></h:link>
+		    <h:link outcome="/admin/discussionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Discussions"/> <b>#{msg['manage.discussions']}</b></h:link>
+		    <h:link outcome="/admin/forumManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-align-right" title="Manage Forums"/> <b>#{msg['manage.forums']}</b></h:link>
+		    <h:link outcome="/admin/tagManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-tags" title="Manage Tags"/> <b>#{msg['manage.tags']}</b></h:link>
+		    <h:link outcome="/admin/chatManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Chat Rooms"/> <b>#{msg['manage.chat.rooms']}</b></h:link>
+		    <h:link outcome="/admin/displayManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="Manage Diplay"/> <b>#{msg['display.configuration']}</b></h:link>
+		    <h:link outcome="/admin/emailManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="Manage Email Option"/> <b>#{msg['email.configuration']}</b></h:link>
+		    <h:link outcome="/admin/registrationManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-book" title="Manage Registration"/><b> #{msg['manage.registration']}</b></h:link>
+		    <h:link outcome="/admin/remoteIPFilterManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-filter" title="Manage IP Filtering"/><b> #{msg['ip.filter.management']}</b></h:link>
+		    <h:link outcome="/admin/systemMaintenance" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-cog" title="Maintain System"/> <b>#{msg['system.maintenance']}</b></h:link>
+		    <h:link outcome="/admin/systemInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-info-circle" title="System Information"/> <b>#{msg['system.information']}</b></h:link>
+			
+			<h:link rendered="#{applicationProperties['application.devMode'] eq 'true'}" outcome="/admin/simulateData" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-play" title="Create Simulation Data"/> <b>#{msg['simulate.data']}</b></h:link>
+			
+			<a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="#{msg['close.menu']}"><i class="pi pi-times"></i>  Close Menu</a>
+		  </div>
+		</nav>
+
+		<!-- Overlay effect when opening sidebar on small & medium screens -->
+		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="closeSidebar()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>    
+
+		<!-- !PAGE CONTENT! -->
+		<div class="w3-main" style="margin-left:0px;margin-top:43px;background-color: #f4f4f4;" id="main">
+			
+			<div class="w3-margin">
+				<ui:insert name="content">
+		        	Template
+		        </ui:insert>
+	        </div>
+	          	
+			<!-- Footer -->
+			<footer class="w3-container w3-padding-16 w3-center">
+				&#169; <a href="http://www.SoftUnify.com">SoftUnify.com 2021</a>. Powered by <a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a>, <a href="https://spring.io/projects/spring-framework">Spring Framework</a>, <a href="http://www.eclipse.org/eclipselink/">EclipseLink</a>, <a href="https://www.primefaces.org">Primefaces</a>, and <a href="https://www.w3schools.com/w3css/default.asp">W3.CSS</a> | All rights reserved.
+			</footer>
+		
+			<!-- End page content -->         	
+		</div>
+		
+        <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:25px;bottom:25px">
+            <f:facet name="start">
+                <i class="pi pi-spin pi-spinner w3-xxlarge w3-text-blue-grey"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+        
+        <ui:include src="/WEB-INF/template/ajaxErrors.xhtml" />    	
+  
+		<script type="text/javascript">
+ 			//<![CDATA[ 				
+ 				
+	 			// Get the Sidebar
+				var mySidebar = document.getElementById("mySidebar");
+				
+				// Get the DIV with overlay effect
+				var overlayBg = document.getElementById("myOverlay");
+				
+				// Get the DIV with overlay effect
+				var main = document.getElementById("main");
+				
+				function toggleSidebar() {					
+					
+				  if (mySidebar.style.display === 'none') {
+
+					console.log('toggleSidebar=== 11');
+				   
+					mySidebar.style.width = "230px";
+					mySidebar.style.display = 'block';
+				    main.style.marginLeft = "230px";
+				    
+				  } 
+				  else {
+					console.log('toggleSidebar=== 22');
+					  
+					mySidebar.style.display = 'none';
+					main.style.marginLeft = "0px";
+				  }
+				}
+				
+				// Toggle between showing and hiding the sidebar, and add overlay effect
+				function openSidebar() {
+					console.log('openSidebar call---');
+				  if (mySidebar.style.display === 'block') {
+					  console.log('openSidebar call---1');
+				    mySidebar.style.display = 'none';
+				    overlayBg.style.display = 'none';
+				  } else {
+					  console.log('openSidebar call---2');
+				    mySidebar.style.display = 'block';
+				    overlayBg.style.display = "block";
+				  }
+				}
+				
+				// Close the sidebar with the close button
+				function closeSidebar() {
+				  mySidebar.style.display = "none";
+				  overlayBg.style.display = "none";
+				}
+				
+				/* highlight and disable anchor (a href) the side navigation link if the page is current */
+				$(document).ready(function(){
+					var navLinks = document.querySelectorAll("a.w3-bar-item");
+					navLinks.forEach(function(navLink) {
+						if(window.location.href.includes(navLink.href)) {
+							navLink.style.pointerEvents = 'none';
+						  	navLink.style.cursor = 'default';
+						  	navLink.className += " w3-theme-dark";
+						  	navLink.style.fontWeight = "bold";
+						}
+					});
+					changeAvatarBackgrounds();
+				});
+				
+				function toggle(id) {
+					var x = document.getElementById(id);
+					if (x.className.indexOf("w3-show") == -1) {
+						x.className += " w3-show";
+					} else {
+						x.className = x.className.replace(" w3-show", "");
+					}
+				}
+				
+				function changeAvatarBackgrounds() {
+					$(".avatarSpan").each(function() {						
+						$(this).css('background-color', stringToColor($(this).prop('title')));
+					});
+				}
+				
+				// from https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
+				function stringToColor(str) {
+					var hash = 0;
+					for (var i = 0; i < str.length; i++) {
+						hash = str.charCodeAt(i) + ((hash << 5) - hash);
+					}
+					var colour = '#';
+					for (var i = 0; i < 3; i++) {
+						var value = (hash >> (i * 8)) & 0xFF;
+					    colour += ('00' + value.toString(16)).substr(-2);
+					}
+					return colour;
+				}
+				
+			//]]>	
+		</script>
+    
+    </h:body>
+</html>

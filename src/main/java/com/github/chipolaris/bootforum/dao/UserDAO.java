@@ -89,17 +89,18 @@ public class UserDAO {
 		CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
 		Root<User> user = query.from(User.class);
 
+		
+		username2EmailMap = new BiMap<>();
+		
 		// the following two lines produce the same result: (also mentioned in the URL link above)
 		/* query.select(criteriaBuilder.tuple(user.get("username"), user.get("person").get("email"))); */
 		query.multiselect(user.get("username"), user.get("person").get("email"));
 
 		List<Tuple> resultList = entityManager.createQuery(query).getResultList();
 		
-		username2EmailMap = new BiMap<>();
 		for (Tuple tuple : resultList) {
 			username2EmailMap.put(tuple.get(0, String.class), tuple.get(1, String.class));
-		}
-		 
+		}		 
 	}
 	
 	/**
@@ -130,12 +131,14 @@ public class UserDAO {
 		return username2EmailMap.containsValue(email);
 	}
 	
+	/* 
+	 * 02/22/2022: Currently not being referenced 
+	 */
 	/**
 	 * return email for username
 	 * @param username
 	 * @return
 	 */
-	// Note: not used in the project
 	public String getEmailForUsername(String username) {
 		
 		return username2EmailMap.get(username);

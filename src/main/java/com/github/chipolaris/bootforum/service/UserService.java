@@ -18,6 +18,7 @@ import com.github.chipolaris.bootforum.dao.UserDAO;
 import com.github.chipolaris.bootforum.domain.DeletedUser;
 import com.github.chipolaris.bootforum.domain.PasswordReset;
 import com.github.chipolaris.bootforum.domain.Person;
+import com.github.chipolaris.bootforum.domain.Registration;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
 import com.github.chipolaris.bootforum.util.Validators;
@@ -66,7 +67,9 @@ public class UserService {
 			messages.add("Username must be at least 5 characters");
 		}
 		else if(userDAO.usernameExists(user.getUsername()) || genericDAO.countEntities(
-				DeletedUser.class, Collections.singletonMap("username", user.getUsername())).intValue() > 0) {
+				Registration.class, Collections.singletonMap("username", user.getUsername())).intValue() > 0
+				|| genericDAO.countEntities(
+						DeletedUser.class, Collections.singletonMap("username", user.getUsername())).intValue() > 0) {
 			messages.add("Username already exists in the system");
 		}
 		
@@ -77,7 +80,10 @@ public class UserService {
 		if(!Validators.isValidEmailAddress(user.getPerson().getEmail())) {
 			messages.add("Invalid Email Format");
 		}
-		else if(userDAO.emailExists(user.getPerson().getEmail())) {
+		else if(userDAO.emailExists(user.getPerson().getEmail()) || genericDAO.countEntities(Registration.class,
+				Collections.singletonMap("email", user.getPerson().getEmail())).intValue() > 0 || 
+				genericDAO.countEntities(DeletedUser.class, 
+						Collections.singletonMap("person.email", user.getPerson().getEmail())).intValue() > 0) {
 			messages.add("Email already exists in the system");
 		}
 		
@@ -103,22 +109,34 @@ public class UserService {
 		return response;
 	}
 	
+	/*
+	 * 02/22/2022: Currently not being referenced 
+	 */
 	@Transactional(readOnly=true)
 	public ServiceResponse<Boolean> checkUsernameExist(String username) {
 		
 		ServiceResponse<Boolean> response = new ServiceResponse<Boolean>();
 		
-		response.setDataObject(userDAO.usernameExists(username));
+		response.setDataObject(userDAO.usernameExists(username)
+				|| genericDAO.countEntities(DeletedUser.class, 
+						Collections.singletonMap("username", username)).longValue() > 0);
 		
 		return response;
 	}
 	
+	/*
+	 * 02/22/2022: Currently not being referenced 
+	 */
 	@Transactional(readOnly=true)
 	public ServiceResponse<Boolean> checkEmailExist(String email) {
 		
 		ServiceResponse<Boolean> response = new ServiceResponse<Boolean>();
 				
-		response.setDataObject(userDAO.emailExists(email));
+		response.setDataObject(userDAO.emailExists(email)
+				|| genericDAO.countEntities(Registration.class, 
+						Collections.singletonMap("email", email)).longValue() > 0
+				|| genericDAO.countEntities(DeletedUser.class, 
+						Collections.singletonMap("email", email)).longValue() > 0);
 				
 		return response;
 	}
