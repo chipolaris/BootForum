@@ -72,8 +72,7 @@
 
 
 ### <ins>Admin Dashboard<ins>
-![Admin_Dashboard](https://user-images.githubusercontent.com/46733006/155855210-38c7dcd5-f591-4c12-8443-9240b4ebecb0.png)
-  
+![AdminDashboard](https://user-images.githubusercontent.com/46733006/155857837-79e33bc1-5ea6-4052-b527-f6e6aba5b37b.png)
   
 
 ### <ins>Admin User Management</ins>
