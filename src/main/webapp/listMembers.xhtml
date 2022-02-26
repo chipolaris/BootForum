@@ -164,6 +164,10 @@
 								<p>
 									#{msg['discussions']}: <b>#{systemInfo.statistics.discussionCount}</b>
 								</p>
+								
+								<p>
+									#{msg['discussion.tags']}: <b>#{systemInfo.statistics.tagCount}</b>
+								</p>
 							
 								<p>
 									#{msg['comments']}: <b>#{systemInfo.statistics.commentCount}</b>
@@ -198,6 +202,10 @@
 								<p>
 									#{msg['anonymous.users']}: <b>#{systemInfo.sessionCount - fn:length(systemInfo.loggedOnUsers)}</b>
 								</p>
+								
+								<p>
+									#{msg['chat.rooms']}: <b>#{systemInfo.statistics.chatRoomCount}</b>
+								</p>							
 							</div>
 	
 						</div>

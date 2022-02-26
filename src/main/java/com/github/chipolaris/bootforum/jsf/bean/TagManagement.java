@@ -140,7 +140,7 @@ public class TagManagement {
     		}
     		
 	    	// 
-	    	ServiceResponse<Void> response = genericService.deleteEntity(this.selectedTag);
+	    	ServiceResponse<Void> response = tagService.deleteTag(this.selectedTag);
 	    	
 	    	if(response.getAckCode() != AckCodeType.FAILURE) {
 	    		JSFUtils.addInfoStringMessage(null, String.format("Tag '%s' (id: %d) deleted", selectedTag.getLabel(), selectedTag.getId()));

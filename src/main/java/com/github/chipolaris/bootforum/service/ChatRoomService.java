@@ -17,6 +17,9 @@ public class ChatRoomService {
 	@Resource
 	private GenericDAO genericDAO;
 	
+	@Resource
+	private SystemInfoService systemInfoService;
+	
 	@Transactional(readOnly = false)
 	public ServiceResponse<Long> createNewChatRoom(ChatRoom newChatRoom) {
 		
@@ -28,7 +31,23 @@ public class ChatRoomService {
 		
 		genericDAO.persist(newChatRoom);
 		
+		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
+		systemStat.addChatRoomCount(1);
+		
 		response.setDataObject(newChatRoom.getId());
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<Void> deleteChatRoom(ChatRoom chatRoomToDelete) {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+		
+		genericDAO.remove(chatRoomToDelete);
+		
+		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
+		systemStat.addChatRoomCount(-1);
 		
 		return response;
 	}

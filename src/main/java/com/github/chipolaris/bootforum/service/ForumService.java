@@ -95,7 +95,7 @@ public class ForumService {
 		
 		// add 1 to system's forum group count
 		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
-		systemStat.setForumGroupCount(systemStat.getForumGroupCount() + 1);
+		systemStat.addForumGroupCount(1);
 		
 		return  response;
 	}

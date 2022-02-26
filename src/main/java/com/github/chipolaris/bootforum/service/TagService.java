@@ -27,6 +27,9 @@ public class TagService {
 	@Resource
 	private GenericDAO genericDAO;
 	
+	@Resource
+	private SystemInfoService systemInfoService;
+	
 	@Transactional(readOnly = false)
 	public ServiceResponse<Long> createNewTag(Tag newTag) {
 		
@@ -38,7 +41,23 @@ public class TagService {
 		
 		genericDAO.persist(newTag);
 		
+		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
+		systemStat.addTagCount(1);
+		
 		response.setDataObject(newTag.getId());
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<Void> deleteTag(Tag tagToDelete) {
+		
+		ServiceResponse<Void> response = new ServiceResponse<>();
+		
+		genericDAO.remove(tagToDelete);
+		
+		SystemInfoService.Statistics systemStat = systemInfoService.getStatistics().getDataObject();
+		systemStat.addTagCount(-1);
 		
 		return response;
 	}

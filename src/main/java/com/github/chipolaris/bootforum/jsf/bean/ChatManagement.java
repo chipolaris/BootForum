@@ -120,7 +120,7 @@ public class ChatManagement {
 		
     	if(this.selectedChatRoom != null) {
 	    	// 
-	    	ServiceResponse<Void> response = genericService.deleteEntity(this.selectedChatRoom);
+	    	ServiceResponse<Void> response = chatRoomService.deleteChatRoom(this.selectedChatRoom);
 	    	
 	    	if(response.getAckCode() != AckCodeType.FAILURE) {
 	    		JSFUtils.addInfoStringMessage(null, String.format("ChatRoom '%s' (id: %d) deleted", selectedChatRoom.getLabel(), selectedChatRoom.getId()));

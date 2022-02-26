@@ -33,12 +33,53 @@
 		</style>
 	
 		<div class="w3-panel w3-margin-top" jsf:id="dashboard">
-			
-			<!-- <div class="w3-panel w3-theme-dark w3-center w3-round">
- 				<h3>#{msg['admin.dashboard']}</h3>
- 			</div> -->
  			
- 			<div class="w3-section w3-border-bottom">
+			<div class="w3-row-padding w3-section">
+				
+				<div class="w3-col l2 m4 s6 w3-margin-top">
+					<div class="w3-card w3-white w3-padding-small w3-center">
+						<p class="w3-large w3-opacity"><i class="pi pi-users w3-large"/>&#160;<h:link outcome="userList" value="#{msg['members']}" style="text-decoration:none;"/></p>
+						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.userCount}</b></p>
+					</div>
+				</div>
+				
+				<div class="w3-col l2 m4 s6 w3-margin-top">
+					<div class="w3-card w3-white w3-padding-small w3-center">
+						<p class="w3-large w3-opacity"><i class="pi pi-comment w3-large"/>&#160;<h:link outcome="discussionManagement" value="#{msg['comments']}" style="text-decoration:none;"/></p>
+						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.commentCount}</b></p>
+					</div>
+				</div>
+				
+				<div class="w3-col l2 m4 s6 w3-margin-top">
+					<div class="w3-card w3-white w3-padding-small w3-center">
+						<p class="w3-large w3-opacity"><i class="pi pi-comments w3-large"/>&#160;<h:link outcome="discussionManagement" value="#{msg['discussions']}" style="text-decoration:none;"/></p>
+						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.discussionCount}</b></p>
+					</div>
+				</div>
+				
+				<div class="w3-col l2 m4 s6 w3-margin-top">
+					<div class="w3-card w3-white w3-padding-small w3-center">
+						<p class="w3-large w3-opacity"><i class="pi pi-tag w3-large"/>&#160;<h:link outcome="tagManagement" value="#{msg['tags']}" style="text-decoration:none;"/></p>
+						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.tagCount}</b></p>
+					</div>
+				</div>
+				
+				<div class="w3-col l2 m4 s6 w3-margin-top">
+					<div class="w3-card w3-white w3-padding-small w3-center">
+						<p class="w3-large w3-opacity"><i class="pi pi-list w3-large"/>&#160;<h:link outcome="forumManagement" value="#{msg['forums']}" style="text-decoration:none;"/></p>
+						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.forumCount}</b></p>
+					</div>
+				</div>
+				
+				<div class="w3-col l2 m4 s6 w3-margin-top">
+					<div class="w3-card w3-white w3-padding-small w3-center">
+						<p class="w3-large w3-opacity"><i class="pi pi-comments w3-large"/>&#160;<h:link outcome="forumManagement" value="#{msg['chat.rooms']}" style="text-decoration:none;"/></p>
+						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.chatRoomCount}</b></p>
+					</div>
+				</div>
+			</div> 			
+ 			
+ 			<div class="w3-section w3-topbar w3-border-bottom">
  				<div class="w3-container w3-center w3-section">
  					<!-- <p:commandButton id="periodButton" value="#{adminDashboard.reportPeriod.toString()}" type="button" 
  						onclick="return false;"
@@ -57,8 +98,6 @@
  				</div>
  				<!-- <h4 style="text-align: center">Last 7 days</h4> -->
  			</div>
-
-
 
 			<div class="w3-row-padding w3-section">
 
@@ -233,42 +272,6 @@
 				</div>
 				
 			</div>
-
-
- 			<div class="w3-row-padding w3-section">
- 
-				<div class="w3-half">
-					
-					<div class="w3-card w3-white">
-						<header class="w3-container w3-dark-gray">
-				        	<h4>Forums - most views</h4>
-				        </header>
-				        <p:repeat var="forumTitle" value="#{adminDashboard.mostViewsForums.keySet().toArray()}">
-				        	<div class="report_line w3-border-bottom">
-				        		#{forumTitle} <span class="w3-large"><b>#{adminDashboard.mostViewsForums[forumTitle]}</b></span>
-				        	</div>
-				        </p:repeat>
-					</div>
-					
-				</div>			
-			
-				<div class="w3-half">
-					
-					<div class="w3-card w3-white">
-						<header class="w3-container w3-dark-gray">
-				        	<h4>Forums - most comments</h4>
-				        </header>
-				        <p:repeat var="forumTitle" value="#{adminDashboard.mostCommentsForums.keySet().toArray()}">
-				        	<div class="report_line w3-border-bottom">
-				        		#{forumTitle} <span class="w3-large"><b>#{adminDashboard.mostCommentsForums[forumTitle]}</b></span>
-				        	</div>
-				        </p:repeat>
-					</div>
-					
-				</div>
- 				
- 			</div>
-
  			
  			<div class="w3-row-padding w3-section">
  
@@ -303,10 +306,40 @@
 				</div>
  				
  			</div>
- 			
 
+ 			<div class="w3-row-padding w3-section">
+ 
+				<div class="w3-half">
+					
+					<div class="w3-card w3-white">
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Forums - most views</h4>
+				        </header>
+				        <p:repeat var="forumTitle" value="#{adminDashboard.mostViewsForums.keySet().toArray()}">
+				        	<div class="report_line w3-border-bottom">
+				        		#{forumTitle} <span class="w3-large"><b>#{adminDashboard.mostViewsForums[forumTitle]}</b></span>
+				        	</div>
+				        </p:repeat>
+					</div>
+					
+				</div>			
 			
-		
+				<div class="w3-half">
+					
+					<div class="w3-card w3-white">
+						<header class="w3-container w3-dark-gray">
+				        	<h4>Forums - most comments</h4>
+				        </header>
+				        <p:repeat var="forumTitle" value="#{adminDashboard.mostCommentsForums.keySet().toArray()}">
+				        	<div class="report_line w3-border-bottom">
+				        		#{forumTitle} <span class="w3-large"><b>#{adminDashboard.mostCommentsForums[forumTitle]}</b></span>
+				        	</div>
+				        </p:repeat>
+					</div>
+					
+				</div>
+ 				
+ 			</div>		
 			
 		</div>
 		

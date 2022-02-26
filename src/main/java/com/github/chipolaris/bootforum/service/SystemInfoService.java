@@ -16,11 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.dao.GenericDAO;
 import com.github.chipolaris.bootforum.dao.StatDAO;
+import com.github.chipolaris.bootforum.domain.ChatRoom;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.CommentInfo;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
+import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.domain.User;
 
 @Service
@@ -54,6 +56,8 @@ public class SystemInfoService {
 		stat.setDiscussionCount(genericDAO.countEntities(Discussion.class).longValue());
 		stat.setForumCount(genericDAO.countEntities(Forum.class).longValue());
 		stat.setForumGroupCount(genericDAO.countEntities(ForumGroup.class).longValue());
+		stat.setTagCount(genericDAO.countEntities(Tag.class).longValue());
+		stat.setChatRoomCount(genericDAO.countEntities(ChatRoom.class).longValue());
 		stat.setUserCount(genericDAO.countEntities(User.class).longValue());
 		stat.setLastComment(statDAO.latestCommentInfo());
 		stat.setLastRegisteredUser(statDAO.getLatestUsername());
@@ -159,6 +163,8 @@ public class SystemInfoService {
     	private AtomicLong forumCount = new AtomicLong();
     	private AtomicLong userCount = new AtomicLong();
     	private AtomicLong forumGroupCount = new AtomicLong();
+    	private AtomicLong tagCount = new AtomicLong();
+    	private AtomicLong chatRoomCount = new AtomicLong();
     	private String lastRegisteredUser;
     	private Date lastUserRegisteredDate;
     	
@@ -217,6 +223,26 @@ public class SystemInfoService {
 		}
 		public void addForumGroupCount(long value) {
 			this.forumGroupCount.addAndGet(value);
+		}
+		
+		public AtomicLong getTagCount() {
+			return tagCount;
+		}
+		public void setTagCount(long tagCount) {
+			this.tagCount.set(tagCount);
+		}
+		public void addTagCount(long value) {
+			this.tagCount.addAndGet(value);
+		}
+		
+		public AtomicLong getChatRoomCount() {
+			return chatRoomCount;
+		}
+		public void setChatRoomCount(long chatRoomCount) {
+			this.chatRoomCount.set(chatRoomCount);;
+		}
+		public void addChatRoomCount(long value) {
+			this.chatRoomCount.addAndGet(value);
 		}
 		
 		public String getLastRegisteredUser() {
