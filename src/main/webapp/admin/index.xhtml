@@ -21,14 +21,14 @@
 	<ui:define name="content">
 	
 		<style>
-			/* set vertical alignment to middle */
+			/* set vertical alignment to middle and stretch line content to left and right ends*/
 			.report_line { 
 				height: 36px;
 				line-height: 36px;
 				padding-left: 16px;
 				padding-right: 16px;
 				display: flex; 
-				justify-content: space-between
+				justify-content: space-between;
 			}
 		</style>
 	
@@ -36,45 +36,45 @@
  			
 			<div class="w3-row-padding w3-section">
 				
-				<div class="w3-col l2 m4 s6 w3-margin-top">
+				<div class="w3-col l2 m4 s6 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					<div class="w3-card w3-white w3-padding-small w3-center">
-						<p class="w3-large w3-opacity"><i class="pi pi-users w3-large"/>&#160;<h:link outcome="userList" value="#{msg['members']}" style="text-decoration:none;"/></p>
-						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.userCount}</b></p>
+						<div class="w3-large w3-opacity"><i class="pi pi-users w3-large"/>&#160;<h:link outcome="userList" value="#{msg['members']}" style="text-decoration:none;"/></div>
+						<div class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.userCount}</b></div>
 					</div>
 				</div>
 				
-				<div class="w3-col l2 m4 s6 w3-margin-top">
+				<div class="w3-col l2 m4 s6 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					<div class="w3-card w3-white w3-padding-small w3-center">
-						<p class="w3-large w3-opacity"><i class="pi pi-comment w3-large"/>&#160;<h:link outcome="discussionManagement" value="#{msg['comments']}" style="text-decoration:none;"/></p>
-						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.commentCount}</b></p>
+						<div class="w3-large w3-opacity"><i class="pi pi-comment w3-large"/>&#160;<h:link outcome="discussionManagement" value="#{msg['comments']}" style="text-decoration:none;"/></div>
+						<div class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.commentCount}</b></div>
 					</div>
 				</div>
 				
-				<div class="w3-col l2 m4 s6 w3-margin-top">
+				<div class="w3-col l2 m4 s6 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					<div class="w3-card w3-white w3-padding-small w3-center">
-						<p class="w3-large w3-opacity"><i class="pi pi-comments w3-large"/>&#160;<h:link outcome="discussionManagement" value="#{msg['discussions']}" style="text-decoration:none;"/></p>
-						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.discussionCount}</b></p>
+						<div class="w3-large w3-opacity"><i class="pi pi-comments w3-large"/>&#160;<h:link outcome="discussionManagement" value="#{msg['discussions']}" style="text-decoration:none;"/></div>
+						<div class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.discussionCount}</b></div>
 					</div>
 				</div>
 				
-				<div class="w3-col l2 m4 s6 w3-margin-top">
+				<div class="w3-col l2 m4 s6 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					<div class="w3-card w3-white w3-padding-small w3-center">
-						<p class="w3-large w3-opacity"><i class="pi pi-tag w3-large"/>&#160;<h:link outcome="tagManagement" value="#{msg['tags']}" style="text-decoration:none;"/></p>
-						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.tagCount}</b></p>
+						<div class="w3-large w3-opacity"><i class="pi pi-tag w3-large"/>&#160;<h:link outcome="tagManagement" value="#{msg['tags']}" style="text-decoration:none;"/></div>
+						<div class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.tagCount}</b></div>
 					</div>
 				</div>
 				
-				<div class="w3-col l2 m4 s6 w3-margin-top">
+				<div class="w3-col l2 m4 s6 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					<div class="w3-card w3-white w3-padding-small w3-center">
-						<p class="w3-large w3-opacity"><i class="pi pi-list w3-large"/>&#160;<h:link outcome="forumManagement" value="#{msg['forums']}" style="text-decoration:none;"/></p>
-						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.forumCount}</b></p>
+						<div class="w3-large w3-opacity"><i class="pi pi-list w3-large"/>&#160;<h:link outcome="forumManagement" value="#{msg['forums']}" style="text-decoration:none;"/></div>
+						<div class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.forumCount}</b></div>
 					</div>
 				</div>
 				
-				<div class="w3-col l2 m4 s6 w3-margin-top">
+				<div class="w3-col l2 m4 s6 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					<div class="w3-card w3-white w3-padding-small w3-center">
-						<p class="w3-large w3-opacity"><i class="pi pi-comments w3-large"/>&#160;<h:link outcome="forumManagement" value="#{msg['chat.rooms']}" style="text-decoration:none;"/></p>
-						<p class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.chatRoomCount}</b></p>
+						<div class="w3-large w3-opacity"><i class="pi pi-comments w3-large"/>&#160;<h:link outcome="forumManagement" value="#{msg['chat.rooms']}" style="text-decoration:none;"/></div>
+						<div class="w3-xlarge w3-opacity"><b>#{systemInfo.statistics.chatRoomCount}</b></div>
 					</div>
 				</div>
 			</div> 			
@@ -101,16 +101,16 @@
 
 			<div class="w3-row-padding w3-section">
 
-				<div class="w3-quarter">
+				<div class="w3-col l3 m6 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Users - Most Discussions</h4>
+				        	<h4>#{msg['members']} - #{msg['most.discussions']}</h4>
 				        </header>
 				        <p:repeat var="username" value="#{adminDashboard.mostDiscussionsUsers.keySet().toArray()}">
-				        	<div class="w3-container">
+				        	<div class="w3-container w3-padding-small">
 								
-								<p style="float:left">
+								<div style="float:left">
 									<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
 										height="40" width="40" style="border:1px;" title="#{username}"
 										rendered="#{fileHandler.isAvatarExists(username)}"/>
@@ -122,26 +122,26 @@
 									</span>
 					        		
 					        		#{username}
-				        		</p>	
-				        		<p style="float:right">
-				        			<span class="w3-xlarge"><b>#{adminDashboard.mostDiscussionsUsers[username]}</b></span>
-				        		</p>
+				        		</div>	
+				        		<div style="float:right" class="w3-xlarge w3-opacity">
+				        			<b>#{adminDashboard.mostDiscussionsUsers[username]}</b>
+				        		</div>
 				        	</div>
 				        </p:repeat>
 					</div>
 					
 				</div>			
 			
-				<div class="w3-quarter">
+				<div class="w3-col l3 m6 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Users - Most Comments</h4>
+				        	<h4>#{msg['members']} - #{msg['most.comments']}</h4>
 				        </header>
 				        <p:repeat var="username" value="#{adminDashboard.mostCommentsUsers.keySet().toArray()}">
 				        	
-				        	<div class="w3-container">
-				        		<p style="float:left">
+				        	<div class="w3-container w3-padding-small">
+				        		<div style="float:left">
 									<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
 										height="40" width="40" style="border:1px;" title="#{username}"
 										rendered="#{fileHandler.isAvatarExists(username)}"/>
@@ -153,26 +153,26 @@
 									</span>
 					        		
 					        		#{username}
-				        		</p>
-				        		<p style="float:right">
-				        			<span class="w3-xlarge"><b>#{adminDashboard.mostCommentsUsers[username]}</b></span>
-				        		</p>
+				        		</div>
+				        		<div style="float:right" class="w3-xlarge w3-opacity">
+				        			<b>#{adminDashboard.mostCommentsUsers[username]}</b>
+				        		</div>
 				        	</div>
 				        </p:repeat>
 					</div>
 					
 				</div>
 				
-				<div class="w3-quarter">
+				<div class="w3-col l3 m6 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Users - Most Voted Up</h4>
+				        	<h4>#{msg['members']} - #{msg['most.voted.up']}</h4>
 				        </header>
 				        
 				        <p:repeat var="username" value="#{adminDashboard.mostVotedUpUsers.keySet().toArray()}">
-				        	<div class="w3-container">
-				        		<p style="float:left">
+				        	<div class="w3-container w3-padding-small">
+				        		<div style="float:left">
 									<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
 										height="40" width="40" style="border:1px;" title="#{username}"
 										rendered="#{fileHandler.isAvatarExists(username)}"/>
@@ -184,41 +184,40 @@
 									</span>
 					        		
 					        		#{username}
-				        		</p>
-				        		<p style="float:right">
-				        			<span class="w3-xlarge"><b>#{adminDashboard.mostVotedUpUsers[username]}</b></span>
-				        		</p>
+				        		</div>
+				        		<div style="float:right" class="w3-xlarge w3-opacity">
+				        			<b>#{adminDashboard.mostVotedUpUsers[username]}</b>
+				        		</div>
 				        	</div>
 				        </p:repeat>
 					</div>
 				
 				</div>
 
-				<div class="w3-quarter">
+				<div class="w3-col l3 m6 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Users - Most Voted Down</h4>
+				        	<h4>#{msg['members']} - #{msg['most.voted.down']}</h4>
 				        </header>
 				        
 				        <p:repeat var="username" value="#{adminDashboard.mostVotedDownUsers.keySet().toArray()}">
-				        	<div class="w3-container">
-				        		<p style="float:left">
+				
+				        	<div class="w3-container w3-padding-small">
+								<div style="float:left">
 									<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
 										height="40" width="40" style="border:1px;" title="#{username}"
 										rendered="#{fileHandler.isAvatarExists(username)}"/>
 								
 									<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle avatarSpan"
 										title="#{username}"
-										style="display:inline-block;font-size:1.0rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;">
+										style="display:inline-block;font-size:1.0rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;float:left">
 										#{fn:substring(username, 0, 3)}
 									</span>
-					        		
-					        		#{username}
-				        		</p>
-				        		<p style="float:right">
-				        			<span class="w3-xlarge"><b>#{adminDashboard.mostVotedDownUsers[username]}</b></span>
-				        		</p>
+					        	</div>
+					        	<div style="float:right" class="w3-xlarge w3-opacity">						        		
+				        			<b>#{adminDashboard.mostVotedDownUsers[username]}</b>
+				        		</div>
 				        	</div>
 				        </p:repeat>
 					</div>
@@ -227,44 +226,40 @@
 			
 			</div>
 
-
 			<div class="w3-row-padding w3-section">
 			
-				<div class="w3-half">
+				<div class="w3-col l6 m12 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Discussions - most views</h4>
+				        	<h4>#{msg['discussions']} - #{msg['most.views']}</h4>
 				        </header>
 				        <p:repeat var="discussion" value="#{adminDashboard.mostViewsDiscussions}">
 				        	<div class="report_line w3-border-bottom">
 				        		<span>
 				        			#{discussion.title}
 				        		</span>
-				        		
-				        		<span class="w3-large"><b>#{discussion.stat.viewCount}</b></span>
-				        		
+				        		<span class="w3-large w3-opacity"><b>#{discussion.stat.viewCount}</b></span>
 				        	</div>
 				        </p:repeat>
 					</div>
 					
 				</div>
 				
-				<div class="w3-half">
+				<div class="w3-col l6 m12 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Discussions - most comments</h4>
+				        	<h4>#{msg['discussions']} - #{msg['most.comments']}</h4>
 				        </header>
 				        <p:repeat var="discussion" value="#{adminDashboard.mostCommentsDiscussions}">
 				        	<div class="report_line w3-border-bottom">
 				        		<span>
 				        			#{discussion.title}:
 				        		</span>
-				        		<span class="w3-large">
+				        		<span class="w3-large w3-opacity">
 				        			<b>#{discussion.stat.commentCount}</b>
 				        		</span> 
-				        		
 				        	</div>
 				        </p:repeat>
 					</div>
@@ -275,14 +270,14 @@
  			
  			<div class="w3-row-padding w3-section">
  
-				<div class="w3-half">
+				<div class="w3-col l6 m12 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Tags - most views</h4>
+				        	<h4>#{msg['tags']} - #{msg['most.views']}</h4>
 				        </header>
 				        <p:repeat var="tagLabel" value="#{adminDashboard.mostViewsTags.keySet().toArray()}">
-				        	<div class="report_line w3-border-bottom">
+				        	<div class="report_line w3-border-bottom w3-opacity">
 				        		<b>#{tagLabel}</b> <span class="w3-large"><b>#{adminDashboard.mostViewsTags[tagLabel]}</b></span>
 				        	</div>
 				        </p:repeat>
@@ -290,14 +285,14 @@
 					
 				</div>			
 			
-				<div class="w3-half">
+				<div class="w3-col l6 m12 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Tags - most comments</h4>
+				        	<h4>#{msg['tags']} - #{msg['most.comments']}</h4>
 				        </header>
 				        <p:repeat var="tagLabel" value="#{adminDashboard.mostCommentsTags.keySet().toArray()}">
-				        	<div class="report_line w3-border-bottom">
+				        	<div class="report_line w3-border-bottom w3-opacity">
 				        		<b>#{tagLabel}</b> <span class="w3-large"><b>#{adminDashboard.mostCommentsTags[tagLabel]}</b></span>
 				        	</div>
 				        </p:repeat>
@@ -309,30 +304,30 @@
 
  			<div class="w3-row-padding w3-section">
  
-				<div class="w3-half">
+				<div class="w3-col l6 m12 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Forums - most views</h4>
+				        	<h4>#{msg['forums']} - #{msg['most.views']}</h4>
 				        </header>
 				        <p:repeat var="forumTitle" value="#{adminDashboard.mostViewsForums.keySet().toArray()}">
-				        	<div class="report_line w3-border-bottom">
-				        		#{forumTitle} <span class="w3-large"><b>#{adminDashboard.mostViewsForums[forumTitle]}</b></span>
+				        	<div class="report_line w3-border-bottom  w3-opacity">
+				        		<b>#{forumTitle}</b> <span class="w3-large"><b>#{adminDashboard.mostViewsForums[forumTitle]}</b></span>
 				        	</div>
 				        </p:repeat>
 					</div>
 					
 				</div>			
 			
-				<div class="w3-half">
+				<div class="w3-col l6 m12 s12 w3-margin-top"> <!-- note: add margin top for vertical space when screen is resized -->
 					
 					<div class="w3-card w3-white">
 						<header class="w3-container w3-dark-gray">
-				        	<h4>Forums - most comments</h4>
+				        	<h4>#{msg['forums']} - #{msg['most.comments']}</h4>
 				        </header>
 				        <p:repeat var="forumTitle" value="#{adminDashboard.mostCommentsForums.keySet().toArray()}">
-				        	<div class="report_line w3-border-bottom">
-				        		#{forumTitle} <span class="w3-large"><b>#{adminDashboard.mostCommentsForums[forumTitle]}</b></span>
+				        	<div class="report_line w3-border-bottom w3-opacity">
+				        		<b>#{forumTitle}</b> <span class="w3-large"><b>#{adminDashboard.mostCommentsForums[forumTitle]}</b></span>
 				        	</div>
 				        </p:repeat>
 					</div>
