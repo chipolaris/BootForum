@@ -1,6 +1,7 @@
 package com.github.chipolaris.bootforum;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -24,10 +25,12 @@ import com.github.chipolaris.bootforum.domain.Preferences;
 import com.github.chipolaris.bootforum.domain.RegistrationOption;
 import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption;
 import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption.FilterType;
+import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
+import com.github.chipolaris.bootforum.event.DiscussionUpdateEvent;
 import com.github.chipolaris.bootforum.event.DisplayOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.EmailOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.RegistrationOptionLoadEvent;
@@ -105,7 +108,9 @@ public class DataInitializer implements ApplicationRunner {
 			else {
 				logger.info("System Admin user created successfully. Creating Announcements forum and Welcome discussion");
 				Forum announcementsForum = createAnouncementsForum(adminUser);
-				createWelcomeDiscussion(announcementsForum, adminUser);
+				Discussion discussion = createWelcomeDiscussion(announcementsForum, adminUser);
+				
+				createBulletinTag(discussion);
 				
 				// create first chat room
 				createFirstChatRoom();
@@ -113,6 +118,23 @@ public class DataInitializer implements ApplicationRunner {
 		}
 	}
 	
+	private void createBulletinTag(Discussion discussion) {
+		
+		Tag tag = new Tag();
+		
+		tag.setLabel("Bulletin");
+		tag.setColor("1e90ff"); //DodgerBlue
+		tag.setIcon("pi pi-book");
+		
+		genericService.saveEntity(tag);
+		
+		discussion.setTags(List.of(tag));
+		
+		genericService.updateEntity(discussion);
+		
+		applicationEventPublisher.publishEvent(new DiscussionUpdateEvent(this, discussion));
+	}
+
 	private User createAdminUserObject() {
 		User admin = new User();
 		
@@ -241,7 +263,7 @@ public class DataInitializer implements ApplicationRunner {
 		return forum;
 	}
 	
-	private void createWelcomeDiscussion(Forum forum, User admin) {
+	private Discussion createWelcomeDiscussion(Forum forum, User admin) {
 		
 		Discussion discussion = new Discussion();
 		discussion.setForum(forum);
@@ -255,6 +277,8 @@ public class DataInitializer implements ApplicationRunner {
 		comment.setContent("Welcome. Please read forum announcements from forum administrators");
 		
 		discussionService.addDiscussion(discussion, comment, admin, Collections.emptyList(), Collections.emptyList());
+		
+		return discussion;
 	}
 	
 	private void createRemoteIPFilterOption() {

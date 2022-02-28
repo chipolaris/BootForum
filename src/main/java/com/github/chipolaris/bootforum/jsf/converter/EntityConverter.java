@@ -26,7 +26,7 @@ public class EntityConverter<E extends BaseEntity> implements Converter<E> {
 			String idStr) {
 		Long id;
 		try {
-			id = new Long(idStr);
+			id = Long.valueOf(idStr);
 		} 
 		catch (NumberFormatException e) {
 			return null;

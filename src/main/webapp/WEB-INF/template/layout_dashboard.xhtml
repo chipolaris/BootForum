@@ -62,10 +62,10 @@
 				
 				<span class="w3-bar-item">#{msg['application.title']} #{msg['administration']}</span>
 				
-				<button class="w3-bar-item w3-button" onclick="toggleSidebar();"><i class="pi pi-bars w3-xlarge"/></button>
+				<button class="w3-bar-item w3-button" onclick="toggleSidebar();" style="height:50px;"><i class="pi pi-bars w3-xlarge"/></button>
 								
 				<div class="w3-dropdown-hover w3-right">
-					<button class="w3-button" style="height:46px;padding-left:8px;padding-right:8px;">
+					<button class="w3-button" style="height:50px;padding-left:8px;padding-right:8px;">
 						<h:graphicImage value="#{requestContext}/avatar/#{userSession.user.username}" class="w3-circle"
 							height="36" width="36" style="border:1px;" title="#{userSession.user.username}"
 							rendered="#{fileHandler.isAvatarExists(userSession.user.username)}"/>
@@ -120,7 +120,7 @@
 		<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="closeSidebar()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>    
 
 		<!-- !PAGE CONTENT! -->
-		<div class="w3-main" style="margin-left:0px;margin-top:43px;background-color: #f4f4f4;" id="main">
+		<div class="w3-main" style="margin-left:0px;margin-top:47px;background-color: #f4f4f4;" id="main">
 			
 			<div class="w3-margin">
 				<ui:insert name="content">
