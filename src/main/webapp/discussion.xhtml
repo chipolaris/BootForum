@@ -147,7 +147,7 @@
 															
 															<span jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" class="w3-circle avatarSpan"
 																title="#{comment.createBy}"
-							  									style="display:inline-block;font-size:1.7rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;color:white;">
+							  									style="display:inline-block;font-size:1.4rem;line-height:50px;width:50px;text-align:center;text-transform: uppercase;color:white;">
 							  									#{fn:substring(comment.createBy, 0, 3)}
 							  								</span>
 															
@@ -161,7 +161,7 @@
 												</td>
 												
 												<td>
-													<h:outputText value="#{comment.title} " style="font-size:1.3rem;" styleClass="w3-opacity-min"/>
+													<h:outputText value="#{comment.title} " style="font-size:1.2rem;font-weight:800"/>
 												    
 												    <p:commandLink rendered="#{not empty comment.replyTo}" 
 												    	onclick="$('#replyTo_#{rowIndex}_Div').toggle(300); return false;">
@@ -189,7 +189,7 @@
 													#{fn:substring(comment.replyTo.createBy, 0, 3)}
 												</span>
 													
-										        <span style="font-size: 1.3rem;" class="w3-opacity-min">#{comment.replyTo.title}</span>
+										        <span style="font-size: 1.2rem;font-weight:800">#{comment.replyTo.title}</span>
 										        
 										        <p/>
 										        
