@@ -114,7 +114,7 @@ public class StatDAO {
 	 */
 	public Comment latestComment(Forum forum) {
 		
-		String queryStr = "SELECT c FROM Comment c WHERE c.discussion.forum = :forum ORDER BY c.createDate DESC";
+		String queryStr = "SELECT c FROM Comment c WHERE c.discussion.forum = :forum ORDER BY c.id DESC";
 		
 		TypedQuery<Comment> typedQuery = entityManager.createQuery(queryStr, Comment.class);
 		typedQuery.setParameter("forum", forum);
@@ -170,7 +170,7 @@ public class StatDAO {
 	
 	public String getLatestUsername() {
 		
-		TypedQuery<String> typedQuery = entityManager.createQuery("SELECT u.username FROM User u ORDER BY u.createDate DESC", String.class);
+		TypedQuery<String> typedQuery = entityManager.createQuery("SELECT u.username FROM User u ORDER BY u.id DESC", String.class);
 		typedQuery.setMaxResults(1);
 		
 		List<String> resultList = typedQuery.setMaxResults(1).getResultList();
@@ -179,7 +179,7 @@ public class StatDAO {
 	}
 	
 	public Date getLastUserRegisteredDate() {
-		TypedQuery<Date> typedQuery = entityManager.createQuery("SELECT u.createDate FROM User u ORDER BY u.createDate DESC", Date.class);
+		TypedQuery<Date> typedQuery = entityManager.createQuery("SELECT u.createDate FROM User u ORDER BY u.id DESC", Date.class);
 		typedQuery.setMaxResults(1);
 		
 		List<Date> resultList = typedQuery.setMaxResults(1).getResultList();
@@ -297,7 +297,7 @@ public class StatDAO {
 	}
 
 	public Comment getLatestComment(Discussion discussion) {
-		TypedQuery<Comment> typedQuery = entityManager.createQuery("SELECT c FROM Comment c WHERE c.discussion = :discussion ORDER BY c.createDate DESC", Comment.class);
+		TypedQuery<Comment> typedQuery = entityManager.createQuery("SELECT c FROM Comment c WHERE c.discussion = :discussion ORDER BY c.id DESC", Comment.class);
 		typedQuery.setParameter("discussion", discussion);
 		
 		List<Comment> resultList = typedQuery.setMaxResults(1).getResultList();
@@ -311,7 +311,7 @@ public class StatDAO {
 	 * @return
 	 */
 	public Comment getLatestComment(String username) {
-		TypedQuery<Comment> typedQuery = entityManager.createQuery("SELECT c FROM Comment c WHERE c.createBy = :username ORDER BY c.createDate DESC", Comment.class);
+		TypedQuery<Comment> typedQuery = entityManager.createQuery("SELECT c FROM Comment c WHERE c.createBy = :username ORDER BY c.id DESC", Comment.class);
 		typedQuery.setParameter("username", username);
 		
 		List<Comment> resultList = typedQuery.setMaxResults(1).getResultList();
@@ -329,7 +329,7 @@ public class StatDAO {
 	public List<String> getFirstCommentors(Discussion discussion, int maxResult) {
 		
 		TypedQuery<String> typedQuery = entityManager.createQuery("SELECT DISTINCT c.createBy FROM Comment c WHERE c.discussion = :discussion"
-				+ " GROUP BY c.createBy ORDER BY min(c.createDate) ASC, c.createBy", String.class);
+				+ " GROUP BY c.createBy ORDER BY min(c.id) ASC, c.createBy", String.class);
 		typedQuery.setParameter("discussion", discussion);
 		
 		return typedQuery.setMaxResults(maxResult).getResultList();

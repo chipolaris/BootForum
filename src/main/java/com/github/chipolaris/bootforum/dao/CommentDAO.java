@@ -60,7 +60,7 @@ public class CommentDAO {
 	
 	public List<Comment> getLatestCommentsForUser(String username, int maxResult) {
 		
-		String queryStr = "SELECT c FROM Comment c WHERE c.createBy = :username ORDER BY c.createDate DESC";
+		String queryStr = "SELECT c FROM Comment c WHERE c.createBy = :username ORDER BY c.id DESC";
 		TypedQuery<Comment> typedQuery = entityManager.createQuery(queryStr, Comment.class);
 		typedQuery.setParameter("username", username);
 		typedQuery.setMaxResults(maxResult);

@@ -461,7 +461,7 @@
 	 					<div>
 							<p:linkButton outcome="/secure/replyComment" value="&#xe90d; #{msg['add.new.comment']}" disabled="#{viewDiscussion.discussion.closed}" 
 								title="#{viewDiscussion.discussion.closed ? 'Discussion is closed' : 'Click to add new comment'}"
-								styleClass="ui-button-raised ui-button-flat" style="font-weight:bold;width:100%;padding:8px 0;font-family:Arial, primeicons">
+								styleClass="ui-button-raised ui-button-flat" style="font-weight:bold;width:100%;padding:8px 0;font-family: Helvetica, Arial, sans-serif, PrimeIcons">
 	       						<f:param name="discussionId" value="#{viewDiscussion.id}"/>
 	   						</p:linkButton>
 				        </div>
@@ -593,7 +593,7 @@
 							<p:commandButton value="&#xe97e; #{msg['suggested.discussions']}" type="button" 
 								onclick="if(window.suggestedDiscussionLoaded == false) { fetchSuggestedDiscussions(); window.suggestedDiscussionLoaded = true; } else { window.scrollTo(0,document.body.scrollHeight); }"
 								widgetVar="suggestedDiscussionsButton"  
-								ajax="true" styleClass="ui-button-raised ui-button-flat" style="width:100%;font-weight:bold;padding:8px 0;font-family:Arial, primeicons"/>
+								ajax="true" styleClass="ui-button-raised ui-button-flat" style="width:100%;font-weight:bold;padding:8px 0;font-family: Helvetica, Arial, sans-serif, PrimeIcons"/>
 							<p/>
 							
 							<p:remoteCommand name="fetchSuggestedDiscussions" action="#{viewDiscussion.fetchSuggestedDiscussions}"

@@ -88,7 +88,7 @@
 										searches is displayed properly: use the paginator.setPage(0) on the onclick event
 										ref: https://stackoverflow.com/questions/18441847/primefaces-datatable-reset-pagination -->
 									<p:commandButton ajax="true" action="#{searchComment.search}" value="&#xe908; #{msg['search']}"
-										style="font-family:Arial, PrimeIcons;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
+										style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;" styleClass="w3-input w3-btn w3-theme-dark w3-border-0" 
 										onclick="PF('searchResultDatatable').getPaginator().setPage(0);" update=":searchResultDiv"
 										oncomplete="$('.commentTitle').mark($('#searchForm\\:keywords').val());changeAvatarBackgrounds();"/>
 								</div>

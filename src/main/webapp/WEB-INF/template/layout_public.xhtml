@@ -46,7 +46,7 @@
         	
         	html {scroll-behavior: smooth;}
         	
-			html, body, h1, h2, h3, h4, h5 {font-family: Arial, sans-serif}
+			html, body, h1, h2, h3, h4, h5 {font-family: Helvetica, Arial, sans-serif;}
 			a { text-decoration: none }
 			a:link           { color: #339966 } 
 			a:visited        { color: #C92D99 } 
@@ -361,7 +361,7 @@
 				<div class="w3-dropdown-click w3-bar-item w3-hover-none w3-block">
 					
 					<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
-					<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="width:100%; font-family:Arial, PrimeIcons" autocomplete="off"
+					<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="width:100%; font-family: Helvetica, Arial, sans-serif, PrimeIcons" autocomplete="off"
 						class="w3-input w3-border w3-round searchInput" id="keywordsSmall"
 						onkeyup="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall'); document.getElementById('keywords').value = this.value;" 
 						onfocus="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall', false)" 
@@ -428,10 +428,10 @@
     			<form action="#{request.contextPath}/login" method="post" class="w3-container">
     				<div class="w3-section w3-center">
 	    				<p>
-	    					<input type="text" name="username" placeholder="&#xe939; #{msg['enter.username']}" class="w3-input w3-border w3-round" style="font-family:Arial, PrimeIcons;text-align:center;" />
+	    					<input type="text" name="username" placeholder="&#xe939; #{msg['enter.username']}" class="w3-input w3-border w3-round" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;" />
 	    				</p>
 	    				<p>
-	    					<input type="password" name="password" placeholder="&#xe981; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family:Arial, PrimeIcons;text-align:center;" />
+	    					<input type="password" name="password" placeholder="&#xe981; #{msg['enter.password']}" class="w3-input w3-border w3-round" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;" />
 	    				</p>
 	    				<p>
 	    					<button type="submit" class="w3-input w3-btn w3-theme-dark w3-round"><i class="pi pi-sign-in"/> #{msg['login']}</button>
@@ -489,35 +489,35 @@
 						<div jsf:rendered="#{!publicBackingBean.registrationSuccess}" class="w3-section w3-center">
 							<p>
 								<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xe939; #{msg['pick.a.username']}" styleClass="w3-input" title="#{msg['username']}"
-									style="font-family:Arial, PrimeIcons;text-align:center;"
+									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;"
 									onblur="validateRegisterUsername();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:inputText>
 								<h:message for="username" id="usernameMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
 								<p:inputText id="email" value="#{publicBackingBean.user.person.email}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="#{msg['email']}"
-									style="font-family:Arial, PrimeIcons;text-align:center;"
+									style="font-family:font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;"
 									onblur="validEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:inputText>
 								<h:message for="email" id="emailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
 								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xe981; #{msg['choose.a.password']}" styleClass="w3-input" title="#{msg['password']}" 
-									style="font-family:Arial, PrimeIcons;text-align:center;" toggleMask="true"
+									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;" toggleMask="true"
 									onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
 								<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
 								<p:password id="confirmPassword" placeholder="&#xe981; #{msg['confirm.password']}" styleClass="w3-input" title="#{msg['confirm.password']}" 
-									style="font-family:Arial, PrimeIcons;text-align:center;" toggleMask="true"
+									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;" toggleMask="true"
 									onblur="validateConfirmPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
 								<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p jsf:rendered="#{publicBackingBean.registrationOption.enableCaptcha}">
 								<p:inputText id="captchaInput" placeholder="#{msg['enter.captcha']} &#xe91e;" styleClass="w3-input" title="#{msg['captcha']}" 
-									style="font-family:Arial, PrimeIcons;text-align:center;">
+									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;">
 									<f:validator validatorId="captchaValidator"/>
 								</p:inputText>
 								<h:message for="captchaInput" id="captchaInputMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
@@ -538,7 +538,7 @@
 							</p>							
 							<p>
 								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xe909; #{msg['submit']}" 
-									onclick="return validateRegistration()"	id="submitButton" style="font-family:Arial, PrimeIcons;" action="#{publicBackingBean.register}" update=":registerForm"/>
+									onclick="return validateRegistration()"	id="submitButton" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;" action="#{publicBackingBean.register}" update=":registerForm"/>
 							</p>
 						</div>
 					</h:form>
@@ -596,7 +596,7 @@
 							</p>
 							<p>
 								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xe909; #{msg['submit']}" 
-									onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" style="font-family:Arial, PrimeIcons;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
+									onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
 							</p>
 						</div>
 					

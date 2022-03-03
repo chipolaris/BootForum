@@ -49,7 +49,7 @@
         
         <style>
         
-			html, body, h1, h2, h3, h4, h5 {font-family: Arial, sans-serif}
+			html, body, h1, h2, h3, h4, h5 {font-family: Helvetica, Arial, sans-serif;}
 			a { text-decoration: none }
 			a:link           { color: #339966 } 
 			a:visited        { color: #C92D99 } 
@@ -269,7 +269,7 @@
 				<div class="w3-dropdown-click w3-bar-item w3-hover-none w3-block">
 					
 					<!-- note: on the onblur event, must use the setTimeout to delay the hideSuggestion function, if not, the a href link won't work when user click on the link -->
-					<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="width:100%; font-family:Open Sans, FontAwesome" autocomplete="off"
+					<input type="text" value="#{null}" placeholder="#{msg['search.forum']}.." style="width:100%;" autocomplete="off"
 						class="w3-input w3-border w3-round searchInput" id="keywordsSmall"
 						onkeyup="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall'); document.getElementById('keywords').value = this.value;" 
 						onfocus="showSearchSuggestion(this, 'searchValueSmall', 'searchCommentLinkSmall', 'searchSuggestionDivSmall', false)" 

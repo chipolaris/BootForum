@@ -31,7 +31,7 @@ public class DiscussionDAO {
 			queryStr += " ORDER BY d." + sortField + (descending ? " DESC" : " ASC");
 		}
 		else {
-			queryStr += " ORDER BY d.createDate DESC";
+			queryStr += " ORDER BY d.id DESC";
 		}
 		
 		TypedQuery<Discussion> typedQuery = entityManager.createQuery(queryStr, Discussion.class);
@@ -96,7 +96,7 @@ public class DiscussionDAO {
 	public CommentInfo getLatestCommentInfo(Tag tag) {
 		
 		String queryStr = "SELECT d.stat.lastComment FROM Discussion d WHERE :tag MEMBER OF d.tags"
-				+ " ORDER BY d.stat.lastComment.createDate DESC";
+				+ " ORDER BY d.stat.lastComment.id DESC";
 		
 		TypedQuery<CommentInfo> typedQuery = entityManager.createQuery(queryStr, CommentInfo.class);
 		
@@ -119,7 +119,7 @@ public class DiscussionDAO {
 
 	public List<Discussion> getLatestDiscussions(Integer maxResult) {
 
-		String queryStr = "FROM Discussion d ORDER BY d.createDate DESC";
+		String queryStr = "FROM Discussion d ORDER BY d.id DESC";
 		
 		TypedQuery<Discussion> typedQuery = entityManager.createQuery(queryStr, Discussion.class);
 		
