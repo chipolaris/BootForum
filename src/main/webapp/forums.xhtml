@@ -42,10 +42,38 @@
 			//<![CDATA[	
 				
 			$(document).ready(function(){
-				var selectedForum = document.getElementById("selectedForum");
-				if(selectedForum) { selectedForum.scrollIntoView(); }
-			});
 				
+				shortNumberFormat();	
+				
+				var selectedForum = document.getElementById("selectedForum");
+				if(selectedForum) { selectedForum.scrollIntoView();}
+			});
+			
+			function shortNumberFormat() {
+				
+				$('.shortFormat').each(function() {
+					var value = this.dataset.val;
+					$(this).html(nFormatter(value, 1));	
+				});
+			}
+
+			function nFormatter(num, digits) {
+			  const lookup = [
+			    { value: 1, symbol: "" },
+			    { value: 1e3, symbol: "K" },
+			    { value: 1e6, symbol: "M" },
+			    { value: 1e9, symbol: "G" },
+			    { value: 1e12, symbol: "T" },
+			    { value: 1e15, symbol: "P" },
+			    { value: 1e18, symbol: "E" }
+			  ];
+			  const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+			  var item = lookup.slice().reverse().find(function(item) {
+			    return num >= item.value;
+			  });
+			  return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
+			}
+			
 			//]]>
 		</script>
 	
@@ -70,35 +98,122 @@
  					<h3>#{msg['forums.index']}</h3>
  				</div>
 				
-
 				<div class="w3-row">
 				
 					<div class="w3-col l9 m12 s12 w3-container">
-					
-						<h:form>
 						
+						<p:outputPanel rendered="#{param.view ne 'tree'}">
+							
+							<p:repeat var="forumGroup" value="#{forumMap.forumGroupsFlat}">
+								
+								<p:panel toggleable="true">
+									<f:facet name="header">
+										<span class="w3-large" style="font-weight:800"><i class="pi pi-list"/> #{forumGroup.title}</span>
+									</f:facet>
+									
+									<p:repeat  var="forum" value="#{forumGroup.forums}" varStatus="status">
+									
+										<div class="w3-cell-row w3-section" style="vertical-align: middle;">
+											
+											<div class="w3-cell">
+												<div class="w3-cell-row">
+													<div class="w3-cell" style="width:50px;">
+														<span class="w3-tag" style="width:44px;height:44px;border-radius:3px;color:#fff;background-color:##{forum.iconColor};">
+										        			<i class="#{forum.icon} w3-xlarge" style="line-height:44px;vertical-align:midde;"/>
+										        		</span>
+									        		</div>
+									        		<div class="w3-cell w3-cell-top">
+										        		<h:link outcome="forum">
+											        		<span style="font-weight:700">
+											        			#{forum.title}
+											        		</span>
+											        		<f:param name="id" value="#{forum.id}"/>
+										        		</h:link>
+										        		<br/>
+										        		<span class="w3-small">#{forum.description}</span>
+									        		</div>
+								        		</div>
+							        		</div>
+							        			
+					        				<div class="w3-cell w3-right-align w3-tiny" style="width:80px;">
+					        					<span class="w3-xlarge shortFormat" data-val="#{forum.stat.discussionCount}"/>
+						        				<br/>
+						        				<span class="w3-hide-small">#{msg['discussions']}</span>
+						        			</div>
+						        			<div class="w3-cell w3-right-align w3-tiny" style="width:80px;">
+						        				<span class="w3-xlarge shortFormat" data-val="#{forum.stat.commentCount}"/>
+						        				 <br/>
+						        				<span class="w3-hide-small">#{msg['comments']}</span>
+						        			</div>
+						        			<div class="w3-cell w3-right-align" style="width:100px;">  
+							        			<span jsf:rendered="#{not empty forum.stat.lastComment}">
+								        			
+								        			
+								        			<h:link outcome="memberProfile">
+														<h:graphicImage value="#{requestContext}/avatar/#{forum.stat.lastComment.commentor}" class="w3-circle"
+																id="commentorAvatar" height="40" width="40" title="#{forum.stat.lastComment.commentor}"
+																rendered="#{fileHandler.isAvatarExists(forum.stat.lastComment.commentor)}"/>
+																
+														<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(forum.stat.lastComment.commentor)}"
+															title="#{forum.stat.lastComment.commentor}"
+						  									style="display:inline-block;font-size:1.1rem;line-height:40px;width:40px;text-align:center;text-transform: uppercase;color:white;">
+						  									#{fn:substring(forum.stat.lastComment.commentor, 0, 3)}
+						  								</span>
+														<f:param name="username" value="#{forum.stat.lastComment.commentor}"/>
+													</h:link>
+													<br/>
+													<pe:timeAgo value="#{forum.stat.lastComment.commentDate}" titlePattern="MMMMM dd yyyy 'at' hh:mm a" styleClass="w3-tiny w3-hide-small"/> 
+													
+												</span>
+												
+											</div>
+							        									        		
+						        		</div>
+						        		
+						        		<p:divider rendered="#{not status.last}"/>
+						        		
+									</p:repeat>
+								
+								</p:panel>
+								<p/>
+							</p:repeat>
+						</p:outputPanel>
+						
+						
+						<h:form rendered="#{param.view eq 'tree'}">
+													
+							<!-- note: must add this for the tree expand/collapse feature to work properly -->
+							<input type="hidden" name="view" value="#{param.view}" />
+							
 							<p:treeTable value="#{forumMap.forumRootTreeNode}" var="data" nodeVar="treeNode" style="margin: 0 auto;" styleClass="borderless">
 						        
+						        <p:ajax event="expand" oncomplete="changeAvatarBackgrounds();"/>
+						        
 						        <p:column headerText="#{msg['category/name']}" style="text-align:left;" responsivePriority="1">
+						        	
 						        	<span class="w3-large w3-opacity-min" jsf:rendered="#{treeNode.type eq 'Root'}">
 						        		<i class="pi pi-sitemap w3-xlarge"/> #{msg['forum.home']}
 						        	</span>
+						        	
 						        	<h:link outcome="forum" rendered="#{treeNode.type eq 'Forum'}">
+						        	
 										<span class="w3-tag" style="line-height:36px;width:36px;height:36px;border-radius:3px;color:#fff;background-color:##{data.iconColor};">
 						        			<i class="#{data.icon} w3-large"/>
 						        		</span>
 						        		<span class="w3-large">#{data.title}</span>
 						        		<f:param name="id" value="#{data.id}"/>
+						        		
 						        	</h:link>
 						        	
 						        	<span jsf:rendered="#{treeNode.type eq 'Forum'}" class="w3-small w3-opacity-min"> #{data.description}</span>
-						        	
+						        							        	
 						        	<span class="w3-large w3-opacity-min" jsf:rendered="#{treeNode.type eq 'ForumGroup' and param['id'] ne data.id}">
 						        		<i class="pi pi-sitemap w3-xlarge"/> #{data.title}
 						        	</span>
 						        	<span class="w3-tag w3-large w3-theme-d5" jsf:rendered="#{treeNode.type eq 'ForumGroup' and param['id'] eq data.id}" id="selectedForum">
 						        		<i class="pi pi-sitemap w3-xlarge"/> #{data.title}
 						        	</span>
+						        	
 						        </p:column>
 						        
 						        <p:column headerText="#{msg['discussions']}" style="text-align:center;width:90px;" responsivePriority="3">
@@ -106,12 +221,12 @@
 						        </p:column>
 						        
 						        <p:column headerText="#{msg['comments']}" style="text-align:center;width:90px;" responsivePriority="4">
-						        	<span jsf:rendered="#{treeNode.type eq 'Forum'}">#{data.stat.commentCount}</span>
+						        	<span jsf:rendered="#{treeNode.type eq 'Forum'}" class="shortFormat" data-val="#{data.stat.commentCount}"/>
 						        </p:column>
 		
-								<p:column headerText="#{msg['latest.comments']}" style="text-align:right;width:190px;" responsivePriority="2">
+								<p:column headerText="#{msg['latest.comment']}" style="text-align:right;width:190px;" responsivePriority="2">
 									<div jsf:rendered="#{treeNode.type eq 'Forum' and not empty data.stat.lastComment}">
-										<pe:timeAgo value="#{data.stat.lastComment.commentDate}" titlePattern="MMMMM dd yyyy " /> #{msg['by']}
+										<pe:timeAgo value="#{data.stat.lastComment.commentDate}" titlePattern="MMMMM dd yyyy 'at' hh:mm a" /> &#160;
 										
 										<h:link outcome="memberProfile">
 											<!-- <h:graphicImage value="data:image/png;base64,#{fileHandler.getAvatarBase64(data.stat.lastComment.commentor)}" class="w3-circle"
@@ -130,13 +245,30 @@
 									</div>
 						        </p:column>
 							</p:treeTable>
-		
+							
 					    </h:form>
 					    
-					</div>
-					
+					</div>					
 					
 				    <div class="w3-col l3 m12 s12 w3-container" id="infoDiv" style="position: -webkit-sticky; /* Safari */; position: sticky; top: 70px;">					
+
+						<div class="w3-cell-row">
+							<div class="w3-container w3-cell" style="padding:0">
+								<p:linkButton value="&#xe967; List" outcome="/forums" disabled="#{param.view ne 'tree'}"
+									title="Forum List" styleClass="ui-button-raised ui-button-flat"
+									style="font-weight:bold;width:100%;padding:8px 0;font-family: Helvetica, Arial, sans-serif, PrimeIcons">
+		   						</p:linkButton>
+	   						</div>
+	   						<div class="w3-container w3-cell" style="padding:0">
+								<p:linkButton value="&#xe96e; Tree" outcome="/forums" disabled="#{param.view eq 'tree'}"
+									title="Forum Tree" styleClass="ui-button-raised ui-button-flat" 
+									style="font-weight:bold;width:100%;padding:8px 0;font-family: Helvetica, Arial, sans-serif, PrimeIcons">
+		       						<f:param name="view" value="tree"/>
+		   						</p:linkButton>
+	   						</div>
+				        </div>
+				        
+				        <p/>
 						
 						<div class="w3-card w3-cursive" style="margin: 0px 0 16px 0;">
 							<header class="w3-container w3-center">

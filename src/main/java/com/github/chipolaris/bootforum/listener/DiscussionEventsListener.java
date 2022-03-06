@@ -96,6 +96,9 @@ public class DiscussionEventsListener {
 		logger.info("Handling DiscussionUpdateEvent");
 		
 		indexService.updateDiscussion(discussionUpdateEvent.getDiscussion());
+		
+		// evict breadcrumb cache
+		cacheManager.getCache(CachingConfig.DISCUSSION_BREAD_CRUMB).evict(discussionUpdateEvent.getDiscussion().getId());
 	}
 	
 	@EventListener

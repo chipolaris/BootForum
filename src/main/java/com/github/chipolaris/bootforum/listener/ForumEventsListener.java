@@ -4,9 +4,11 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.CachingConfig;
 import com.github.chipolaris.bootforum.event.ForumAddEvent;
 import com.github.chipolaris.bootforum.event.ForumDeleteEvent;
 import com.github.chipolaris.bootforum.event.ForumUpdateEvent;
@@ -19,6 +21,9 @@ public class ForumEventsListener {
 	
 	@Resource
 	private ForumMap forumMap;
+	
+	@Resource 
+	private CacheManager cacheManager;
 	
 	@EventListener
 	public void handleForumAddEvent(ForumAddEvent forumAddEvent) {
@@ -35,7 +40,12 @@ public class ForumEventsListener {
 		logger.info("Handle Forum Update");
 		
 		// reset forumMap.initialized flag so it will be re-initialize when called on next time
-		forumMap.setInitialized(false);  
+		forumMap.setInitialized(false); 
+		
+		// clear the breadcrumb caches since the update might change the label of the forum 
+		// TODO: perhaps just clear/evict the cache entries that were affected?
+		cacheManager.getCache(CachingConfig.FORUM_BREAD_CRUMB).clear();
+		cacheManager.getCache(CachingConfig.DISCUSSION_BREAD_CRUMB).clear();
 	}
 	
 	@EventListener

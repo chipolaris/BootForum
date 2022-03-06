@@ -1,6 +1,8 @@
 package com.github.chipolaris.bootforum.jsf.bean;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
+import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.GenericService;
 
 // application scope JSF backing bean
@@ -45,13 +48,22 @@ public class ForumMap {
 		this.managementRootTreeNode = managementRootTreeNode;
 	}
 
-	private boolean initialized; 
+	private boolean initialized;
 	
 	public boolean isInitialized() {
 		return initialized;
 	}
 	public void setInitialized(boolean initialized) {
 		this.initialized = initialized;
+	}
+	
+	private List<ForumGroup> forumGroupsFlat; 
+	
+	public List<ForumGroup> getForumGroupsFlat() {
+		return forumGroupsFlat;
+	}
+	public void setForumGroupsFlat(List<ForumGroup> forumGroupsFlat) {
+		this.forumGroupsFlat = forumGroupsFlat;
 	}
 	
 	public void init() {
@@ -71,7 +83,10 @@ public class ForumMap {
 			
 			buildForumTreeNodes(forums, forumGroups, rootTreeNode);
 			
-			// 
+			// forum categories, for flat display (as opposed to hierarchical tree display)
+			buildForumGroupsFlat(forums, forumGroups);
+			
+			// for management 
 			
 			managementRootTreeNode = new DefaultTreeNode(null, null);
 			managementRootTreeNode.setExpanded(true);
@@ -83,6 +98,41 @@ public class ForumMap {
 		}
 	}
 
+	/**
+	 * Build a flat forum group list (used for display as forum categories as opposed to the hierarchical tree structure)
+	 * @param forums: top level forum (not under any forum group)
+	 * @param forumGroups: top level forum group (not under any/parent forum group)
+	 * @return
+	 */
+	private void buildForumGroupsFlat(List<Forum> forums, List<ForumGroup> forumGroups) {
+	
+		forumGroupsFlat = new ArrayList<>();
+		
+		for(ForumGroup forumGroup : forumGroups) {
+			
+			if(forumGroup.getForums().size() > 0) {
+				forumGroupsFlat.add(forumGroup);
+			}
+		}
+		
+		// sort entries by title
+		forumGroupsFlat.sort(new Comparator<ForumGroup>() {
+
+			@Override
+			public int compare(ForumGroup o1, ForumGroup o2) {
+				return o1.getTitle().compareToIgnoreCase(o2.getTitle());
+			}
+		});
+		
+		// finally, top level forum
+		if(forums.size() > 0) {
+			ForumGroup homeForumGroup = new ForumGroup();
+			homeForumGroup.setForums(forums);
+			homeForumGroup.setTitle(JSFUtils.getMessageBundle().getString("forum.home"));
+			forumGroupsFlat.add(0, homeForumGroup);
+		}
+	}
+	
 	private void buildManagementTree(List<Forum> forums, List<ForumGroup> forumGroups, TreeNode parent) {
 		
 		for(Forum forum : forums) {
@@ -117,4 +167,6 @@ public class ForumMap {
 			buildForumTreeNodes(forumGroup.getForums(), forumGroup.getSubGroups(), forumGroupNode);
 		}
 	}
+
+	
 }

@@ -25,7 +25,7 @@
 			.ui-datatable.borderless tbody,
 			.ui-datatable.borderless tbody tr,
 			.ui-datatable.borderless tbody td {
-			    border-style: none;
+			    border-style: none !important;
 			}
 			
 			body .ui-paginator {
@@ -61,7 +61,7 @@
 						<h:form>
 						
 							<p:dataTable var="user" value="#{listMembers.genericLazyModel}" style="margin: 0 auto;" stripedRows="true" showGridlines="false"
-								widgetVar="membersTableVar" rowIndexVar="rowIndex" paginator="true" filterEvent="enter"
+								widgetVar="membersTableVar" rowIndexVar="rowIndex" paginator="true" filterEvent="enter" styleClass="borderless"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								currentPageReportTemplate="#{msg['showing']} {startRecord}-{endRecord} #{msg['of']} {totalRecords} #{msg['members']}"
 								rows="10" rowsPerPageTemplate="10,20,50" lazy="true" id="membersTable" draggableColumns="true">

@@ -76,9 +76,16 @@
   				display: none;
 			}
 			
-			/* remove border from fieldset */
-			body .ui-fieldset {
-				border-style: none;
+			/* remove border from fieldset and dataview */
+			body .ui-fieldset, form .ui-dataview-row, .ui-paginator, .ui-datatable-header {
+				border-style: none !important;
+			}
+			
+			.ui-datatable.borderless thead th,
+			.ui-datatable.borderless tbody,
+			.ui-datatable.borderless tbody tr,
+			.ui-datatable.borderless tbody td {
+			    border-style: none !important;
 			}
 			
 		</style>
@@ -131,10 +138,10 @@
 		                    	<p:dataViewListItem>
 		
 									<div class="w3-container w3-margin-bottom" style="padding:10px 0 0 0;">
-			
-										<table>
-											<tr>
-												<td>					
+										
+										<div class="w3-cell-row">
+											<div class="w3-container w3-cell" style="width: 60px;padding-right: 0px;">
+
 					             					<p:commandLink update=":userDetailsForm:userStatOutputPanel" action="#{userStatManager.loadUserStat(comment.createBy)}" 
 														oncomplete="PF('userStatOverlayPanel').show('#{component.clientId}')">
 					               						
@@ -156,12 +163,14 @@
 														
 														</div>
 														
-					           						</p:commandLink>											
-					           														
-												</td>
-												
-												<td>
-													<h:outputText value="#{comment.title} " style="font-size:1.2rem;font-weight:800"/>
+					           						</p:commandLink>
+											
+											</div>											
+											
+											<!-- comment title -->
+											<div class="w3-container w3-cell" style="vertical-align: middle;">
+
+													<h:outputText value="#{comment.title} " style="font-size:1.2rem;font-weight:700"/>
 												    
 												    <p:commandLink rendered="#{not empty comment.replyTo}" 
 												    	onclick="$('#replyTo_#{rowIndex}_Div').toggle(300); return false;">
@@ -170,11 +179,23 @@
 												    	<span>@#{comment.replyTo.createBy}: </span>
 												    	<h:outputText value=" #{comment.replyTo.title}" style="font-weight:bold;font-style:italic;" />
 												    </p:commandLink>
-												    
-												</td>
-											</tr>
-										</table>
-								        
+											
+											</div>
+											
+											
+											<div class="w3-container w3-cell w3-right-align" style="font-size: small;">
+
+							        			#{msg['created']} <pe:timeAgo value="#{comment.createDate}" titlePattern="MMMM dd, yyyy 'at' h:mm:ss a" style="font-size:small;"/>
+							        			<span jsf:rendered="#{not empty comment.updateDate}">.
+							        				#{msg['edited']} <pe:timeAgo value="#{comment.updateDate}" titlePattern="MMMM dd, yyyy 'at' h:mm:ss a" style="font-size:small;"/>
+							        			</span>			        		
+								        		
+								        		<h:outputText value=" [#{rowIndex + 1}]" style="font-weight:bold;"/>
+											
+											</div>
+										
+										</div>
+																		        
 								        <div jsf:rendered="#{not empty comment.replyTo}" style="margin: 10px 20px;display:none;" id="replyTo_#{rowIndex}_Div">
 								        	<div class="w3-panel w3-border w3-round-large">
 								        		
@@ -270,21 +291,12 @@
 													
 												</p:fieldset>
 											
-											</div>
-											
-											<div class="w3-right-align" style="margin-top:-15px;font-size: small;">
-							        			#{msg['created']} <pe:timeAgo value="#{comment.createDate}" titlePattern="MMMM dd, yyyy 'at' h:mm:ss a" style="font-size:small;"/>
-							        			<span jsf:rendered="#{not empty comment.updateDate}">.
-							        				#{msg['edited']} <pe:timeAgo value="#{comment.updateDate}" titlePattern="MMMM dd, yyyy 'at' h:mm:ss a" style="font-size:small;"/>
-							        			</span>			        		
-								        		
-								        		<h:outputText value=" [#{rowIndex + 1}]" style="font-weight:bold;"/>
-							        		</div>    
+											</div>  
 									        			        	
 								       	</div>
 									    
 									    <!-- large screen and tablet -->
-									    <div class="w3-bar w3-hide-small w3-padding-small">
+									    <div class="w3-bar w3-hide-small w3-padding">
 			
 											<p:linkButton outcome="/secure/replyComment" value=" #{msg['reply']}" icon="pi pi-reply" 
 												styleClass="ui-button-raised ui-button-flat" style="font-weight:bold;" rendered="#{not viewDiscussion.discussion.closed}">
@@ -316,7 +328,7 @@
 									    </div>
 			
 										<!-- mobile screen -->
-										<div class="w3-bar w3-hide-medium w3-hide-large w3-padding-small">
+										<div class="w3-bar w3-hide-medium w3-hide-large w3-padding">
 											
 											<p:linkButton outcome="/secure/replyComment" icon="pi pi-reply" title="Reply" 
 												styleClass="ui-button-raised ui-button-flat" style="font-weight:bold;" rendered="#{not viewDiscussion.discussion.closed}">
@@ -363,7 +375,7 @@
 		
 						<p:outputPanel id="suggestedDiscussionsPanel">
 						
-							<p:dataTable value="#{viewDiscussion.suggestedDiscussions}" var="suggestedDiscussion" lazy="false" stripedRows="true" 
+							<p:dataTable value="#{viewDiscussion.suggestedDiscussions}" var="suggestedDiscussion" lazy="false" stripedRows="true" styleClass="borderless"
 								rendered="#{viewDiscussion.suggestedDiscussions != null}" emptyMessage="#{msg['no.suggested.discussion.found']}">
 								
 								<p:ajax event="sort" oncomplete="changeAvatarBackgrounds();"/>

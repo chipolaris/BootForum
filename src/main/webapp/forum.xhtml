@@ -60,7 +60,7 @@
 						
 							<p:dataTable var="discussion" value="#{viewForum.forumDiscussionsLazyModel}" style="margin: 0 auto;" styleClass="borderless"
 								widgetVar="discussionTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
-								rows="10" lazy="true" id="discussionTable" draggableColumns="true">
+								rows="10" lazy="true" id="discussionTable" draggableColumns="true" emptyMessage="No discussion exists">
 								
 								<p:ajax event="page" oncomplete="changeAvatarBackgrounds();"/>
 								<p:ajax event="sort" oncomplete="changeAvatarBackgrounds();"/>

@@ -71,7 +71,7 @@ public class BreadCrumbBuilder {
 			
 			while(forumGroup != null) {
 				
-				DefaultMenuItem forumGroupItem = DefaultMenuItem.builder().value(forumGroup.getTitle()).outcome("/forumGroup")
+				DefaultMenuItem forumGroupItem = DefaultMenuItem.builder().value(forumGroup.getTitle()).outcome("/forums")
 						.params(Collections.singletonMap("id", Arrays.asList(forumGroup.getId().toString()))).build();
 				menuItems.add(0, forumGroupItem);
 				
