@@ -5,7 +5,7 @@ BootForum can be run as a stand-alone Java application as it is bundled with an 
 
 ## Quick Start
 1. If not already, install JDK 11 or later.
-2. Download the [WAR file](https://github.com/chipolaris/BootForum/releases/download/v.0.03/BootForum-0.0.3-SNAPSHOT.war "Latest Release") or [build the **BootForum.war**](Building.md).
+2. Download the [WAR file](https://github.com/chipolaris/BootForum/releases/download/v.0.04/BootForum-0.0.4-SNAPSHOT.war "Latest Release") or [build the **BootForum.war**](Building.md).
 3. Create an **application.properties** file to configure the desired DB connection using the following template 
 	
 		################################################################################
