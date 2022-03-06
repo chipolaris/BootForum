@@ -14,7 +14,7 @@
 	</f:metadata>
 		    
     <ui:define name="title">
-		Email Confirmation
+		#{msg['email.confirmation']}
 	</ui:define>
 	
  	<ui:define name="content">
@@ -25,7 +25,7 @@
 		
 		<div jsf:rendered="#{emailConfirmation.success}" class="w3-container w3-round">
 			<h4>#{msg['email.confirmed']}</h4>
-			<a href="login.xhtml">Click here to login</a>	
+			<a href="login.xhtml">#{msg['click.here.to.login']}</a>	
 		</div>
 		
 		<div jsf:rendered="#{not emailConfirmation.success}" class="w3-red w3-container w3-round">
