@@ -73,7 +73,7 @@ public class IndexService {
 	/*@Value("${Lucene.maxHitsPerPage}")
 	private Integer maxHitsPerPage;*/
 	
-	@Value("${Lucene.indexDirectory:#{nul}}")
+	@Value("${Lucene.indexDirectory:#{null}}")
 	private String indexDirectory;
 	
 	/* comment index */

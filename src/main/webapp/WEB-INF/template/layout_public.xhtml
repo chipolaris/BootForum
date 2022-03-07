@@ -127,7 +127,7 @@
 					searchValueElement.textContent = keywords;
 					
 					var searchCommentLink = document.getElementById(searchCommentLinkEl);
-					searchCommentLink.href = "searchComment.xhtml?keywords=" + keywords;
+					searchCommentLink.href = "#{request.contextPath}/searchComment.xhtml?keywords=" + keywords;
 				} 
 				else { 
 					elm.className = elm.className.replace(" w3-show", "");
@@ -264,7 +264,7 @@
 							
 							</button>
 							<div class="w3-dropdown-content w3-bar-block w3-card-4">
-								<a href="#{request.contextPath}/secure/index.xhtml" class="w3-bar-item w3-button"><i class="pi pi-cog"/> #{msg['my.account']}</a>
+								<h:link outcome="/secure/index" styleClass="w3-bar-item w3-button"><i class="pi pi-user"/> #{msg['my.account']}</h:link>
 								<a href="#{request.contextPath}/logout" class="w3-bar-item w3-button"><i class="pi pi-sign-out"/> #{msg['logout']}</a>
 							</div>
 						</div>
@@ -298,7 +298,7 @@
 									<f:facet name="header">
 							            #{msg['discussions']}:
 							        </f:facet>
-							        <h:link outcome="discussion">
+							        <h:link outcome="/discussion">
 										<span>#{discussion.id}: #{discussion.title}</span>
 										<f:param name="id" value="#{discussion.id}"/>
 									</h:link>
@@ -307,7 +307,7 @@
 									<f:facet name="header">
 							            #{msg['comments']}:
 							        </f:facet>
-							        <h:link outcome="commentThread">
+							        <h:link outcome="/commentThread">
 										<span>#{comment.id}: #{comment.title}</span>
 										<f:param name="id" value="#{comment.id}"/>
 									</h:link>
@@ -317,7 +317,7 @@
 							            #{msg['members']}:
 							        </f:facet>
 							        
-							        <h:link outcome="memberProfile">
+							        <h:link outcome="/memberProfile">
 										<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
 											id="commentorAvatar" height="36" width="36"	title="#{username}"
 											rendered="#{fileHandler.isAvatarExists(username)}"/>
@@ -328,7 +328,6 @@
 		  									#{fn:substring(username, 0, 3)}
 										</span>
 										#{username}
-										
 										<f:param name="username" value="#{username}"/>
 									</h:link>     
 								</p:dataList>
@@ -379,27 +378,41 @@
 						</a>
 					
 						<div jsf:id="searchSuggestionResultDivSmall">
+							<p:dataList value="#{searchSuggestion.discussions}" var="discussion" rendered="#{not empty searchSuggestion.discussions}">
+								<f:facet name="header">
+						            #{msg['discussions']}:
+						        </f:facet>
+						        <h:link outcome="/discussion">
+									<span>#{discussion.id}: #{discussion.title}</span>
+									<f:param name="id" value="#{discussion.id}"/>
+								</h:link>
+							</p:dataList>
 							<p:dataList value="#{searchSuggestion.comments}" var="comment" rendered="#{not empty searchSuggestion.comments}">
 								<f:facet name="header">
 						            #{msg['comments']}:
 						        </f:facet>
-								#{comment.id}: #{comment.title}
+						        <h:link outcome="/commentThread">
+									<span>#{comment.id}: #{comment.title}</span>
+									<f:param name="id" value="#{comment.id}"/>
+								</h:link>
 							</p:dataList>
 							<p:dataList value="#{searchSuggestion.usernames}" var="username" rendered="#{not empty searchSuggestion.usernames}">
 								<f:facet name="header">
 						            ${msg['users']}:
 						        </f:facet>
-						        
-								<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
-									id="commentorAvatar" height="36" width="36"	title="#{username}"
-									rendered="#{fileHandler.isAvatarExists(username)}"/>
-								
-								<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle w3-purple"
-									 title="#{username}"
-  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;">
-  									#{fn:substring(username, 0, 3)}
-								</span>
-								#{username}     
+						        <h:link outcome="/memberProfile">
+									<h:graphicImage value="#{requestContext}/avatar/#{username}" class="w3-circle"
+										id="commentorAvatar" height="36" width="36"	title="#{username}"
+										rendered="#{fileHandler.isAvatarExists(username)}"/>
+									
+									<span jsf:rendered="#{!fileHandler.isAvatarExists(username)}" class="w3-circle w3-purple"
+										 title="#{username}"
+	  									style="display:inline-block;font-size:1.0rem;line-height:36px;width:36px;text-align:center;text-transform: uppercase;">
+	  									#{fn:substring(username, 0, 3)}
+									</span>
+									#{username}
+									<f:param name="username" value="#{username}"/>
+								</h:link>
 							</p:dataList>
 						</div>
 						

@@ -44,7 +44,7 @@
 		  				<div id="commentThreads" class="w3-container">
 		  					
 		  					<h:link outcome="discussion">
-		  						<center><h4 style="font-weight:700;">#{msg['in.discussion']} <b>#{commentThread.comment.discussion.title}</b></h4></center>
+		  						<center><h4 style="font-weight:700;">#{msg['discussion']} <b>#{commentThread.comment.discussion.title}</b></h4></center>
 		  						<f:param name="id" value="#{commentThread.comment.discussion.id}"/>
 		  					</h:link>		
 		
@@ -65,7 +65,7 @@
 						        <f:facet name="marker">
 						        	<h:link outcome="memberProfile">
 										<h:graphicImage value="#{requestContext}/avatar/#{comment.createBy}" class="w3-circle"
-											id="commentorAvatar" height="40" width="40" title="#{comment.createBy}"
+											height="40" width="40" title="#{comment.createBy}"
 											rendered="#{fileHandler.isAvatarExists(comment.createBy)}"/>
 														
 										<span class="w3-circle avatarSpan" jsf:rendered="#{!fileHandler.isAvatarExists(comment.createBy)}" title="#{comment.createBy}"
