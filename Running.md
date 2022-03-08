@@ -55,8 +55,13 @@ By default, BootForum looks for the **application.properties** file in the follo
 [Externalized Configuration](https://docs.spring.io/spring-boot/docs/2.2.0.RELEASE/reference/html/spring-boot-features.html#boot-features-external-config-application-property-files "Externalized Configuration")
 
 ## Run in Docker
-**BootForum** is also provided as a Docker-Hub's image in: **ch3nguyen/bootforum**  
-Use the included **[docker-compose.yml](./docker-compose.yml)** to run in your local Docker container. It bundles a Postgres instance as a back end DB for your convenience  
+**BootForum** is also provided as a Docker-Hub's image in: **ch3nguyen/bootforum**. An example of running BootForum docker image connecting to an instance of PostgreSQL is as follows:
+
+	docker run -p 8080:8080 -e "spring.datasource.url=jdbc:postgresql://localhost:5432/BootForum" -e "spring.datasource.username=BootForum" -e "spring.datasource.password=secret" -e "spring.datasource.driverClassName=org.postgresql.Driver" ch3nguyen/bootforum
+
+
+### Docker Compose
+If desired, use the included **[docker-compose.yml](./docker-compose.yml)** to run in your local Docker container. It includes a Postgres instance as the DB for your convenience  
 
 	version: '2'
 	
@@ -73,14 +78,19 @@ Use the included **[docker-compose.yml](./docker-compose.yml)** to run in your l
 	      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/BootForum
 	      - SPRING_DATASOURCE_USERNAME=BootForum
 	      - SPRING_DATASOURCE_PASSWORD=secret
+	      - File.uploadDirectory=/var/BootForum/files
+	      - Lucene.indexDirectory=/var/BootForum/index
 	    ports:
 	      - 8080:8080
 	    volumes:
-	      - ./bootforum/files:/tmp/BootForum/files
+	      # map the host's current-directory/BootForum to app's BootForum/files & BootForum/index 
+	      - ./BootForum/files:/var/BootForum/files
+	      - ./BootForum/index:/var/BootForum/index
 	  db:
 	    container_name: postgres
 	    image: 'postgres:13.1-alpine'
 	    volumes:
+	      # map the host's current-directory/postresql/data to postgresql's data
 	      - ./postgresql/data:/var/lib/postgresql/data
 	    environment:
 	      - POSTGRES_USER=BootForum
@@ -97,5 +107,6 @@ Use the included **[docker-compose.yml](./docker-compose.yml)** to run in your l
 	* Forum **"Announcement"**  
 	* Discussion **"Welcome to BootForum"**
 	* Chat Room **"First Chat Room"**
+	* Tag **"Bulletin"**
 * After login as an administrator, access the "Administration" area and create Forum or Forum Group. After which, discussions can be started by any authenticated user.
 
