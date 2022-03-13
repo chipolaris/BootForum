@@ -1,5 +1,5 @@
 
-# Really Quick Start
+# Quick Start
 
 ## Required Software 
 - JDK 11+
@@ -45,5 +45,6 @@ Latest [war file](https://github.com/chipolaris/BootForum/releases/download/v.0.
 3. In the directory where BootForum.war and application.properties reside, execute the followings on command line: <br>
       > **java -jar BootForum.war** 
 4. BootForum is available at http://localhost:8080/BootForum/
+5. Log in as administrator to change the admin password, initial account username/password is **admin/secret**
 
 * By default, uploaded data (avatars, attachements, thumbnails...) is stored in BootForum folder in user home directory, e.g., **<user.home>/BootForum**. To customize this and other parameters, see this **document**
