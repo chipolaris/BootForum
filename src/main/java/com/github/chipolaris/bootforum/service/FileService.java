@@ -127,7 +127,6 @@ public class FileService {
 		// create comment thumbnail if not already exis
 		commentThumbnailPath.toFile().mkdirs();
 		
-		
 		/*
 		 * Comment Attachments 
 		 */
@@ -288,7 +287,7 @@ public class FileService {
 			
 			String fileName = createFilename(extension);
 			
-			File imageFile = commentThumbnailPath.resolve(File.separator + fileName).toFile();
+			File imageFile = commentThumbnailPath.resolve(fileName).toFile();
 			
 			try {
 				BufferedImage bufferedImage = ImageIO.read(bais);
@@ -317,7 +316,7 @@ public class FileService {
 		
 		ServiceResponse<File> response = new ServiceResponse<File>();
 		
-		response.setDataObject(commentThumbnailPath.resolve(File.separator + fileName).toFile());
+		response.setDataObject(commentThumbnailPath.resolve(fileName).toFile());
 		
 		return response;
 	}
@@ -331,7 +330,7 @@ public class FileService {
 		
 		ServiceResponse<Boolean> response = new ServiceResponse<Boolean>();
 		
-		File file2Delete = commentThumbnailPath.resolve(File.separator + fileName).toFile();
+		File file2Delete = commentThumbnailPath.resolve(fileName).toFile();
 		
 		response.setDataObject(file2Delete.delete());
 		

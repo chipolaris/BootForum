@@ -20,10 +20,12 @@
 	
 	<ui:define name="content">
 	
-		<div class="w3-panel w3-card-4 w3-white">
+		<div class="w3-panel w3-card-4" style="background-color: #f8f8f8">
 			
-			<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 0 -16px;">
+			<div class="w3-theme-dark w3-opacity-min w3-center" style="margin: 0 -16px;padding:48px 16px;">
  				<h3>#{msg['welcome.to.forum']}</h3>
+ 				
+ 				<h3>Custom content</h3>
  			</div>
 			
 			<div class="w3-large w3-margin-top">
@@ -35,8 +37,8 @@
 			<div class="w3-row">
 			
 				<div class="w3-col l9 m12 s12 w3-container">
-					<div class="w3-container" style="padding:0;" jsf:rendered="#{not empty homePage.mostRecentDiscussions}">
-						<div class="w3-large w3-text-theme"	style="border-bottom-style:solid; border-width: 2px;">
+					<div class="w3-container w3-card w3-white w3-padding" jsf:rendered="#{not empty homePage.mostRecentDiscussions}">
+						<div class="w3-large w3-text-theme w3-margin-top">
 							<b><i class="pi pi-clock w3-large"/> #{msg['most.recent.discussions']}</b>
 						</div>
 						<p:repeat var="discussion" value="#{homePage.mostRecentDiscussions}">
@@ -67,9 +69,9 @@
 					
 					<p/>
 					
-					<div class="w3-container" style="padding:0;" jsf:rendered="#{not empty homePage.mostViewsDiscussions}">
+					<div class="w3-container w3-card w3-white w3-padding" jsf:rendered="#{not empty homePage.mostViewsDiscussions}">
 					
-						<div class="w3-large w3-text-theme"	style="border-bottom-style:solid; border-width: 2px;">
+						<div class="w3-large w3-text-theme w3-margin-top">
 							<b><i class="pi pi-eye w3-large"/> #{msg['most.views.discussions']}</b>
 						</div>
 					
@@ -103,9 +105,9 @@
 					
 					<p/>
 					
-					<div class="w3-container" style="padding:0;" jsf:rendered="#{not empty homePage.mostCommentsDiscussions}">
+					<div class="w3-container w3-card w3-white w3-padding"  jsf:rendered="#{not empty homePage.mostCommentsDiscussions}">
 					
-						<div class="w3-large w3-text-theme"	style="border-bottom-style:solid; border-width: 2px;">
+						<div class="w3-large w3-text-theme"	>
 							<b><i class="pi pi-comments w3-large"/> #{msg['most.comments.discussions']}</b>
 						</div>
 					
@@ -141,9 +143,9 @@
 					
 					<p:repeat var="tag" value="#{homePage.displayTags}">
 						<div jsf:rendered="#{not empty tag.discussions}">
-							<div class="w3-container" style="padding:0;">
+							<div class="w3-container w3-card w3-white w3-padding">
 								<div class="w3-large" 
-									style="border-bottom-style:solid; border-width: 2px; border-color:##{tag.color}; color:##{tag.color}">
+									style="color:##{tag.color}">
 									<b><i class="pi #{tag.icon} w3-large"/> #{tag.label}</b>
 								</div>
 								<p:repeat var="discussion" value="#{tag.discussions}">
@@ -177,7 +179,7 @@
 				
 				<div class="w3-col l3 m12 s12 w3-container" id="infoDiv" style="position: -webkit-sticky; /* Safari */; position: sticky; top: 70px;">
 					
-					<div class="w3-card">
+					<div class="w3-card w3-white">
 						<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
 							<header class="w3-container w3-center">
 						  		<h4>#{msg['welcome']} <b>#{userSession.user.username}</b></h4>
@@ -240,7 +242,7 @@
 					
 					<p/>
 					
-					<div class="w3-card">
+					<div class="w3-card w3-white">
 						<header class="w3-container w3-center">
 						  <h4>#{msg['discussion.tags']}</h4>
 						</header>
@@ -258,7 +260,7 @@
 					
 					<p/>
 					
-					<div class="w3-card w3-cursive">
+					<div class="w3-card w3-cursive w3-white">
 						<header class="w3-container w3-center">
 						  <h4>#{msg['forum.info']}</h4>
 						</header>
