@@ -63,8 +63,8 @@
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(editComment.comment.discussion)}"/>
 				</div>
  				
- 				<div class="w3-padding-32 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
- 					<h2 jsf:rendered="#{not empty editComment.comment.title}">#{msg['edit.comment']} '#{editComment.comment.title}'</h2>
+ 				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
+ 					<h3 jsf:rendered="#{not empty editComment.comment.title}">#{msg['edit.comment']} '#{editComment.comment.title}'</h3>
  				</div>
  								
 				<button onclick="toggle('commentPanel');" class="w3-btn w3-block w3-left-align w3-theme-l2 w3-border w3-round"><i class="pi pi-comment"/> #{msg['comment']}</button> <!-- accordion button  -->
@@ -77,7 +77,7 @@
 						<b>#{msg['title']}</b>
 						<p/>
 						
-						<p:inputText id="title" value="#{editComment.comment.title}" styleClass="w3-input" maxlength="255" 
+						<p:inputText id="title" value="#{editComment.comment.title}" styleClass="w3-input" maxlength="#{optionService.commentOption.maxCharDiscussionTitle}" 
 							required="true" requiredMessage="#{msg['comment.title.required']}">
 							
 						</p:inputText>
@@ -92,17 +92,20 @@
 							issues with the quoting feature where it add multi-lines.
 							Therefore, use PrimefacesExtension's ckEditor for now
 						-->
-						<pe:ckEditor id="content" value="#{editComment.comment.content}" skin="moono-lisa" width="100%"  required="true"
+						<pe:ckEditor id="content" value="#{editComment.comment.content}" skin="moono-lisa" width="100%" 
+							required="true" requiredMessage="#{msg['comment.message.required']}"
 							toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
 										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
 										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
-										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" requiredMessage="#{msg['comment.message.required']}">
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]">
+							<f:validateLength minimum="#{optionService.commentOption.minCharDiscussionContent}" 
+								maximum="#{optionService.commentOption.maxCharDiscussionContent}"/>
 						</pe:ckEditor>
 						<h:message id="contentError" for="content" styleClass="w3-pale-red"/>
 						
 						<p/>
 						
-						<p:commandButton value="#{msg['save.and.continue']}" ajax="true" icon="pi pi-check" 
+						<p:commandButton value="#{msg['save.and.continue']}" ajax="true" icon="pi pi-save" 
 							action="#{editComment.submit(true)}" styleClass="w3-btn w3-border w3-theme-dark w3-border-0" update="titleError contentError"/>
 						
 						<p:commandButton value="#{msg['save.and.go.to.discussion']}" ajax="true" icon="pi pi-check" 
@@ -128,10 +131,9 @@
 						</p>
 						
 						<h6>
-							(#{msg['limit']} #{applicationProperties['Comment.thumbnail.maxPerComment']} #{msg['images.per.comment']},
-							 #{applicationProperties['Comment.thumbnail.maxPerComment'] - fn:length(editComment.comment.thumbnails)} #{msg['images.per.comment']})
+							(#{msg['limit']} #{optionService.commentOption.maxCommentThumbnail} #{msg['images.per.comment']},
+							 #{optionService.commentOption.maxCommentThumbnail - fn:length(editComment.comment.thumbnails)} #{msg['left']})
 						</h6>
-
 
 						<div class="w3-row" style="padding:0">										
 							
@@ -186,8 +188,8 @@
 						</p>
 						
 						<h6>
-							(#{msg['limit']} #{applicationProperties['Comment.attachment.maxPerComment']} #{msg['attachments.per.comment']},
-							#{applicationProperties['Comment.attachment.maxPerComment'] - fn:length(editComment.comment.attachments)} #{msg['left']})
+							(#{msg['limit']} #{optionService.commentOption.maxCommentAttachment} #{msg['attachments.per.comment']},
+							#{optionService.commentOption.maxCommentAttachment - fn:length(editComment.comment.attachments)} #{msg['left']})
 						</h6>
 
 						<div class="w3-row" style="padding:0">										
