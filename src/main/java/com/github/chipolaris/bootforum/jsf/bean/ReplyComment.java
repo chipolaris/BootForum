@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.CommentOption;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.event.CommentAddEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
@@ -19,6 +20,7 @@ import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.CommentService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 
 @Component("replyComment")
 @Scope("view")
@@ -37,6 +39,9 @@ public class ReplyComment {
 	
 	@Resource
 	private CommentService commentService;
+	
+	@Resource
+	private SystemConfigService systemConfigService;
 	
 	@Resource
 	private LoggedOnSession userSession;
@@ -61,22 +66,14 @@ public class ReplyComment {
 		this.comment = comment;
 	}
 	
-	private Long discussionId;
-	
+	private Long discussionId;	
 	public Long getDiscussionId() {
 		return discussionId;
 	}
-	public void setDiscussionId(Long discussionId) {
-		this.discussionId = discussionId;
-	}
 
 	private Long commentId;
-	
 	public Long getCommentId() {
 		return commentId;
-	}
-	public void setCommentId(Long commentId) {
-		this.commentId = commentId;
 	}
 	
 	private Boolean quote;
@@ -84,17 +81,15 @@ public class ReplyComment {
 	public Boolean getQuote() {
 		return quote;
 	}
-	public void setQuote(Boolean quote) {
-		this.quote = quote;
-	}
 	
 	private String loadingErrorMessage;
-	
 	public String getLoadingErrorMessage() {
 		return loadingErrorMessage;
 	}
-	public void setLoadingErrorMessage(String loadingErrorMessage) {
-		this.loadingErrorMessage = loadingErrorMessage;
+	
+	private CommentOption commentOption;
+	public CommentOption getCommentOption() {
+		return commentOption;
 	}
 	
 	/**
@@ -109,7 +104,7 @@ public class ReplyComment {
 			if(this.comment != null) {
 			
 				if(comment.getDiscussion().isClosed()) {
-					this.setLoadingErrorMessage(JSFUtils.getMessageBundle().getString("discussion.is.closed"));
+					this.loadingErrorMessage = JSFUtils.getMessageBundle().getString("discussion.is.closed");
 					return;
 				}
 				
@@ -126,9 +121,11 @@ public class ReplyComment {
 				
 				this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);
 				this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
+				
+				this.commentOption = systemConfigService.getCommentOption().getDataObject();
 			}
 			else {
-				this.setLoadingErrorMessage(JSFUtils.getMessageBundle().getString("comment.does.not.exist"));
+				this.loadingErrorMessage = JSFUtils.getMessageBundle().getString("comment.does.not.exist");
 			}
 		}
 		else if(discussionId != null) { // reply to main discussion
@@ -138,7 +135,7 @@ public class ReplyComment {
 			if(discussion != null) {
 				
 				if(discussion.isClosed()) {
-					this.setLoadingErrorMessage("Discussion is closed");
+					this.loadingErrorMessage = "Discussion is closed";
 					return;
 				}
 			
@@ -149,13 +146,15 @@ public class ReplyComment {
 				
 				this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);
 				this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
+				
+				this.commentOption = systemConfigService.getCommentOption().getDataObject();
 			}
 			else {
-				this.setLoadingErrorMessage("Discussion is not valid");
+				this.loadingErrorMessage = "Discussion is not valid";
 			}
 		}
 		else {
-			this.setLoadingErrorMessage("Must specified a valid comment or discussion to post a reply");
+			this.loadingErrorMessage = "Must specified a valid comment or discussion to post a reply";
 		}
 	}
 	

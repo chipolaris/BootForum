@@ -43,21 +43,21 @@
 			
 			<p/>
 			
-			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{not applicationProperties['Comment.allowEdit']}">
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{not editComment.commentOption.allowCommentEdit}">
 			
 				<h3>Error!</h3>
 				<h4>System does not allow to edit comment (contact administrator)</h4>
 			
 			</div>
 			
-			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{applicationProperties['Comment.allowEdit'] and empty editComment.comment}">
+			<div class="w3-panel w3-pale-red w3-border" jsf:rendered="#{editComment.commentOption.allowCommentEdit and empty editComment.comment}">
 			
 				<h3>Error!</h3>
 				<h4>#{editComment.loadingErrorMessage}</h4>
 			
 			</div>
 		
-			<div jsf:id="editCommentDiv" jsf:rendered="#{applicationProperties['Comment.allowEdit'] and not empty editComment.comment}">
+			<div jsf:id="editCommentDiv" jsf:rendered="#{editComment.commentOption.allowCommentEdit and not empty editComment.comment}">
 
 				<div>
 					<p:breadCrumb model="#{breadCrumbBuilder.buildBreadCrumbModel(editComment.comment.discussion)}"/>
@@ -77,7 +77,7 @@
 						<b>#{msg['title']}</b>
 						<p/>
 						
-						<p:inputText id="title" value="#{editComment.comment.title}" styleClass="w3-input" maxlength="#{optionService.commentOption.maxCharDiscussionTitle}" 
+						<p:inputText id="title" value="#{editComment.comment.title}" styleClass="w3-input" maxlength="#{editComment.commentOption.maxCharDiscussionTitle}" 
 							required="true" requiredMessage="#{msg['comment.title.required']}">
 							
 						</p:inputText>
@@ -98,8 +98,8 @@
 										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
 										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
 										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]">
-							<f:validateLength minimum="#{optionService.commentOption.minCharDiscussionContent}" 
-								maximum="#{optionService.commentOption.maxCharDiscussionContent}"/>
+							<f:validateLength minimum="#{editComment.commentOption.minCharDiscussionContent}" 
+								maximum="#{editComment.commentOption.maxCharDiscussionContent}"/>
 						</pe:ckEditor>
 						<h:message id="contentError" for="content" styleClass="w3-pale-red"/>
 						
@@ -131,8 +131,8 @@
 						</p>
 						
 						<h6>
-							(#{msg['limit']} #{optionService.commentOption.maxCommentThumbnail} #{msg['images.per.comment']},
-							 #{optionService.commentOption.maxCommentThumbnail - fn:length(editComment.comment.thumbnails)} #{msg['left']})
+							(#{msg['limit']} #{editComment.firstComment ? editComment.commentOption.maxDiscussionThumbnail : editComment.commentOption.maxCommentThumbnail} #{msg['images.per.comment']},
+							 #{(editComment.firstComment ? editComment.commentOption.maxDiscussionThumbnail : editComment.commentOption.maxCommentThumbnail) - fn:length(editComment.comment.thumbnails)} #{msg['left']})
 						</h6>
 
 						<div class="w3-row" style="padding:0">										
@@ -168,8 +168,10 @@
 						<p/>
 						
 						<p:fileUpload listener="#{editComment.uploadThumbnail}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();"
-		        			update=":thumbnailPanel" auto="true" sizeLimit="#{applicationProperties['Comment.thumbnail.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
-		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(editComment.comment.thumbnails)}" label="#{msg['choose']}"/>
+		        			update=":thumbnailPanel" auto="true" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/"
+		        			sizeLimit="#{(editComment.firstComment ? editComment.commentOption.maxByteDiscussionThumbnail : editComment.commentOption.maxByteCommentThumbnail) * 1024}"  
+		        			rendered="#{(editComment.firstComment ? editComment.commentOption.maxDiscussionThumbnail : editComment.commentOption.maxCommentThumbnail) gt fn:length(editComment.comment.thumbnails)}" 
+		        			label="#{msg['choose']}"/>
           				
           				<p/>
           					
@@ -188,8 +190,8 @@
 						</p>
 						
 						<h6>
-							(#{msg['limit']} #{optionService.commentOption.maxCommentAttachment} #{msg['attachments.per.comment']},
-							#{optionService.commentOption.maxCommentAttachment - fn:length(editComment.comment.attachments)} #{msg['left']})
+							(#{msg['limit']} #{editComment.firstComment ? editComment.commentOption.maxDiscussionAttachment : editComment.commentOption.maxCommentAttachment} #{msg['attachments.per.comment']},
+							#{(editComment.firstComment ? editComment.commentOption.maxDiscussionAttachment : editComment.commentOption.maxCommentAttachment) - fn:length(editComment.comment.attachments)} #{msg['left']})
 						</h6>
 
 						<div class="w3-row" style="padding:0">										
@@ -225,8 +227,8 @@
 						<p/>
 						
 						<p:fileUpload listener="#{editComment.uploadAttachment}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();"
-		        			update=":attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Comment.attachment.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
-		        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(editComment.comment.attachments)}" label="#{msg['choose']}"/>
+		        			update=":attachmentPanel" auto="true" sizeLimit="#{editComment.commentOption.maxByteCommentAttachment * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
+		        			rendered="#{editComment.commentOption.maxCommentAttachment gt fn:length(editComment.comment.attachments)}" label="#{msg['choose']}"/>
 		          		
 		          		<p/>
 				

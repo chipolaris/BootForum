@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.CommentOption;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.event.DiscussionUpdateEvent;
 import com.github.chipolaris.bootforum.event.DiscussionViewEvent;
@@ -30,6 +31,7 @@ import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.IndexService;
 import com.github.chipolaris.bootforum.service.SearchDiscussionResult;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 
 @Component(value="viewDiscussion")
 @Scope("view")
@@ -47,6 +49,9 @@ public class ViewDiscussion {
 	
 	@Resource
 	private IndexService indexService;
+	
+	@Resource
+	private SystemConfigService systemConfigService;
 	
 	@Resource
 	private ApplicationEventPublisher applicationEventPublisher;
@@ -90,6 +95,11 @@ public class ViewDiscussion {
 		this.commentListLazyModel = commentListLazyModel;
 	}
 	
+	private CommentOption commentOption;
+	public CommentOption getCommentOption() {
+		return commentOption;
+	}
+	
 	public void onLoad() {
 		
 		if(this.id != null) {
@@ -109,6 +119,8 @@ public class ViewDiscussion {
 				
 				// publish this event so discussionViewEventListener can update the discussion's viewCount
 				applicationEventPublisher.publishEvent(new DiscussionViewEvent(this, discussion));
+				
+				this.commentOption = systemConfigService.getCommentOption().getDataObject();
 			}
 		}
 		

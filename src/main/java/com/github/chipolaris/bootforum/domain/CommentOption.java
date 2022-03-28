@@ -53,7 +53,10 @@ public class CommentOption extends BaseEntity {
 	
 	@Column(name = "MAX_BYTE_DISC_ATTACHMENT")
 	private int maxByteDiscussionAttachment;
-		
+	
+	@Column(name = "ALLOW_DISC_TITLE_EDIT")
+	private boolean allowDiscussionTitleEdit;
+
 	@Column(name = "MIN_CHAR_COMMENT_TITLE")
 	private int minCharCommentTitle;
 	
@@ -78,6 +81,9 @@ public class CommentOption extends BaseEntity {
 	@Column(name = "MAX_BYTE_COMMENT_ATTACHMENT")
 	private int maxByteCommentAttachment;
 	
+	@Column(name = "ALLOW_COMMENT_EDIT")
+	private boolean allowCommentEdit;
+
 	@Override
 	public Long getId() {
 		return id;
@@ -141,6 +147,13 @@ public class CommentOption extends BaseEntity {
 	public void setMaxByteDiscussionAttachment(int maxByteDiscussionAttachment) {
 		this.maxByteDiscussionAttachment = maxByteDiscussionAttachment;
 	}
+	
+	public boolean isAllowDiscussionTitleEdit() {
+		return allowDiscussionTitleEdit;
+	}
+	public void setAllowDiscussionTitleEdit(boolean allowDiscussionTitleEdit) {
+		this.allowDiscussionTitleEdit = allowDiscussionTitleEdit;
+	}
 
 	public int getMinCharCommentTitle() {
 		return minCharCommentTitle;
@@ -196,5 +209,12 @@ public class CommentOption extends BaseEntity {
 	}
 	public void setMaxByteCommentAttachment(int maxByteCommentAttachment) {
 		this.maxByteCommentAttachment = maxByteCommentAttachment;
+	}
+	
+	public boolean getAllowCommentEdit() {
+		return allowCommentEdit;
+	}
+	public void setAllowCommentEdit(boolean allowCommentEdit) {
+		this.allowCommentEdit = allowCommentEdit;
 	}
 }

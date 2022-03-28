@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="/WEB-INF/template/layout_dashboard.xhtml">
+
+	<!-- load data-->
+	<f:metadata>
+		<f:viewAction action="#{manageRemoteIPFilter.onLoad}"/>
+	</f:metadata>
+
+	<ui:define name="title">
+		#{msg['comment.configuration']}
+	</ui:define>
+	
+	<ui:define name="content">
+
+		<style type="text/css">
+			
+		</style>
+
+		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
+			<p:autoUpdate/>
+		</p:growl>
+
+		<div class="w3-panel w3-margin-top" jsf:id="mainContentDiv">
+			
+			<div class="w3-bottombar">
+ 				<h3><b>#{msg['comment.configuration']}</b></h3>
+			</div>
+			
+			<div class="w3-container">
+			
+				<h:form id="form" styleClass="w3-margin-top">
+					
+					<div class="w3-row">
+					
+						<div class="w3-half w3-container">
+						
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="minCharDiscussionTitle" value="Minimum discussion title length (characters)" style="font-weight:600"/>
+									
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.minCharDiscussionTitle}" id="minCharDiscussionTitle"
+										size="9" onchange="submitForm();">
+										<f:validateLongRange minimum="1" maximum="255" for="minCharDiscussionTitle"/>
+									</p:inputNumber>
+									<p:message for="minCharDiscussionTitle"/>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxCharDiscussionTitle" value="Maximum discussion title length (characters)" style="font-weight:600"/>
+									<p:message for="maxCharDiscussionTitle"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxCharDiscussionTitle}" id="maxCharDiscussionTitle"
+										validatorMessage="Maximum discussion title must be between 1 and 255" size="9" onchange="submitForm();">
+										<f:validateLongRange minimum="1" maximum="255" for="minCharDiscussionTitle"/>
+									</p:inputNumber>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="minCharDiscussionContent" value="Minimum discussion content length (characters)" style="font-weight:600"/>
+									<p:message for="minCharDiscussionContent"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.minCharDiscussionContent}" id="minCharDiscussionContent"
+										validatorMessage="Mininum discussion content must be between 1 and 255" size="9">
+										<f:validateLongRange minimum="1" maximum="255" for="minCharDiscussionContent"/>
+									</p:inputNumber>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxCharDiscussionContent" value="Maximum discussion content length (characters)" style="font-weight:600"/>
+									<p:message for="maxCharDiscussionContent"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxCharDiscussionContent}" id="maxCharDiscussionContent"
+										validatorMessage="Maximum discussion content must be between 1000 and 2 billions" size="9">
+										<f:validateLongRange minimum="1000" maximum="2000000000" for="maxCharDiscussionContent"/>
+									</p:inputNumber>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxDiscussionThumbnail" value="Maximum discussion thumbnails" style="font-weight:600"/>
+									<p:message for="maxDiscussionThumbnail"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxDiscussionThumbnail}" id="maxDiscussionThumbnail"
+										validatorMessage="Maximum number of thumbnails per comment must be between 0 and 100" size="9">
+										<f:validateLongRange minimum="0" maximum="100" for="maxDiscussionThumbnail"/>
+									</p:inputNumber>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxDiscussionAttachment" value="Maximum discussion attachments" style="font-weight:600"/>
+									<p:message for="maxDiscussionAttachment"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxDiscussionAttachment}" id="maxDiscussionAttachment"
+										validatorMessage="Maximum number of attachments per comment must be between 0 and 100" size="9">
+										<f:validateLongRange minimum="0" maximum="100" for="maxDiscussionAttachment"/>
+									</p:inputNumber>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxByteDiscussionThumbnail" value="Maximum size of discussion thumbnail (bytes)" style="font-weight:600"/>
+									<p:message for="maxByteDiscussionThumbnail"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxByteDiscussionThumbnail}" id="maxByteDiscussionThumbnail"
+										validatorMessage="Maximum size of discussion thumbnail must be between 10000 and 2 billion" size="9">
+										<f:validateLongRange minimum="10000" maximum="2000000000" for="maxByteDiscussionThumbnail"/>
+									</p:inputNumber>
+									
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxByteDiscussionAttachment" value="Maximum size of discussion attachment (bytes)" style="font-weight:600"/>
+									<p:message for="maxByteDiscussionAttachment"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxByteDiscussionAttachment}" id="maxByteDiscussionAttachment"
+										validatorMessage="Maximum size of discussion attachment must be between 10000 and 2 billions" size="9">
+										<f:validateLongRange minimum="10000" maximum="2000000000" for="maxByteDiscussionAttachment"/>
+									</p:inputNumber>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="allowDiscussionTitleEdit" value="Allow discussion title edit" style="font-weight:600"/>
+									<p:message for="allowDiscussionTitleEdit"/>
+								</div>
+								<div class="w3-quarter">
+									<p:selectBooleanCheckbox value="#{manageCommentOption.commentOption.allowDiscussionTitleEdit}" id="allowDiscussionTitleEdit" styleClass="w3-check"/>
+								</div>
+							</div>
+							
+						</div>
+						
+						
+						<!--  -->
+						
+						<div class="w3-half w3-container">
+						
+							<div class="w3-row">
+						
+								<div class="w3-threequarter">
+									<p:outputLabel for="minCharCommentTitle" value="Minimum comment title length (characters)" style="font-weight:600"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.minCharCommentTitle}" id="minCharCommentTitle"
+										validatorMessage="Mininum comment title must be between 1 and 255" size="9">
+										<f:validateLongRange minimum="1" maximum="255" for="minCharCommentTitle"></f:validateLongRange>
+									</p:inputNumber>
+									<p:message for="minCharCommentTitle"/>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxCharCommentTitle" value="Maximum comment title length (characters)" style="font-weight:600"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxCharCommentTitle}" id="maxCharCommentTitle"
+										validatorMessage="Mininum comment title must be between 1 and 255" size="9">
+										<f:validateLongRange minimum="1" maximum="255" for="minCharCommentTitle"></f:validateLongRange>
+									</p:inputNumber>
+									<p:message for="maxCharCommentTitle"/>
+								</div>	
+												
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="minCharCommentContent" value="Minimum comment content length (characters)" style="font-weight:600"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.minCharCommentContent}" id="minCharCommentContent"
+										validatorMessage="Mininum comment content must be between 1 and 255" size="9">
+										<f:validateLongRange minimum="1" maximum="255" for="minCharCommentContent"/>
+									</p:inputNumber>
+									<p:message for="minCharDiscussionContent"/>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxCharCommentContent" value="Maximum comment content length (characters)" style="font-weight:600"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxCharCommentContent}" id="maxCharCommentContent"
+										validatorMessage="Maximum comment content must be between 1000 and 2 billions" size="9">
+										<f:validateLongRange minimum="1000" maximum="2000000000" for="maxCharCommentContent"/>
+									</p:inputNumber>
+									<p:message for="maxCharCommentContent"/>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxCommentThumbnail" value="Maximum comment thumbnails" style="font-weight:600"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxCommentThumbnail}" id="maxCommentThumbnail"
+										validatorMessage="Maximum number of thumbnails per comment must be between 0 and 100" size="9">
+										<f:validateLongRange minimum="0" maximum="100" for="maxCommentThumbnail"/>
+									</p:inputNumber>
+									<p:message for="maxCommentThumbnail"/>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxCommentAttachment" value="Maximum comment attachments" style="font-weight:600"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxCommentAttachment}" id="maxCommentAttachment"
+										validatorMessage="Maximum number of attachments per comment must be between 0 and 100" size="9">
+										<f:validateLongRange minimum="0" maximum="100" for="maxCommentAttachment"/>
+									</p:inputNumber>
+									<p:message for="maxCommentAttachment"/>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxByteCommentThumbnail" value="Maximum size of comment thumbnail (bytes)" style="font-weight:600"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxByteCommentThumbnail}" id="maxByteCommentThumbnail"
+										validatorMessage="Maximum size of comment thumbnail must be between 10000 and 2000000000" size="9">
+										<f:validateLongRange minimum="10000" maximum="2000000000" for="maxByteCommentThumbnail"/>
+									</p:inputNumber>
+									<p:message for="maxByteCommentThumbnail"/>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxByteCommentAttachment" value="Maximum size of comment attachment (bytes)" style="font-weight:600"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageCommentOption.commentOption.maxByteCommentAttachment}" id="maxByteCommentAttachment"
+										validatorMessage="Maximum size of comment attachment must be between 10000 and 2000000000" size="9">
+										<f:validateLongRange minimum="10000" maximum="2000000000" for="maxByteCommentAttachment"/>
+									</p:inputNumber>
+									<p:message for="maxByteCommentAttachment"/>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="allowCommentEdit" value="Allow comment edit" style="font-weight:600"/>
+								</div>
+								<div class="w3-quarter">
+									<p:selectBooleanCheckbox value="#{manageCommentOption.commentOption.allowCommentEdit}" id="allowCommentEdit" styleClass="w3-check"/>
+									<p:message for="allowCommentEdit"/>
+								</div>
+							</div>
+							
+						</div>
+						
+					</div>
+									
+					<p:remoteCommand name="submitForm" action="#{manageCommentOption.update}"/>
+					
+				</h:form>
+			</div>
+ 		</div>
+ 		
+        <p:confirmPopup global="true">
+            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirm-popup-yes" />
+        </p:confirmPopup>
+ 		
+		<script>
+			//<![CDATA[//------
+			
+			
+			//]]>
+		</script>
+				
+	</ui:define>
+	
+</ui:composition>

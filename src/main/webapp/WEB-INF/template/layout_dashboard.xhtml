@@ -97,18 +97,19 @@
 		  		 		  
 		  <div class="w3-bar-block">
 		    
-		    <h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-" title="Dashboard"/> #{msg['admin.dashboard']}</h:link>
-		    <h:link outcome="/admin/userList" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="Manage Users"/> <b>#{msg['manage.users']}</b></h:link>
-		    <h:link outcome="/admin/discussionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Discussions"/> <b>#{msg['manage.discussions']}</b></h:link>
-		    <h:link outcome="/admin/forumManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-list" title="Manage Forums"/> <b>#{msg['manage.forums']}</b></h:link>
-		    <h:link outcome="/admin/tagManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-tags" title="Manage Tags"/> <b>#{msg['manage.tags']}</b></h:link>
-		    <h:link outcome="/admin/chatManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="Manage Chat Rooms"/> <b>#{msg['manage.chat.rooms']}</b></h:link>
-		    <h:link outcome="/admin/displayManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="Manage Diplay"/> <b>#{msg['display.configuration']}</b></h:link>
-		    <h:link outcome="/admin/emailManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="Manage Email Option"/> <b>#{msg['email.configuration']}</b></h:link>
-		    <h:link outcome="/admin/registrationManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-book" title="Manage Registration"/><b> #{msg['manage.registration']}</b></h:link>
-		    <h:link outcome="/admin/remoteIPFilterManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-filter" title="Manage IP Filtering"/><b> #{msg['ip.filter.management']}</b></h:link>
-		    <h:link outcome="/admin/systemMaintenance" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-cog" title="Maintain System"/> <b>#{msg['system.maintenance']}</b></h:link>
-		    <h:link outcome="/admin/systemInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-info-circle" title="System Information"/> <b>#{msg['system.information']}</b></h:link>
+		    <h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-" title="#{msg['admin.dashboard']}"/> #{msg['admin.dashboard']}</h:link>
+		    <h:link outcome="/admin/userList" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="#{msg['manage.users']}"/> <b>#{msg['manage.users']}</b></h:link>
+		    <h:link outcome="/admin/discussionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="#{msg['manage.discussions']}"/> <b>#{msg['manage.discussions']}</b></h:link>
+		    <h:link outcome="/admin/commentManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comment" title="#{msg['comment.configuration']}"/> <b>#{msg['comment.configuration']}</b></h:link>
+		    <h:link outcome="/admin/forumManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-list" title="#{msg['manage.forums']}"/> <b>#{msg['manage.forums']}</b></h:link>
+		    <h:link outcome="/admin/tagManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-tags" title="#{msg['manage.tags']}"/> <b>#{msg['manage.tags']}</b></h:link>
+		    <h:link outcome="/admin/chatManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="#{msg['manage.chat.rooms']}"/> <b>#{msg['manage.chat.rooms']}</b></h:link>
+		    <h:link outcome="/admin/displayManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="#{msg['display.configuration']}"/> <b>#{msg['display.configuration']}</b></h:link>
+		    <h:link outcome="/admin/emailManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="#{msg['email.configuration']}"/> <b>#{msg['email.configuration']}</b></h:link>
+		    <h:link outcome="/admin/registrationManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-book" title="#{msg['manage.registration']}"/> <b>#{msg['manage.registration']}</b></h:link>
+		    <h:link outcome="/admin/remoteIPFilterManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-filter" title="#{msg['ip.filter.management']}"/> <b>#{msg['ip.filter.management']}</b></h:link>
+		    <h:link outcome="/admin/systemMaintenance" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-cog" title="#{msg['system.maintenance']}"/> <b>#{msg['system.maintenance']}</b></h:link>
+		    <h:link outcome="/admin/systemInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-info-circle" title="#{msg['system.information']}"/> <b>#{msg['system.information']}</b></h:link>
 			
 			<h:link rendered="#{applicationProperties['application.devMode'] eq 'true'}" outcome="/admin/simulateData" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-play" title="Create Simulation Data"/> <b>#{msg['simulate.data']}</b></h:link>
 			

@@ -10,20 +10,21 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.CommentOption;
 import com.github.chipolaris.bootforum.domain.FileInfo;
-import com.github.chipolaris.bootforum.event.CommentFileEvent;
 import com.github.chipolaris.bootforum.event.CommentEditEvent;
+import com.github.chipolaris.bootforum.event.CommentFileEvent;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.CommentService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 import com.github.chipolaris.bootforum.service.UploadedFileData;
 
 @Component
@@ -39,16 +40,19 @@ public class EditComment {
 	private CommentService commentService;
 	
 	@Resource
+	private SystemConfigService systemConfigService;
+	
+	@Resource
 	private LoggedOnSession userSession;
 	
 	@Resource
 	private ApplicationEventPublisher applicationEventPublisher;
 	
-	@Value("${Comment.thumbnail.maxPerComment}")
-	private short maxThumbnailsPerComment;
-
-	@Value("${Comment.attachment.maxPerComment}")
-	private short maxAttachmentsPerComment;
+	private CommentOption commentOption;
+	
+	public CommentOption getCommentOption() {
+		return commentOption;
+	}
 	
 	private Long id;
 	public Long getId() {
@@ -74,6 +78,11 @@ public class EditComment {
 		this.comment = comment;
 	}
 	
+	private boolean isFirstComment;
+	public boolean isFirstComment() {
+		return isFirstComment;
+	}
+	
 	public void onLoad() {
 		
 		this.comment = genericService.getEntity(Comment.class, id).getDataObject();
@@ -89,6 +98,10 @@ public class EditComment {
 				this.setLoadingErrorMessage(JSFUtils.getMessageBundle().getString("comment.cannot.be.edited.by.current.user"));
 				
 				this.comment = null;
+			}
+			else {
+				this.isFirstComment = commentService.isFirstComment(comment).getDataObject();
+				this.commentOption = systemConfigService.getCommentOption().getDataObject();
 			}
 		}
 	}
@@ -120,7 +133,10 @@ public class EditComment {
 	
 	public void uploadThumbnail(FileUploadEvent event) {
 		
-		if(this.comment.getThumbnails().size() < maxThumbnailsPerComment) {
+		int maxThumbnail = this.isFirstComment ? 
+				commentOption.getMaxDiscussionThumbnail() : commentOption.getMaxCommentThumbnail();
+		
+		if(this.comment.getThumbnails().size() < maxThumbnail) {
 			
 			UploadedFile uploadedFile = event.getFile(); 
 			
@@ -142,13 +158,16 @@ public class EditComment {
 		}
 		else {
 			JSFUtils.addErrorStringMessage("messages", 
-					String.format("Can't upload file, maximum %d total files has been reached", maxThumbnailsPerComment));
+					String.format("Can't upload file, maximum %d total files has been reached", maxThumbnail));
 		}
 	}
 	
 	public void uploadAttachment(FileUploadEvent event) {
 		
-		if(this.comment.getAttachments().size() < maxAttachmentsPerComment) {
+		int maxAttachment = this.isFirstComment ? 
+				commentOption.getMaxDiscussionAttachment() : commentOption.getMaxCommentAttachment();
+		
+		if(this.comment.getAttachments().size() < maxAttachment) {
 			
 			UploadedFile uploadedFile = event.getFile(); 
 			
@@ -170,7 +189,7 @@ public class EditComment {
 		}
 		else {
 			JSFUtils.addErrorStringMessage("messages", 
-				String.format("Can't upload file, maximum %d total files has been reached", maxAttachmentsPerComment));
+				String.format("Can't upload file, maximum %d total files has been reached", maxAttachment));
 		}
 	}
 	

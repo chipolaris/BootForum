@@ -146,7 +146,8 @@
 				
 				<div class="w3-padding-16 w3-theme-dark w3-opacity-min w3-center" style="margin: 16px -16px;">
  					
- 					<p:inplace id="discussionTitleInplace" editor="true" rendered="#{userSession.user.username eq viewDiscussion.discussion.createBy and not viewDiscussion.discussion.closed}"
+ 					<p:inplace id="discussionTitleInplace" editor="true" 
+ 						rendered="#{userSession.user.username eq viewDiscussion.discussion.createBy and not viewDiscussion.discussion.closed and viewDiscussion.commentOption.allowDiscussionTitleEdit}"
  						saveLabel="#{msg['save']}" cancelLabel="#{msg['cancel']}">
  						
  						<p:ajax event="save" listener="#{viewDiscussion.saveDiscussionTitle}" update="growl discussionTitleInplace" partialSubmit="true"/>
@@ -353,7 +354,7 @@
 						    				
 						    				<p:linkButton outcome="/secure/editComment" value=" #{msg['edit']}" icon="pi pi-pencil" 
 						    					styleClass="ui-button-raised ui-button-flat ui-button-danger" style="font-weight:bold;margin-left:5px;" 
-												rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}">
+												rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed and viewDiscussion.commentOption.allowCommentEdit}">
 						        				<f:param name="id" value="#{comment.id}"/>
 						    				</p:linkButton>
 						    				
@@ -372,20 +373,20 @@
 										<!-- mobile screen -->
 										<div class="w3-bar w3-hide-medium w3-hide-large w3-padding">
 											
-											<p:linkButton outcome="/secure/replyComment" icon="pi pi-reply" title="Reply" 
+											<p:linkButton outcome="/secure/replyComment" icon="pi pi-reply" title="#{msg['reply']}" 
 												styleClass="ui-button-raised ui-button-flat" style="font-weight:bold;" rendered="#{not viewDiscussion.discussion.closed}">
 						        				<f:param name="id" value="#{comment.id}"/>
 						    				</p:linkButton>
 						    				
-						    				<p:linkButton outcome="/secure/replyComment" icon="pi pi-chevron-circle-right" title="Quote"
+						    				<p:linkButton outcome="/secure/replyComment" icon="pi pi-chevron-circle-right" title="#{msg['quote']}"
 												styleClass="ui-button-raised ui-button-flat ui-button-help" style="font-weight:bold;margin-left:5px;" rendered="#{not viewDiscussion.discussion.closed}">
 						        				<f:param name="id" value="#{comment.id}"/>
 												<f:param name="quote" value="true"/>
 						    				</p:linkButton>
 						    				
-						    				<p:linkButton outcome="/secure/editComment" icon="pi pi-pencil" title="Edit"
+						    				<p:linkButton outcome="/secure/editComment" icon="pi pi-pencil" title="#{msg['edit']}"
 						    					styleClass="ui-button-raised ui-button-flat ui-button-warning" style="font-weight:bold;margin-left:5px;" 
-												rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed}">
+												rendered="#{userSession.user.username eq comment.createBy and not viewDiscussion.discussion.closed and viewDiscussion.commentOption.allowCommentEdit}">
 						        				<f:param name="id" value="#{comment.id}"/>
 						    				</p:linkButton>
 							        			

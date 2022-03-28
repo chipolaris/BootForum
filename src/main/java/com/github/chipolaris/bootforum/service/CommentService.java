@@ -226,4 +226,14 @@ public class CommentService {
 		
 		return response;
 	}
+	
+	@Transactional(readOnly = true)
+	public ServiceResponse<Boolean> isFirstComment(Comment comment) {
+
+		ServiceResponse<Boolean> response = new ServiceResponse<>();
+
+		response.setDataObject(commentDAO.isFirstComment(comment));
+
+		return response;
+	}
 }

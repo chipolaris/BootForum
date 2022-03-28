@@ -8,10 +8,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.dao.GenericDAO;
+import com.github.chipolaris.bootforum.domain.CommentOption;
 import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.domain.EmailOption;
 import com.github.chipolaris.bootforum.domain.RegistrationOption;
 import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption;
+import com.github.chipolaris.bootforum.event.CommentOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.DisplayOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.EmailOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.RegistrationOptionLoadEvent;
@@ -27,6 +29,7 @@ public class SystemConfigService {
 	private RegistrationOption registrationOption;
 	private EmailOption emailOption;
 	private RemoteIPFilterOption remoteIPFilterOption;
+	private CommentOption commentOption;
 	
 	@EventListener // note: visibility can not be private for EventListener
 	protected void displayOptionLoadListener(DisplayOptionLoadEvent event) {
@@ -46,6 +49,11 @@ public class SystemConfigService {
 	@EventListener // note: visibility can not be private for EventListener
 	protected void remoteIPFilterOptionLoadListener(RemoteIPFilterOptionLoadEvent event) {
 		this.remoteIPFilterOption = event.getRemoteIPFilterOption();
+	}
+	
+	@EventListener // note: visibility can not be private for EventListener
+	protected void commentOptionLoadListener(CommentOptionLoadEvent event) {
+		this.commentOption = event.getCommentOption();
 	}
 	
 	/*
@@ -124,8 +132,7 @@ public class SystemConfigService {
 		
 		return response;
 	}
-	
-	
+		
 	/*
 	 * No need have transaction, as this get from the cache object
 	 */
@@ -150,7 +157,30 @@ public class SystemConfigService {
 		response.setDataObject(this.remoteIPFilterOption);
 		
 		return response;
-	}		
+	}	
+	
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public ServiceResponse<CommentOption> getCommentOption() {
+		
+		ServiceResponse<CommentOption> response = new ServiceResponse<>();
+		
+		response.setDataObject(this.commentOption);
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<CommentOption> updateCommentOption(CommentOption commentOption) {
+		
+		ServiceResponse<CommentOption> response = new ServiceResponse<>();
+		
+		// merge/update and update cache object
+		this.commentOption = genericDAO.merge(commentOption);
+		
+		response.setDataObject(this.commentOption);
+		
+		return response;
+	}
 	
 	/*
 	 * ================================================================================

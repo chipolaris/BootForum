@@ -116,8 +116,8 @@
 						</p>
 						
 						<h6>
-							(#{msg['limit']} #{applicationProperties['Comment.thumbnail.maxPerComment']} #{msg['images.per.comment']},
-							 #{applicationProperties['Comment.thumbnail.maxPerComment'] - fn:length(replyComment.commentThumbnailManagement.uploadedFileList)} #{msg['left']})
+							(#{msg['limit']} #{replyComment.commentOption.maxCommentThumbnail} #{msg['images.per.comment']},
+							 #{replyComment.commentOption.maxCommentThumbnail - fn:length(replyComment.commentThumbnailManagement.uploadedFileList)} #{msg['left']})
 						</h6>
 
 						<div class="w3-row" style="padding:0">										
@@ -153,8 +153,8 @@
 						<p/>
 						
 						<p:fileUpload listener="#{replyComment.commentThumbnailManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();"
-		        			update=":thumbnailPanel" auto="true" sizeLimit="#{applicationProperties['Comment.thumbnail.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
-		        			rendered="#{applicationProperties['Comment.thumbnail.maxPerComment'] gt fn:length(replyComment.commentThumbnailManagement.uploadedFileList)}" label="#{msg['choose']}"/>
+		        			update=":thumbnailPanel" auto="true" sizeLimit="#{replyComment.commentOption.maxByteCommentThumbnail * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
+		        			rendered="#{replyComment.commentOption.maxCommentThumbnail gt fn:length(replyComment.commentThumbnailManagement.uploadedFileList)}" label="#{msg['choose']}"/>
           				
           				<p/>
           					
@@ -173,8 +173,8 @@
 						</p>
 						
 						<h6>
-							(#{msg['limit']} #{applicationProperties['Comment.attachment.maxPerComment']} #{msg['attachments.per.comment']},
-							#{applicationProperties['Comment.attachment.maxPerComment'] - fn:length(replyComment.commentAttachmentManagement.uploadedFileList)} #{msg['left']})
+							(#{msg['limit']} #{replyComment.commentOption.maxCommentAttachment} #{msg['attachments.per.comment']},
+							#{replyComment.commentOption.maxCommentAttachment - fn:length(replyComment.commentAttachmentManagement.uploadedFileList)} #{msg['left']})
 						</h6>
 
 						<div class="w3-row" style="padding:0">										
@@ -210,8 +210,8 @@
 						<p/>
 						
 						<p:fileUpload listener="#{replyComment.commentAttachmentManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();"
-			        			update=":attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Comment.attachment.maxFileSize'] * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
-			        			rendered="#{applicationProperties['Comment.attachment.maxPerComment'] gt fn:length(replyComment.commentAttachmentManagement.uploadedFileList)}" label="#{msg['choose']}"/>
+			        			update=":attachmentPanel" auto="true" sizeLimit="#{replyComment.commentOption.maxByteCommentAttachment * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
+			        			rendered="#{replyComment.commentOption.maxCommentAttachment gt fn:length(replyComment.commentAttachmentManagement.uploadedFileList)}" label="#{msg['choose']}"/>
 		          		
 		          		<p/>
 				
