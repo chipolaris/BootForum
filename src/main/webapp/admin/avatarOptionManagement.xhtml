@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="/WEB-INF/template/layout_dashboard.xhtml">
+
+	<!-- load data-->
+	<f:metadata>
+		<f:viewAction action="#{manageRemoteIPFilter.onLoad}"/>
+	</f:metadata>
+
+	<ui:define name="title">
+		#{msg['avatar']}
+	</ui:define>
+	
+	<ui:define name="content">
+
+		<style type="text/css">
+			input.error[type='text'] {
+			  border: 2px solid red;
+			}			
+		</style>
+
+		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
+			<p:autoUpdate/>
+		</p:growl>
+
+		<div class="w3-panel w3-margin-top" jsf:id="mainContentDiv">
+			
+			<div class="w3-bottombar">
+ 				<h3 style="font-weight: 800;"><i class="pi pi-image w3-large"/> #{msg['avatar']}</h3>
+			</div>
+			
+			<div class="w3-container">
+				
+				<h:form id="form" styleClass="w3-margin-top">
+					
+					<div class="w3-row">
+					
+						<!-- -->
+					
+						<div class="w3-half w3-container">
+						
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxFileSize" value="#{msg['max.avatar.byte']}" style="font-weight:600"/>
+									<br/>
+									<h:message for="maxFileSize" style="font-weight:600;color:red"/>
+									<h:outputText style="font-size:80%;" value="#{msg['max.avatar.byte.sub']}"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageAvatarOption.avatarOption.maxFileSize}" id="maxFileSize" size="9"
+										validatorMessage="[ * ] " styleClass="#{component.valid? 'error' : ''}">
+										<f:validateLongRange minimum="10000" maximum="10000000" for="maxFileSize"/>
+									</p:inputNumber>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxWidth" value="#{msg['max.avatar.width']}" style="font-weight:600"/>
+									<br/>
+									<h:message for="maxWidth" style="font-weight:600;color:red"/>
+									<h:outputText style="font-size:80%;" value="#{msg['max.avatar.width.sub']}"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageAvatarOption.avatarOption.maxWidth}" id="maxWidth"
+										size="9" validatorMessage="[ * ] " styleClass="#{component.valid? 'error' : ''}">
+										<f:validateLongRange minimum="100" maximum="800" for="maxWidth"/>
+									</p:inputNumber>
+								</div>
+							</div>
+							<p/>
+							<div class="w3-row">
+								<div class="w3-threequarter">
+									<p:outputLabel for="maxHeight" value="#{msg['max.avatar.height']}" style="font-weight:600"/>
+									<br/>
+									<h:message for="maxHeight" style="font-weight:600;color:red"/>
+									<h:outputText style="font-size:80%;" value="#{msg['max.avatar.height.sub']}"/>
+								</div>
+								<div class="w3-quarter">
+									<p:inputNumber value="#{manageAvatarOption.avatarOption.maxHeight}" id="maxHeight"
+										validatorMessage="[ * ] " styleClass="#{component.valid? 'error' : ''}" size="9">
+										<f:validateLongRange minimum="100" maximum="800" for="maxHeight"/>
+									</p:inputNumber>
+								</div>
+							</div>
+							<p/>
+							
+						</div>
+						
+					</div>
+					
+					<div class="w3-container w3-margin-top">
+						<p:commandButton ajax="true" action="#{manageAvatarOption.update}" value="#{msg['update']}" icon="pi pi-save" update=":form"/>
+					</div>
+					
+				</h:form>
+			</div>
+ 		</div>
+ 		
+        <p:confirmPopup global="true">
+            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirm-popup-yes" />
+        </p:confirmPopup>
+ 		
+		<script>
+			//<![CDATA[//------
+			
+			
+			//]]>
+		</script>
+				
+	</ui:define>
+	
+</ui:composition>

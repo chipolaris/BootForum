@@ -222,11 +222,11 @@ public class SystemConfigService {
 	}
 	
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public ServiceResponse<PrivateMessageOption> getAvatarOption() {
+	public ServiceResponse<AvatarOption> getAvatarOption() {
 		
-		ServiceResponse<PrivateMessageOption> response = new ServiceResponse<>();
+		ServiceResponse<AvatarOption> response = new ServiceResponse<>();
 		
-		response.setDataObject(this.privateMessageOption);
+		response.setDataObject(this.avatarOption);
 		
 		return response;
 	}

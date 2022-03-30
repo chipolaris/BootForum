@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.github.chipolaris.bootforum.domain.AvatarOption;
+
 @Service
 public class FileService {
 
@@ -54,16 +56,7 @@ public class FileService {
 	private String avatarFolderPath;
 	
 	/* complete path to the avatar folder */
-	private Path avatarPath;		
-
-	@Value("#{ ${Avatar.maxFileSize} * 1024 }")
-	private Integer avatarMaxFileSize;
-	
-	@Value("${Avatar.maxWidth}")
-	private Integer avatarMaxWidth;
-	
-	@Value("${Avatar.maxHeight}")
-	private Integer avatarMaxHeight;
+	private Path avatarPath;
 	
 	@Value("${Avatar.imageType}")
 	private String avatarImageType;
@@ -164,29 +157,38 @@ public class FileService {
 		ServiceResponse<String> response = new ServiceResponse<String>();
 		
 		File avatarFile = avatarPath.resolve(username + "." + avatarImageType).toFile();
+					
+		AvatarOption avatarOption = systemConfigService.getAvatarOption().getDataObject();
 		
-		try {
-			BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
-			
-			// check image size
-			if(bytes.length > this.avatarMaxFileSize) {
-				response.setAckCode(AckCodeType.FAILURE);
-				response.addMessage("Invalid avatar file size. Avatar file size must be less than " 
-						+ this.avatarMaxFileSize + " bytes");				
-			}
-			else if(bufferedImage.getWidth() > this.avatarMaxWidth || bufferedImage.getHeight() > this.avatarMaxHeight) {
-				response.setAckCode(AckCodeType.FAILURE);
-				response.addMessage("Invalid avatar size. Avatar image must be " 
-						+ this.avatarMaxWidth + " x " + this.avatarMaxHeight + " or smaller");
-			}
-			else {
-				ImageIO.write(bufferedImage, avatarImageType, avatarFile);
-			}
-		} 
-		catch (IOException e) {
-			logger.error("Unable to create new file: " + avatarFile.getAbsolutePath());
-			logger.error(ExceptionUtils.getStackTrace(e));
+		// check image size
+		if(bytes.length > avatarOption.getMaxFileSize()) {
 			response.setAckCode(AckCodeType.FAILURE);
+			response.addMessage("Invalid avatar file size. Avatar file size must be less than " 
+					+ avatarOption.getMaxFileSize() + " bytes");				
+		}
+		else {
+			
+			try {
+			
+				BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
+			
+				if(bufferedImage.getWidth() > avatarOption.getMaxWidth() ||
+					bufferedImage.getHeight() > avatarOption.getMaxHeight()) {
+					
+					response.setAckCode(AckCodeType.FAILURE);
+					
+					response.addMessage(String.format("Invalid avatar size. Avatar image must be %d x %d or smaller", 
+							avatarOption.getMaxWidth(), avatarOption.getMaxHeight()));
+				}
+				else {
+					ImageIO.write(bufferedImage, avatarImageType, avatarFile);
+				}
+			}
+			catch (IOException e) {
+				logger.error("Unable to create new file: " + avatarFile.getAbsolutePath());
+				logger.error(ExceptionUtils.getStackTrace(e));
+				response.setAckCode(AckCodeType.FAILURE);
+			}
 		}
 		
 		return response;
@@ -203,24 +205,26 @@ public class FileService {
 		
 		ServiceResponse<String> response = new ServiceResponse<String>();
 		
+		AvatarOption avatarOption = systemConfigService.getAvatarOption().getDataObject();
+		
 		// check image size
-		if(size > this.avatarMaxFileSize) {
+		if(size > avatarOption.getMaxFileSize()) {
 			response.setAckCode(AckCodeType.FAILURE);
-			response.addMessage("Invalid avatar file size. Avatar file size must be less than " 
-					+ this.avatarMaxFileSize + " bytes");				
+						
+			response.addMessage(String.format("Invalid avatar file size. Avatar file size must "
+					+ "be less than %d bytes", avatarOption.getMaxFileSize()));				
 		}
-		else {
-			
+		else {			
 			File avatarFile = avatarPath.resolve(username + "." + avatarImageType).toFile();
 			
 			try {
 				BufferedImage bufferedImage = ImageIO.read(inputStream);
 				
-				if(bufferedImage.getWidth() > this.avatarMaxWidth 
-						|| bufferedImage.getHeight() > this.avatarMaxHeight) {
+				if(bufferedImage.getWidth() > avatarOption.getMaxWidth()
+						|| bufferedImage.getHeight() > avatarOption.getMaxHeight()) {
 					response.setAckCode(AckCodeType.FAILURE);
-					response.addMessage("Invalid avatar size. Avatar image must be " 
-							+ this.avatarMaxWidth + " x " + this.avatarMaxHeight + " or smaller");
+					response.addMessage(String.format("Invalid avatar size. Avatar image must be %d x %d "
+							+ "or smaller", avatarOption.getMaxWidth(), avatarOption.getMaxHeight()));
 				}
 				else {
 					ImageIO.write(bufferedImage, avatarImageType, avatarFile);

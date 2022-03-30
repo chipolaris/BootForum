@@ -130,10 +130,11 @@
 			</div>
 			<div id="configurationDiv" style="display:none">
 			  <h:link outcome="/admin/commentOptionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comment" title="#{msg['comment']}"/> #{msg['comment']}</h:link>
-			  <h:link outcome="/admin/displayManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="#{msg['display.configuration']}"/> #{msg['display.configuration']}</h:link>
-			  <h:link outcome="/admin/remoteIPFilterManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-filter" title="#{msg['ip.filter.management']}"/> #{msg['ip.filter.management']}</h:link>
-			  <h:link outcome="/admin/emailManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="#{msg['email.configuration']}"/> #{msg['email.configuration']}</h:link>
+			  <h:link outcome="/admin/displayManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="#{msg['homepage']}"/> #{msg['homepage']}</h:link>
+			  <h:link outcome="/admin/remoteIPFilterManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-filter" title="#{msg['ip.filter']}"/> #{msg['ip.filter']}</h:link>
+			  <h:link outcome="/admin/emailManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="#{msg['email']}"/> #{msg['email']}</h:link>
 			  <h:link outcome="/admin/privateMessageOptionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="#{msg['private.message']}"/> #{msg['private.message']}</h:link>
+			  <h:link outcome="/admin/avatarOptionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-image" title="#{msg['avatar']}"/> #{msg['avatar']}</h:link>
 			</div>
 			
 			<h:link rendered="#{applicationProperties['application.devMode'] eq 'true'}" outcome="/admin/simulateData" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-play" title="Create Simulation Data"/> <b>#{msg['simulate.data']}</b></h:link>			
