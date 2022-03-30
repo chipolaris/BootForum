@@ -7,7 +7,7 @@
     xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
-    template="/WEB-INF/template/layout_admin.xhtml">
+    template="/WEB-INF/template/layout_dashboard.xhtml">
 
 	<!-- load data-->
 	<f:metadata>
@@ -23,18 +23,18 @@
 		<style type="text/css">
 			
 		</style>
+
+		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
+			<p:autoUpdate/>
+		</p:growl>
 		
-		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
+		<div class="w3-panel w3-margin-top" jsf:id="mainContentDiv">
+
+			<div class="w3-bottombar">
+ 				<h3 style="font-weight: 800;"><i class="pi pi-filter w3-large"/> #{msg['ip.filter']}</h3>
+			</div>
 			
-			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
- 				<h3><b>#{msg['ip.filter.management']}</b></h3>
- 			</div>
- 			
- 			<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
-				<p:autoUpdate/>
-			</p:growl>
-			
-			<h:form id="form" styleClass="w3-theme-light">
+			<h:form id="form">
 				
 				<div class="w3-row-padding">
 					<div class="w3-quarter w3-container w3-padding-large">

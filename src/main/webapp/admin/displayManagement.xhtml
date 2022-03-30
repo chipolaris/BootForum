@@ -7,7 +7,13 @@
     xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
-    template="/WEB-INF/template/layout_admin.xhtml">
+    template="/WEB-INF/template/layout_dashboard.xhtml">
+
+	<!-- load data-->
+	<f:metadata>
+		<f:viewAction action="#{manageDisplay.onLoad}"/>
+	</f:metadata>
+
 
 	<ui:define name="title">
 		#{msg['manage.display']}
@@ -19,34 +25,17 @@
 			
 		</style>
 		
-		<script type="text/javascript">
- 			//<![CDATA[
-				$(document).ready(function(){
-					customizePrimefaceButtons();
-				});
-				
-				function customizePrimefaceButtons() {
- 					$('.ui-button.ui-widget').addClass("w3-btn w3-theme-dark w3-border-0")
- 				}				
-			//]]>	
-		</script>
+		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
+			<p:autoUpdate/>
+		</p:growl>
 		
-		<!-- load data-->
-		<f:metadata>
-			<f:viewAction action="#{manageDisplay.onLoad}"/>
-		</f:metadata>
-		
-		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
+		<div class="w3-panel w3-margin-top" jsf:id="mainContentDiv">
+
+ 			<div class="w3-bottombar">
+ 				<h3 style="font-weight: 800;"><i class="pi pi-desktop w3-large"/> #{msg['display.configuration']}</h3>
+			</div>
 			
-			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
- 				<h3><b>#{msg['manage.display']}</b></h3>
- 			</div>
- 			
- 			<p:messages id="messages" showDetail="true" closable="true">
-				<p:autoUpdate/>
-			</p:messages>
-			
-			<h:form styleClass="w3-theme-light">
+			<h:form styleClass="w3-margin-top">
 			
 				<div class="w3-container w3-xlarge w3-border-bottom">
 					#{msg['set.default.application.themes']}
@@ -202,7 +191,7 @@
 			
 			<p/> <!-- ////// -->
 			
-			<h:form styleClass="w3-theme-light w3-padding-top w3-padding-bottom">
+			<h:form styleClass="w3-padding-top w3-padding-bottom">
 				
 				<div class="w3-container w3-xlarge w3-border-bottom">
 					#{msg['tags.display.on.home.page']}

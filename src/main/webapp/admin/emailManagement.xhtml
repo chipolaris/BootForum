@@ -6,7 +6,7 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
-    template="/WEB-INF/template/layout_admin.xhtml">
+    template="/WEB-INF/template/layout_dashboard.xhtml">
 
 	<!-- load data-->
 	<f:metadata>
@@ -22,18 +22,18 @@
 		<style type="text/css">
 			
 		</style>
-		
-		<div class="w3-panel w3-card-4 w3-margin-top w3-padding w3-white" jsf:id="mainContentDiv">
-			
-			<div class="w3-panel w3-round w3-theme-dark w3-center w3-round">
- 				<h3><b>#{msg['email.configuration']}</b></h3>
- 			</div>
+
+		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
+			<p:autoUpdate/>
+		</p:growl>
+	
+		<div class="w3-panel w3-margin-top" jsf:id="mainContentDiv">
  			
- 			<p:messages id="messages" showDetail="true" closable="true" globalOnly="true">
-				<p:autoUpdate/>
-			</p:messages>
+ 			<div class="w3-bottombar">
+ 				<h3 style="font-weight: 800;"><i class="pi pi-envelope w3-large"/> #{msg['email']}</h3>
+			</div>
 			
-			<h:form id="form" styleClass="w3-theme-light">
+			<h:form id="form">
 				<div class="w3-container w3-xlarge w3-border-bottom">
 					#{msg['email.configuration']}
 				</div>
@@ -130,8 +130,7 @@
 
 					<div class="w3-threequarter w3-container w3-margin-top">
 						<!-- Note: to invoke the remoteCommand as below, type=button is important for it to work properly -->
-						<p:commandButton value="#{msg['update']}" type="button" icon="pi pi-check" onclick="submitForm();"
-							styleClass="w3-btn w3-theme-dark w3-border-0"/>
+						<p:commandButton value="#{msg['update']}" type="button" icon="pi pi-check" onclick="submitForm();"/>
 						
 						<span class="w3-margin-left" onclick="$('#form\\:testConfigurationDiv').toggle();"
 							style="cursor:pointer;color:purple;font-weight:bold;">
@@ -157,7 +156,7 @@
 					
 					<div class="w3-panel w3-border w3-round w3-display-container">
 					
-						<span onclick="$('#form\\:testConfigurationDiv').hide();" class="w3-button w3-display-topright w3-grey w3-theme-dark">X</span>
+						<span onclick="$('#form\\:testConfigurationDiv').hide();" class="w3-button w3-display-topright w3-grey">X</span>
 						
 						<br/><br/>
 						
@@ -225,8 +224,7 @@
 							</h:message>
 							
 							<p/>
-							<p:commandButton value="#{msg['send.test.email']}" action="#{manageEmail.testEmailConfiguration}" ajax="true" icon="pi pi-send" update="testResultDiv"
-								styleClass="w3-btn w3-theme-dark w3-border-0"/>				
+							<p:commandButton value="#{msg['send.test.email']}" action="#{manageEmail.testEmailConfiguration}" ajax="true" icon="pi pi-send" update="testResultDiv"/>				
 							<p/>
 						</div>
 						
