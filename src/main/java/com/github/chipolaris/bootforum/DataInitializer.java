@@ -13,6 +13,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import com.github.chipolaris.bootforum.domain.AvatarOption;
 import com.github.chipolaris.bootforum.domain.ChatRoom;
 import com.github.chipolaris.bootforum.domain.Comment;
 import com.github.chipolaris.bootforum.domain.CommentOption;
@@ -23,6 +24,7 @@ import com.github.chipolaris.bootforum.domain.EmailOption;
 import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.Person;
 import com.github.chipolaris.bootforum.domain.Preferences;
+import com.github.chipolaris.bootforum.domain.PrivateMessageOption;
 import com.github.chipolaris.bootforum.domain.RegistrationOption;
 import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption;
 import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption.FilterType;
@@ -31,10 +33,12 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
+import com.github.chipolaris.bootforum.event.AvatarOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.CommentOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.DiscussionUpdateEvent;
 import com.github.chipolaris.bootforum.event.DisplayOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.EmailOptionLoadEvent;
+import com.github.chipolaris.bootforum.event.PrivateMessageOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.RegistrationOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.RemoteIPFilterOptionLoadEvent;
 import com.github.chipolaris.bootforum.service.AckCodeType;
@@ -86,6 +90,8 @@ public class DataInitializer implements ApplicationRunner {
 		createDisplayOption();
 		createRemoteIPFilterOption();
 		createCommentOption();
+		createPrivateMessageOption();
+		createAvatarOption();
 		
 		systemInfoService.refreshStatistics();
 	}
@@ -211,11 +217,11 @@ public class DataInitializer implements ApplicationRunner {
 		RegistrationOption registrationOption = genericService.findEntity(RegistrationOption.class, 1L).getDataObject();
 		
 		if(registrationOption != null) {
-			logger.info("Registration Option's already initialized");
+			logger.info("Registration Option has already been created");
 		}
 		else {
 			
-			logger.info("Registration Option is NOT initialized. Creating..");
+			logger.info("Registration Option has NOT been created. Creating..");
 			
 			registrationOption = new RegistrationOption();
 			registrationOption.setId(1L);
@@ -257,11 +263,11 @@ public class DataInitializer implements ApplicationRunner {
 		EmailOption emailOption = genericService.findEntity(EmailOption.class, 1L).getDataObject();
 		
 		if(emailOption != null) {
-			logger.info("Email Option's already initialized");
+			logger.info("Email Option has already been created");
 		}
 		else {
 			
-			logger.info("Email Option is NOT initialized. Creating..");
+			logger.info("Email Option has NOT been created. Creating..");
 			
 			emailOption = new EmailOption();
 			emailOption.setId(1L);
@@ -284,11 +290,11 @@ public class DataInitializer implements ApplicationRunner {
 		DisplayOption displayOption = genericService.findEntity(DisplayOption.class, 1L).getDataObject();
 		
 		if(displayOption != null) {
-			logger.info("Display Option's already initialized");
+			logger.info("Display Option has already been created");
 		}
 		else {
 			
-			logger.info("Display Option is NOT initialized. Creating..");
+			logger.info("Display Option has NOT been created. Creating..");
 			
 			displayOption = new DisplayOption();
 			displayOption.setId(1L);
@@ -320,11 +326,11 @@ public class DataInitializer implements ApplicationRunner {
 		RemoteIPFilterOption remoteIPFilterOption = genericService.findEntity(RemoteIPFilterOption.class, 1L).getDataObject();
 		
 		if(remoteIPFilterOption != null) {
-			logger.info("Remote IP Filter Option's already initialized");
+			logger.info("Remote IP Filter Option has already been created");
 		}
 		else {
 			
-			logger.info("Remote IP Filter Option is NOT initialized. Creating..");
+			logger.info("Remote IP Filter Option has NOT been created. Creating..");
 			
 			remoteIPFilterOption = new RemoteIPFilterOption();
 			
@@ -356,11 +362,11 @@ public class DataInitializer implements ApplicationRunner {
 			commentOption.setMinCharDiscussionTitle(1);
 			commentOption.setMaxCharDiscussionTitle(80);
 			commentOption.setMinCharDiscussionContent(1);
-			commentOption.setMaxCharDiscussionContent(10000*1024); // 10,000KB ~ 10MB
+			commentOption.setMaxCharDiscussionContent(10000*1024); // 10,2400KB ~ 10MB
 			commentOption.setMaxDiscussionThumbnail(5);
 			commentOption.setMaxDiscussionAttachment(5);
-			commentOption.setMaxByteDiscussionThumbnail(5000*1024); // 1000KB ~ 5MB
-			commentOption.setMaxByteDiscussionAttachment(5000*1024); // 1000KB ~ 5MB
+			commentOption.setMaxByteDiscussionThumbnail(5000*1024); // 5120KB ~ 5MB
+			commentOption.setMaxByteDiscussionAttachment(5000*1024); // 5120KB ~ 5MB
 			commentOption.setAllowDiscussionTitleEdit(true);
 			
 			commentOption.setMinCharCommentTitle(1);
@@ -379,4 +385,53 @@ public class DataInitializer implements ApplicationRunner {
 		applicationEventPublisher.publishEvent(new CommentOptionLoadEvent(this, commentOption));
 	}
 
+	private void createPrivateMessageOption() {
+		
+		PrivateMessageOption privateMessageOption = genericService.findEntity(PrivateMessageOption.class, 1L).getDataObject();
+		
+		if(privateMessageOption != null) {
+			logger.info("Private Message Option has already been created");
+		}
+		else {
+			logger.info("Private Message Option has NOT been created. Creating..");
+			
+			privateMessageOption = new PrivateMessageOption();
+			privateMessageOption.setId(1L);
+			
+			// default values
+			privateMessageOption.setMinCharTitle(1);
+			privateMessageOption.setMaxCharTitle(80);
+			privateMessageOption.setMinCharContent(1);
+			privateMessageOption.setMaxCharContent(1000*1024); // 1,240KB ~1MB
+			privateMessageOption.setMaxAttachment(3);
+			privateMessageOption.setMaxByteAttachment(5000*1024); // 5120KB ~ 5MB			
+			
+			genericService.saveEntity(privateMessageOption);
+		}
+		
+		applicationEventPublisher.publishEvent(new PrivateMessageOptionLoadEvent(this, privateMessageOption));
+	}
+	
+	private void createAvatarOption() {
+		
+		AvatarOption avatarOption = genericService.findEntity(AvatarOption.class, 1L).getDataObject();
+		
+		if(avatarOption != null) {
+			logger.info("Avatar Option has already been created");
+		}
+		else {
+			logger.info("Avatar Option has NOT been created. Creating..");
+		
+			avatarOption = new AvatarOption();
+			avatarOption.setId(1L);
+			
+			avatarOption.setMaxFileSize(500*1024); // ~500KB
+			avatarOption.setMaxWidth(800);
+			avatarOption.setMaxHeight(800);
+			
+			genericService.saveEntity(avatarOption);
+		}
+		
+		applicationEventPublisher.publishEvent(new AvatarOptionLoadEvent(this, avatarOption));
+	}
 }

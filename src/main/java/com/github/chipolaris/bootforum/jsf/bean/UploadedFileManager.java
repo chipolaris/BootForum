@@ -26,10 +26,13 @@ public class UploadedFileManager {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UploadedFileManager.class);
 
-	private short maxTotalFilesAllowed;
+	private int maxTotalFilesAllowed;
 	
-	public UploadedFileManager(short maxAttachments) {
-		this.maxTotalFilesAllowed = maxAttachments;
+	private int maxFileUploadSize;
+	
+	public UploadedFileManager(int maxFileCount, int maxFileSize) {
+		this.maxTotalFilesAllowed = maxFileCount;
+		this.maxFileUploadSize = maxFileSize;
 	}
 	
 	// this field is to keep track of selected uploadedFile (by UI user)
@@ -56,37 +59,44 @@ public class UploadedFileManager {
 		
 		if(uploadedFileList.size() < maxTotalFilesAllowed) {
 			
-			UploadedFile uploadedFile = event.getFile(); 
+			UploadedFile uploadedFile = event.getFile();
 			
-			Date now = Calendar.getInstance().getTime();
-			
-			String tempFilename = now.getTime() + "." + FilenameUtils.getExtension(uploadedFile.getFileName());
-			
-			UploadedFileData uploadedFileData = new UploadedFileData();
-			uploadedFileData.setFileName(tempFilename);
-			uploadedFileData.setOrigFileName(uploadedFile.getFileName());
-			uploadedFileData.setContentType(uploadedFile.getContentType());
-			
-			// for Servlet 2.5 & common io/upload, the following work:
-			//		attachment.setBytes(uploadedFile.getContents());
-			// however, for Servlet 3.0, must use IOUtils.toByteArray(uploadedFile.getInputstream())
-			// to extract bytes content:
-			//   http://stackoverflow.com/questions/18049671/pfileupload-always-give-me-null-contents
-			// TODO:clean up the following code
-			try {
-				uploadedFileData.setContents(IOUtils.toByteArray(uploadedFile.getInputStream()));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(uploadedFile.getSize() > this.maxFileUploadSize) {
+				JSFUtils.addErrorStringMessage("messages", 
+						String.format("Can't upload file of over %d bytes", maxFileUploadSize));				
 			}
-			
-			uploadedFileData.setUploadedDate(now);
-			
-			this.uploadedFileList.add(uploadedFileData);
-			
-			/*JSFUtils.getHttpSession(false).setAttribute(attachment.getFileName(), attachment);*/
-			
-			JSFUtils.addInfoStringMessage("messages", String.format("File '%s' uploaded", uploadedFile.getFileName()));
+			else {
+				Date now = Calendar.getInstance().getTime();
+				
+				String tempFilename = now.getTime() + "." + FilenameUtils.getExtension(uploadedFile.getFileName());
+				
+				UploadedFileData uploadedFileData = new UploadedFileData();
+				uploadedFileData.setFileName(tempFilename);
+				uploadedFileData.setOrigFileName(uploadedFile.getFileName());
+				uploadedFileData.setContentType(uploadedFile.getContentType());
+				
+				// for Servlet 2.5 & common io/upload, the following work:
+				//		attachment.setBytes(uploadedFile.getContents());
+				// however, for Servlet 3.0, must use IOUtils.toByteArray(uploadedFile.getInputstream())
+				// to extract bytes content:
+				//   http://stackoverflow.com/questions/18049671/pfileupload-always-give-me-null-contents
+				// TODO:clean up the following code
+				try {
+					uploadedFileData.setContents(IOUtils.toByteArray(uploadedFile.getInputStream()));
+				} 
+				catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				uploadedFileData.setUploadedDate(now);
+				
+				this.uploadedFileList.add(uploadedFileData);
+				
+				/*JSFUtils.getHttpSession(false).setAttribute(attachment.getFileName(), attachment);*/
+				
+				JSFUtils.addInfoStringMessage("messages", String.format("File '%s' uploaded", uploadedFile.getFileName()));
+			}
 		}
 		else {
 			JSFUtils.addErrorStringMessage("messages", 

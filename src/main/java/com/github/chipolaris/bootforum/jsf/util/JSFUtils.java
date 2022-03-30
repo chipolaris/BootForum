@@ -28,6 +28,11 @@ public class JSFUtils {
 		return bundle;
 	}
 	
+	public static String getMessageResource(String key) {
+	
+		return getMessageBundle().getString(key);
+	}
+	
 	/**
 	 * get base URL of the application
 	 * @return

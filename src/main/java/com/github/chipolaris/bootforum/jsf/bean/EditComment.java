@@ -133,63 +133,81 @@ public class EditComment {
 	
 	public void uploadThumbnail(FileUploadEvent event) {
 		
-		int maxThumbnail = this.isFirstComment ? 
+		int maxThumbnailCount = this.isFirstComment ? 
 				commentOption.getMaxDiscussionThumbnail() : commentOption.getMaxCommentThumbnail();
 		
-		if(this.comment.getThumbnails().size() < maxThumbnail) {
+		if(this.comment.getThumbnails().size() < maxThumbnailCount) {
 			
 			UploadedFile uploadedFile = event.getFile(); 
 			
-			UploadedFileData uploadedFileData = toUploadedFileData(uploadedFile);
+			int maxThumbnailSize = this.isFirstComment ? 
+					commentOption.getMaxByteDiscussionThumbnail() : commentOption.getMaxByteCommentThumbnail();
 			
-			ServiceResponse<Comment> serviceResponse = commentService.addCommentThumbnail(this.comment, uploadedFileData);
-			
-			if(serviceResponse.getAckCode() == AckCodeType.FAILURE) {
-				JSFUtils.addErrorStringMessage(null, "Unable to upload thumbnail");
+			if(uploadedFile.getSize() > maxThumbnailSize) {
+				JSFUtils.addErrorStringMessage("messages", 
+						String.format("Can't upload file of over %d bytes", maxThumbnailSize));
 			}
 			else {
-				this.comment = serviceResponse.getDataObject();
-				JSFUtils.addInfoStringMessage(null, "Thumbnail added");
+				UploadedFileData uploadedFileData = toUploadedFileData(uploadedFile);			
 				
-				applicationEventPublisher.publishEvent(
-						new CommentFileEvent(this, CommentFileEvent.Type.THUMBNAIL, 
-								CommentFileEvent.Action.ADD, comment, userSession.getUser()));
+				ServiceResponse<Comment> serviceResponse = commentService.addCommentThumbnail(this.comment, uploadedFileData);
+				
+				if(serviceResponse.getAckCode() == AckCodeType.FAILURE) {
+					JSFUtils.addErrorStringMessage(null, "Unable to upload thumbnail");
+				}
+				else {
+					this.comment = serviceResponse.getDataObject();
+					JSFUtils.addInfoStringMessage(null, "Thumbnail added");
+					
+					applicationEventPublisher.publishEvent(
+							new CommentFileEvent(this, CommentFileEvent.Type.THUMBNAIL, 
+									CommentFileEvent.Action.ADD, comment, userSession.getUser()));
+				}
 			}
 		}
 		else {
 			JSFUtils.addErrorStringMessage("messages", 
-					String.format("Can't upload file, maximum %d total files has been reached", maxThumbnail));
+					String.format("Can't upload file, maximum %d total files has been reached", maxThumbnailCount));
 		}
 	}
 	
 	public void uploadAttachment(FileUploadEvent event) {
 		
-		int maxAttachment = this.isFirstComment ? 
+		int maxAttachmentCount = this.isFirstComment ? 
 				commentOption.getMaxDiscussionAttachment() : commentOption.getMaxCommentAttachment();
 		
-		if(this.comment.getAttachments().size() < maxAttachment) {
+		if(this.comment.getAttachments().size() < maxAttachmentCount) {
 			
-			UploadedFile uploadedFile = event.getFile(); 
+			UploadedFile uploadedFile = event.getFile();
 			
-			UploadedFileData uploadedFileData = toUploadedFileData(uploadedFile);
+			int maxAttachmentSize = this.isFirstComment ?
+					commentOption.getMaxByteDiscussionAttachment() : commentOption.getMaxByteCommentAttachment();
 			
-			ServiceResponse<Comment> serviceResponse = commentService.addCommentAttachment(this.comment, uploadedFileData);
-			
-			if(serviceResponse.getAckCode() == AckCodeType.FAILURE) {
-				JSFUtils.addErrorStringMessage(null, "Unable to upload attachment");
+			if(uploadedFile.getSize() > maxAttachmentSize) {
+				JSFUtils.addErrorStringMessage("messages", 
+						String.format("Can't upload file of over %d bytes", maxAttachmentSize));
 			}
 			else {
-				this.comment = serviceResponse.getDataObject();
-				JSFUtils.addInfoStringMessage(null, "Attachment added");
+				UploadedFileData uploadedFileData = toUploadedFileData(uploadedFile);
 				
-				applicationEventPublisher.publishEvent(
-						new CommentFileEvent(this, CommentFileEvent.Type.ATTACHMENT, 
-								CommentFileEvent.Action.ADD, comment, userSession.getUser()));
+				ServiceResponse<Comment> serviceResponse = commentService.addCommentAttachment(this.comment, uploadedFileData);
+				
+				if(serviceResponse.getAckCode() == AckCodeType.FAILURE) {
+					JSFUtils.addErrorStringMessage(null, "Unable to upload attachment");
+				}
+				else {
+					this.comment = serviceResponse.getDataObject();
+					JSFUtils.addInfoStringMessage(null, "Attachment added");
+					
+					applicationEventPublisher.publishEvent(
+							new CommentFileEvent(this, CommentFileEvent.Type.ATTACHMENT, 
+									CommentFileEvent.Action.ADD, comment, userSession.getUser()));
+				}
 			}
 		}
 		else {
 			JSFUtils.addErrorStringMessage("messages", 
-				String.format("Can't upload file, maximum %d total files has been reached", maxAttachment));
+				String.format("Can't upload file, maximum %d total files has been reached", maxAttachmentCount));
 		}
 	}
 	

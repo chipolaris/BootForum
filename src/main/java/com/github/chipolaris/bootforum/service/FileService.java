@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
@@ -67,12 +68,6 @@ public class FileService {
 	@Value("${Avatar.imageType}")
 	private String avatarImageType;
 	
-	@Value("#{ ${Comment.thumbnail.maxFileSize} * 1024 }")
-	private Long commentThumbnailMaxSize;
-	
-	@Value("#{ ${Comment.attachment.maxFileSize} * 1024}")
-	private Long commentAttachmentMaxSize;
-	
 	@Value("${Comment.thumbnail.folderPath:#{null}}")
 	private String commentThumbnailFolderPath;
 	
@@ -95,6 +90,9 @@ public class FileService {
 	private Path messageAttachmentPath;
 	
 	private DateFormat dateFormat;
+	
+	@Resource
+	private SystemConfigService systemConfigService;
 	
 	@PostConstruct
 	public void init() {
@@ -274,36 +272,28 @@ public class FileService {
 	public ServiceResponse<String> uploadCommentThumbnail(byte[] bytes, String extension) {
 		
 		ServiceResponse<String> response = new ServiceResponse<String>();
+			
+		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 		
-		// check attachment file size
-		if(bytes.length > this.commentThumbnailMaxSize) {
-			response.setAckCode(AckCodeType.FAILURE);
-			response.addMessage("Invalid attachment file size. Thumbnail file size must be less than " 
-					+ this.commentThumbnailMaxSize + " bytes");				
-		}
-		else {
-			
-			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-			
-			String fileName = createFilename(extension);
-			
-			File imageFile = commentThumbnailPath.resolve(fileName).toFile();
-			
-			try {
-				BufferedImage bufferedImage = ImageIO.read(bais);
+		String fileName = createFilename(extension);
+		
+		File imageFile = commentThumbnailPath.resolve(fileName).toFile();
+		
+		try {
+			BufferedImage bufferedImage = ImageIO.read(bais);
 
-				ImageIO.write(bufferedImage, extension, imageFile);
-				response.setDataObject(fileName);
-			} 
-			catch (IOException e) {
-				logger.error("Unable to create new file: " + imageFile.getAbsolutePath());
-				logger.error(ExceptionUtils.getStackTrace(e));
-				response.setAckCode(AckCodeType.FAILURE);
-			}
-			finally {
-				IOUtils.closeQuietly(bais);
-			}
+			ImageIO.write(bufferedImage, extension, imageFile);
+			response.setDataObject(fileName);
+		} 
+		catch (IOException e) {
+			logger.error("Unable to create new file: " + imageFile.getAbsolutePath());
+			logger.error(ExceptionUtils.getStackTrace(e));
+			response.setAckCode(AckCodeType.FAILURE);
 		}
+		finally {
+			IOUtils.closeQuietly(bais);
+		}
+		
 		return response;
 	}
 	
@@ -340,34 +330,26 @@ public class FileService {
 	public ServiceResponse<String> uploadCommentAttachment(byte[] bytes, String extension) {
 		
 		ServiceResponse<String> response = new ServiceResponse<String>();
+			
+		String fileName = createFilename(extension);
 		
-		// check attachment file size
-		if(bytes.length > this.commentAttachmentMaxSize) {
+		File attachmentFile = commentAttachmentPath.resolve(fileName).toFile();
+		
+		try {
+			
+			FileUtils.writeByteArrayToFile(attachmentFile, bytes);
+			response.setDataObject(fileName);
+		} 
+		catch (IOException e) {
+			logger.error("Unable to create new file: " + attachmentFile.getAbsolutePath());
+			logger.error(ExceptionUtils.getStackTrace(e));
 			response.setAckCode(AckCodeType.FAILURE);
-			response.addMessage("Invalid attachment file size. Attachment file size must be less than " 
-					+ this.commentAttachmentMaxSize + " bytes");				
 		}
-		else {
+		finally {	
 			
-			String fileName = createFilename(extension);
-			
-			File attachmentFile = commentAttachmentPath.resolve(fileName).toFile();
-			
-			try {
-				
-				FileUtils.writeByteArrayToFile(attachmentFile, bytes);
-				response.setDataObject(fileName);
-			} 
-			catch (IOException e) {
-				logger.error("Unable to create new file: " + attachmentFile.getAbsolutePath());
-				logger.error(ExceptionUtils.getStackTrace(e));
-				response.setAckCode(AckCodeType.FAILURE);
-			}
-			finally {	
-				
-				// do cleanup here
-			}
+			// do cleanup here
 		}
+
 		return response;
 	}
 	

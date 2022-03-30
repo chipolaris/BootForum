@@ -153,7 +153,7 @@
 						<p/>
 						
 						<p:fileUpload listener="#{replyComment.commentThumbnailManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();"
-		        			update=":thumbnailPanel" auto="true" sizeLimit="#{replyComment.commentOption.maxByteCommentThumbnail * 1024}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
+		        			update=":thumbnailPanel" auto="true" sizeLimit="#{replyComment.commentOption.maxByteCommentThumbnail}" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/" 
 		        			rendered="#{replyComment.commentOption.maxCommentThumbnail gt fn:length(replyComment.commentThumbnailManagement.uploadedFileList)}" label="#{msg['choose']}"/>
           				
           				<p/>
@@ -210,7 +210,7 @@
 						<p/>
 						
 						<p:fileUpload listener="#{replyComment.commentAttachmentManagement.handleFileUpload}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();"
-			        			update=":attachmentPanel" auto="true" sizeLimit="#{replyComment.commentOption.maxByteCommentAttachment * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
+			        			update=":attachmentPanel" auto="true" sizeLimit="#{replyComment.commentOption.maxByteCommentAttachment}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
 			        			rendered="#{replyComment.commentOption.maxCommentAttachment gt fn:length(replyComment.commentAttachmentManagement.uploadedFileList)}" label="#{msg['choose']}"/>
 		          		
 		          		<p/>

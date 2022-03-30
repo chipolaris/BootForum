@@ -169,7 +169,7 @@
 						
 						<p:fileUpload listener="#{editComment.uploadThumbnail}" mode="advanced" dragDropSupport="true" oncomplete="toggle('thumbnailPanel');customizePrimefaceButtons();"
 		        			update=":thumbnailPanel" auto="true" allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG)$/"
-		        			sizeLimit="#{(editComment.firstComment ? editComment.commentOption.maxByteDiscussionThumbnail : editComment.commentOption.maxByteCommentThumbnail) * 1024}"  
+		        			sizeLimit="#{(editComment.firstComment ? editComment.commentOption.maxByteDiscussionThumbnail : editComment.commentOption.maxByteCommentThumbnail)}"  
 		        			rendered="#{(editComment.firstComment ? editComment.commentOption.maxDiscussionThumbnail : editComment.commentOption.maxCommentThumbnail) gt fn:length(editComment.comment.thumbnails)}" 
 		        			label="#{msg['choose']}"/>
           				
@@ -227,7 +227,7 @@
 						<p/>
 						
 						<p:fileUpload listener="#{editComment.uploadAttachment}" mode="advanced" dragDropSupport="true" oncomplete="toggle('attachmentPanel');customizePrimefaceButtons();"
-		        			update=":attachmentPanel" auto="true" sizeLimit="#{editComment.commentOption.maxByteCommentAttachment * 1024}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
+		        			update=":attachmentPanel" auto="true" sizeLimit="#{editComment.commentOption.maxByteCommentAttachment}" allowTypes="/(\.|\/)(zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
 		        			rendered="#{editComment.commentOption.maxCommentAttachment gt fn:length(editComment.comment.attachments)}" label="#{msg['choose']}"/>
 		          		
 		          		<p/>

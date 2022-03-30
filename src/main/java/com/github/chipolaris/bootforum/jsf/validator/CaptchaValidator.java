@@ -21,7 +21,7 @@ public class CaptchaValidator implements Validator<String> {
 		
 		// check against the captcha value from session
 		if (!captchaValue.equals(JSFUtils.getHttpSession(false).getAttribute("captcha"))) {
-			FacesMessage faceMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Captcha", JSFUtils.getMessageBundle().getString("captcha.entered.is.incorrect"));
+			FacesMessage faceMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Captcha", JSFUtils.getMessageResource("captcha.entered.is.incorrect"));
 			
 			throw new ValidatorException(faceMessage);
 		}

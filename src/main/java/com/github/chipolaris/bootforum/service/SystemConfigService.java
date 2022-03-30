@@ -8,14 +8,18 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.chipolaris.bootforum.dao.GenericDAO;
+import com.github.chipolaris.bootforum.domain.AvatarOption;
 import com.github.chipolaris.bootforum.domain.CommentOption;
 import com.github.chipolaris.bootforum.domain.DisplayOption;
 import com.github.chipolaris.bootforum.domain.EmailOption;
+import com.github.chipolaris.bootforum.domain.PrivateMessageOption;
 import com.github.chipolaris.bootforum.domain.RegistrationOption;
 import com.github.chipolaris.bootforum.domain.RemoteIPFilterOption;
+import com.github.chipolaris.bootforum.event.AvatarOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.CommentOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.DisplayOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.EmailOptionLoadEvent;
+import com.github.chipolaris.bootforum.event.PrivateMessageOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.RegistrationOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.RemoteIPFilterOptionLoadEvent;
 
@@ -30,6 +34,8 @@ public class SystemConfigService {
 	private EmailOption emailOption;
 	private RemoteIPFilterOption remoteIPFilterOption;
 	private CommentOption commentOption;
+	private PrivateMessageOption privateMessageOption;
+	private AvatarOption avatarOption;
 	
 	@EventListener // note: visibility can not be private for EventListener
 	protected void displayOptionLoadListener(DisplayOptionLoadEvent event) {
@@ -54,6 +60,16 @@ public class SystemConfigService {
 	@EventListener // note: visibility can not be private for EventListener
 	protected void commentOptionLoadListener(CommentOptionLoadEvent event) {
 		this.commentOption = event.getCommentOption();
+	}
+	
+	@EventListener
+	protected void privateMessageOptionListener(PrivateMessageOptionLoadEvent event) {
+		this.privateMessageOption = event.getPrivateMessageOption();
+	}
+	
+	@EventListener
+	protected void avatarOptionListener(AvatarOptionLoadEvent event) {
+		this.avatarOption = event.getAvatarOption();
 	}
 	
 	/*
@@ -178,6 +194,52 @@ public class SystemConfigService {
 		this.commentOption = genericDAO.merge(commentOption);
 		
 		response.setDataObject(this.commentOption);
+		
+		return response;
+	}
+	
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public ServiceResponse<PrivateMessageOption> getPrivateMessageOption() {
+		
+		ServiceResponse<PrivateMessageOption> response = new ServiceResponse<>();
+		
+		response.setDataObject(this.privateMessageOption);
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<PrivateMessageOption> updatePrivateMessageOption(PrivateMessageOption privateMessageOption) {
+		
+		ServiceResponse<PrivateMessageOption> response = new ServiceResponse<>();
+		
+		// merge/update and update cache object
+		this.privateMessageOption = genericDAO.merge(privateMessageOption);
+		
+		response.setDataObject(this.privateMessageOption);
+		
+		return response;
+	}
+	
+	@Transactional(propagation = Propagation.NOT_SUPPORTED)
+	public ServiceResponse<PrivateMessageOption> getAvatarOption() {
+		
+		ServiceResponse<PrivateMessageOption> response = new ServiceResponse<>();
+		
+		response.setDataObject(this.privateMessageOption);
+		
+		return response;
+	}
+	
+	@Transactional(readOnly = false)
+	public ServiceResponse<AvatarOption> updateAvatarOption(AvatarOption avatarOption) {
+		
+		ServiceResponse<AvatarOption> response = new ServiceResponse<>();
+		
+		// merge/update and update cache object
+		this.avatarOption = genericDAO.merge(avatarOption);
+		
+		response.setDataObject(this.avatarOption);
 		
 		return response;
 	}

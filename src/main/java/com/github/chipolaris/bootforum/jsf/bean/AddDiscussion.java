@@ -7,12 +7,12 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.github.chipolaris.bootforum.domain.Comment;
+import com.github.chipolaris.bootforum.domain.CommentOption;
 import com.github.chipolaris.bootforum.domain.Discussion;
 import com.github.chipolaris.bootforum.domain.DiscussionStat;
 import com.github.chipolaris.bootforum.domain.Forum;
@@ -22,6 +22,7 @@ import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.DiscussionService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 
 @Component("addDiscussion")
 @Scope("view")
@@ -29,17 +30,14 @@ public class AddDiscussion {
 
 	private static final Logger logger = LoggerFactory.getLogger(AddDiscussion.class);
 	
-	@Value("${Comment.thumbnail.maxPerComment}")
-	private short maxThumbnailsPerComment;
-
-	@Value("${Comment.attachment.maxPerComment}")
-	private short maxAttachmentsPerComment;
-	
 	@Resource
 	private GenericService genericService;
 	
 	@Resource
 	private DiscussionService discussionService;
+	
+	@Resource
+	private SystemConfigService systemConfigService;
 	
 	@Resource
 	private LoggedOnSession userSession;
@@ -94,6 +92,8 @@ public class AddDiscussion {
 	public void onLoad() {
 		
 		this.forum = genericService.getEntity(Forum.class, this.forumId).getDataObject();
+		
+		CommentOption commentOption = systemConfigService.getCommentOption().getDataObject();
 
 		if (this.forum != null) {
 
@@ -110,11 +110,13 @@ public class AddDiscussion {
 
 			comment = new Comment();
 
-			this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);
-			this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
+			this.commentAttachmentManagement = new UploadedFileManager(
+					commentOption.getMaxDiscussionAttachment(), commentOption.getMaxByteDiscussionAttachment());
+			this.commentThumbnailManagement = new UploadedFileManager(
+					commentOption.getMaxDiscussionThumbnail(), commentOption.getMaxByteDiscussionThumbnail());
 		} 
 		else {
-			this.setLoadingErrorMessage("forum.not.found");
+			this.setLoadingErrorMessage(JSFUtils.getMessageResource("forum.not.found"));
 		}
 	}
 	

@@ -17,11 +17,13 @@ import org.springframework.stereotype.Component;
 import com.github.chipolaris.bootforum.domain.Message;
 import com.github.chipolaris.bootforum.domain.PrivateMessage;
 import com.github.chipolaris.bootforum.domain.PrivateMessage.MessageType;
+import com.github.chipolaris.bootforum.domain.PrivateMessageOption;
 import com.github.chipolaris.bootforum.jsf.util.JSFUtils;
 import com.github.chipolaris.bootforum.service.AckCodeType;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.PrivateMessageService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
+import com.github.chipolaris.bootforum.service.SystemConfigService;
 import com.github.chipolaris.bootforum.service.UserService;
 
 @Component 
@@ -41,6 +43,9 @@ public class PrivateMessages {
 	
 	@Resource
 	private UserService userService;
+	
+	@Resource
+	private SystemConfigService systemConfigService;
 	
 	@Resource
 	private PrivateMessageService privateMessageService;
@@ -82,6 +87,12 @@ public class PrivateMessages {
 		this.allUsernames = allUsernames;
 	}
 	
+	private PrivateMessageOption privateMessageOption;
+	
+	public PrivateMessageOption getPrivateMessageOption() {
+		return privateMessageOption;
+	}
+
 	public void onLoad() {
 		
 		String owner = userSession.getUser().getUsername();
@@ -94,7 +105,9 @@ public class PrivateMessages {
 		
 		this.allUsernames = userService.getAllUsernames().getDataObject();
 		
-		this.uploadedFileManager = new UploadedFileManager(this.maxAttachmentsPerMessage);
+		this.privateMessageOption = systemConfigService.getPrivateMessageOption().getDataObject();
+		
+		this.uploadedFileManager = new UploadedFileManager(privateMessageOption.getMaxAttachment(), privateMessageOption.getMaxByteAttachment());
 		
 		if(!StringUtils.isEmpty(to)) {
 			toUsers = Arrays.asList(to);

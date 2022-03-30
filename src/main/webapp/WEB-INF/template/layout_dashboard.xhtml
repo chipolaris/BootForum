@@ -49,7 +49,19 @@
 			a:visited        { color: #C92D99 } 
 			a:hover, a:focus { color: #990000 } 
 			a:active         { color: #339966 }  */
+
+			/* https://stackoverflow.com/questions/26173376/rotate-font-awesome-icon-on-click/26173496 */
+			.rotate {
+			    -moz-transition: all 0.3s linear;
+			    -webkit-transition: all 0.3s linear;
+			    transition: all 0.3s linear;
+			}
 			
+			.rotate.down {
+			    -moz-transform:rotate(90deg);
+			    -webkit-transform:rotate(90deg);
+			    transform:rotate(90deg);
+			}			
 		</style>
     </h:head>
 
@@ -97,23 +109,36 @@
 		  		 		  
 		  <div class="w3-bar-block">
 		    
-		    <h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-" title="#{msg['admin.dashboard']}"/> #{msg['admin.dashboard']}</h:link>
-		    <h:link outcome="/admin/userList" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="#{msg['manage.users']}"/> <b>#{msg['manage.users']}</b></h:link>
-		    <h:link outcome="/admin/discussionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="#{msg['manage.discussions']}"/> <b>#{msg['manage.discussions']}</b></h:link>
-		    <h:link outcome="/admin/commentManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comment" title="#{msg['comment.configuration']}"/> <b>#{msg['comment.configuration']}</b></h:link>
-		    <h:link outcome="/admin/forumManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-list" title="#{msg['manage.forums']}"/> <b>#{msg['manage.forums']}</b></h:link>
-		    <h:link outcome="/admin/tagManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-tags" title="#{msg['manage.tags']}"/> <b>#{msg['manage.tags']}</b></h:link>
-		    <h:link outcome="/admin/chatManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="#{msg['manage.chat.rooms']}"/> <b>#{msg['manage.chat.rooms']}</b></h:link>
-		    <h:link outcome="/admin/displayManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="#{msg['display.configuration']}"/> <b>#{msg['display.configuration']}</b></h:link>
-		    <h:link outcome="/admin/emailManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="#{msg['email.configuration']}"/> <b>#{msg['email.configuration']}</b></h:link>
-		    <h:link outcome="/admin/registrationManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-book" title="#{msg['manage.registration']}"/> <b>#{msg['manage.registration']}</b></h:link>
-		    <h:link outcome="/admin/remoteIPFilterManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-filter" title="#{msg['ip.filter.management']}"/> <b>#{msg['ip.filter.management']}</b></h:link>
-		    <h:link outcome="/admin/systemMaintenance" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-cog" title="#{msg['system.maintenance']}"/> <b>#{msg['system.maintenance']}</b></h:link>
-		    <h:link outcome="/admin/systemInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-info-circle" title="#{msg['system.information']}"/> <b>#{msg['system.information']}</b></h:link>
+		    <h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-padding"><i title="#{msg['admin.dashboard']}"/> #{msg['admin.dashboard']}</h:link>
+		    
+		    <div class="w3-bar-item w3-button" onclick="$('#managementDiv').toggle(300);$('#managementCaret').toggleClass('down');">
+			  <span style="font-weight:800;">Management</span> <i class="pi pi-caret-right rotate" id="managementCaret"/>
+			</div>
+		    <div id="managementDiv" style="display:none">
+			    <h:link outcome="/admin/userList" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="#{msg['manage.users']}"/> #{msg['manage.users']}</h:link>
+			    <h:link outcome="/admin/discussionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="#{msg['manage.discussions']}"/> #{msg['manage.discussions']}</h:link>
+			    <h:link outcome="/admin/forumManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-list" title="#{msg['manage.forums']}"/> #{msg['manage.forums']}</h:link>
+			    <h:link outcome="/admin/tagManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-tags" title="#{msg['manage.tags']}"/> #{msg['manage.tags']}</h:link>
+			    <h:link outcome="/admin/chatManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comments" title="#{msg['manage.chat.rooms']}"/> #{msg['manage.chat.rooms']}</h:link>
+			    <h:link outcome="/admin/registrationManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-book" title="#{msg['manage.registration']}"/> #{msg['manage.registration']}</h:link>
+			    <h:link outcome="/admin/systemMaintenance" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-cog" title="#{msg['system.maintenance']}"/> #{msg['system.maintenance']}</h:link>
+			    <h:link outcome="/admin/systemInfo" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-info-circle" title="#{msg['system.information']}"/> #{msg['system.information']}</h:link>
+			</div>
 			
-			<h:link rendered="#{applicationProperties['application.devMode'] eq 'true'}" outcome="/admin/simulateData" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-play" title="Create Simulation Data"/> <b>#{msg['simulate.data']}</b></h:link>
+			<div class="w3-bar-item w3-button" onclick="$('#configurationDiv').toggle(300);$('#configurationCaret').toggleClass('down')">
+			  <span style="font-weight:800;">Configuration</span> <i class="pi pi-caret-right rotate" id="configurationCaret"/>
+			</div>
+			<div id="configurationDiv" style="display:none">
+			  <h:link outcome="/admin/commentOptionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comment" title="#{msg['comment']}"/> #{msg['comment']}</h:link>
+			  <h:link outcome="/admin/displayManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-desktop" title="#{msg['display.configuration']}"/> #{msg['display.configuration']}</h:link>
+			  <h:link outcome="/admin/remoteIPFilterManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-filter" title="#{msg['ip.filter.management']}"/> #{msg['ip.filter.management']}</h:link>
+			  <h:link outcome="/admin/emailManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="#{msg['email.configuration']}"/> #{msg['email.configuration']}</h:link>
+			  <h:link outcome="/admin/privateMessageOptionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-envelope" title="#{msg['private.message']}"/> #{msg['private.message']}</h:link>
+			</div>
 			
-			<a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="#{msg['close.menu']}"><i class="pi pi-times"></i>  Close Menu</a>
+			<h:link rendered="#{applicationProperties['application.devMode'] eq 'true'}" outcome="/admin/simulateData" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-play" title="Create Simulation Data"/> <b>#{msg['simulate.data']}</b></h:link>			
+			
+			<button  class="w3-bar-item w3-button w3-padding-8 w3-hide-large w3-dark-grey w3-hover-black" onclick="closeSidebar()" title="#{msg['close.menu']}"><i class="pi pi-times"></i>  Close Menu</button>
 		  </div>
 		</nav>
 
@@ -164,64 +189,41 @@
 				function toggleSidebar() {					
 					
 				  if (mySidebar.style.display === 'none') {
-
-					console.log('toggleSidebar=== 11');
 				   
 					mySidebar.style.width = "230px";
 					mySidebar.style.display = 'block';
 				    main.style.marginLeft = "230px";
-				    
+				    overlayBg.style.display = 'block';
 				  } 
-				  else {
-					console.log('toggleSidebar=== 22');
-					  
+				  else {					  
 					mySidebar.style.display = 'none';
 					main.style.marginLeft = "0px";
-				  }
-				}
-				
-				// Toggle between showing and hiding the sidebar, and add overlay effect
-				function openSidebar() {
-					console.log('openSidebar call---');
-				  if (mySidebar.style.display === 'block') {
-					  console.log('openSidebar call---1');
-				    mySidebar.style.display = 'none';
-				    overlayBg.style.display = 'none';
-				  } else {
-					  console.log('openSidebar call---2');
-				    mySidebar.style.display = 'block';
-				    overlayBg.style.display = "block";
+					overlayBg.style.display = 'none';
 				  }
 				}
 				
 				// Close the sidebar with the close button
 				function closeSidebar() {
 				  mySidebar.style.display = "none";
+				  main.style.marginLeft = "0px";
 				  overlayBg.style.display = "none";
 				}
 				
-				/* highlight and disable anchor (a href) the side navigation link if the page is current */
-				$(document).ready(function(){
+				$(document).ready(function() {
+					/* highlight and disable anchor (a href) the side navigation link if the page is current */
 					var navLinks = document.querySelectorAll("a.w3-bar-item");
 					navLinks.forEach(function(navLink) {
 						if(window.location.href.includes(navLink.href)) {
 							navLink.style.pointerEvents = 'none';
 						  	navLink.style.cursor = 'default';
 						  	navLink.className += " w3-theme-dark";
-						  	navLink.style.fontWeight = "bold";
+						  	navLink.style.fontWeight = "400";
 						}
 					});
+					
+					/* make sure avatars are displayed correctly */
 					changeAvatarBackgrounds();
 				});
-				
-				function toggle(id) {
-					var x = document.getElementById(id);
-					if (x.className.indexOf("w3-show") == -1) {
-						x.className += " w3-show";
-					} else {
-						x.className = x.className.replace(" w3-show", "");
-					}
-				}
 				
 				function changeAvatarBackgrounds() {
 					$(".avatarSpan").each(function() {						
@@ -241,8 +243,7 @@
 					    colour += ('00' + value.toString(16)).substr(-2);
 					}
 					return colour;
-				}
-				
+				}				
 			//]]>	
 		</script>
     

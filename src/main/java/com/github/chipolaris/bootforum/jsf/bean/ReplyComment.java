@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -27,12 +26,6 @@ import com.github.chipolaris.bootforum.service.SystemConfigService;
 public class ReplyComment {
 
 	private static final Logger logger = LoggerFactory.getLogger(ReplyComment.class);
-	
-	@Value("${Comment.thumbnail.maxPerComment}")
-	private short maxThumbnailsPerComment;
-
-	@Value("${Comment.attachment.maxPerComment}")
-	private short maxAttachmentsPerComment;
 	
 	@Resource
 	private GenericService genericService;
@@ -104,7 +97,7 @@ public class ReplyComment {
 			if(this.comment != null) {
 			
 				if(comment.getDiscussion().isClosed()) {
-					this.loadingErrorMessage = JSFUtils.getMessageBundle().getString("discussion.is.closed");
+					this.loadingErrorMessage = JSFUtils.getMessageResource("discussion.is.closed");
 					return;
 				}
 				
@@ -119,13 +112,15 @@ public class ReplyComment {
 					reply.setContent(String.format("<blockquote>%s:%s</blockquote><br/>", comment.getCreateBy(), comment.getContent()));
 				}
 				
-				this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);
-				this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
-				
 				this.commentOption = systemConfigService.getCommentOption().getDataObject();
+				
+				this.commentAttachmentManagement = new UploadedFileManager(
+						commentOption.getMaxCommentAttachment(), commentOption.getMaxByteCommentAttachment());
+				this.commentThumbnailManagement = new UploadedFileManager(
+						commentOption.getMaxCommentThumbnail(), commentOption.getMaxByteCommentThumbnail());
 			}
 			else {
-				this.loadingErrorMessage = JSFUtils.getMessageBundle().getString("comment.does.not.exist");
+				this.loadingErrorMessage = JSFUtils.getMessageResource("comment.does.not.exist");
 			}
 		}
 		else if(discussionId != null) { // reply to main discussion
@@ -144,10 +139,12 @@ public class ReplyComment {
 				this.reply = new Comment();
 				this.reply.setDiscussion(discussion);
 				
-				this.commentAttachmentManagement = new UploadedFileManager(this.maxAttachmentsPerComment);
-				this.commentThumbnailManagement = new UploadedFileManager(maxThumbnailsPerComment);
-				
 				this.commentOption = systemConfigService.getCommentOption().getDataObject();
+				
+				this.commentAttachmentManagement = new UploadedFileManager(
+						commentOption.getMaxCommentAttachment(), commentOption.getMaxByteCommentAttachment());
+				this.commentThumbnailManagement = new UploadedFileManager(
+						commentOption.getMaxCommentThumbnail(), commentOption.getMaxByteCommentThumbnail());
 			}
 			else {
 				this.loadingErrorMessage = "Discussion is not valid";

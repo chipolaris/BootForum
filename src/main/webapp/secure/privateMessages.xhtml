@@ -354,25 +354,35 @@
 			       		
 			       		<div class="w3-section">
 			       			
-			       			<b>Subject</b>
+			       			<p:outputLabel value="Subject" style="font-weight:600" for="subject"/>
 				       		
-					       	<p:inputText value="#{privateMessages.message.subject}" style="width:100%" maxlength="100">
+					       	<p:inputText value="#{privateMessages.message.subject}" style="width:100%" id="subject"
+					       		validatorMessage="Message subject must be between #{privateMessages.privateMessageOption.minCharTitle} and #{privateMessages.privateMessageOption.maxCharTitle} characters">
 					       		<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+					       		<f:validateLength minimum="#{privateMessages.privateMessageOption.minCharTitle}" maximum="#{privateMessages.privateMessageOption.maxCharTitle}"/>
 					       	</p:inputText>
-				       						       		
+				       		
+				       		<h:message for="subject" id="subjectError" style="color:red;">
+				       			<p:autoUpdate/>
+				     		</h:message>				       		
 						</div>
 
 			       		<div class="w3-section">
 			       			
-				       		<b>Message</b>				       		
+							<p:outputLabel value="Message" style="font-weight:600" for="messageContent"/>
 							
-							<pe:ckEditor value="#{privateMessages.message.text}" skin="moono-lisa" width="100%" id="messageEditor"
+							<pe:ckEditor value="#{privateMessages.message.text}" skin="moono-lisa" width="100%" id="messageContent"
 								toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
 										'-', 'Styles', 'Format', 'Font', 'FontSize', '-', 'TextColor', 'BGColor',
 										'-', 'Link', 'Unlink', '-', 'Blockquote', 'Smiley', 'SpecialChar',
-										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" widgetVar="messageEditorVar">
+										'-', 'Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo']]" widgetVar="messageContentVar"
+									validatorMessage="Message content must be between #{privateMessages.privateMessageOption.minCharContent} and #{privateMessages.privateMessageOption.maxCharContent} characters">
 								<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
+								<f:validateLength minimum="#{privateMessages.privateMessageOption.minCharContent}" maximum="#{privateMessages.privateMessageOption.maxCharContent}"/>
 							</pe:ckEditor>
+							<h:message for="messageContent" id="messageContentError" style="color:red;">
+				       			<p:autoUpdate/>
+				     		</h:message>
 			       		</div>
 			       		
 			       		<div jsf:id="attachmentPanel">
@@ -380,8 +390,8 @@
 					      	<b>Attachments:</b>
 
 							<h6>
-								(Limit #{applicationProperties['Message.attachment.maxPerMessage']} attachments per message,
-								#{applicationProperties['Message.attachment.maxPerMessage'] - fn:length(privateMessages.uploadedFileManager.uploadedFileList)} left)
+								(Limit #{privateMessages.privateMessageOption.maxAttachment} attachments per message,
+								#{privateMessages.privateMessageOption.maxAttachment - fn:length(privateMessages.uploadedFileManager.uploadedFileList)} left)
 							</h6>
 
 							<div class="w3-row" style="padding:0">										
@@ -418,9 +428,9 @@
 							<p/>
 							
 							<p:fileUpload listener="#{privateMessages.uploadedFileManager.handleFileUpload}" mode="advanced" dragDropSupport="true"
-				        			update=":newMessageForm:attachmentPanel" auto="true" sizeLimit="#{applicationProperties['Message.attachment.maxFileSize'] * 1024}" 
+				        			update=":newMessageForm:attachmentPanel" auto="true" sizeLimit="#{privateMessages.privateMessageOption.maxByteAttachment}" 
 				        			allowTypes="/(\.|\/)(gif|GIF|jpe?g|JPE?G|png|PNG|zip|pdf|txt|ppt?x|xls?x|doc?x)$/" 
-				        			rendered="#{applicationProperties['Message.attachment.maxPerMessage'] gt fn:length(privateMessages.uploadedFileManager.uploadedFileList)}" label="#{msg['choose']}"/>
+				        			rendered="#{privateMessages.privateMessageOption.maxAttachment gt fn:length(privateMessages.uploadedFileManager.uploadedFileList)}" label="#{msg['choose']}"/>
 			          	          				       		
 			       		</div>
 			       		
@@ -472,7 +482,7 @@
 		    			</div>
 		    			
 		    			<div class="w3-section">
-		    				<h5 class="w3-opacity-min">#{privateMessages.selectedMessage.message.text}Subject: <b>#{privateMessages.selectedMessage.message.subject}</b></h5>
+		    				<h5 class="w3-opacity-min">Subject: <b>#{privateMessages.selectedMessage.message.subject}</b></h5>
 		    			</div>		    				
 	    				
 	    			</div>
