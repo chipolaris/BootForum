@@ -23,7 +23,11 @@
 		<style type="text/css">
 			input.error[type='text'] {
 			  border: 2px solid red;
-			}			
+			}
+			
+			.subText {
+				font-size: 80%;
+			}		
 		</style>
 
 		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
@@ -51,7 +55,10 @@
 									<p:outputLabel for="minCharTitle" value="#{msg['min.private.message.title']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="minCharTitle" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['min.private.message.title.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y']}">
+										<f:param value="1" />
+										<f:param value="255" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{managePrivateMessageOption.privateMessageOption.minCharTitle}" id="minCharTitle" size="9"
@@ -66,7 +73,10 @@
 									<p:outputLabel for="maxCharTitle" value="#{msg['max.private.message.title']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxCharTitle" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.private.message.title.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y.ge.min']}">
+										<f:param value="1" />
+										<f:param value="255" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{managePrivateMessageOption.privateMessageOption.maxCharTitle}" id="maxCharTitle"
@@ -82,7 +92,10 @@
 									<p:outputLabel for="minCharContent" value="#{msg['min.private.message.content']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="minCharContent" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['min.private.message.content.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y']}">
+										<f:param value="1" />
+										<f:param value="1000000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{managePrivateMessageOption.privateMessageOption.minCharContent}" id="minCharContent"
@@ -97,7 +110,10 @@
 									<p:outputLabel for="maxCharContent" value="#{msg['max.private.message.content']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxCharContent" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.private.message.content.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y.ge.min']}">
+										<f:param value="1" />
+										<f:param value="1000000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{managePrivateMessageOption.privateMessageOption.maxCharContent}" id="maxCharContent"
@@ -113,7 +129,9 @@
 									<p:outputLabel for="maxAttachment" value="#{msg['max.private.message.attachment']}s" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxAttachment" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.private.message.attachment.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="100" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{managePrivateMessageOption.privateMessageOption.maxAttachment}" id="maxAttachment"
@@ -128,7 +146,9 @@
 									<p:outputLabel for="maxByteAttachment" value="#{msg['max.private.message.attachment.byte']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxByteAttachment" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.private.message.attachment.byte.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="50000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{managePrivateMessageOption.privateMessageOption.maxByteAttachment}" id="maxByteAttachment"

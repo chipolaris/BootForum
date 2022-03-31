@@ -22,8 +22,12 @@
 
 		<style type="text/css">
 			input.error[type='text'] {
-			  border: 2px solid red;
-			}			
+				border: 2px solid red;
+			}
+			
+			.subText {
+				font-size: 80%;
+			}		
 		</style>
 
 		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
@@ -51,7 +55,10 @@
 									<p:outputLabel for="minCharDiscussionTitle" value="#{msg['min.discussion.title']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="minCharDiscussionTitle" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['min.discussion.title.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y']}">
+										<f:param value="1" />
+										<f:param value="255" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.minCharDiscussionTitle}" id="minCharDiscussionTitle" size="9"
@@ -66,7 +73,10 @@
 									<p:outputLabel for="maxCharDiscussionTitle" value="#{msg['max.discussion.title']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxCharDiscussionTitle" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.discussion.title.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y.ge.min']}">
+										<f:param value="1" />
+										<f:param value="255" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxCharDiscussionTitle}" id="maxCharDiscussionTitle"
@@ -82,7 +92,10 @@
 									<p:outputLabel for="minCharDiscussionContent" value="#{msg['min.discussion.content']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="minCharDiscussionContent" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['min.discussion.content.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y']}">
+										<f:param value="1" />
+										<f:param value="1000000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.minCharDiscussionContent}" id="minCharDiscussionContent"
@@ -97,7 +110,10 @@
 									<p:outputLabel for="maxCharDiscussionContent" value="#{msg['max.discussion.content']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxCharDiscussionContent" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.discussion.content.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y.ge.min']}">
+										<f:param value="1" />
+										<f:param value="1000000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxCharDiscussionContent}" id="maxCharDiscussionContent"
@@ -113,7 +129,9 @@
 									<p:outputLabel for="maxDiscussionThumbnail" value="#{msg['max.discussion.thumbnail']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxDiscussionThumbnail" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.discussion.thumbnail.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="100" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxDiscussionThumbnail}" id="maxDiscussionThumbnail"
@@ -128,7 +146,9 @@
 									<p:outputLabel for="maxDiscussionAttachment" value="#{msg['max.discussion.attachment']}s" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxDiscussionAttachment" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.discussion.attachment.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="100" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxDiscussionAttachment}" id="maxDiscussionAttachment"
@@ -143,7 +163,9 @@
 									<p:outputLabel for="maxByteDiscussionThumbnail" value="#{msg['max.discussion.thumbnail.byte']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxByteDiscussionThumbnail" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.discussion.thumbnail.byte.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="50000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxByteDiscussionThumbnail}" id="maxByteDiscussionThumbnail"
@@ -159,7 +181,9 @@
 									<p:outputLabel for="maxByteDiscussionAttachment" value="#{msg['max.discussion.attachment.byte']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxByteDiscussionAttachment" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.discussion.attachment.byte.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="50000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxByteDiscussionAttachment}" id="maxByteDiscussionAttachment"
@@ -180,7 +204,6 @@
 							
 						</div>
 						
-						
 						<!-- Comment column -->
 						
 						<div class="w3-half w3-container">
@@ -191,7 +214,10 @@
 									<p:outputLabel for="minCharCommentTitle" value="#{msg['min.comment.title']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="minCharCommentTitle" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['min.comment.title.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y']}">
+										<f:param value="1" />
+										<f:param value="255" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.minCharCommentTitle}" id="minCharCommentTitle"
@@ -204,10 +230,13 @@
 							<p/>
 							<div class="w3-row">
 								<div class="w3-threequarter">
-									<p:outputLabel for="maxCharCommentTitle" value="#{msg['max.comment.content']}" style="font-weight:600"/>
+									<p:outputLabel for="maxCharCommentTitle" value="#{msg['max.comment.title']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxCharCommentTitle" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.comment.content.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y.ge.min']}">
+										<f:param value="1" />
+										<f:param value="255" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxCharCommentTitle}" id="maxCharCommentTitle"
@@ -224,7 +253,10 @@
 									<p:outputLabel for="minCharCommentContent" value="#{msg['min.comment.content']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="minCharCommentContent" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['min.comment.content.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y']}">
+										<f:param value="1" />
+										<f:param value="1000000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.minCharCommentContent}" id="minCharCommentContent"
@@ -240,7 +272,10 @@
 									<p:outputLabel for="maxCharCommentContent" value="#{msg['max.comment.content']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxCharCommentContent" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.comment.content.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y.ge.min']}">
+										<f:param value="1" />
+										<f:param value="1000000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxCharCommentContent}" id="maxCharCommentContent"
@@ -256,7 +291,9 @@
 									<p:outputLabel for="maxCommentThumbnail" value="#{msg['max.comment.thumbnail']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxCommentThumbnail" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.comment.thumbnail.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="100" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxCommentThumbnail}" id="maxCommentThumbnail"
@@ -271,7 +308,9 @@
 									<p:outputLabel for="maxCommentAttachment" value="#{msg['max.comment.attachment']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxCommentAttachment" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.comment.attachment.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="100" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxCommentAttachment}" id="maxCommentAttachment"
@@ -286,7 +325,9 @@
 									<p:outputLabel for="maxByteCommentThumbnail" value="#{msg['max.comment.thumbnail.byte']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxByteCommentThumbnail" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.comment.thumbnail.byte.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="50000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxByteCommentThumbnail}" id="maxByteCommentThumbnail"
@@ -301,7 +342,9 @@
 									<p:outputLabel for="maxByteCommentAttachment" value="#{msg['max.comment.attachment.byte']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxByteCommentAttachment" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.comment.attachment.byte.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['x.or.less']}">
+										<f:param value="50000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageCommentOption.commentOption.maxByteCommentAttachment}" id="maxByteCommentAttachment"

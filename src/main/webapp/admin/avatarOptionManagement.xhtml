@@ -23,7 +23,11 @@
 		<style type="text/css">
 			input.error[type='text'] {
 			  border: 2px solid red;
-			}			
+			}
+			
+			.subText {
+				font-size: 80%;
+			}
 		</style>
 
 		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
@@ -51,7 +55,10 @@
 									<p:outputLabel for="maxFileSize" value="#{msg['max.avatar.byte']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxFileSize" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.avatar.byte.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y']}">
+										<f:param value="10000" />
+										<f:param value="10000000" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageAvatarOption.avatarOption.maxFileSize}" id="maxFileSize" size="9"
@@ -66,7 +73,10 @@
 									<p:outputLabel for="maxWidth" value="#{msg['max.avatar.width']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxWidth" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.avatar.width.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y']}">
+										<f:param value="100" />
+										<f:param value="800" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageAvatarOption.avatarOption.maxWidth}" id="maxWidth"
@@ -81,7 +91,10 @@
 									<p:outputLabel for="maxHeight" value="#{msg['max.avatar.height']}" style="font-weight:600"/>
 									<br/>
 									<h:message for="maxHeight" style="font-weight:600;color:red"/>
-									<h:outputText style="font-size:80%;" value="#{msg['max.avatar.height.sub']}"/>
+									<h:outputFormat styleClass="subText" value="#{msg['between.x.and.y']}">
+										<f:param value="100" />
+										<f:param value="800" />
+									</h:outputFormat>
 								</div>
 								<div class="w3-quarter">
 									<p:inputNumber value="#{manageAvatarOption.avatarOption.maxHeight}" id="maxHeight"
