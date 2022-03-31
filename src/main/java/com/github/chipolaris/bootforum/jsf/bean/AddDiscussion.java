@@ -67,6 +67,15 @@ public class AddDiscussion {
 		this.loadingErrorMessage = loadingErrorMessage;
 	}
 	
+	private CommentOption commentOption;
+	
+	public CommentOption getCommentOption() {
+		return commentOption;
+	}
+	public void setCommentOption(CommentOption commentOption) {
+		this.commentOption = commentOption;
+	}
+	
 	public Forum getForum() {
 		return forum;
 	}
@@ -93,7 +102,7 @@ public class AddDiscussion {
 		
 		this.forum = genericService.getEntity(Forum.class, this.forumId).getDataObject();
 		
-		CommentOption commentOption = systemConfigService.getCommentOption().getDataObject();
+		this.commentOption = systemConfigService.getCommentOption().getDataObject();
 
 		if (this.forum != null) {
 
@@ -171,5 +180,6 @@ public class AddDiscussion {
 		this.commentAttachmentManagement.cleanup();
 		this.commentThumbnailManagement.cleanup();
 	}
+
 }
 

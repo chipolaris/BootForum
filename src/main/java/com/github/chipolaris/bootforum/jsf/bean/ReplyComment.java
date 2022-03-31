@@ -63,16 +63,24 @@ public class ReplyComment {
 	public Long getDiscussionId() {
 		return discussionId;
 	}
+	public void setDiscussionId(Long discussionId) {
+		this.discussionId = discussionId;
+	}
 
 	private Long commentId;
 	public Long getCommentId() {
 		return commentId;
 	}
+	public void setCommentId(Long commentId) {
+		this.commentId = commentId;
+	}
 	
 	private Boolean quote;
-	
 	public Boolean getQuote() {
 		return quote;
+	}
+	public void setQuote(Boolean quote){
+		this.quote = quote;
 	}
 	
 	private String loadingErrorMessage;
