@@ -112,7 +112,7 @@
 		    <h:link outcome="/admin/index" styleClass="w3-bar-item w3-button w3-padding"><i title="#{msg['admin.dashboard']}"/> #{msg['admin.dashboard']}</h:link>
 		    
 		    <div class="w3-bar-item w3-button" onclick="$('#managementDiv').toggle(300);$('#managementCaret').toggleClass('down');">
-			  <span style="font-weight:800;">Management</span> <i class="pi pi-caret-down rotate" id="managementCaret"/>
+			  <span style="font-weight:800;">#{msg['management']}</span> <i class="pi pi-caret-down rotate" id="managementCaret"/>
 			</div>
 		    <div id="managementDiv">
 			    <h:link outcome="/admin/userList" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-users" title="#{msg['manage.users']}"/> #{msg['manage.users']}</h:link>
@@ -126,7 +126,7 @@
 			</div>
 			
 			<div class="w3-bar-item w3-button" onclick="$('#configurationDiv').toggle(300);$('#configurationCaret').toggleClass('down')">
-			  <span style="font-weight:800;">Configuration</span> <i class="pi pi-caret-down rotate" id="configurationCaret"/>
+			  <span style="font-weight:800;">#{msg['configuration']}</span> <i class="pi pi-caret-down rotate" id="configurationCaret"/>
 			</div>
 			<div id="configurationDiv">
 			  <h:link outcome="/admin/commentOptionManagement" styleClass="w3-bar-item w3-button w3-padding"><i class="pi pi-comment" title="#{msg['comment']}"/> #{msg['comment']}</h:link>
