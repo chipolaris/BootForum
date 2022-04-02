@@ -13,6 +13,8 @@
 	<!-- set request parameter values from URL to backing bean -->
 	<f:metadata>
 		<f:viewParam name="id" value="#{replyComment.commentId}"/>
+		<f:viewParam name="quoteText" value="#{replyComment.quoteText}"/>
+		<f:viewParam name="quoteCommentor" value="#{replyComment.quoteCommentor}"/>
 		<f:viewParam name="quote" value="#{replyComment.quote}"/>
 		<f:viewParam name="discussionId" value="#{replyComment.discussionId}"/>
 		<f:viewAction action="#{replyComment.onLoad}"/>

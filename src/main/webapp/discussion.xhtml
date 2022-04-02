@@ -29,13 +29,19 @@
 				font-family: Georgia, serif;
 				font-size: 10pt;
 				font-style: italic;
-				/*width: 90%;*/
 				margin: 0.25em 0;
 				padding: 0.25em 40px;
 				line-height: 1.45;
 				position: relative;
 				color: #383838;
 				background:#ececec;
+				border-radius: 3px;
+				
+				/* disable text select for blockquote */
+				-moz-user-select: none;
+  				-khtml-user-select: none;
+  				-webkit-user-select: none;
+  				user-select: none;
 			}
 			
 			blockquote:before {
@@ -84,20 +90,18 @@
 				padding: 0.5rem;
 			}
 
-			.popup-tag{
+			.popupQuote {
 				position:absolute;
+				z-index:1000; /* make sure this will always be on top, not behind other elements */
 				display:none;
-				background-color:#785448d4;
-				border-radius: 5px;
+				border-radius: 3px;
 				color:white;
-				padding:10px;
-				font-size:20px;
-				font-weight:bold;
-				text-decoration:underline;
+				padding:8px;
+				font-size:1.2rem;
+				font-weight:bold;				
 				cursor:pointer;
 				-webkit-filter: drop-shadow(0 1px 10px rgba(113,158,206,0.8));
 			}
-			
 		</style>
 		
 		<script>
@@ -112,21 +116,45 @@
 					}
 					return false;
 			}
-			/* create sniffer */
-			$(document).ready(function() {
-				$('.commentText').mouseup(function(event) {
-					var selection = getSelected();
-			        selection = $.trim(selection);
-			        if(selection != ''){
-				        $("span.popup-tag").css("display","block");
-				        $("span.popup-tag").css("top",event.pageY);
-				        $("span.popup-tag").css("left",event.pageX);
-				        $("span.popup-tag").text('Quote');
+			
+			/* listener function to text selected action by user */
+			var selectTextListener = function() {
+				
+				$('div.commentText').mouseup(function(event) {
+					quoteText = getSelected();
+					quoteText = $.trim(quoteText);
+			        if(quoteText.length > 0 && quoteText.length <= 300){
+				        $("span.popupQuote").css("display","block");
+				        $("span.popupQuote").css("top",event.pageY);
+				        $("span.popupQuote").css("left",event.pageX);
+				        
+				        /* 
+				        store commentid and commentor data before user click the 'Quote' button
+				        note: dataset.<attribute> must be all lowercase 
+				        */ 
+				        commentId = this.dataset.commentid;
+				        commentor = this.dataset.commentor;
 			        }
 			        else{
-			        	$("span.popup-tag").css("display","none");
+			        	$("span.popupQuote").css("display","none");
 			        }
 				});
+			}
+			
+			var commentId = '';
+			var commentor = '';
+			var quoteText = '';
+			
+			function quoteSelectedText() {
+				
+				var url = "./secure/replyComment.xhtml?id=" + commentId + "&quoteCommentor=" 
+						+ commentor + "&quoteText=" + encodeURIComponent(quoteText);
+				
+				window.location.href = url;
+			}
+			
+			$(document).ready(function() {
+				selectTextListener();
 			});	
 			
 			//]]>
@@ -171,12 +199,15 @@
  				<div class="w3-row">
 				
 					<div class="w3-col l9 m12 s12 w3-container">
-						<span class="popup-tag"></span>
+						
+						<!-- popup quote span when user highlight comment Text -->
+						<span class="popupQuote w3-theme-dark" onclick="quoteSelectedText();"><i class="pi pi-code"/> #{msg['quote']}</span>
+					
 						<h:form>
 						
 							<p:dataView var="comment" value="#{viewDiscussion.commentListLazyModel}" rows="15" paginator="true" lazy="true" rowIndexVar="rowIndex" styleClass="headerless">
 		                    
-		                    	<p:ajax event="page" oncomplete="changeAvatarBackgrounds();window.scrollTo(0,0);"/>
+		                    	<p:ajax event="page" oncomplete="changeAvatarBackgrounds();window.scrollTo(0,0);selectTextListener();"/>
 						                            	
 		                    	<p:dataViewListItem>
 		
@@ -267,7 +298,7 @@
 								        		
 								        		<p/>
 								        		
-								        		<a onclick="$('#replyTo_#{rowIndex}_Div').hide();" style="cursor:pointer;font-size: large;">
+								        		<a onclick="$('#replyTo_#{rowIndex}_Div').toggle(300);" style="cursor:pointer;font-size: large;">
 								        			[ <i class="pi pi-caret-up" title="Collapse"/> #{msg['collapse']} ]
 								        		</a>
 								        		
@@ -291,9 +322,8 @@
 								        
 								        	<div jsf:id="commentIsShownDiv" jsf:rendered="#{not comment.hidden}" >
 								        	
-									        	<div class="w3-panel w3-round-large w3-padding w3-theme-l5">
-									        		
-									        		<h:outputText value="#{comment.content}" escape="false" styleClass="commentText"/>
+									        	<div class="w3-panel w3-round-large w3-padding w3-theme-l5 commentText" data-commentor="#{comment.createBy}" data-commentid="#{comment.id}">
+									        		<h:outputText value="#{comment.content}" escape="false"/>
 												</div>
 												
 												<p/>

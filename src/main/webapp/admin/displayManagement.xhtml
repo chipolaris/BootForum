@@ -22,7 +22,11 @@
 	<ui:define name="content">
 
 		<style type="text/css">
-			
+
+			.formFieldLabel {
+				font-weight: 700;
+			}		
+		
 		</style>
 		
 		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
@@ -37,7 +41,7 @@
 			
 			<h:form styleClass="w3-margin-top">
 			
-				<div class="w3-container w3-xlarge w3-border-bottom">
+				<div class="w3-container w3-large w3-border-bottom">
 					#{msg['set.default.application.themes']}
 				</div>
 				
@@ -52,7 +56,7 @@
 						</p>
 					
 						<p>
-							<b>#{msg['select.a.new.color.theme']}:</b>
+							<p:outputLabel value="#{msg['select.a.new.color.theme']}" styleClass="formFieldLabel"/>
 						</p>
 						
 						<p>
@@ -94,7 +98,7 @@
 						</p>
 				
 						<p>
-							<b>#{msg['select.a.new.component.theme']} :</b>
+							<p:outputLabel value="#{msg['select.a.new.component.theme']}" styleClass="formFieldLabel"/>
 						</p>
 					
 						<p>
@@ -140,7 +144,7 @@
 				
 				<p/>
 
-				<div class="w3-container w3-xlarge w3-border-bottom">
+				<div class="w3-container w3-large w3-border-bottom">
 					#{msg['discussions.display.on.home.page']}
 				</div>
 				
@@ -148,35 +152,56 @@
 				
 				<div class="w3-row-padding">
 				
-					<div class="w3-half container">
-						<h6><b>#{msg['show.most.views.discussions']}</b></h6>
-						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostViewsDiscussions}" styleClass="w3-check"/>
+					<div class="w3-quarter container">
+						<p:outputLabel for="showMostViewsDiscussionsCheckBox" value="#{msg['show.most.views.discussions']}" styleClass="formFieldLabel"/>
 					</div>
 					
-					<div class="w3-half container">
-						<h6><b>#{msg['number.of.most.views.discussions']}</b></h6>
-						<h:inputText value="#{manageDisplay.displayOption.numMostViewsDiscussions}" styleClass="w3-input w3-border"/>	
-					</div>
-
-					<div class="w3-half container">
-						<h6><b>#{msg['show.most.comments.discussions']}</b></h6>
-						<!-- <p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{manageDisplay.displayOption.showMostViewsDiscussions}"/> -->
-						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostCommentsDiscussions}" styleClass="w3-check"/>
+					<div class="w3-quarter container">
+						<p:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostViewsDiscussions}" id="showMostViewsDiscussionsCheckBox"/>
 					</div>
 					
-					<div class="w3-half container">
-						<h6><b>#{msg['number.of.most.comments.discussions']}</b></h6>
-						<h:inputText value="#{manageDisplay.displayOption.numMostCommentsDiscussions}" styleClass="w3-input w3-border"/>	
+					<div class="w3-quarter container">
+						<p:outputLabel for="numMostViewsDiscussionsInput" value="#{msg['number.of.most.views.discussions']}" styleClass="formFieldLabel"/>
+					</div>
+					<div class="w3-quarter container">
+						<p:inputNumber value="#{manageDisplay.displayOption.numMostViewsDiscussions}" id="numMostViewsDiscussionsInput"/>
+					</div>
+				</div>
+				<p/>
+				<div class="w3-row-padding">
+					
+					<div class="w3-quarter container">
+						<p:outputLabel for="showMostCommentDiscussionsCheckBox" value="#{msg['show.most.comments.discussions']}" styleClass="formFieldLabel"/>
 					</div>
 					
-					<div class="w3-half container">
-						<h6><b>#{msg['show.most.recent.discussions']}</b></h6>
-						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostRecentDiscussions}" styleClass="w3-check"/>
+					<div class="w3-quarter container">
+						<p:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostCommentsDiscussions}" id="showMostCommentDiscussionsCheckBox"/>
 					</div>
 					
-					<div class="w3-half container">
-						<h6><b>#{msg['number.of.most.recent.discussions']}</b></h6>
-						<h:inputText value="#{manageDisplay.displayOption.numMostRecentDiscussions}" styleClass="w3-input w3-border"/>	
+					<div class="w3-quarter container">
+						<p:outputLabel for="numMostCommentDiscussionsInput" value="#{msg['number.of.most.comments.discussions']}" styleClass="formFieldLabel"/>	
+					</div>
+				
+					<div class="w3-quarter container">
+						<p:inputNumber value="#{manageDisplay.displayOption.numMostCommentsDiscussions}" id="numMostCommentDiscussionsInput"/>	
+					</div>
+				</div>
+				<p/>
+				<div class="w3-row-padding">	
+					<div class="w3-quarter container">
+						<p:outputLabel for="showMostRecentDiscussionsCheckBox" value="#{msg['show.most.recent.discussions']}" styleClass="formFieldLabel"/>
+					</div>
+					
+					<div class="w3-quarter container">
+						<p:selectBooleanCheckbox value="#{manageDisplay.displayOption.showMostRecentDiscussions}" id="showMostRecentDiscussionsCheckBox"/>
+					</div>
+					
+					<div class="w3-quarter container">
+						<p:outputLabel for="numMostRecentDiscussionsInput" value="#{msg['number.of.most.recent.discussions']}" styleClass="formFieldLabel"/>	
+					</div>
+					
+					<div class="w3-quarter container">
+						<p:inputNumber value="#{manageDisplay.displayOption.numMostRecentDiscussions}" id="numMostRecentDiscussionsInput"/>	
 					</div>
 					
 				</div>
@@ -193,7 +218,7 @@
 			
 			<h:form styleClass="w3-padding-top w3-padding-bottom">
 				
-				<div class="w3-container w3-xlarge w3-border-bottom">
+				<div class="w3-container w3-large w3-border-bottom">
 					#{msg['tags.display.on.home.page']}
 				</div>
 				
@@ -201,14 +226,18 @@
 				
 				<div class="w3-row-padding">
 
-					<div class="w3-col w3-half w3-container">
-						<h6><b>#{msg['show.discussions.per.tags']}</b></h6>
-						<h:selectBooleanCheckbox value="#{manageDisplay.displayOption.showDiscussionsForTag}" styleClass="w3-check"/>
+					<div class="w3-quarter container">
+						<p:outputLabel for="showDiscussionsForTagCheckBox" value="#{msg['show.discussions.per.tags']}" styleClass="formFieldLabel"/>	
+					</div>
+					<div class="w3-quarter container">
+						<p:selectBooleanCheckbox value="#{manageDisplay.displayOption.showDiscussionsForTag}" id="showDiscussionsForTagCheckBox"/>
 					</div>
 					
-					<div class="w3-col w3-half w3-container">
-						<h6><b>#{msg['number.of.discussions.per.tag']}</b></h6>
-						<h:inputText value="#{manageDisplay.displayOption.numDiscussionsPerTag}" styleClass="w3-input w3-border"/>
+					<div class="w3-quarter container">
+						<p:outputLabel for="numDiscussionsPerTagInput" value="#{msg['number.of.discussions.per.tag']}" styleClass="formFieldLabel"/>
+					</div>
+					<div class="w3-quarter container">
+						<p:inputNumber value="#{manageDisplay.displayOption.numDiscussionsPerTag}" id="numDiscussionsPerTagInput"/>
 					</div>
 					
 					<div class="w3-col w3-rest container"> <!-- note: use w3-rest for full-width column -->

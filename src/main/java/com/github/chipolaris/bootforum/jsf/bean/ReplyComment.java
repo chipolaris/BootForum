@@ -75,6 +75,22 @@ public class ReplyComment {
 		this.commentId = commentId;
 	}
 	
+	private String quoteText;
+	public String getQuoteText() {
+		return this.quoteText;
+	}
+	public void setQuoteText(String quoteText) {
+		this.quoteText = quoteText;
+	}
+	
+	private String quoteCommentor;
+	public String getQuoteCommentor() {
+		return this.quoteCommentor;
+	}
+	public void setQuoteCommentor(String quoteCommentor) {
+		this.quoteCommentor = quoteCommentor;
+	}
+	
 	private Boolean quote;
 	public Boolean getQuote() {
 		return quote;
@@ -98,12 +114,12 @@ public class ReplyComment {
 	 */
 	public void onLoad() {
 		
-		if(commentId != null) { // reply to a comment
-		
+		if(commentId != null) { // reply to a comment				
+				
 			this.comment = genericService.findEntity(Comment.class, commentId).getDataObject();
 			
 			if(this.comment != null) {
-			
+				
 				if(comment.getDiscussion().isClosed()) {
 					this.loadingErrorMessage = JSFUtils.getMessageResource("discussion.is.closed");
 					return;
@@ -117,7 +133,13 @@ public class ReplyComment {
 					if(!StringUtils.startsWith(comment.getTitle(), "Re: ")) {
 						reply.setTitle("Re: " + comment.getTitle());
 					}
-					reply.setContent(String.format("<blockquote>%s:%s</blockquote><br/>", comment.getCreateBy(), comment.getContent()));
+					reply.setContent(String.format("<blockquote><b>%s:</b> %s</blockquote><br/>", comment.getCreateBy(), comment.getContent()));
+				}
+				else if(this.quoteText != null && !this.quoteText.isBlank() 
+						&& this.quoteCommentor != null && !this.quoteCommentor.isBlank()) {
+					
+					reply.setContent(String.format("<blockquote><b>%s:</b> %s</blockquote><br/>", 
+							this.quoteCommentor, this.quoteText));
 				}
 				
 				this.commentOption = systemConfigService.getCommentOption().getDataObject();
