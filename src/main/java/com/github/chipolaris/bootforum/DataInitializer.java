@@ -303,6 +303,8 @@ public class DataInitializer implements ApplicationRunner {
 			displayOption.setThemeColor("w3-theme-light-blue");
 			displayOption.setThemeComponent("saga");
 			
+			displayOption.setHomePageBannerContent(HOMEPAGE_BANNER_CONTENT);
+			
 			displayOption.setShowMostCommentsDiscussions(true);
 			displayOption.setNumMostCommentsDiscussions(5);
 			
@@ -320,6 +322,9 @@ public class DataInitializer implements ApplicationRunner {
 		
 		applicationEventPublisher.publishEvent(new DisplayOptionLoadEvent(this, displayOption));
 	}
+	
+	private static final String HOMEPAGE_BANNER_CONTENT = "<div class=\"w3-theme-dark w3-opacity-min w3-center\" "
+			+ "style=\"margin: 0 -16px;padding:16px;\"><h3>Welcome to BootForum</h3></div>";
 	
 	private void createRemoteIPFilterOption() {
 		

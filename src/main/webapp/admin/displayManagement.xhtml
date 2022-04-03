@@ -25,7 +25,13 @@
 
 			.formFieldLabel {
 				font-weight: 700;
-			}		
+			}
+			
+			.boxSizingBorder {
+			    -webkit-box-sizing: border-box;
+			       -moz-box-sizing: border-box;
+			            box-sizing: border-box;
+			}	
 		
 		</style>
 		
@@ -133,12 +139,31 @@
 				</div>
 				
 				<div class="w3-container w3-padding">
-					<p:commandButton value=" #{msg['save']}" icon="pi pi-save" ajax="true" action="#{manageDisplay.edit}"/>
+					<p:commandButton value=" #{msg['save']}" icon="pi pi-save" ajax="true" action="#{manageDisplay.update}"/>
 				</div>
 			
 			</h:form>
 			
-			<p/>	
+			<p/>
+			
+			<h:form>
+
+				<div class="w3-container w3-large w3-border-bottom">
+					#{msg['homepage.banner.content']}
+				</div>			
+			
+				<div class="w3-row w3-margin-top w3-padding">
+					<p:inputTextarea id="homePageBannerContent" value="#{manageDisplay.displayOption.homePageBannerContent}" 
+						styleClass="boxSizingBorder" style="width:100%" rows="12"/>
+					<h:message id="contentError" for="homePageBannerContent" styleClass="w3-pale-red"/>				
+				</div>
+				
+				<div class="w3-container w3-padding">
+					<p:commandButton value=" #{msg['save']}" icon="pi pi-save" ajax="true" action="#{manageDisplay.update}"/>
+				</div>
+			</h:form>	
+			
+			<p/>
 			
 			<h:form>
 				
@@ -209,7 +234,7 @@
 				<p/>
 				
 				<div class="w3-container w3-padding">
-					<p:commandButton value=" #{msg['save']}" ajax="true" action="#{manageDisplay.edit}" icon="pi pi-save"/>
+					<p:commandButton value=" #{msg['save']}" ajax="true" action="#{manageDisplay.update}" icon="pi pi-save"/>
 				</div>
 				
 			</h:form>
@@ -267,7 +292,7 @@
 				<p/>
 				
 				<div class="w3-container w3-padding">
-					<p:commandButton value=" #{msg['save']}" ajax="true" action="#{manageDisplay.editDisplayTags}" icon="pi pi-save"/>
+					<p:commandButton value=" #{msg['save']}" ajax="true" action="#{manageDisplay.updateDisplayTags}" icon="pi pi-save"/>
 				</div>
 				
 			</h:form>

@@ -2,6 +2,7 @@ package com.github.chipolaris.bootforum.domain;
 
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -25,6 +27,10 @@ public class DisplayOption extends BaseEntity {
 	
 	@Column(name="THEME_COMPONENT")
 	private String themeComponent;
+	
+	@Lob @Basic(fetch=FetchType.LAZY) 
+	@Column(name="HOMEPAGE_BANNER_CONTENT")
+	private String homePageBannerContent; // HTML content for homepage's welcome area
 	
 	@Column(name = "SHOW_MOST_VIEWS_DIS")
 	private boolean showMostViewsDiscussions;
@@ -77,6 +83,13 @@ public class DisplayOption extends BaseEntity {
 	}
 	public void setThemeComponent(String themeComponent) {
 		this.themeComponent = themeComponent;
+	}
+	
+	public String getHomePageBannerContent() {
+		return homePageBannerContent;
+	}
+	public void setHomePageBannerContent(String homePageBannerContent) {
+		this.homePageBannerContent = homePageBannerContent;
 	}
 	
 	public boolean isShowMostViewsDiscussions() {

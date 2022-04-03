@@ -67,7 +67,7 @@ public class ManageDisplay {
 		this.tagDualList = new DualListModel<>(allTags, currentDisplayTags);
 	}
 
-	public void edit() {
+	public void update() {
 		
 		logger.info("Updating display options ");
 		

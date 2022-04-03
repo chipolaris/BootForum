@@ -22,21 +22,11 @@
 	
 		<div class="w3-panel w3-card-4" style="background-color: #f8f8f8">
 			
-			<div class="w3-theme-dark w3-opacity-min w3-center" style="margin: 0 -16px;padding:48px 16px;">
- 				<h3>#{msg['welcome.to.forum']}</h3>
- 				
- 				<h3>Custom content</h3>
- 			</div>
+			<h:outputText value="#{homePage.displayOption.homePageBannerContent}" escape="false" id="banner"/>
+								
+			<div class="w3-row w3-margin-top">
 			
-			<div class="w3-large w3-margin-top">
-				<p>
-					<!-- welcome text -->
-				</p>
-			</div>
-
-			<div class="w3-row">
-			
-				<div class="w3-col l9 m12 s12 w3-container">
+				<div class="w3-col l9 m12 s12 w3-container w3-margin-bottom">
 					<div class="w3-container w3-card w3-white w3-padding" jsf:rendered="#{not empty homePage.mostRecentDiscussions}">
 						<div class="w3-large w3-text-theme w3-margin-top">
 							<b><i class="pi pi-clock w3-large"/> #{msg['most.recent.discussions']}</b>
@@ -172,8 +162,6 @@
 							<p/>
 						</div>
 					</p:repeat>
-					
-					<hr/>
 						
 				</div> <!-- end div class=w3-col l9 m12 s12 -->
 				
