@@ -13,7 +13,7 @@
 **Note**: if no database is available, the embedded H2 database is included in BootForum  
 
 ## Download
-Latest [war file](https://github.com/chipolaris/BootForum/releases/download/v.0.04/BootForum-0.0.4-SNAPSHOT.war). Rename to **BootForum.war** if desired<br>
+Latest [war file](https://github.com/chipolaris/BootForum/releases/download/v.0.05/BootForum-0.0.5-SNAPSHOT.war). Rename to **BootForum.war** if desired<br>
 
 ## Running BootForum
 1. Create an **application.properties** file for database connection configurations. Use one of the following templates for your respective database type
