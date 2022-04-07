@@ -125,12 +125,10 @@
  				}
 			//]]>
 		</script>
-						
-		<div>
-			<p:messages id="messages" showDetail="true" showSummary="false" closable="true">
-				<p:autoUpdate/>
-			</p:messages>
-		</div>
+
+		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
+			<p:autoUpdate/>
+		</p:growl>
 
 		<div id="viewMessagesDiv">
 			
@@ -157,6 +155,7 @@
 						rows="10" lazy="true" id="receivedPrivateMessageTable" draggableColumns="true">
 						
 						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						<p:ajax event="sort" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 						
 						<p:column sortBy="#{privateMessage.message.fromUser}" style="text-align:left;" responsivePriority="2">
 							<f:facet name="header">
@@ -209,6 +208,7 @@
 						rows="10" lazy="true" id="sentPrivateMessageTable" draggableColumns="true">
 						
 						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						<p:ajax event="sort" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 						
 						<p:column style="text-align:left;" responsivePriority="2">
 							<f:facet name="header">
@@ -261,6 +261,7 @@
 						rows="10" lazy="true" id="deletedPrivateMessageTable" draggableColumns="true">
 						
 						<p:ajax event="page" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
+						<p:ajax event="sort" oncomplete="customizeDatatableStyle();changeAvatarBackgrounds();"/>
 						
 						<p:column sortBy="#{privateMessage.message.fromUser}" style="text-align:left;" responsivePriority="2">
 							<f:facet name="header">
@@ -348,6 +349,10 @@
 						                <h:outputText value="#{toUser}" />
 						            </p:column>
 						        </p:autoComplete>
+						        
+						        <h:message for="toUsers" id="toUsersError" infoClass="w3-text-green" errorClass="w3-text-red">
+				       				<p:autoUpdate/>
+				     			</h:message>
 					        </div>       			
 			       			
 						</div>
@@ -362,7 +367,7 @@
 					       		<f:validateLength minimum="#{privateMessages.privateMessageOption.minCharTitle}" maximum="#{privateMessages.privateMessageOption.maxCharTitle}"/>
 					       	</p:inputText>
 				       		
-				       		<h:message for="subject" id="subjectError" style="color:red;">
+				       		<h:message for="subject" id="subjectError" infoClass="w3-text-green" errorClass="w3-text-red">
 				       			<p:autoUpdate/>
 				     		</h:message>				       		
 						</div>
@@ -380,7 +385,7 @@
 								<!-- <f:validateBean validationGroups="com.box4j.dforum.domain.validation.WebInputCheck"/> -->
 								<f:validateLength minimum="#{privateMessages.privateMessageOption.minCharContent}" maximum="#{privateMessages.privateMessageOption.maxCharContent}"/>
 							</pe:ckEditor>
-							<h:message for="messageContent" id="messageContentError" style="color:red;">
+							<h:message for="messageContent" id="messageContentError" infoClass="w3-text-green" errorClass="w3-text-red">
 				       			<p:autoUpdate/>
 				     		</h:message>
 			       		</div>
@@ -435,8 +440,10 @@
 			       		</div>
 			       		
 			       		<p>
+			       			<!-- submit message to send and switch to sentTab if there is no validation error -->
 				       		<p:commandButton id="createMessageButton" ajax="true" action="#{privateMessages.createMessage}"
-		            			update=":sentPrivateMessageTable" value=" Send" icon="pi pi-send"/>         
+		            			update=":sentPrivateMessageTable" value=" Send" icon="pi pi-send" 
+		            			oncomplete="if (args &amp;&amp; !args.validationFailed) {switchTab($('#sentButton'));showSentTab();}"/>         
 				       	</p>
 			    
 			    	</h:form>

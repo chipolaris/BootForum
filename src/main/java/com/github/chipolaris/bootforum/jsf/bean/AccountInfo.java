@@ -61,15 +61,16 @@ public class AccountInfo {
 	}
 	
 	public void updatePassword() {
+		
 		ServiceResponse<Void> response =
 			userService.updatePassword(currentPassword, newPassword, user);
 		
 		if(response.getAckCode() != AckCodeType.SUCCESS) {
-			JSFUtils.addServiceErrorMessage("accountMessages", response);
-			return;
+			JSFUtils.addServiceErrorMessage(null, response);
 		}
-		
-		JSFUtils.addInfoStringMessage(null, "Password updated!");
+		else {
+			JSFUtils.addInfoStringMessage(null, "Password updated!");
+		}
 	}
 	
 	private String currentPassword;

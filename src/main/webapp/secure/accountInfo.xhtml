@@ -36,7 +36,7 @@
 			//]]>	
 		</script>
 			
-		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="3000">
+		<p:growl id="growl" showDetail="true" sticky="false" globalOnly="true" life="5000">
 			<p:autoUpdate/>
 		</p:growl>
 						
@@ -202,7 +202,7 @@
 					</div>
 				</f:facet>
 							
-				<h:form>
+				<h:form id="passwordForm">
 											
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s2 m4 l2">
@@ -246,9 +246,8 @@
 					
 					<div class="w3-row-padding w3-section">
 						<div class="w3-col s12 m4 l2">
-							<p:commandButton ajax="true" value="#{msg['save']}" icon="pi pi-save" action="#{accountInfo.updatePassword}"/>
+							<p:commandButton ajax="true" value="#{msg['update']}" icon="pi pi-save" action="#{accountInfo.updatePassword}" id="updatePasswordButton"/>
 						</div>
-						
 					</div>
 					
 				</h:form>			
