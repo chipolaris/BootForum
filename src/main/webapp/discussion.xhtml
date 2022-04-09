@@ -193,6 +193,7 @@
         			</p:inplace>
  					
  					<h3 jsf:rendered="#{userSession.user.username ne viewDiscussion.discussion.createBy}">#{viewDiscussion.discussion.title}</h3>
+ 					<h5 jsf:rendered="#{viewDiscussion.discussion.closed}">#{msg['discussion.is.closed']}</h5>
 			    	
  				</div>
  				 				
@@ -393,10 +394,11 @@
 								        	
 								        	<p:commandButton action="#{voteManager.voteDown(comment)}" process="@this" icon="pi pi-thumbs-down w3-large" value="#{comment.commentVote.voteDownCount}"
 								        		styleClass="rounded-button ui-button-raised ui-button-flat ui-button-warning w3-right" id="voteDownButton"
-								        		title="#{msg['dislike']}" update="growl @this voteScoreMobile" style="margin-left:5px;"/>
+								        		rendered="#{not viewDiscussion.discussion.closed}" title="#{msg['dislike']}" update="growl @this voteScoreMobile" style="margin-left:5px;"/>
 								        	
 								        	<p:commandButton action="#{voteManager.voteUp(comment)}" process="@this" icon="pi pi-thumbs-up w3-large" value="#{comment.commentVote.voteUpCount}" id="voteUpButton"
-								        		styleClass="rounded-button ui-button-raised ui-button-flat ui-button-success w3-right" title="#{msg['like']}" update="growl @this voteScoreMobile"/>
+								        		styleClass="rounded-button ui-button-raised ui-button-flat ui-button-success w3-right" title="#{msg['like']}" update="growl @this voteScoreMobile"
+								        		rendered="#{not viewDiscussion.discussion.closed}"/>
 								        		
 									    </div>
 			
@@ -425,12 +427,13 @@
 								        	
 								        	<p:commandButton action="#{voteManager.voteDown(comment)}" process="@this" icon="pi pi-thumbs-down w3-large" 
 								        		styleClass="rounded-button ui-button-raised ui-button-flat ui-button-warning w3-right"
-								        		title="#{msg['dislike']}" update="growl voteScoreMobile voteDownButton"/>
+								        		title="#{msg['dislike']}" rendered="#{not viewDiscussion.discussion.closed}" update="growl voteScoreMobile voteDownButton"/>
 								        	
 								        	<p:badge value="#{comment.commentVote.voteUpCount}" id="voteScoreMobile" styleClass="w3-right" size="large" style="margin:0px 5px;"/>
 								        	
 								        	<p:commandButton action="#{voteManager.voteUp(comment)}" process="@this" icon="pi pi-thumbs-up w3-large" 
-								        		styleClass="rounded-button ui-button-raised ui-button-flat ui-button-success w3-right" title="#{msg['like']}" update="growl voteScoreMobile voteUpButton"/>				        			
+								        		styleClass="rounded-button ui-button-raised ui-button-flat ui-button-success w3-right" title="#{msg['like']}" 
+								        		rendered="#{not viewDiscussion.discussion.closed}" update="growl voteScoreMobile voteUpButton"/>				        			
 							        			
 									    </div>
 							        					        					        

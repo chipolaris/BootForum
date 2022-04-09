@@ -82,7 +82,10 @@ public class ManageDisplay {
     	}
 	}
 	
-	public void editDisplayTags() {
+	/**
+	 * get invoked to update the order of display tags on home page
+	 */
+	public void updateDisplayTags() {
 		logger.info("Updating display tags");
 		
 		this.displayOption.setDisplayTags(tagDualList.getTarget());

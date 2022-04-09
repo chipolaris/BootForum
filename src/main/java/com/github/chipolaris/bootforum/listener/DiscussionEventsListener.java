@@ -25,7 +25,6 @@ import com.github.chipolaris.bootforum.event.DiscussionDeleteEvent;
 import com.github.chipolaris.bootforum.event.DiscussionMovedEvent;
 import com.github.chipolaris.bootforum.event.DiscussionUpdateEvent;
 import com.github.chipolaris.bootforum.event.DiscussionViewEvent;
-import com.github.chipolaris.bootforum.jsf.bean.ForumMap;
 import com.github.chipolaris.bootforum.service.IndexService;
 import com.github.chipolaris.bootforum.service.StatService;
 import com.github.chipolaris.bootforum.service.SystemInfoService;
@@ -49,9 +48,6 @@ public class DiscussionEventsListener {
 	
 	@Resource 
 	private CacheManager cacheManager;
-	
-	@Resource
-	private ForumMap forumMap;
 	
 	@Resource
 	private IndexService indexService;
@@ -121,7 +117,16 @@ public class DiscussionEventsListener {
 	public void handleDiscussionMovedEvent(DiscussionMovedEvent event) {
 		logger.info("Handling DiscussionMovedEvent");
 		
-		updateStats4DiscussionMoved(event.getDiscussion(), event.getFromForum(), event.getToForum());
+		Forum fromForum = event.getFromForum();
+		Forum toForum = event.getToForum();
+		
+		statService.synchForumStat(fromForum);
+		// evict cache's entry with key fromForumStat.id
+		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(fromForum.getStat().getId());
+		
+		statService.synchForumStat(toForum);		
+		// evict cache's entry with key toForumStat.id
+		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(toForum.getStat().getId());
 	}
 	
 	private void updateStats4NewDiscussion(Discussion discussion, User user) {
@@ -189,19 +194,5 @@ public class DiscussionEventsListener {
 		statistics.addCommentCount(-deletedCommentCount);
 		statistics.addDiscussionCount(-1);
 		statistics.setLastComment(statDAO.latestCommentInfo());
-	}	
-	
-	private void updateStats4DiscussionMoved(Discussion discussion, Forum fromForum, Forum toForum) {
-		
-		statService.synchForumStat(fromForum);
-		// evict cache's entry with key fromForumStat.id
-		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(fromForum.getStat().getId());
-		
-		statService.synchForumStat(toForum);		
-		// evict cache's entry with key toForumStat.id
-		cacheManager.getCache(CachingConfig.FORUM_STAT).evict(toForum.getStat().getId());
-		
-		// reset forumMap.initialized flag so it will be re-initialize when called on next time
-		forumMap.setInitialized(false);  
 	}
 }

@@ -33,6 +33,7 @@ import com.github.chipolaris.bootforum.domain.User;
 import com.github.chipolaris.bootforum.domain.UserStat;
 import com.github.chipolaris.bootforum.enumeration.AccountStatus;
 import com.github.chipolaris.bootforum.enumeration.UserRole;
+import com.github.chipolaris.bootforum.event.ApplicationDataInitializedEvent;
 import com.github.chipolaris.bootforum.event.AvatarOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.CommentOptionLoadEvent;
 import com.github.chipolaris.bootforum.event.DiscussionUpdateEvent;
@@ -47,7 +48,6 @@ import com.github.chipolaris.bootforum.service.ForumService;
 import com.github.chipolaris.bootforum.service.GenericService;
 import com.github.chipolaris.bootforum.service.ServiceResponse;
 import com.github.chipolaris.bootforum.service.StatService;
-import com.github.chipolaris.bootforum.service.SystemInfoService;
 import com.github.chipolaris.bootforum.service.UserService;
 
 @Component
@@ -70,9 +70,6 @@ public class DataInitializer implements ApplicationRunner {
 	@Resource
 	private DiscussionService discussionService;
 	
-	@Resource
-	private SystemInfoService systemInfoService;
-	
 	@Value("${Application.name}")
 	private String applicationName;
 	
@@ -93,7 +90,7 @@ public class DataInitializer implements ApplicationRunner {
 		createPrivateMessageOption();
 		createAvatarOption();
 		
-		systemInfoService.refreshStatistics();
+		applicationEventPublisher.publishEvent(new ApplicationDataInitializedEvent(this));
 	}
 
 	private void createAdminUser() {

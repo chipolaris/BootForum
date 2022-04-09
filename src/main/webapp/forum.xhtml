@@ -59,7 +59,7 @@
 						<h:form>
 						
 							<p:dataTable var="discussion" value="#{viewForum.forumDiscussionsLazyModel}" style="margin: 0 auto;" styleClass="borderless"
-								widgetVar="discussionTableVar" rowIndexVar="rowIndex" paginator="true" sortOrder="descending"
+								widgetVar="discussionTableVar" rowIndexVar="rowIndex" paginator="true"
 								rows="10" lazy="true" id="discussionTable" draggableColumns="true" emptyMessage="No discussion exists">
 								
 								<p:ajax event="page" oncomplete="changeAvatarBackgrounds();"/>
@@ -117,7 +117,7 @@
 									
 								</p:column>
 		
-								<p:column sortBy="#{discussion.stat.lastComment.commentDate}" style="text-align:right;width:190px;" responsivePriority="2">
+								<p:column sortBy="#{discussion.stat.lastComment.commentDate}" sortPriority="1" sortOrder="desc" style="text-align:right;width:190px;" responsivePriority="2">
 									<f:facet name="header">
 										<h:outputText value="#{msg['latest.comment']}" />
 									</f:facet>

@@ -419,7 +419,7 @@
 												action="#{privateMessages.uploadedFileManager.deleteUploadedFile}"
 												update=":newMessageForm:attachmentPanel">
 												<p:confirm header="#{msg['confirm.delete.attachment']}" message="#{msg['are.you.sure']}?" icon="pi pi-exclamation-triangle"/>
-												<f:setPropertyActionListener value="#{attachment}" target="#{replyComment.commentAttachmentManagement.selectedUploadedFile}" />  
+												<f:setPropertyActionListener value="#{attachment}" target="#{privateMessages.uploadedFileManager.selectedUploadedFile}" />  
 											</p:commandButton>
 									
 											<p/>

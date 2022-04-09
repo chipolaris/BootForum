@@ -32,9 +32,6 @@ public class PrivateMessages {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PrivateMessages.class);
 	
-	@Value("${Message.attachment.maxPerMessage}")
-	private short maxAttachmentsPerMessage;
-	
 	@Resource
 	private LoggedOnSession userSession;
 	

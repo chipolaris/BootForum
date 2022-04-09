@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import com.github.chipolaris.bootforum.domain.Forum;
 import com.github.chipolaris.bootforum.domain.ForumGroup;
 import com.github.chipolaris.bootforum.domain.Tag;
 import com.github.chipolaris.bootforum.domain.User;
+import com.github.chipolaris.bootforum.event.ApplicationDataInitializedEvent;
 
 @Service
 public class SystemInfoService {
@@ -35,6 +37,11 @@ public class SystemInfoService {
 	
 	@Resource
 	private StatDAO statDAO;
+	
+	@EventListener @Transactional(readOnly = true)
+	public void handleApplicationDataInitializedEvent(ApplicationDataInitializedEvent event) {
+		this.refreshStatistics();
+	}
 	
 	@Transactional(readOnly = true)
 	public ServiceResponse<Void> refreshStatistics() {
