@@ -181,7 +181,7 @@
 			        </div>
 			        
 		            <form class="w3-container w3-padding">
-		            	<fieldset style="border:0;padding: 0;" id="fieldSet#{chatRoom.id}" disabled="disabled">
+		            	<fieldset style="border:0;padding: 0;" id="chatButtonGroup#{chatRoom.id}" class="chatButtons" disabled="disabled">
 			            	<h:outputText id="counterMessage#{chatRoom.id}" styleClass="w3-opacity"/><h:outputText value=" #{msg['characters.remaining']}" styleClass="w3-opacity"/>
 		                	<p:inputTextarea rows="2" maxlength="200" counter="counterMessage#{chatRoom.id}" counterTemplate="{0}"
 		                		autoResize="false" id="messageText#{chatRoom.id}" style="overflow-x: hidden;" styleClass="w3-input" placeholder="#{msg['type.your.message']}.."/>

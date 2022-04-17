@@ -505,45 +505,62 @@
 							
 						</div>
 					
-						<div jsf:rendered="#{!publicBackingBean.registrationSuccess}" class="w3-section w3-center">
-							<p>
+						<div jsf:rendered="#{!publicBackingBean.registrationSuccess}" class="w3-center">
+							<div class="w3-section">
 								<p:inputText id="username" value="#{publicBackingBean.user.username}" placeholder="&#xe939; #{msg['pick.a.username']}" styleClass="w3-input" title="#{msg['username']}"
 									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;"
-									onblur="validateRegisterUsername();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+									onblur="validateRegisterUsername();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');"
+									validatorMessage="#{msg['username.must.be']}">
+									<f:validateRegex pattern="^[a-zA-Z0-9]{5,30}$"/>
 								</p:inputText>
 								<h:message for="username" id="usernameMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
-							</p>
-							<p>
+							</div>
+							<div class="w3-section">
 								<p:inputText id="email" value="#{publicBackingBean.user.person.email}" placeholder="@ #{msg['enter.email']}" styleClass="w3-input w3-margin-top" title="#{msg['email']}"
 									style="font-family:font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;"
 									onblur="validEmail = validateEmail(this);" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:inputText>
 								<h:message for="email" id="emailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
-							</p>
-							<p>
+							</div>
+							<div class="w3-section">
+								<p:inputText id="firstName" value="#{publicBackingBean.user.person.firstName}" placeholder="&#xe9aa; #{msg['first.name']}" styleClass="w3-input" 
+									title="#{msg['first.name']}" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;" 
+									maxlength="30" validatorMessage="#{msg['first.name.cant.exceed.30']}">
+									<f:validateLength maximum="30"/>
+								</p:inputText>
+								<h:message for="firstName" id="firstNameMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+							</div>
+							<div class="w3-section">
+								<p:inputText id="lastName" value="#{publicBackingBean.user.person.lastName}" placeholder="&#xe9aa; #{msg['last.name']}" styleClass="w3-input" 
+									title="#{msg['last.name']}" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;"
+									maxlength="30" validatorMessage="#{msg['last.name.cant.exceed.30']}">
+									<f:validateLength maximum="30"/>
+								</p:inputText>
+								<h:message for="lastName" id="lastNameMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>					
+							</div>
+							<div class="w3-section">
 								<p:password id="password" value="#{publicBackingBean.user.password}" placeholder="&#xe981; #{msg['choose.a.password']}" styleClass="w3-input" title="#{msg['password']}" 
-									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;" toggleMask="true"
+									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;" toggleMask="true" validatorMessage="#{msg['password.must.be']}"
 									onblur="validateRegisterPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
+									<f:validateLength minimum="5" maximum="16"/>
 								</p:password>
 								<h:message for="password" id="passwordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
-							</p>
-							<p>
+							</div>
+							<div class="w3-section">
 								<p:password id="confirmPassword" placeholder="&#xe981; #{msg['confirm.password']}" styleClass="w3-input" title="#{msg['confirm.password']}" 
 									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;" toggleMask="true"
+									match="password" validatorMessage="#{msg['confirm.password.not.matched']}"
 									onblur="validateConfirmPassword();" onfocus="this.className = this.className.replace(/(^|\s)w3-border-\S+/gi, '');">
 								</p:password>
 								<h:message for="confirmPassword" id="confirmPasswordMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
-							</p>
-							<p jsf:rendered="#{publicBackingBean.registrationOption.enableCaptcha}">
-								<p:inputText id="captchaInput" placeholder="#{msg['enter.captcha']} &#xe91e;" styleClass="w3-input" title="#{msg['captcha']}" 
-									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;">
+							</div>
+							<div jsf:rendered="#{publicBackingBean.registrationOption.enableCaptcha}" style="text-align: right;display: flex;" class="w3-section">
+								<p:inputText id="captchaInput" placeholder="#{msg['enter.captcha']} &#xe920;" styleClass="w3-input" title="#{msg['captcha']}" 
+									style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;text-align:center;flex-grow:1">
 									<f:validator validatorId="captchaValidator"/>
 								</p:inputText>
-								<h:message for="captchaInput" id="captchaInputMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
-							</p>
-							<p jsf:rendered="#{publicBackingBean.registrationOption.enableCaptcha}">
-											
-								<h:graphicImage value="data:image/png;base64,#{captchaImage.randomCaptchaBase64}" id="captchaImage"/>
+								
+								<h:graphicImage value="data:image/png;base64,#{captchaImage.randomCaptchaBase64}" id="captchaImage" style="margin-left:5px; border-radius:4px;"/>
 								
 								<!-- 
 									note: it's important to have process="@this" and partialSubmit="true", meaning only process this component (button).
@@ -552,13 +569,16 @@
 									https://stackoverflow.com/questions/25339056/understanding-primefaces-process-update-and-jsf-fajax-execute-render-attributes
 								-->
 					  			<p:commandButton update="registerForm:captchaImage" process="@this" partialSubmit="true"
-					  				icon="pi pi-refresh" ajax="true" style="margin-left:5px;" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" title="#{msg['refresh.captcha']}"/>
+					  				icon="pi pi-refresh" ajax="true" style="margin-left:5px;padding:0 16px;" styleClass="w3-input w3-btn w3-theme-dark" title="#{msg['refresh.captcha']}"/>							
+							</div>
 							
-							</p>							
-							<p>
-								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xe909; #{msg['submit']}" 
-									onclick="return validateRegistration()"	id="submitButton" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;" action="#{publicBackingBean.register}" update=":registerForm"/>
-							</p>
+							<div>
+								<h:message for="captchaInput" id="captchaInputMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
+							</div>							
+							<div class="w3-section">
+								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-theme-dark" value="&#xe909; #{msg['submit']}" 
+									id="submitButton" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;" action="#{publicBackingBean.register}" update=":registerForm"/>
+							</div>
 						</div>
 					</h:form>
 					
@@ -581,7 +601,7 @@
 					<span onclick="$('#passwordResetModal').hide();" class="w3-button w3-xlarge w3-transparent w3-display-topright" title="#{msg['close']}">&#215;</span>
 		
 					<header class="w3-container w3-padding w3-center">
-						<span class="w3-xlarge"><i class="pi pi-lock-open w3-xlarge"/> #{msg['reset.your.password']} </span>
+						<span class="w3-xlarge"><i class="pi pi-refresh w3-xlarge"/> #{msg['reset.your.password']} </span>
 					</header>
 
 					<div class="w3-center w3-section w3-text-theme">
@@ -614,8 +634,8 @@
 								<h:message for="passwordResetEmail" id="passwordResetEmailMessage" errorClass="w3-text-red" infoClass="w3-text-green"/>
 							</p>
 							<p>
-								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-border-0 w3-theme-dark" value="&#xe909; #{msg['submit']}" 
-									onclick="return validPasswordResetEmail;" id="resetPasswordSubmitButton" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
+								<p:commandButton ajax="true" styleClass="w3-input w3-btn w3-theme-dark" value="&#xe909; #{msg['submit']}" 
+									id="resetPasswordSubmitButton" style="font-family: Helvetica, Arial, sans-serif, PrimeIcons;" action="#{publicBackingBean.resetPassword}" update=":passwordResetForm"/>
 							</p>
 						</div>
 					
@@ -643,16 +663,19 @@
 				
 				function validateRegisterUsername() {
 					
+					// https://stackoverflow.com/questions/15933727/javascript-regular-expression-for-usernames-no-spaces
+					var userNameRegex = /^[a-zA-Z0-9]{5,30}$/;
+					
 					var usernameEl = document.getElementById('registerForm:username');
 					var username = usernameEl.value;
 					
 					// reset styling
 					usernameEl.className = usernameEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
 					
-					if(username.length < 5) {
+					if(!userNameRegex.test(username)) {
 						validUsername = false;
 						usernameEl.className += " w3-border-orange";
-						usernameEl.title = "#{msg['username.must.be.at.least.5.characters']}"
+						usernameEl.title = "#{msg['username.must.be']}"
 					}
 					else {
 						validUsername = true;
@@ -697,10 +720,10 @@
 					// reset styling
 					passwordEl.className = passwordEl.className.replace(/(^|\s)w3-border-\S+/gi, "");
 					
-					if(password.length < 5) {
+					if(password.length < 5 || password.length > 16) {
 						validPassword = false;
 						passwordEl.className += " w3-border-orange";
-						passwordEl.title = "#{msg['password.length.is.less.than.5']}"
+						passwordEl.title = "#{msg['password.must.be']}"
 					}
 					else {
 						validPassword = true;
@@ -725,11 +748,6 @@
 						confirmPasswordEl.className += " w3-border-orange";
 						confirmPasswordEl.title="#{msg['confirm.password.does.not.match.password']}"
 					}
-					else if(confirmPassword.length < 5) {
-						validConfirmPassword = false;
-						confirmPasswordEl.className += " w3-border-orange";
-						confirmPasswordEl.title="#{msg['password.is.too.short']}"
-					}
 					else {
 						validConfirmPassword = true;
 						confirmPasswordEl.className += " w3-border-light-green";
@@ -737,6 +755,10 @@
 					}
 				}
 				
+				/*
+				 * Note: 04/10/2022: remove the use JS client side validation for now
+				 *  validateRegistration() are now not used
+				 */ 
 				function validateRegistration() {
 					
 					if(!validUsername) {

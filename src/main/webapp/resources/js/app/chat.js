@@ -36,6 +36,8 @@ function disconnect() {
     	
     	// clear all userListDiv
     	$('.userListDiv').empty();
+    	
+    	$('.chatButtons').prop("disabled", true)
     }
     setConnected(false);
     console.log("Disconnected");
@@ -275,8 +277,8 @@ $(function () {
     	// enable leave button
     	$('#leaveRoom' + roomId).prop("disabled", false);
     	
-    	// enable post message form fieldset
-    	$('#fieldSet' + roomId).prop("disabled", false);
+    	// enable post message form chatButtonGroup
+    	$('#chatButtonGroup' + roomId).prop("disabled", false);
     });
     
     $( ".clearRoomContent" ).click(function() {
@@ -302,8 +304,8 @@ $(function () {
     	// enable enter button
     	$('#joinRoom' + roomId).prop("disabled", false);
     	
-    	// disable post message form fieldset
-    	$('#fieldSet' + roomId).prop("disabled", true);
+    	// disable post message form chatButtonGroup
+    	$('#chatButtonGroup' + roomId).prop("disabled", true);
     	
     	// clear room content, comment out for now
     	// $("#roomContent" + roomId).html("");

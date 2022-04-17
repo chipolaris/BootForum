@@ -152,7 +152,7 @@ public class RegistrationService {
 						+ JSFUtils.getBaseURL() + "emailConfirmation.xhtml?key=" + registration.getRegistrationKey()
 						+ "\">" + this.applicationName + "</a>");
 	}
-
+	
 	/**
 	 * Validate registration data, check input format as well as check existence of username & email
 	 * in both User entity and Registration entity
@@ -163,10 +163,7 @@ public class RegistrationService {
 		
 		List<String> errors = new ArrayList<>();
 		
-		if(registration.getUsername().length() < 5) {
-			errors.add("Username must be at least 5 characters");
-		}
-		else if(userDAO.usernameExists(registration.getUsername())
+		if(userDAO.usernameExists(registration.getUsername())
 			|| genericDAO.countEntities(Registration.class, 
 					Collections.singletonMap("username", registration.getUsername())).longValue() > 0
 			|| genericDAO.countEntities(DeletedUser.class, 

@@ -260,8 +260,7 @@
 		    	
 		    	<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-users w3-large"/><br/>Members</a>
 		    	<a href="#{request.contextPath}/forums.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-list w3-large"/><br/>Forums</a>
-		    	
-		    	
+		    			    	
 		  	</div>
 		  	
 		  	<!-- Searchbar on small screens -->
@@ -315,24 +314,23 @@
         <!-- Page Container -->
 		<div class="w3-container w3-content" style="max-width:1680px;margin-top:60px; padding:0px;">
 			<!-- The Grid -->
-  			<div class="w3-row"> <!-- The w3-row class creates a mobile-first responsive grid system -->
+  			<!-- <div class="w3-row"> --> <!-- The w3-row class creates a mobile-first responsive grid system -->
 				
 				<ui:insert name="content">
                 	Template
             	</ui:insert>
             	
-			</div> <!-- end of w3-row -->
+			<!-- </div>  --><!-- end of w3-row -->
 			
-			<!-- bottom copyright -->
-			<div class="w3-section w3-display-bottommiddle"> 
-				<center><a href="https://github.com/chipolaris/BootForum">BootForum</a>. </center>
-				Powered by <a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a>, 
-				<a href="https://spring.io/projects/spring-boot">Spring Boot</a>, <a href="http://www.eclipse.org/eclipselink/">EclipseLink</a>, 
-				<a href="https://www.primefaces.org">Primefaces</a>, and <a href="https://www.w3schools.com/w3css/default.asp">W3.CSS</a>
-			</div>
-		
 		</div> <!-- end of w3-container -->
-    	
+
+		<!-- bottom copyright -->
+		<div class="w3-section w3-display-bottommiddle"> 
+			<a href="https://github.com/chipolaris/BootForum">BootForum</a>. 
+			Powered by <a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">Java</a>, 
+			<a href="https://spring.io/projects/spring-boot">Spring Boot</a>, <a href="http://www.eclipse.org/eclipselink/">EclipseLink</a>, 
+			<a href="https://www.primefaces.org">Primefaces</a>, and <a href="https://www.w3schools.com/w3css/default.asp">W3.CSS</a>
+		</div>    	
 		<!-- <ui:include src="/WEB-INF/template/about.xhtml"/> -->
 
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:25px;bottom:25px">
