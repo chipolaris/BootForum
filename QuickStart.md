@@ -17,26 +17,30 @@ Latest [war file](https://github.com/chipolaris/BootForum/releases/download/v.0.
 
 ## Running BootForum
 1. Create an **application.properties** file for database connection configurations. Use one of the following templates for your respective database type
- 
+
+### H2 - Default
        #### H2 database configuration
        spring.datasource.url=jdbc:h2:file:~/BootForum/database/db
        spring.datasource.username=sa
        spring.datasource.password=
        spring.datasource.driverClassName=org.h2.Driver
 
+### PostgreSQL
        #### PostgreSQL database configuration
        spring.datasource.url=jdbc:postgresql://localhost:5433/BootForum
        spring.datasource.username=BootForum
        spring.datasource.password=secret
        spring.datasource.driverClassName=org.postgresql.Driver
 
+### MySQL
        #### MySQL database configuration
        spring.datasource.url=jdbc:mysql://localhost/BootForum
        spring.datasource.username=BootForum
        spring.datasource.password=secret
        spring.datasource.driverClassName=com.mysql.jdbc.Driver
 
-       ### SQL Server database configuration
+### SQL Server
+       #### SQL Server database configuration
        spring.datasource.url=jdbc:sqlserver://localhost;databaseName=BootForum
        spring.datasource.username=BootForum
        spring.datasource.password=secret
