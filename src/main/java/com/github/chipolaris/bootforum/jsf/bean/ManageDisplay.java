@@ -38,6 +38,9 @@ public class ManageDisplay {
 	@Resource 
 	private CacheManager cacheManager;
 	
+	@Resource
+	private LoggedOnSession userSession;
+	
 	private List<Tag> tags;
 	
 	private List<ChatRoom> chatRooms;
@@ -72,6 +75,7 @@ public class ManageDisplay {
 		logger.info("Updating display options ");
 		
 	    // 
+		this.displayOption.setUpdateBy(userSession.getUser().getUsername());
     	ServiceResponse<DisplayOption> response = systemConfigService.updateDisplayOption(this.displayOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {

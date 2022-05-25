@@ -30,6 +30,9 @@ public class RegistrationManagement {
 	@Resource
 	private SystemConfigService systemConfigService;
 	
+	@Resource
+	private LoggedOnSession userSession;
+	
 	private RegistrationOption registrationOption;
 	
 	public RegistrationOption getRegistrationOption() {
@@ -80,6 +83,7 @@ public class RegistrationManagement {
 		logger.info("Updating registration options ");
 		
 	    // 
+		this.registrationOption.setUpdateBy(userSession.getUser().getUsername());
     	ServiceResponse<RegistrationOption> response = systemConfigService.updateRegistrationOption(this.registrationOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {

@@ -36,6 +36,9 @@ public class ChatManagement {
 	@Resource
 	private ChatRoomService chatRoomService;
 	
+	@Resource
+	private LoggedOnSession userSession;
+	
 	private List<ChatRoom> chatRooms;
 	private ChatRoom selectedChatRoom;
 	private ChatRoom newChatRoom;
@@ -79,6 +82,7 @@ public class ChatManagement {
 			return;
 		}
 		
+		this.newChatRoom.setCreateBy(userSession.getUser().getUsername());
 		ServiceResponse<Long> response = chatRoomService.createNewChatRoom(newChatRoom);
     	
     	if(response.getAckCode().equals(AckCodeType.SUCCESS)) {
@@ -99,6 +103,7 @@ public class ChatManagement {
 		
     	if(this.selectedChatRoom != null) {
 	    	// 
+    		this.newChatRoom.setUpdateBy(userSession.getUser().getUsername());
 	    	ServiceResponse<ChatRoom> response = genericService.updateEntity(this.selectedChatRoom);
 	    	
 	    	if(response.getAckCode() != AckCodeType.FAILURE) {

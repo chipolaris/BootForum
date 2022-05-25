@@ -19,12 +19,10 @@ public class EmailOption extends BaseEntity {
 	public void prePersist() {
 		Date now = Calendar.getInstance().getTime();
 		this.setCreateDate(now);
-		this.setUpdateDate(now);
 	}
 	
 	@PreUpdate
 	public void preUpdate() {
-		
 		Date now = Calendar.getInstance().getTime();
 		this.setUpdateDate(now);
 	}

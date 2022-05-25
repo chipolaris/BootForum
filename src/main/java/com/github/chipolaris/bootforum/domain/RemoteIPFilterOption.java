@@ -1,5 +1,7 @@
 package com.github.chipolaris.bootforum.domain;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -11,6 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 /**
@@ -23,6 +27,18 @@ import javax.persistence.Table;
 @Table(name="REMOTE_IP_FILTER_OPTION_T")
 public class RemoteIPFilterOption extends BaseEntity {
 
+	@PrePersist
+	public void prePersist() {
+		Date now = Calendar.getInstance().getTime();
+		this.setCreateDate(now);
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		Date now = Calendar.getInstance().getTime();
+		this.setUpdateDate(now);
+	}
+	
 	@Id
 	private Long id;
 	

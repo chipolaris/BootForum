@@ -43,6 +43,9 @@ public class TagManagement {
 	@Resource 
 	private CacheManager cacheManager;
 	
+	@Resource
+	private LoggedOnSession userSession;
+	
 	private List<Tag> tags;
 	private Tag selectedTag;
 	private Tag newTag;
@@ -86,6 +89,7 @@ public class TagManagement {
 			return;
 		}
 		
+		newTag.setCreateBy(userSession.getUser().getUsername());
 		ServiceResponse<Long> response = tagService.createNewTag(newTag);
     	
     	if(response.getAckCode().equals(AckCodeType.SUCCESS)) {
@@ -108,6 +112,7 @@ public class TagManagement {
 		logger.info("Editing tag " + selectedTag.getLabel());
 		
     	if(this.selectedTag != null) {
+    		this.selectedTag.setUpdateBy(userSession.getUser().getUsername());
 	    	// 
 	    	ServiceResponse<Tag> response = genericService.updateEntity(this.selectedTag);
 	    	
@@ -182,7 +187,7 @@ public class TagManagement {
 		public Tag getAsObject(FacesContext context, UIComponent component, String idStr) {
 			Long id;
 			try {
-				id = new Long(idStr);
+				id = Long.valueOf(idStr);
 			} 
 			catch (NumberFormatException e) {
 				return null;

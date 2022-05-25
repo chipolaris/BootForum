@@ -25,6 +25,9 @@ public class ManagePrivateMessageOption {
 	@Resource
 	private SystemConfigService systemConfigService;
 	
+	@Resource
+	private LoggedOnSession userSession;
+	
 	private PrivateMessageOption privateMessageOption;
 	public PrivateMessageOption getPrivateMessageOption() {
 		return privateMessageOption;
@@ -39,6 +42,7 @@ public class ManagePrivateMessageOption {
 		
 		logger.info("Update Private Message Option");
 		
+		this.privateMessageOption.setUpdateBy(userSession.getUser().getUsername());
 		systemConfigService.updatePrivateMessageOption(this.privateMessageOption);
 		
 		JSFUtils.addInfoStringMessage(null, "Private Message Option Updated");

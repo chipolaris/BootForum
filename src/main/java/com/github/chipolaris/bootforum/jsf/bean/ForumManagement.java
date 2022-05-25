@@ -49,6 +49,9 @@ public class ForumManagement {
 	@Resource
 	private ApplicationEventPublisher applicationEventPublisher;
 	
+	@Resource
+	private LoggedOnSession userSession;
+	
 	private Forum selectedForum;
 	
 	public Forum getSelectedForum() {
@@ -99,6 +102,7 @@ public class ForumManagement {
     public void createForumGroup() {
     	
     	// call service add
+		this.newForumGroup.setCreateBy(userSession.getUser().getUsername());
     	ServiceResponse<ForumGroup> response = forumService.addForumGroup(newForumGroup, this.selectedForumGroup);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {
@@ -121,6 +125,7 @@ public class ForumManagement {
     public void editForumGroup() {
     	
     	if(this.selectedForumGroup != null) {
+    		this.selectedForumGroup.setUpdateBy(userSession.getUser().getUsername());
 	    	// 
 	    	ServiceResponse<ForumGroup> response = genericService.updateEntity(this.selectedForumGroup);
 	    	
@@ -172,6 +177,7 @@ public class ForumManagement {
      */
     public void createForum() {
     	// call service add
+    	this.newForum.setCreateBy(userSession.getUser().getUsername());
     	ServiceResponse<Forum> response = forumService.addForum(newForum, this.selectedForumGroup);
     	
     	if(response.getAckCode().equals(AckCodeType.SUCCESS)) {
@@ -195,6 +201,7 @@ public class ForumManagement {
     public void editForum() {
     	
     	if(this.selectedForum != null) {
+    		this.selectedForum.setUpdateBy(userSession.getUser().getUsername());
 	    	// 
 	    	ServiceResponse<Forum> response = genericService.updateEntity(this.selectedForum);
 	    	

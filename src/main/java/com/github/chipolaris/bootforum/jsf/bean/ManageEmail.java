@@ -22,6 +22,9 @@ public class ManageEmail {
 	
 	@Resource
 	private SystemConfigService systemConfigService;
+	
+	@Resource
+	private LoggedOnSession userSession;
 
 	private EmailOption emailOption;
 	
@@ -41,6 +44,7 @@ public class ManageEmail {
 		logger.info("Updating email options ");
 		
 	    // 
+		this.emailOption.setUpdateBy(userSession.getUser().getUsername());
     	ServiceResponse<EmailOption> response = systemConfigService.updateEmailOption(this.emailOption);
     	
     	if(response.getAckCode() != AckCodeType.FAILURE) {

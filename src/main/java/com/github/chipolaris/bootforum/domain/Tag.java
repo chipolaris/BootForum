@@ -1,5 +1,7 @@
 package com.github.chipolaris.bootforum.domain;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Cacheable;
@@ -8,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
@@ -19,6 +23,18 @@ import javax.persistence.UniqueConstraint;
 	pkColumnValue="TAG_ID", valueColumnName="GEN_VALUE", initialValue = 1000, allocationSize=10)
 @Cacheable(true)
 public class Tag extends BaseEntity {
+	
+	@PrePersist
+	public void prePersist() {
+		Date now = Calendar.getInstance().getTime();
+		this.setCreateDate(now);
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		Date now = Calendar.getInstance().getTime();
+		this.setUpdateDate(now);
+	}
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="TagIdGenerator")

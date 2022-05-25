@@ -25,6 +25,9 @@ public class ManageCommentOption {
 	@Resource
 	private SystemConfigService systemConfigService;
 	
+	@Resource
+	private LoggedOnSession userSession;
+	
 	private CommentOption commentOption;
 	public CommentOption getCommentOption() {
 		return commentOption;
@@ -39,6 +42,7 @@ public class ManageCommentOption {
 		
 		logger.info("Update Comment Option");
 		
+		this.commentOption.setUpdateBy(userSession.getUser().getUsername());
 		systemConfigService.updateCommentOption(this.commentOption);
 		
 		JSFUtils.addInfoStringMessage(null, "Comment Option Updated");

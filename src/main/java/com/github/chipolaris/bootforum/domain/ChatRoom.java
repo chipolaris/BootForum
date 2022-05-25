@@ -23,7 +23,6 @@ public class ChatRoom extends BaseEntity {
 	public void prePersist() {
 		Date now = Calendar.getInstance().getTime();
 		this.setCreateDate(now);
-		this.setUpdateDate(now);
 	}
 	
 	@PreUpdate

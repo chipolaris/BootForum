@@ -20,6 +20,9 @@ public class ManageAvatarOption {
 	@Resource
 	private SystemConfigService systemConfigService;
 	
+	@Resource
+	private LoggedOnSession userSession;
+	
 	private AvatarOption avatarOption;
 	public AvatarOption getAvatarOption() {
 		return avatarOption;
@@ -34,6 +37,7 @@ public class ManageAvatarOption {
 		
 		logger.info("Update Comment Option");
 		
+		this.avatarOption.setUpdateBy(userSession.getUser().getUsername());
 		systemConfigService.updateAvatarOption(this.avatarOption);
 		
 		JSFUtils.addInfoStringMessage(null, "Avatar Option Updated");

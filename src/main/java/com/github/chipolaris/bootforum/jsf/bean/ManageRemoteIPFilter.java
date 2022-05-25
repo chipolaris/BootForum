@@ -31,6 +31,9 @@ public class ManageRemoteIPFilter {
 	
 	@Resource
 	private SystemConfigService systemConfigService;
+	
+	@Resource
+	private LoggedOnSession userSession;
 
 	private RemoteIPFilterOption remoteIPFilterOption;
 
@@ -83,6 +86,7 @@ public class ManageRemoteIPFilter {
 		}
 		
 	    // 
+		this.remoteIPFilterOption.setUpdateBy(userSession.getUser().getUsername());
     	ServiceResponse<RemoteIPFilterOption> response = 
     			systemConfigService.updateRemoteIPFilterOption(this.remoteIPFilterOption);
     	

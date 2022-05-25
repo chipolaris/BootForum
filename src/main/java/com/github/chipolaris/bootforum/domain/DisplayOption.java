@@ -1,5 +1,7 @@
 package com.github.chipolaris.bootforum.domain;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -13,12 +15,26 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="DISPLAY_OPTION_T")
 public class DisplayOption extends BaseEntity {
 
+	@PrePersist
+	public void prePersist() {
+		Date now = Calendar.getInstance().getTime();
+		this.setCreateDate(now);
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		Date now = Calendar.getInstance().getTime();
+		this.setUpdateDate(now);
+	}
+	
 	@Id
 	private Long id;
 	
