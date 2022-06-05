@@ -319,9 +319,9 @@
             			
 			       		<div class="w3-row w3-section">
 			       			
-			       			<b>Recipients</b><br/>
+			       			<b>#{msg['recipients']}</b><br/>
 			       			<div class="w3-col" style="width:50px;">
-			       				<p:button styleClass="w3-button w3-round" style="height:35px;" value="To" onclick="return false;"/>		       			
+			       				<p:button styleClass="w3-button w3-round" style="height:35px;" value="#{msg['to']}" onclick="return false;"/>		       			
 			       				<!-- <a href="#" class="w3-button w3-round w3-theme-dark" style="height:35px;">To</a> -->
 			       			</div>
 			       			<div class="w3-rest">
@@ -359,7 +359,7 @@
 			       		
 			       		<div class="w3-section">
 			       			
-			       			<p:outputLabel value="Subject" style="font-weight:600" for="subject"/>
+			       			<p:outputLabel value="#{msg['subject']}" style="font-weight:600" for="subject"/>
 				       		
 					       	<p:inputText value="#{privateMessages.message.subject}" style="width:100%" id="subject"
 					       		validatorMessage="Message subject must be between #{privateMessages.privateMessageOption.minCharTitle} and #{privateMessages.privateMessageOption.maxCharTitle} characters">
@@ -374,7 +374,7 @@
 
 			       		<div class="w3-section">
 			       			
-							<p:outputLabel value="Message" style="font-weight:600" for="messageContent"/>
+							<p:outputLabel value="#{msg['messages']}" style="font-weight:600" for="messageContent"/>
 							
 							<pe:ckEditor value="#{privateMessages.message.text}" skin="moono-lisa" width="100%" id="messageContent"
 								toolbar="[['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 
@@ -392,11 +392,11 @@
 			       		
 			       		<div jsf:id="attachmentPanel">
 														
-					      	<b>Attachments:</b>
+					      	<b>#{msg['attachments']}:</b>
 
 							<h6>
-								(Limit #{privateMessages.privateMessageOption.maxAttachment} attachments per message,
-								#{privateMessages.privateMessageOption.maxAttachment - fn:length(privateMessages.uploadedFileManager.uploadedFileList)} left)
+								(#{msg['limit']} #{privateMessages.privateMessageOption.maxAttachment} #{msg['attachments.per.message']},
+								#{privateMessages.privateMessageOption.maxAttachment - fn:length(privateMessages.uploadedFileManager.uploadedFileList)} #{msg['left']})
 							</h6>
 
 							<div class="w3-row" style="padding:0">										
@@ -442,7 +442,7 @@
 			       		<p>
 			       			<!-- submit message to send and switch to sentTab if there is no validation error -->
 				       		<p:commandButton id="createMessageButton" ajax="true" action="#{privateMessages.createMessage}"
-		            			update=":sentPrivateMessageTable" value=" Send" icon="pi pi-send" 
+		            			update=":sentPrivateMessageTable" value=" #{msg['send']}" icon="pi pi-send" 
 		            			oncomplete="if (args &amp;&amp; !args.validationFailed) {switchTab($('#sentButton'));showSentTab();}"/>         
 				       	</p>
 			    

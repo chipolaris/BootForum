@@ -290,7 +290,7 @@
 						<div jsf:id="searchSuggestionDiv" class="w3-dropdown-content w3-bar-block w3-border w3-card" style="width:400px;margin-top: 5px;">
 						
 							<a href="#{request.contextPath}/searchComment.xhtml?keywords=" class="w3-bar-item w3-button" id="searchCommentLink">
-								Search comment for <span id="searchValue" style="font-weight: bold"></span>
+								#{msg['search.comment.for']} <span id="searchValue" style="font-weight: bold"></span>
 							</a>
 						
 							<div jsf:id="searchSuggestionResultDiv">
@@ -342,9 +342,9 @@
 		  	<!-- Navbar on small screens -->
 		  	<div id="navSmall" class="w3-bar w3-theme-l4 w3-hide w3-hide-large w3-hide-medium w3-border-top">
 		    	
-		    	<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-users w3-large"/><br/>Members</a>
-		    	<a href="#{request.contextPath}/chat/index.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-comments w3-large"/><br/>Chat</a>
-		    	<a href="#{request.contextPath}/forums.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-list w3-large"/><br/>Forums</a>
+		    	<a href="#{request.contextPath}/listMembers.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-users w3-large"/><br/>#{msg['members']}</a>
+		    	<a href="#{request.contextPath}/chat/index.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-comments w3-large"/><br/>#{msg['chat']}</a>
+		    	<a href="#{request.contextPath}/forums.xhtml" class="w3-bar-item w3-button w3-hover-grey w3-hover-text-white w3-border-left w3-right"><i class="pi pi-list w3-large"/><br/>#{msg['forums']}</a>
 		    	
 		    	<sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
 		    	
