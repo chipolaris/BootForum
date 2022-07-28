@@ -11,7 +11,7 @@ Full features web based forum/discussion/bulletin board software implemented usi
 
 ###  [**View BootForum Screenshots**](Screenshots.md "Screenshots")
 
-### [**Live Demo**](http://52.87.177.125:8080/BootForum "BootForum Demo")
+### [**Live Demo**](http://52.87.177.125/BootForum "BootForum Demo")
 
 ### Main Features:
 
