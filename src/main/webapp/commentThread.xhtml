@@ -59,6 +59,11 @@
 						            </f:facet>
 						            
 						            <h:outputText value="#{comment.content}" escape="false"/>
+									
+								  	<p/>
+								  	
+								  	<p:badge severity="success" value="#{comment.commentVote.voteUpCount} #{msg['like']}"/>
+								  	<p:badge severity="warning" value="#{comment.commentVote.voteDownCount} #{msg['dislike']}" style="margin-left:5px;"/>
 						            						
 								</p:card>
 								

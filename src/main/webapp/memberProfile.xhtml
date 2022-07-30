@@ -40,7 +40,7 @@
 			
 			/* fade out long text: http://jsfiddle.net/b9vtW/4/
 			   https://stackoverflow.com/questions/22808040/fading-out-text-on-overflow-with-css-if-the-text-is-bigger-than-allowed */
-			.row {
+			.commentContent {
 			    margin-bottom: 5px;
 			    padding-bottom: 5px;
 			    max-height:180px;
@@ -49,7 +49,7 @@
 			    content: "";
 			    position:relative;
 			}
-			.row:before {
+			.commentContent:before {
 			    content:'';
 			    width:100%;
 			    height:100%;    
@@ -109,8 +109,14 @@
 										</h:link>
 			 						</p>
 									
-									<div class="row">
+									<div class="commentContent">
 								  		<h:outputText value="#{comment.content}" escape="false"/>
+
+								  	</div>
+								  	
+								  	<div>
+								  		<p:badge severity="warning" value="#{comment.commentVote.voteDownCount} #{msg['dislike']}" style="margin-left:5px;" styleClass="w3-right"/>
+								  		<p:badge severity="success" value="#{comment.commentVote.voteUpCount} #{msg['like']}" styleClass="w3-right"/>
 								  	</div>
 								</div>
 		 					
