@@ -33,7 +33,7 @@
 
 
 ### <ins>Comment Thread (sliced off discussion)<ins>
-![CommentThread](https://user-images.githubusercontent.com/46733006/79707579-fb36ed00-828a-11ea-99ac-a4bdb25576da.PNG)
+![commentThread](https://user-images.githubusercontent.com/46733006/181866829-676647ec-54db-439c-98fc-c7fea3893dfa.PNG)
 
 
 
@@ -45,9 +45,7 @@
 
   
 ### <ins>Member Profile<ins>
-![MemberProfile](https://user-images.githubusercontent.com/46733006/155855257-43615d69-2b55-46d0-8633-917eed762368.png)
-
-
+![memberProfile](https://user-images.githubusercontent.com/46733006/181866830-8889f86c-309a-43b9-9bb2-aadf83134575.png)
   
 ### <ins>Tag<ins>  
 ![Tag](https://user-images.githubusercontent.com/46733006/155855276-01fa0eb4-67ec-40a3-bef8-e0e88602677f.png)
