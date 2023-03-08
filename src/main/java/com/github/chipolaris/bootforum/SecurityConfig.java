@@ -69,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .loginPage("/login.xhtml")
           .usernameParameter("username") // username is default since SS v.3.2
           .passwordParameter("password")  // password is default since SS v.3.2
-          .loginProcessingUrl("/login") // default since SS v.3.2
+          .loginProcessingUrl("/login.xhtml") // default is /login
           .failureUrl("/login.xhtml?login_error=1" )
           .defaultSuccessUrl("/secure/index.xhtml", false)
           .permitAll()

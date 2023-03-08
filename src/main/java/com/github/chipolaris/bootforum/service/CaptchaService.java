@@ -75,10 +75,10 @@ public class CaptchaService {
 	}
 
 	private byte[] drawImage(String chars) {
-        BufferedImage bufferedImg = new BufferedImage(chars.length() * 12, 34, BufferedImage.TYPE_INT_RGB);  
+        BufferedImage bufferedImg = new BufferedImage(chars.length() * 14, 38, BufferedImage.TYPE_INT_RGB);  
         Graphics2D g = bufferedImg.createGraphics();
         g.setFont(new Font("default", Font.BOLD, 16));
-        g.drawString(chars, 7, 20); 
+        g.drawString(chars, 10, 24); 
         
         // TODO: consider draw some random lines in the image to make it harder to detect characters
         

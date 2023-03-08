@@ -50,7 +50,7 @@ public class User extends BaseEntity {
 	@GeneratedValue(strategy=GenerationType.TABLE, generator="UserIdGenerator")
 	private Long id;
 	
-	@Column(name="USERNAME", length=50, nullable=false)
+	@Column(name="USER_NAME", length=50, nullable=false)
 	private String username;
 	
 	@Column(name="PASSWORD", length=200, nullable=false)
