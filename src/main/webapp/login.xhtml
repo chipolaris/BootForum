@@ -23,9 +23,11 @@
 		<div class="h-screen flex align-items-center justify-content-center">
 		    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6 ui-widget">
 		        <div class="text-center mb-5">
-		        	<i class="pi pi-prime mb-3 text-5xl"></i>
-		            
-		            <div class="text-900 text-3xl font-medium mb-3">#{msg['login.to']} <h:outputLink value="#{request.contextPath}" style="color:inherit">#{msg['application.title']}</h:outputLink></div>
+		        	<h:link outcome="index">
+		        		<p:graphicImage name="logo.png" library="images" alt="Logo"
+                            height="50" styleClass="mb-3"/>
+		            </h:link>
+		            <div class="text-900 text-3xl font-medium mb-3">#{msg['login']}</div>
 		            <span class="text-600 font-medium line-height-3">#{msg['no.account']}?</span>
 		            <h:link outcome="register" styleClass="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">
 			           #{msg['register.account']}

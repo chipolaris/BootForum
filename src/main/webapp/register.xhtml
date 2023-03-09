@@ -40,10 +40,13 @@
 		<div class="h-screen flex align-items-center justify-content-center">
 		    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6 ui-widget">
 		        <div class="text-center mb-5">
-		        	<i class="pi pi-prime mb-3 text-5xl"></i>
-		            
+		            <h:link outcome="index">
+		        		<p:graphicImage name="logo.png" library="images" alt="Logo"
+                            height="50" styleClass="mb-3"/>
+		            </h:link>
+                            
 		            <div class="text-900 text-3xl font-medium mb-3">#{msg['register.account']}</div>
-		            <span class="text-600 font-medium line-height-3">Already have account?</span>
+		            <span class="text-600 font-medium line-height-3">#{msg['already.have.account']}</span>
 		            <h:link outcome="login" styleClass="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">
 		               	#{msg['login']}
 			        </h:link>
@@ -57,7 +60,7 @@
 				            <p:autoUpdate/>
 				        </p:messages>
 
-			            <label for="username" class="block text-900 font-medium mb-2"><i class="pi pi-user"/> #{msg['username']}</label>
+			            <p:outputLabel for="username" styleClass="block text-900 font-medium mb-2"><i class="pi pi-user"/> #{msg['username']}</p:outputLabel>
 						<p:inputText id="username" value="#{register.user.username}" placeholder="#{msg['pick.a.username']}" 
 							styleClass="w-full mb-3" title="#{msg['username']}" validatorMessage="#{msg['username.must.be']}">
 							<!-- username must be alphanumeric between 5 to 30 characters -->
@@ -65,7 +68,7 @@
 						</p:inputText>
 						<p:message for="username" id="usernameMessage"/>
 			
-			            <label for="email" class="block text-900 font-medium mb-2"><i class="pi pi-envelope"/> #{msg['email']}</label>
+			            <p:outputLabel for="email" styleClass="block text-900 font-medium mb-2"><i class="pi pi-envelope"/> #{msg['email']}</p:outputLabel>
 			            <p:inputText id="email" value="#{register.user.person.email}" placeholder="#{msg['enter.email']}" 
 			            	styleClass="w-full mb-3" title="#{msg['email']}" validatorMessage="#{msg['invalid.email.format']}">
 			            	<!-- use OWASP email regex from https://www.baeldung.com/java-email-validation-regex
@@ -77,7 +80,7 @@
 						</p:inputText>
 						<p:message for="email" id="emailMessage"/>
 						
-						<label for="password" class="block text-900 font-medium mb-2"><i class="pi pi-key"/> #{msg['password']}</label>
+						<p:outputLabel for="password" styleClass="block text-900 font-medium mb-2"><i class="pi pi-key"/> #{msg['password']}</p:outputLabel>
 						<p:password id="password" value="#{register.user.password}" placeholder="#{msg['choose.a.password']}"
 							styleClass="w-full" title="#{msg['password']}"
 							toggleMask="true" validatorMessage="#{msg['password.must.be']}">
@@ -86,7 +89,7 @@
 						<p/>
 						<p:message for="password" id="passwordMessage"/>
 							
-						<p:outputLabel for="confirmPassword" styleClass="block text-900 font-medium mb-2" value="#{msg['confirm.password']}"></p:outputLabel>
+						<p:outputLabel for="confirmPassword" styleClass="block text-900 font-medium mb-2"><i class="pi pi-check"/> #{msg['confirm.password']}</p:outputLabel>
 						<p:password type="password" id="confirmPassword" placeholder="#{msg['confirm.password']}" validator="#{register.validateConfirmPassword}"
 							styleClass="w-full" title="#{msg['confirm.password']}" toggleMask="true" value="#{register.user.password}">
 						</p:password>
@@ -95,7 +98,7 @@
 
 						<div class="field">
 							
-							<label for="captchaInput" class="block text-900 font-medium mb-2"><i class="pi pi-verified"/> #{msg['enter.captcha']}</label>
+							<p:outputLabel for="captchaInput" styleClass="block text-900 font-medium mb-2"><i class="pi pi-verified"/> #{msg['enter.captcha']}</p:outputLabel>
 							
 							<div class="grid">
 							
